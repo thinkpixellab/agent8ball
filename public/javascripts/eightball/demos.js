@@ -2,9 +2,13 @@ var world;
 var canvasContext;
 var canvasWidth;
 var canvasHeight;
-var tableHeight = 148;
-var tableWidth = 284;
-var tableBumperThickness = 10;
+
+var poolTable = {
+  height: 148, // cm, regulation
+  width: 284, // cm, regulation
+  ballDiameter: 5.715, // cm, regulation
+  bumperThickness: 10
+}
 
 function step(cnt) {
   var timeStep = 1.0/60;
@@ -19,8 +23,8 @@ $(window).load(function() {
   var canvasElm = $('#demo_canvas');
   if(canvasElm){
 
-    canvasElm.attr('width', tableWidth*2 + tableBumperThickness*4);
-    canvasElm.attr('height', tableHeight*2 + tableBumperThickness*4);
+    canvasElm.attr('width', poolTable.width*2 + poolTable.bumperThickness*4);
+    canvasElm.attr('height', poolTable.height*2 + poolTable.bumperThickness*4);
 
     world = createWorld();
     canvasContext = canvasElm[0].getContext('2d');
@@ -29,7 +33,7 @@ $(window).load(function() {
     canvasHeight = canvasElm.height();
 
     canvasElm.click(function(e) {
-      createBall(world, e.offsetX, e.offsetY, 10, new b2Vec2(400, 0));
+      createBall(world, e.offsetX, e.offsetY, poolTable.ballDiameter * 2, new b2Vec2(400, 0));
     });
 
     step();

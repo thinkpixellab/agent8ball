@@ -1,12 +1,12 @@
 function createWorld() {
   function setupBalls(world){
-    var ballRadius = 12;
+    var ballRadius = poolTable.ballDiameter * 2;
 
     for(var col=0;col<5;col++){
 
       var ballCount = col+1;
-      var x = 1.5 * tableWidth + col * ballRadius * Math.sqrt(3);
-      var yStart = 2 * tableBumperThickness + tableHeight - col * ballRadius;
+      var x = 1.5 * poolTable.width + col * ballRadius * Math.sqrt(3);
+      var yStart = 2 * poolTable.bumperThickness + poolTable.height - col * ballRadius;
 
       for(var row=0;row<ballCount;row++){
         createBall(world, x, yStart + row * ballRadius*2, ballRadius);
@@ -17,20 +17,20 @@ function createWorld() {
 
   function createTable(world) {
     var sideLeft = new b2BoxDef();
-    sideLeft.extents.Set(tableBumperThickness, tableHeight);
-    sideLeft.localPosition.Set(tableBumperThickness, tableHeight+tableBumperThickness*2);
+    sideLeft.extents.Set(poolTable.bumperThickness, poolTable.height);
+    sideLeft.localPosition.Set(poolTable.bumperThickness, poolTable.height+poolTable.bumperThickness*2);
 
     var sideRight = new b2BoxDef();
-    sideRight.extents.Set(tableBumperThickness, tableHeight);
-    sideRight.localPosition.Set(tableWidth*2+tableBumperThickness*3, tableHeight+tableBumperThickness*2);
+    sideRight.extents.Set(poolTable.bumperThickness, poolTable.height);
+    sideRight.localPosition.Set(poolTable.width*2+poolTable.bumperThickness*3, poolTable.height+poolTable.bumperThickness*2);
 
     var sideTop = new b2BoxDef();
-    sideTop.extents.Set(tableWidth, tableBumperThickness);
-    sideTop.localPosition.Set(tableWidth+tableBumperThickness*2, tableBumperThickness)
+    sideTop.extents.Set(poolTable.width, poolTable.bumperThickness);
+    sideTop.localPosition.Set(poolTable.width+poolTable.bumperThickness*2, poolTable.bumperThickness)
 
     var sideBottom = new b2BoxDef();
-    sideBottom.extents.Set(tableWidth, tableBumperThickness);
-    sideBottom.localPosition.Set(tableWidth+tableBumperThickness*2, tableHeight*2+tableBumperThickness*3)
+    sideBottom.extents.Set(poolTable.width, poolTable.bumperThickness);
+    sideBottom.localPosition.Set(poolTable.width+poolTable.bumperThickness*2, poolTable.height*2+poolTable.bumperThickness*3)
 
     var table = new b2BodyDef();
     table.AddShape(sideLeft);
