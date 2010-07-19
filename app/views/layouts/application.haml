@@ -1,0 +1,12 @@
+!!! XML
+!!! Strict
+%html{html_attrs()}
+  %head
+    %title Fun!
+    = javascript_include_tag 'prototype_lite'
+    = javascript_include_tag 'jquery-1.4.2.min.js'
+    = javascript_include_tag Util.get_js_dir('box2d')
+  %body
+    =yield
+    - if Rails.env == 'production'
+      =render :partial => 'layouts/stats'
