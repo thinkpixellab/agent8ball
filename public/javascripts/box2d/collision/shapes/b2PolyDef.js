@@ -16,18 +16,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
-
-
 var b2PolyDef = Class.create();
 Object.extend(b2PolyDef.prototype, b2ShapeDef.prototype);
-Object.extend(b2PolyDef.prototype, 
-{
-  initialize: function()
-  {
+Object.extend(b2PolyDef.prototype, {
+  initialize: function() {
     // The constructor for b2ShapeDef
     this.type = b2Shape.e_unknownShape;
     this.userData = null;
@@ -38,21 +30,26 @@ Object.extend(b2PolyDef.prototype,
     this.density = 0.0;
     this.categoryBits = 0x0001;
     this.maskBits = 0xFFFF;
-    this.groupIndex = 0;  
+    this.groupIndex = 0;
     //
-
     // initialize instance variables for references
     this.vertices = new Array(b2Settings.b2_maxPolyVertices);
     //
-
     this.type = b2Shape.e_polyShape;
     this.vertexCount = 0;
 
-    for (var i = 0; i < b2Settings.b2_maxPolyVertices; i++){
+    for (var i = 0; i < b2Settings.b2_maxPolyVertices; i++) {
       this.vertices[i] = new b2Vec2();
     }
   },
 
   vertices: new Array(b2Settings.b2_maxPolyVertices),
-  vertexCount: 0});
+  vertexCount: 0,
 
+  SetVertices: function(vertexArray) {
+    this.vertexCount = vertexArray.length;
+    for (var i = 0; i < vertexArray.length; i++) {
+      this.vertices[i].Set(vertexArray[i][0], vertexArray[i][1]);
+    }
+  }
+});
