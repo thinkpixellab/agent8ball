@@ -8,7 +8,7 @@ var poolTable = {
   width: 284, // cm, regulation
   ballDiameter: 5.715, // cm, regulation
   bumperThickness: 10
-}
+};
 
 function step(cnt) {
   var timeStep = 1.0/60;
