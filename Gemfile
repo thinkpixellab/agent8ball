@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.0.0.beta4'
 
 gem 'pg'
-gem 'haml', '3.0.12'
+gem 'haml', '3.0.13'
 gem 'compass', '0.10.2'
 
 gem 'ruby-debug'
