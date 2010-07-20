@@ -9,8 +9,8 @@ function createWorld() {
     for (var col = 0; col < 5; col++) {
 
       var ballCount = col + 1;
-      var x = 1.5 * poolTable.width + col * ballRadius * Math.sqrt(3);
-      var yStart = 2 * poolTable.bumperThickness + poolTable.height - col * ballRadius;
+      var x = 0.5 * poolTable.width + col * ballRadius * Math.sqrt(3);
+      var yStart = -col * ballRadius;
 
       for (var row = 0; row < ballCount; row++) {
         createBall(world, x, yStart + row * ballRadius * 2, ballRadius);
@@ -19,58 +19,67 @@ function createWorld() {
     }
   }
 
-  var topLeftPoints = [
-    [poolTable.width, 0],
-    [poolTable.width, poolTable.bumperThickness * 2],
-    [poolTable.bumperThickness * 4, poolTable.bumperThickness * 2],
-    [poolTable.bumperThickness * 2, 0]];
-
-  var topLeftMatrix = new goog.math.Matrix(topLeftPoints);
-
-  var flipMatrix = new goog.math.Matrix([
+  var matrixFlipHorizontal = new goog.math.Matrix([
     [-1, 0],
     [0, 1]]);
 
-  var result = topLeftMatrix.multiply(flipMatrix);
-
-  var topRightPoints = result.toArray().reverse();
-
-  // should translate here...:-/
-  for (var i = 0; i < topRightPoints.length; i++) {
-    topRightPoints[i][0] += poolTable.width * 2 + poolTable.bumperThickness * 4;
-  }
+  var matrixFlipVertical = new goog.math.Matrix([
+    [-1, 0],
+    [0, -1]]);
 
 
 
   function createTable(world) {
-    var sideLeft = new b2PolyDef();
-    sideLeft.SetVertices([
-      [0, poolTable.bumperThickness * 2],
-      [poolTable.bumperThickness * 2, poolTable.bumperThickness * 4],
-      [poolTable.bumperThickness * 2, poolTable.height * 2],
-      [0, poolTable.height * 2 + poolTable.bumperThickness * 2]]);
-
-    var sideRight = new b2BoxDef();
-    sideRight.extents.Set(poolTable.bumperThickness, poolTable.height);
-    sideRight.localPosition.Set(poolTable.width * 2 + poolTable.bumperThickness * 3, poolTable.height + poolTable.bumperThickness * 2);
-
-    var sideTopLeft = new b2PolyDef();
-    sideTopLeft.SetVertices(topLeftPoints);
-
-    var sideTopRight = new b2PolyDef();
-    sideTopRight.SetVertices(topRightPoints);
-
-    var sideBottom = new b2BoxDef();
-    sideBottom.extents.Set(poolTable.width, poolTable.bumperThickness);
-    sideBottom.localPosition.Set(poolTable.width + poolTable.bumperThickness * 2, poolTable.height * 2 + poolTable.bumperThickness * 3);
-
     var table = new b2BodyDef();
     table.friction = 0.5;
-    table.AddShape(sideLeft);
-    table.AddShape(sideTopLeft);
-    table.AddShape(sideTopRight);
-    table.AddShape(sideRight);
-    table.AddShape(sideBottom);
+
+    var side;
+    var points;
+
+    // Left
+    side = new b2PolyDef();
+    points = [
+      [-centerOffset.x, -centerOffset.y + poolTable.bumperThickness * 2],
+      [-centerOffset.x + poolTable.bumperThickness * 2, -centerOffset.y + poolTable.bumperThickness * 4],
+      [-centerOffset.x + poolTable.bumperThickness * 2, centerOffset.y - poolTable.bumperThickness * 4],
+      [-centerOffset.x, centerOffset.y - poolTable.bumperThickness * 2]];
+    side.SetVertices(points);
+    table.AddShape(side);
+
+    // Right
+    side = new b2PolyDef();
+    points = new goog.math.Matrix(points).multiply(matrixFlipHorizontal).toArray().reverse();
+    side.SetVertices(points);
+    table.AddShape(side);
+
+    // top left
+    points = [
+      [-centerOffset.x + poolTable.bumperThickness * 2, -centerOffset.y],
+      [-centerOffset.x + poolTable.bumperThickness * 4, -centerOffset.y + poolTable.bumperThickness * 2],
+      [-poolTable.bumperThickness * 2, -centerOffset.y + poolTable.bumperThickness * 2],
+      [-poolTable.bumperThickness * 2, -centerOffset.y]].reverse();
+
+    side = new b2PolyDef();
+    side.SetVertices(points);
+    table.AddShape(side);
+
+    // top right
+    side = new b2PolyDef();
+    points = new goog.math.Matrix(points).multiply(matrixFlipHorizontal).toArray().reverse();
+    side.SetVertices(points);
+    table.AddShape(side);
+
+    // bottom right
+    side = new b2PolyDef();
+    points = new goog.math.Matrix(points).multiply(matrixFlipVertical).toArray();
+    side.SetVertices(points);
+    table.AddShape(side);
+
+    // bottom left
+    side = new b2PolyDef();
+    points = new goog.math.Matrix(points).multiply(matrixFlipHorizontal).toArray().reverse();
+    side.SetVertices(points);
+    table.AddShape(side);
 
     return world.CreateBody(table);
   }

@@ -1,4 +1,12 @@
 function drawWorld(world, context) {
+  context.strokeStyle = '#ffffff';
+  context.beginPath();
+  context.moveTo(-10,-10);
+  context.lineTo(10,10);
+  context.moveTo(10,-10);
+  context.lineTo(-10,10);
+  context.stroke();
+
   for (var b = world.m_bodyList; b; b = b.m_next) {
     for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
       drawShape(s, context);

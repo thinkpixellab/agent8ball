@@ -2,6 +2,7 @@ var world;
 var canvasContext;
 var canvasWidth;
 var canvasHeight;
+var centerOffset;
 
 var poolTable = {
   // cm, regulation
@@ -19,7 +20,7 @@ function step(cnt) {
   var timeStep = 1.0 / 60;
   var iteration = 1;
   world.Step(timeStep, iteration);
-  canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+  canvasContext.clearRect(-centerOffset.x, -centerOffset.y, 2 * centerOffset.x, 2 * centerOffset.y);
   drawWorld(world, canvasContext);
   setTimeout('step(' + (cnt || 0) + ')', 10);
 }
@@ -31,14 +32,16 @@ $(window).load(function() {
     canvasElm.attr('width', poolTable.width * 2 + poolTable.bumperThickness * 4);
     canvasElm.attr('height', poolTable.height * 2 + poolTable.bumperThickness * 4);
 
+    centerOffset = new b2Vec2(poolTable.width + poolTable.bumperThickness * 2, poolTable.height + poolTable.bumperThickness * 2);
     world = createWorld();
     canvasContext = canvasElm[0].getContext('2d');
+    canvasContext.translate(centerOffset.x, centerOffset.y);
 
     canvasWidth = canvasElm.width();
     canvasHeight = canvasElm.height();
 
     canvasElm.click(function(e) {
-      createBall(world, e.offsetX, e.offsetY, poolTable.ballDiameter * 2, new b2Vec2(400, 0));
+      createBall(world, e.offsetX - centerOffset.x, e.offsetY - centerOffset.y, poolTable.ballDiameter * 2, new b2Vec2(400, 0));
     });
 
     step();
