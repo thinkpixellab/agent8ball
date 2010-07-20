@@ -7,8 +7,8 @@ var cueBall;
 
 
 $(window).load(function() {
-  var canvasElm = $('#demo_canvas');
-  if (canvasElm) {
+  var canvasElm = $('canvas#demo_canvas');
+  if (canvasElm[0]) {
 
     canvasElm.attr('width', eightball.PoolTable.width * 2 + eightball.PoolTable.bumperThickness * 4);
     canvasElm.attr('height', eightball.PoolTable.height * 2 + eightball.PoolTable.bumperThickness * 4);
