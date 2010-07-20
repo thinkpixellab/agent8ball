@@ -3,6 +3,7 @@ var canvasContext;
 var canvasWidth;
 var canvasHeight;
 var centerOffset;
+var cueBall;
 
 var poolTable = {
   // cm, regulation
@@ -41,7 +42,11 @@ $(window).load(function() {
     canvasHeight = canvasElm.height();
 
     canvasElm.click(function(e) {
-      createBall(world, e.offsetX - centerOffset.x, e.offsetY - centerOffset.y, poolTable.ballDiameter * 2, new b2Vec2(400, 0));
+      var velocity = new b2Vec2(b2Math.b2Random() , b2Math.b2Random() );
+      velocity.Normalize();
+      velocity.Multiply(300);
+      cueBall.SetLinearVelocity(velocity);
+      cueBall.WakeUp();
     });
 
     step();
@@ -63,7 +68,7 @@ function createBall(world, x, y, radius, initialVelocity) {
   if (initialVelocity) {
     ballBd.linearVelocity = initialVelocity;
   }
-  ballBd.linearDamping = 0.005;
+  ballBd.linearDamping = 0.002;
   ballBd.angularDamping = 0.005;
   return world.CreateBody(ballBd);
 }

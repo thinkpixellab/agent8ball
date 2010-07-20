@@ -17,6 +17,8 @@ function createWorld() {
       }
 
     }
+
+    cueBall = createBall(world, -0.5 * poolTable.width, 0, ballRadius);
   }
 
   var matrixFlipHorizontal = new goog.math.Matrix([
@@ -56,7 +58,7 @@ function createWorld() {
     points = [
       [-centerOffset.x + poolTable.bumperThickness * 2, -centerOffset.y],
       [-centerOffset.x + poolTable.bumperThickness * 4, -centerOffset.y + poolTable.bumperThickness * 2],
-      [-poolTable.bumperThickness * 2, -centerOffset.y + poolTable.bumperThickness * 2],
+      [-poolTable.bumperThickness * 2.2, -centerOffset.y + poolTable.bumperThickness * 2],
       [-poolTable.bumperThickness * 2, -centerOffset.y]].reverse();
 
     side = new b2PolyDef();
