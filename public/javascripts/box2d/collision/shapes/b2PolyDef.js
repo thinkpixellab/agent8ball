@@ -16,6 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+/** @typedef {b2PolyDef} */
 var b2PolyDef = Class.create();
 Object.extend(b2PolyDef.prototype, b2ShapeDef.prototype);
 Object.extend(b2PolyDef.prototype, {

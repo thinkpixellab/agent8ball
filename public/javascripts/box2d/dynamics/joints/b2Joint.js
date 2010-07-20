@@ -16,51 +16,52 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
+/** 
+ @const
+ @typedef {b2Joint} 
+ */
 var b2Joint = Class.create();
-b2Joint.prototype = 
-{
-  GetType: function(){
+b2Joint.prototype = {
+  GetType: function() {
     return this.m_type;
   },
 
-  GetAnchor1: function(){return null},
-  GetAnchor2: function(){return null},
+  GetAnchor1: function() {
+    return null;
+  },
+  GetAnchor2: function() {
+    return null;
+  },
 
-  GetReactionForce: function(invTimeStep){return null},
-  GetReactionTorque: function(invTimeStep){return 0.0},
+  GetReactionForce: function(invTimeStep) {
+    return null;
+  },
+  GetReactionTorque: function(invTimeStep) {
+    return 0.0;
+  },
 
-  GetBody1: function()
-  {
+  GetBody1: function() {
     return this.m_body1;
   },
 
-  GetBody2: function()
-  {
+  GetBody2: function() {
     return this.m_body2;
   },
 
-  GetNext: function(){
+  GetNext: function() {
     return this.m_next;
   },
 
-  GetUserData: function(){
+  GetUserData: function() {
     return this.m_userData;
   },
 
   //--------------- Internals Below -------------------
-
-
-
-  initialize: function(def){
+  initialize: function(def) {
     // initialize instance variables for references
     this.m_node1 = new b2JointNode();
     this.m_node2 = new b2JointNode();
     //
-
     this.m_type = def.type;
     this.m_prev = null;
     this.m_next = null;
@@ -71,13 +72,14 @@ b2Joint.prototype =
     this.m_userData = def.userData;
   },
   //virtual ~b2Joint() {}
-
-  PrepareVelocitySolver: function(){},
-  SolveVelocityConstraints: function(step){},
+  PrepareVelocitySolver: function() {},
+  SolveVelocityConstraints: function(step) {},
 
   // This returns true if the position errors are within tolerance.
-  PreparePositionSolver: function(){},
-  SolvePositionConstraints: function(){return false},
+  PreparePositionSolver: function() {},
+  SolvePositionConstraints: function() {
+    return false;
+  },
 
   m_type: 0,
   m_prev: null,
@@ -92,70 +94,65 @@ b2Joint.prototype =
 
   m_userData: null
 
-
   // ENUMS
-
   // enum b2JointType
-
   // enum b2LimitState
-
 };
-b2Joint.Create = function(def, allocator){
-    var joint = null;
+b2Joint.Create = function(def, allocator) {
+  var joint = null;
 
-    switch (def.type)
+  switch (def.type) {
+  case b2Joint.e_distanceJoint:
     {
-    case b2Joint.e_distanceJoint:
-      {
-        //void* mem = allocator->Allocate(sizeof(b2DistanceJoint));
-        joint = new b2DistanceJoint(def);
-      }
-      break;
-
-    case b2Joint.e_mouseJoint:
-      {
-        //void* mem = allocator->Allocate(sizeof(b2MouseJoint));
-        joint = new b2MouseJoint(def);
-      }
-      break;
-
-    case b2Joint.e_prismaticJoint:
-      {
-        //void* mem = allocator->Allocate(sizeof(b2PrismaticJoint));
-        joint = new b2PrismaticJoint(def);
-      }
-      break;
-
-    case b2Joint.e_revoluteJoint:
-      {
-        //void* mem = allocator->Allocate(sizeof(b2RevoluteJoint));
-        joint = new b2RevoluteJoint(def);
-      }
-      break;
-
-    case b2Joint.e_pulleyJoint:
-      {
-        //void* mem = allocator->Allocate(sizeof(b2PulleyJoint));
-        joint = new b2PulleyJoint(def);
-      }
-      break;
-
-    case b2Joint.e_gearJoint:
-      {
-        //void* mem = allocator->Allocate(sizeof(b2GearJoint));
-        joint = new b2GearJoint(def);
-      }
-      break;
-
-    default:
-      //b2Settings.b2Assert(false);
-      break;
+      //void* mem = allocator->Allocate(sizeof(b2DistanceJoint));
+      joint = new b2DistanceJoint(def);
     }
+    break;
 
-    return joint;
-  };
-b2Joint.Destroy = function(joint, allocator){
-    /*joint->~b2Joint();
+  case b2Joint.e_mouseJoint:
+    {
+      //void* mem = allocator->Allocate(sizeof(b2MouseJoint));
+      joint = new b2MouseJoint(def);
+    }
+    break;
+
+  case b2Joint.e_prismaticJoint:
+    {
+      //void* mem = allocator->Allocate(sizeof(b2PrismaticJoint));
+      joint = new b2PrismaticJoint(def);
+    }
+    break;
+
+  case b2Joint.e_revoluteJoint:
+    {
+      //void* mem = allocator->Allocate(sizeof(b2RevoluteJoint));
+      joint = new b2RevoluteJoint(def);
+    }
+    break;
+
+  case b2Joint.e_pulleyJoint:
+    {
+      //void* mem = allocator->Allocate(sizeof(b2PulleyJoint));
+      joint = new b2PulleyJoint(def);
+    }
+    break;
+
+  case b2Joint.e_gearJoint:
+    {
+      //void* mem = allocator->Allocate(sizeof(b2GearJoint));
+      joint = new b2GearJoint(def);
+    }
+    break;
+
+  default:
+    //b2Settings.b2Assert(false);
+    break;
+  }
+
+  return joint;
+};
+b2Joint.Destroy = function(joint, allocator) {
+  /*joint->~b2Joint();
     switch (joint.m_type)
     {
     case b2Joint.e_distanceJoint:
@@ -186,15 +183,59 @@ b2Joint.Destroy = function(joint, allocator){
       b2Assert(false);
       break;
     }*/
-  };
+};
+/** 
+ @const
+ @type {number}
+ */
 b2Joint.e_unknownJoint = 0;
+/** 
+ @const
+ @type {number} 
+ */
 b2Joint.e_revoluteJoint = 1;
+/** 
+ @const
+ @type {number} 
+ */
 b2Joint.e_prismaticJoint = 2;
+/**
+ @const
+ @type {number} 
+ */
 b2Joint.e_distanceJoint = 3;
+/** 
+ @const
+ @type {number} 
+ */
 b2Joint.e_pulleyJoint = 4;
+/** 
+ @const
+ @type {number} 
+ */
 b2Joint.e_mouseJoint = 5;
+/** 
+ @const
+ @type {number} 
+ */
 b2Joint.e_gearJoint = 6;
+/** 
+ @const
+ @type {number} 
+ */
 b2Joint.e_inactiveLimit = 0;
+/** 
+ @const
+ @type {number} 
+ */
 b2Joint.e_atLowerLimit = 1;
+/**
+ @const
+ @type {number} 
+ */
 b2Joint.e_atUpperLimit = 2;
+/** 
+ @const
+ @type {number} 
+ */
 b2Joint.e_equalLimits = 3;

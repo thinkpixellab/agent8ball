@@ -16,10 +16,6 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
 /*
 Position Correction Notes
 =========================
@@ -99,61 +95,53 @@ probably default to the slower Full NGS and let the user select the faster
 Baumgarte method in performance critical scenarios.
 */
 
-
+/** @typedef {b2Island} */
 var b2Island = Class.create();
-b2Island.prototype = 
-{
-  initialize: function(bodyCapacity, contactCapacity, jointCapacity, allocator)
-  {
+b2Island.prototype = {
+  initialize: function(bodyCapacity, contactCapacity, jointCapacity, allocator) {
     var i = 0;
 
     this.m_bodyCapacity = bodyCapacity;
     this.m_contactCapacity = contactCapacity;
-    this.m_jointCapacity   = jointCapacity;
+    this.m_jointCapacity = jointCapacity;
     this.m_bodyCount = 0;
     this.m_contactCount = 0;
     this.m_jointCount = 0;
-
 
     //this.m_bodies = (b2Body**)allocator->Allocate(bodyCapacity * sizeof(b2Body*));
     this.m_bodies = new Array(bodyCapacity);
     for (i = 0; i < bodyCapacity; i++)
-      this.m_bodies[i] = null;
+    this.m_bodies[i] = null;
 
     //this.m_contacts = (b2Contact**)allocator->Allocate(contactCapacity   * sizeof(b2Contact*));
     this.m_contacts = new Array(contactCapacity);
     for (i = 0; i < contactCapacity; i++)
-      this.m_contacts[i] = null;
+    this.m_contacts[i] = null;
 
     //this.m_joints = (b2Joint**)allocator->Allocate(jointCapacity * sizeof(b2Joint*));
     this.m_joints = new Array(jointCapacity);
     for (i = 0; i < jointCapacity; i++)
-      this.m_joints[i] = null;
+    this.m_joints[i] = null;
 
     this.m_allocator = allocator;
   },
   //~b2Island();
-
-  Clear: function()
-  {
+  Clear: function() {
     this.m_bodyCount = 0;
     this.m_contactCount = 0;
     this.m_jointCount = 0;
   },
 
-  Solve: function(step, gravity)
-  {
+  Solve: function(step, gravity) {
     var i = 0;
     var b;
 
-    for (i = 0; i < this.m_bodyCount; ++i)
-    {
+    for (i = 0; i < this.m_bodyCount; ++i) {
       b = this.m_bodies[i];
 
-      if (b.m_invMass == 0.0)
-        continue;
+      if (b.m_invMass == 0.0) continue;
 
-      b.m_linearVelocity.Add( b2Math.MulFV (step.dt, b2Math.AddVV(gravity, b2Math.MulFV( b.m_invMass, b.m_force ) ) ) );
+      b.m_linearVelocity.Add(b2Math.MulFV(step.dt, b2Math.AddVV(gravity, b2Math.MulFV(b.m_invMass, b.m_force))));
       b.m_angularVelocity += step.dt * b.m_invI * b.m_torque;
 
       //b.m_linearVelocity *= b.m_linearDamping;
@@ -170,29 +158,24 @@ b2Island.prototype =
     // Pre-solve
     contactSolver.PreSolve();
 
-    for (i = 0; i < this.m_jointCount; ++i)
-    {
+    for (i = 0; i < this.m_jointCount; ++i) {
       this.m_joints[i].PrepareVelocitySolver();
     }
 
     // this.Solve velocity constraints.
-    for (i = 0; i < step.iterations; ++i)
-    {
+    for (i = 0; i < step.iterations; ++i) {
       contactSolver.SolveVelocityConstraints();
 
-      for (var j = 0; j < this.m_jointCount; ++j)
-      {
+      for (var j = 0; j < this.m_jointCount; ++j) {
         this.m_joints[j].SolveVelocityConstraints(step);
       }
     }
 
     // Integrate positions.
-    for (i = 0; i < this.m_bodyCount; ++i)
-    {
+    for (i = 0; i < this.m_bodyCount; ++i) {
       b = this.m_bodies[i];
 
-      if (b.m_invMass == 0.0)
-        continue;
+      if (b.m_invMass == 0.0) continue;
 
       //b.m_position.Add( b2Math.MulFV (step.dt, b.m_linearVelocity) );
       b.m_position.x += step.dt * b.m_linearVelocity.x;
@@ -202,27 +185,22 @@ b2Island.prototype =
       b.m_R.Set(b.m_rotation);
     }
 
-    for (i = 0; i < this.m_jointCount; ++i)
-    {
+    for (i = 0; i < this.m_jointCount; ++i) {
       this.m_joints[i].PreparePositionSolver();
     }
 
     // this.Solve position constraints.
-    if (b2World.s_enablePositionCorrection)
-    {
-      for (b2Island.m_positionIterationCount = 0; b2Island.m_positionIterationCount < step.iterations; ++b2Island.m_positionIterationCount)
-      {
+    if (b2World.s_enablePositionCorrection) {
+      for (b2Island.m_positionIterationCount = 0; b2Island.m_positionIterationCount < step.iterations; ++b2Island.m_positionIterationCount) {
         var contactsOkay = contactSolver.SolvePositionConstraints(b2Settings.b2_contactBaumgarte);
 
         var jointsOkay = true;
-        for (i = 0; i < this.m_jointCount; ++i)
-        {
+        for (i = 0; i < this.m_jointCount; ++i) {
           var jointOkay = this.m_joints[i].SolvePositionConstraints();
           jointsOkay = jointsOkay && jointOkay;
         }
 
-        if (contactsOkay && jointsOkay)
-        {
+        if (contactsOkay && jointsOkay) {
           break;
         }
       }
@@ -232,12 +210,10 @@ b2Island.prototype =
     contactSolver.PostSolve();
 
     // Synchronize shapes and reset forces.
-    for (i = 0; i < this.m_bodyCount; ++i)
-    {
+    for (i = 0; i < this.m_bodyCount; ++i) {
       b = this.m_bodies[i];
 
-      if (b.m_invMass == 0.0)
-        continue;
+      if (b.m_invMass == 0.0) continue;
 
       b.m_R.Set(b.m_rotation);
 
@@ -247,8 +223,7 @@ b2Island.prototype =
     }
   },
 
-  UpdateSleep: function(dt)
-  {
+  UpdateSleep: function(dt) {
     var i = 0;
     var b;
 
@@ -257,58 +232,45 @@ b2Island.prototype =
     var linTolSqr = b2Settings.b2_linearSleepTolerance * b2Settings.b2_linearSleepTolerance;
     var angTolSqr = b2Settings.b2_angularSleepTolerance * b2Settings.b2_angularSleepTolerance;
 
-    for (i = 0; i < this.m_bodyCount; ++i)
-    {
+    for (i = 0; i < this.m_bodyCount; ++i) {
       b = this.m_bodies[i];
-      if (b.m_invMass == 0.0)
-      {
+      if (b.m_invMass == 0.0) {
         continue;
       }
 
-      if ((b.m_flags & b2Body.e_allowSleepFlag) == 0)
-      {
+      if ((b.m_flags & b2Body.e_allowSleepFlag) == 0) {
         b.m_sleepTime = 0.0;
         minSleepTime = 0.0;
       }
 
-      if ((b.m_flags & b2Body.e_allowSleepFlag) == 0 ||
-        b.m_angularVelocity * b.m_angularVelocity > angTolSqr ||
-        b2Math.b2Dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr)
-      {
+      if ((b.m_flags & b2Body.e_allowSleepFlag) == 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || b2Math.b2Dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr) {
         b.m_sleepTime = 0.0;
         minSleepTime = 0.0;
-      }
-      else
-      {
+      } else {
         b.m_sleepTime += dt;
         minSleepTime = b2Math.b2Min(minSleepTime, b.m_sleepTime);
       }
     }
 
-    if (minSleepTime >= b2Settings.b2_timeToSleep)
-    {
-      for (i = 0; i < this.m_bodyCount; ++i)
-      {
+    if (minSleepTime >= b2Settings.b2_timeToSleep) {
+      for (i = 0; i < this.m_bodyCount; ++i) {
         b = this.m_bodies[i];
         b.m_flags |= b2Body.e_sleepFlag;
       }
     }
   },
 
-  AddBody: function(body)
-  {
+  AddBody: function(body) {
     //b2Settings.b2Assert(this.m_bodyCount < this.m_bodyCapacity);
     this.m_bodies[this.m_bodyCount++] = body;
   },
 
-  AddContact: function(contact)
-  {
+  AddContact: function(contact) {
     //b2Settings.b2Assert(this.m_contactCount < this.m_contactCapacity);
     this.m_contacts[this.m_contactCount++] = contact;
   },
 
-  AddJoint: function(joint)
-  {
+  AddJoint: function(joint) {
     //b2Settings.b2Assert(this.m_jointCount < this.m_jointCapacity);
     this.m_joints[this.m_jointCount++] = joint;
   },
@@ -327,5 +289,6 @@ b2Island.prototype =
   m_contactCapacity: 0,
   m_jointCapacity: 0,
 
-  m_positionError: null};
+  m_positionError: null
+};
 b2Island.m_positionIterationCount = 0;

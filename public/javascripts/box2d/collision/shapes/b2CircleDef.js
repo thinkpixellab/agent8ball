@@ -16,18 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
-
-
+/** @typedef {b2CircleDef} */
 var b2CircleDef = Class.create();
 Object.extend(b2CircleDef.prototype, b2ShapeDef.prototype);
-Object.extend(b2CircleDef.prototype, 
-{
-  initialize: function()
-  {
+Object.extend(b2CircleDef.prototype, {
+  initialize: function() {
     // The constructor for b2ShapeDef
     this.type = b2Shape.e_unknownShape;
     this.userData = null;
@@ -38,12 +31,11 @@ Object.extend(b2CircleDef.prototype,
     this.density = 0.0;
     this.categoryBits = 0x0001;
     this.maskBits = 0xFFFF;
-    this.groupIndex = 0;  
+    this.groupIndex = 0;
     //
-
     this.type = b2Shape.e_circleShape;
     this.radius = 1.0;
   },
 
-  radius: null});
-
+  radius: null
+});

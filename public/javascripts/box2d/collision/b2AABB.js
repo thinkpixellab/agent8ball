@@ -19,6 +19,7 @@
 
 
 // A manifold for two touching convex shapes.
+/** @typedef {b2AABB} */
 var b2AABB = Class.create();
 b2AABB.prototype = 
 {

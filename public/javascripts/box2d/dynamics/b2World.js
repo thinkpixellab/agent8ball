@@ -16,18 +16,14 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
+/** @typedef {b2World} */
 var b2World = Class.create();
-b2World.prototype = 
-{
-  initialize: function(worldAABB, gravity, doSleep){
+b2World.prototype = {
+  initialize: function(worldAABB, gravity, doSleep) {
     // initialize instance variables for references
     this.step = new b2TimeStep();
     this.m_contactManager = new b2ContactManager();
     //
-
 
     this.m_listener = null;
     this.m_filter = b2CollisionFilter.b2_defaultFilter;
@@ -56,30 +52,28 @@ b2World.prototype =
   //  this.DestroyBody(this.m_groundBody);
   //  delete this.m_broadPhase;
   //}
-
   // Set a callback to notify you when a joint is implicitly destroyed
   // when an attached body is destroyed.
-  SetListener: function(listener){
+  SetListener: function(listener) {
     this.m_listener = listener;
   },
 
   // Register a collision filter to provide specific control over collision.
   // Otherwise the default filter is used (b2CollisionFilter).
-  SetFilter: function(filter){
+  SetFilter: function(filter) {
     this.m_filter = filter;
   },
 
   // Create and destroy rigid bodies. Destruction is deferred until the
   // the next call to this.Step. This is done so that bodies may be destroyed
   // while you iterate through the contact list.
-  CreateBody: function(def){
+  CreateBody: function(def) {
     //void* mem = this.m_blockAllocator.Allocate(sizeof(b2Body));
     var b = new b2Body(def, this);
     b.m_prev = null;
 
     b.m_next = this.m_bodyList;
-    if (this.m_bodyList)
-    {
+    if (this.m_bodyList) {
       this.m_bodyList.m_prev = b;
     }
     this.m_bodyList = b;
@@ -88,27 +82,22 @@ b2World.prototype =
     return b;
   },
   // Body destruction is deferred to make contact processing more robust.
-  DestroyBody: function(b)
-  {
+  DestroyBody: function(b) {
 
-    if (b.m_flags & b2Body.e_destroyFlag)
-    {
+    if (b.m_flags & b2Body.e_destroyFlag) {
       return;
     }
 
     // Remove from normal body list.
-    if (b.m_prev)
-    {
+    if (b.m_prev) {
       b.m_prev.m_next = b.m_next;
     }
 
-    if (b.m_next)
-    {
+    if (b.m_next) {
       b.m_next.m_prev = b.m_prev;
     }
 
-    if (b == this.m_bodyList)
-    {
+    if (b == this.m_bodyList) {
       this.m_bodyList = b.m_next;
     }
 
@@ -124,28 +113,23 @@ b2World.prototype =
     this.m_bodyDestroyList = b;
   },
 
-  CleanBodyList: function()
-  {
+  CleanBodyList: function() {
     this.m_contactManager.m_destroyImmediate = true;
 
     var b = this.m_bodyDestroyList;
-    while (b)
-    {
+    while (b) {
       //b2Settings.b2Assert((b.m_flags & b2Body.e_destroyFlag) != 0);
-
       // Preserve the next pointer.
       var b0 = b;
       b = b.m_next;
 
       // Delete the attached joints
       var jn = b0.m_jointList;
-      while (jn)
-      {
+      while (jn) {
         var jn0 = jn;
         jn = jn.next;
 
-        if (this.m_listener)
-        {
+        if (this.m_listener) {
           this.m_listener.NotifyJointDestroyed(jn0.joint);
         }
 
@@ -162,14 +146,13 @@ b2World.prototype =
     this.m_contactManager.m_destroyImmediate = false;
   },
 
-  CreateJoint: function(def){
+  CreateJoint: function(def) {
     var j = b2Joint.Create(def, this.m_blockAllocator);
 
     // Connect to the world list.
     j.m_prev = null;
     j.m_next = this.m_jointList;
-    if (this.m_jointList)
-    {
+    if (this.m_jointList) {
       this.m_jointList.m_prev = j;
     }
     this.m_jointList = j;
@@ -191,36 +174,30 @@ b2World.prototype =
     j.m_body2.m_jointList = j.m_node2;
 
     // If the joint prevents collisions, then reset collision filtering.
-    if (def.collideConnected == false)
-    {
+    if (def.collideConnected == false) {
       // Reset the proxies on the body with the minimum number of shapes.
       var b = def.body1.m_shapeCount < def.body2.m_shapeCount ? def.body1 : def.body2;
-      for (var s = b.m_shapeList; s; s = s.m_next)
-      {
+      for (var s = b.m_shapeList; s; s = s.m_next) {
         s.ResetProxy(this.m_broadPhase);
       }
     }
 
     return j;
   },
-  DestroyJoint: function(j)
-  {
+  DestroyJoint: function(j) {
 
     var collideConnected = j.m_collideConnected;
 
     // Remove from the world.
-    if (j.m_prev)
-    {
+    if (j.m_prev) {
       j.m_prev.m_next = j.m_next;
     }
 
-    if (j.m_next)
-    {
+    if (j.m_next) {
       j.m_next.m_prev = j.m_prev;
     }
 
-    if (j == this.m_jointList)
-    {
+    if (j == this.m_jointList) {
       this.m_jointList = j.m_next;
     }
 
@@ -233,18 +210,15 @@ b2World.prototype =
     body2.WakeUp();
 
     // Remove from body 1
-    if (j.m_node1.prev)
-    {
+    if (j.m_node1.prev) {
       j.m_node1.prev.next = j.m_node1.next;
     }
 
-    if (j.m_node1.next)
-    {
+    if (j.m_node1.next) {
       j.m_node1.next.prev = j.m_node1.prev;
     }
 
-    if (j.m_node1 == body1.m_jointList)
-    {
+    if (j.m_node1 == body1.m_jointList) {
       body1.m_jointList = j.m_node1.next;
     }
 
@@ -252,18 +226,15 @@ b2World.prototype =
     j.m_node1.next = null;
 
     // Remove from body 2
-    if (j.m_node2.prev)
-    {
+    if (j.m_node2.prev) {
       j.m_node2.prev.next = j.m_node2.next;
     }
 
-    if (j.m_node2.next)
-    {
+    if (j.m_node2.next) {
       j.m_node2.next.prev = j.m_node2.prev;
     }
 
-    if (j.m_node2 == body2.m_jointList)
-    {
+    if (j.m_node2 == body2.m_jointList) {
       body2.m_jointList = j.m_node2.next;
     }
 
@@ -276,12 +247,10 @@ b2World.prototype =
     --this.m_jointCount;
 
     // If the joint prevents collisions, then reset collision filtering.
-    if (collideConnected == false)
-    {
+    if (collideConnected == false) {
       // Reset the proxies on the body with the minimum number of shapes.
       var b = body1.m_shapeCount < body2.m_shapeCount ? body1 : body2;
-      for (var s = b.m_shapeList; s; s = s.m_next)
-      {
+      for (var s = b.m_shapeList; s; s = s.m_next) {
         s.ResetProxy(this.m_broadPhase);
       }
     }
@@ -289,27 +258,22 @@ b2World.prototype =
 
   // The world provides a single ground body with no collision shapes. You
   // can use this to simplify the creation of joints.
-  GetGroundBody: function(){
+  GetGroundBody: function() {
     return this.m_groundBody;
   },
 
-
   step: new b2TimeStep(),
   // this.Step
-  Step: function(dt, iterations){
+  Step: function(dt, iterations) {
 
     var b;
     var other;
 
-
     this.step.dt = dt;
-    this.step.iterations  = iterations;
-    if (dt > 0.0)
-    {
+    this.step.iterations = iterations;
+    if (dt > 0.0) {
       this.step.inv_dt = 1.0 / dt;
-    }
-    else
-    {
+    } else {
       this.step.inv_dt = 0.0;
     }
 
@@ -328,16 +292,13 @@ b2World.prototype =
     var island = new b2Island(this.m_bodyCount, this.m_contactCount, this.m_jointCount, this.m_stackAllocator);
 
     // Clear all the island flags.
-    for (b = this.m_bodyList; b != null; b = b.m_next)
-    {
+    for (b = this.m_bodyList; b != null; b = b.m_next) {
       b.m_flags &= ~b2Body.e_islandFlag;
     }
-    for (var c = this.m_contactList; c != null; c = c.m_next)
-    {
+    for (var c = this.m_contactList; c != null; c = c.m_next) {
       c.m_flags &= ~b2Contact.e_islandFlag;
     }
-    for (var j = this.m_jointList; j != null; j = j.m_next)
-    {
+    for (var j = this.m_jointList; j != null; j = j.m_next) {
       j.m_islandFlag = false;
     }
 
@@ -346,12 +307,10 @@ b2World.prototype =
     //var stack = (b2Body**)this.m_stackAllocator.Allocate(stackSize * sizeof(b2Body*));
     var stack = new Array(this.m_bodyCount);
     for (var k = 0; k < this.m_bodyCount; k++)
-      stack[k] = null;
+    stack[k] = null;
 
-    for (var seed = this.m_bodyList; seed != null; seed = seed.m_next)
-    {
-      if (seed.m_flags & (b2Body.e_staticFlag | b2Body.e_islandFlag | b2Body.e_sleepFlag | b2Body.e_frozenFlag))
-      {
+    for (var seed = this.m_bodyList; seed != null; seed = seed.m_next) {
+      if (seed.m_flags & (b2Body.e_staticFlag | b2Body.e_islandFlag | b2Body.e_sleepFlag | b2Body.e_frozenFlag)) {
         continue;
       }
 
@@ -362,8 +321,7 @@ b2World.prototype =
       seed.m_flags |= b2Body.e_islandFlag;;
 
       // Perform a depth first search (DFS) on the constraint graph.
-      while (stackCount > 0)
-      {
+      while (stackCount > 0) {
         // Grab the next body off the stack and add it to the island.
         b = stack[--stackCount];
         island.AddBody(b);
@@ -373,16 +331,13 @@ b2World.prototype =
 
         // To keep islands, we don't
         // propagate islands across static bodies.
-        if (b.m_flags & b2Body.e_staticFlag)
-        {
+        if (b.m_flags & b2Body.e_staticFlag) {
           continue;
         }
 
         // Search all contacts connected to this body.
-        for (var cn = b.m_contactList; cn != null; cn = cn.next)
-        {
-          if (cn.contact.m_flags & b2Contact.e_islandFlag)
-          {
+        for (var cn = b.m_contactList; cn != null; cn = cn.next) {
+          if (cn.contact.m_flags & b2Contact.e_islandFlag) {
             continue;
           }
 
@@ -390,8 +345,7 @@ b2World.prototype =
           cn.contact.m_flags |= b2Contact.e_islandFlag;
 
           other = cn.other;
-          if (other.m_flags & b2Body.e_islandFlag)
-          {
+          if (other.m_flags & b2Body.e_islandFlag) {
             continue;
           }
 
@@ -401,10 +355,8 @@ b2World.prototype =
         }
 
         // Search all joints connect to this body.
-        for (var jn = b.m_jointList; jn != null; jn = jn.next)
-        {
-          if (jn.joint.m_islandFlag == true)
-          {
+        for (var jn = b.m_jointList; jn != null; jn = jn.next) {
+          if (jn.joint.m_islandFlag == true) {
             continue;
           }
 
@@ -412,8 +364,7 @@ b2World.prototype =
           jn.joint.m_islandFlag = true;
 
           other = jn.other;
-          if (other.m_flags & b2Body.e_islandFlag)
-          {
+          if (other.m_flags & b2Body.e_islandFlag) {
             continue;
           }
 
@@ -427,27 +378,22 @@ b2World.prototype =
 
       this.m_positionIterationCount = b2Math.b2Max(this.m_positionIterationCount, b2Island.m_positionIterationCount);
 
-      if (this.m_allowSleep)
-      {
+      if (this.m_allowSleep) {
         island.UpdateSleep(dt);
       }
 
       // Post solve cleanup.
-      for (var i = 0; i < island.m_bodyCount; ++i)
-      {
+      for (var i = 0; i < island.m_bodyCount; ++i) {
         // Allow static bodies to participate in other islands.
         b = island.m_bodies[i];
-        if (b.m_flags & b2Body.e_staticFlag)
-        {
+        if (b.m_flags & b2Body.e_staticFlag) {
           b.m_flags &= ~b2Body.e_islandFlag;
         }
 
         // Handle newly frozen bodies.
-        if (b.IsFrozen() && this.m_listener)
-        {
+        if (b.IsFrozen() && this.m_listener) {
           var response = this.m_listener.NotifyBoundaryViolated(b);
-          if (response == b2WorldListener.b2_destroyBody)
-          {
+          if (response == b2WorldListener.b2_destroyBody) {
             this.DestroyBody(b);
             b = null;
             island.m_bodies[i] = null;
@@ -464,14 +410,13 @@ b2World.prototype =
   // this.Query the world for all shapes that potentially overlap the
   // provided AABB. You provide a shape pointer buffer of specified
   // size. The number of shapes found is returned.
-  Query: function(aabb, shapes, maxCount){
+  Query: function(aabb, shapes, maxCount) {
 
     //void** results = (void**)this.m_stackAllocator.Allocate(maxCount * sizeof(void*));
     var results = new Array();
     var count = this.m_broadPhase.QueryAABB(aabb, results, maxCount);
 
-    for (var i = 0; i < count; ++i)
-    {
+    for (var i = 0; i < count; ++i) {
       shapes[i] = results[i];
     }
 
@@ -480,18 +425,17 @@ b2World.prototype =
   },
 
   // You can use these to iterate over all the bodies, joints, and contacts.
-  GetBodyList: function(){
+  GetBodyList: function() {
     return this.m_bodyList;
   },
-  GetJointList: function(){
+  GetJointList: function() {
     return this.m_jointList;
   },
-  GetContactList: function(){
+  GetContactList: function() {
     return this.m_contactList;
   },
 
   //--------------- Internals Below -------------------
-
   m_blockAllocator: null,
   m_stackAllocator: null,
 
@@ -517,6 +461,7 @@ b2World.prototype =
   m_listener: null,
   m_filter: null,
 
-  m_positionIterationCount: 0};
+  m_positionIterationCount: 0
+};
 b2World.s_enablePositionCorrection = 1;
 b2World.s_enableWarmStarting = 1;

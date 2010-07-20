@@ -16,21 +16,15 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
+/** @typedef {b2BodyDef} */
 var b2BodyDef = Class.create();
-b2BodyDef.prototype = 
-{
-  initialize: function()
-  {
+b2BodyDef.prototype = {
+  initialize: function() {
     // initialize instance variables for references
     this.shapes = new Array();
     //
-
     this.userData = null;
-    for (var i = 0; i < b2Settings.b2_maxShapesPerBody; i++){
+    for (var i = 0; i < b2Settings.b2_maxShapesPerBody; i++) {
       this.shapes[i] = null;
     }
     this.position = new b2Vec2(0.0, 0.0);
@@ -56,14 +50,12 @@ b2BodyDef.prototype =
   isSleeping: null,
   preventRotation: null,
 
-  AddShape: function(shape)
-  {
-    for (var i = 0; i < b2Settings.b2_maxShapesPerBody; ++i)
-    {
-      if (this.shapes[i] == null)
-      {
+  AddShape: function(shape) {
+    for (var i = 0; i < b2Settings.b2_maxShapesPerBody; ++i) {
+      if (this.shapes[i] == null) {
         this.shapes[i] = shape;
         break;
       }
     }
-  }};
+  }
+};

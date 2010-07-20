@@ -16,17 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
-
-
+/** @typedef {b2CircleShape} */
 var b2CircleShape = Class.create();
 Object.extend(b2CircleShape.prototype, b2Shape.prototype);
-Object.extend(b2CircleShape.prototype, 
-{
-  TestPoint: function(p){
+Object.extend(b2CircleShape.prototype, {
+  TestPoint: function(p) {
     //var d = b2Math.SubtractVV(p, this.m_position);
     var d = new b2Vec2();
     d.SetV(p);
@@ -35,13 +29,11 @@ Object.extend(b2CircleShape.prototype,
   },
 
   //--------------- Internals Below -------------------
-
-  initialize: function(def, body, localCenter){
+  initialize: function(def, body, localCenter) {
     // initialize instance variables for references
     this.m_R = new b2Mat22();
     this.m_position = new b2Vec2();
     //
-
     // The constructor for b2Shape
     this.m_userData = def.userData;
 
@@ -57,13 +49,10 @@ Object.extend(b2CircleShape.prototype,
     this.m_maskBits = def.maskBits;
     this.m_groupIndex = def.groupIndex;
     //
-
     // initialize instance variables for references
     this.m_localPosition = new b2Vec2();
     //
-
     //super(def, body);
-
     //b2Settings.b2Assert(def.type == b2Shape.e_circleShape);
     var circle = def;
 
@@ -80,36 +69,31 @@ Object.extend(b2CircleShape.prototype,
     this.m_position.x = this.m_body.m_position.x + rX;
     this.m_position.y = this.m_body.m_position.y + rY;
     //this.m_maxRadius = r.Length() + this.m_radius;
-    this.m_maxRadius = Math.sqrt(rX*rX+rY*rY) + this.m_radius;
+    this.m_maxRadius = Math.sqrt(rX * rX + rY * rY) + this.m_radius;
 
     var aabb = new b2AABB();
     aabb.minVertex.Set(this.m_position.x - this.m_radius, this.m_position.y - this.m_radius);
     aabb.maxVertex.Set(this.m_position.x + this.m_radius, this.m_position.y + this.m_radius);
 
     var broadPhase = this.m_body.m_world.m_broadPhase;
-    if (broadPhase.InRange(aabb))
-    {
+    if (broadPhase.InRange(aabb)) {
       this.m_proxyId = broadPhase.CreateProxy(aabb, this);
-    }
-    else
-    {
+    } else {
       this.m_proxyId = b2Pair.b2_nullProxy;
     }
 
-    if (this.m_proxyId == b2Pair.b2_nullProxy)
-    {
+    if (this.m_proxyId == b2Pair.b2_nullProxy) {
       this.m_body.Freeze();
     }
   },
 
-  Synchronize: function(position1, R1, position2, R2){
+  Synchronize: function(position1, R1, position2, R2) {
     this.m_R.SetM(R2);
     //this.m_position = position2 + b2Mul(R2, this.m_localPosition);
     this.m_position.x = (R2.col1.x * this.m_localPosition.x + R2.col2.x * this.m_localPosition.y) + position2.x;
     this.m_position.y = (R2.col1.y * this.m_localPosition.x + R2.col2.y * this.m_localPosition.y) + position2.y;
 
-    if (this.m_proxyId == b2Pair.b2_nullProxy)
-    {
+    if (this.m_proxyId == b2Pair.b2_nullProxy) {
       return;
     }
 
@@ -129,28 +113,22 @@ Object.extend(b2CircleShape.prototype,
     aabb.maxVertex.Set(upperX + this.m_radius, upperY + this.m_radius);
 
     var broadPhase = this.m_body.m_world.m_broadPhase;
-    if (broadPhase.InRange(aabb))
-    {
+    if (broadPhase.InRange(aabb)) {
       broadPhase.MoveProxy(this.m_proxyId, aabb);
-    }
-    else
-    {
+    } else {
       this.m_body.Freeze();
     }
   },
 
-  QuickSync: function(position, R){
+  QuickSync: function(position, R) {
     this.m_R.SetM(R);
     //this.m_position = position + b2Mul(R, this.m_localPosition);
     this.m_position.x = (R.col1.x * this.m_localPosition.x + R.col2.x * this.m_localPosition.y) + position.x;
     this.m_position.y = (R.col1.y * this.m_localPosition.x + R.col2.y * this.m_localPosition.y) + position.y;
   },
 
-
-  ResetProxy: function(broadPhase)
-  {
-    if (this.m_proxyId == b2Pair.b2_nullProxy)
-    {
+  ResetProxy: function(broadPhase) {
+    if (this.m_proxyId == b2Pair.b2_nullProxy) {
       return;
     }
 
@@ -163,36 +141,28 @@ Object.extend(b2CircleShape.prototype,
     aabb.minVertex.Set(this.m_position.x - this.m_radius, this.m_position.y - this.m_radius);
     aabb.maxVertex.Set(this.m_position.x + this.m_radius, this.m_position.y + this.m_radius);
 
-    if (broadPhase.InRange(aabb))
-    {
+    if (broadPhase.InRange(aabb)) {
       this.m_proxyId = broadPhase.CreateProxy(aabb, this);
-    }
-    else
-    {
+    } else {
       this.m_proxyId = b2Pair.b2_nullProxy;
     }
 
-    if (this.m_proxyId == b2Pair.b2_nullProxy)
-    {
+    if (this.m_proxyId == b2Pair.b2_nullProxy) {
       this.m_body.Freeze();
     }
   },
 
-
-  Support: function(dX, dY, out)
-  {
+  Support: function(dX, dY, out) {
     //b2Vec2 u = d;
     //u.Normalize();
-    var len = Math.sqrt(dX*dX + dY*dY);
+    var len = Math.sqrt(dX * dX + dY * dY);
     dX /= len;
     dY /= len;
     //return this.m_position + this.m_radius * u;
-    out.Set(  this.m_position.x + this.m_radius*dX,
-          this.m_position.y + this.m_radius*dY);
+    out.Set(this.m_position.x + this.m_radius * dX, this.m_position.y + this.m_radius * dY);
   },
-
 
   // Local position in parent body
   m_localPosition: new b2Vec2(),
-  m_radius: null});
-
+  m_radius: null
+});

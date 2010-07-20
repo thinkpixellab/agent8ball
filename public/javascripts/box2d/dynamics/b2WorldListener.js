@@ -16,15 +16,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
-
-
+/** @typedef {b2WorldListener} */
 var b2WorldListener = Class.create();
-b2WorldListener.prototype = 
-{
+b2WorldListener.prototype = {
 
   // If a body is destroyed, then any joints attached to it are also destroyed.
   // This prevents memory leaks, but you may unexpectedly be left with an
@@ -34,19 +28,17 @@ b2WorldListener.prototype =
   // Implement this abstract class and provide it to b2World via
   // b2World::SetListener().
   // DO NOT modify the Box2D world inside this callback.
-  NotifyJointDestroyed: function(joint){},
+  NotifyJointDestroyed: function(joint) {},
 
   // This is called when a body's shape passes outside of the world boundary. If you
   // override this and pass back e_destroyBody, you must nullify your copies of the
   // body pointer.
-  NotifyBoundaryViolated: function(body)
-  {
+  NotifyBoundaryViolated: function(body) {
     //NOT_USED(body);
     return b2WorldListener.b2_freezeBody;
   },
 
-
-
-  initialize: function() {}};
+  initialize: function() {}
+};
 b2WorldListener.b2_freezeBody = 0;
 b2WorldListener.b2_destroyBody = 1;

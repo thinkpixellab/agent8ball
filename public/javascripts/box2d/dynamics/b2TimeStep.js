@@ -16,12 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
+/** @typedef {b2TimeStep} */
 var b2TimeStep = Class.create();
-b2TimeStep.prototype = 
-{
+b2TimeStep.prototype = {
   dt: null,
   inv_dt: null,
   iterations: 0,
-  initialize: function() {}};
+  initialize: function() {}
+};

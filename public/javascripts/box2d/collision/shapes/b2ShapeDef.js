@@ -16,94 +16,82 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
-
-
+/** @typedef {b2ShapeDef} */
 var b2ShapeDef = Class.create();
-b2ShapeDef.prototype = 
-{
-  initialize: function()
-  {
-    this.type = b2Shape.e_unknownShape;
-    this.userData = null;
-    this.localPosition = new b2Vec2(0.0, 0.0);
-    this.localRotation = 0.0;
-    this.friction = 0.2;
-    this.restitution = 0.0;
-    this.density = 0.0;
-    this.categoryBits = 0x0001;
-    this.maskBits = 0xFFFF;
-    this.groupIndex = 0;
-  },
 
-  //virtual ~b2ShapeDef() {}
+b2ShapeDef.prototype.initialize = function() {
+  this.type = b2Shape.e_unknownShape;
+  this.userData = null;
+  this.localPosition = new b2Vec2(0.0, 0.0);
+  this.localRotation = 0.0;
+  this.friction = 0.2;
+  this.restitution = 0.0;
+  this.density = 0.0;
+  this.categoryBits = 0x0001;
+  this.maskBits = 0xFFFF;
+  this.groupIndex = 0;
+};
 
-  ComputeMass: function(massData)
-  {
+b2ShapeDef.prototype.ComputeMass = function(massData) {
 
-    massData.center = new b2Vec2(0.0, 0.0)
+  massData.center = new b2Vec2(0.0, 0.0);
 
-    if (this.density == 0.0)
+  if (this.density == 0.0) {
+    massData.mass = 0.0;
+    massData.center.Set(0.0, 0.0);
+    massData.I = 0.0;
+  };
+
+  switch (this.type) {
+  case b2Shape.e_circleShape:
     {
-      massData.mass = 0.0;
+      var circle = this;
+      massData.mass = this.density * b2Settings.b2_pi * circle.radius * circle.radius;
       massData.center.Set(0.0, 0.0);
-      massData.I = 0.0;
-    };
-
-    switch (this.type)
-    {
-    case b2Shape.e_circleShape:
-      {
-        var circle = this;
-        massData.mass = this.density * b2Settings.b2_pi * circle.radius * circle.radius;
-        massData.center.Set(0.0, 0.0);
-        massData.I = 0.5 * (massData.mass) * circle.radius * circle.radius;
-      }
-      break;
-
-    case b2Shape.e_boxShape:
-      {
-        var box = this;
-        massData.mass = 4.0 * this.density * box.extents.x * box.extents.y;
-        massData.center.Set(0.0, 0.0);
-        massData.I = massData.mass / 3.0 * b2Math.b2Dot(box.extents, box.extents);
-      }
-      break;
-
-    case b2Shape.e_polyShape:
-      {
-        var poly = this;
-        b2Shape.PolyMass(massData, poly.vertices, poly.vertexCount, this.density);
-      }
-      break;
-
-    default:
-      massData.mass = 0.0;
-      massData.center.Set(0.0, 0.0);
-      massData.I = 0.0;
-      break;
+      massData.I = 0.5 * (massData.mass) * circle.radius * circle.radius;
     }
-  },
+    break;
 
-  type: 0,
-  userData: null,
-  localPosition: null,
-  localRotation: null,
-  friction: null,
-  restitution: null,
-  density: null,
+  case b2Shape.e_boxShape:
+    {
+      var box = this;
+      massData.mass = 4.0 * this.density * box.extents.x * box.extents.y;
+      massData.center.Set(0.0, 0.0);
+      massData.I = massData.mass / 3.0 * b2Math.b2Dot(box.extents, box.extents);
+    }
+    break;
 
-  // The collision category bits. Normally you would just set one bit.
-  categoryBits: 0,
+  case b2Shape.e_polyShape:
+    {
+      var poly = this;
+      b2Shape.PolyMass(massData, poly.vertices, poly.vertexCount, this.density);
+    }
+    break;
 
-  // The collision mask bits. This states the categories that this
-  // shape would accept for collision.
-  maskBits: 0,
+  default:
+    massData.mass = 0.0;
+    massData.center.Set(0.0, 0.0);
+    massData.I = 0.0;
+    break;
+  }
+};
 
-  // Collision groups allow a certain group of objects to never collide (negative)
-  // or always collide (positive). Zero means no collision group. Non-zero group
-  // filtering always wins against the mask bits.
-  groupIndex: 0};
+b2ShapeDef.prototype.type = 0;
+b2ShapeDef.prototype.userData = null;
+b2ShapeDef.prototype.localPosition = null;
+b2ShapeDef.prototype.localRotation = null;
+b2ShapeDef.prototype.friction = null;
+b2ShapeDef.prototype.restitution = null;
+b2ShapeDef.prototype.density = null;
+
+// The collision category bits. Normally you would just set one bit.
+b2ShapeDef.prototype.categoryBits = 0;
+
+// The collision mask bits. This states the categories that this
+// shape would accept for collision.
+b2ShapeDef.prototype.maskBits = 0;
+
+// Collision groups allow a certain group of objects to never collide (negative)
+// or always collide (positive). Zero means no collision group. Non-zero group
+// filtering always wins against the mask bits.
+b2ShapeDef.prototype.groupIndex = 0;

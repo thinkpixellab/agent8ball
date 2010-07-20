@@ -16,20 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
-
-
+/** @typedef {b2CollisionFilter} */
 var b2CollisionFilter = Class.create();
-b2CollisionFilter.prototype = 
-{
+b2CollisionFilter.prototype = {
 
   // Return true if contact calculations should be performed between these two shapes.
-  ShouldCollide: function(shape1, shape2){
-    if (shape1.m_groupIndex == shape2.m_groupIndex && shape1.m_groupIndex != 0)
-    {
+  ShouldCollide: function(shape1, shape2) {
+    if (shape1.m_groupIndex == shape2.m_groupIndex && shape1.m_groupIndex != 0) {
       return shape1.m_groupIndex > 0;
     }
 
@@ -37,6 +30,6 @@ b2CollisionFilter.prototype =
     return collide;
   },
 
-
-  initialize: function() {}};
+  initialize: function() {}
+};
 b2CollisionFilter.b2_defaultFilter = new b2CollisionFilter;
