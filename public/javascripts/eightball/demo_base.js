@@ -35,10 +35,12 @@ function createWorld() {
 
   var topRightPoints = result.toArray().reverse();
 
+  // should translate here...:-/
   for (var i = 0; i < topRightPoints.length; i++) {
     topRightPoints[i][0] += poolTable.width * 2 + poolTable.bumperThickness * 4;
-    console.debug(topRightPoints[i]);
   }
+
+
 
   function createTable(world) {
     var sideLeft = new b2PolyDef();
@@ -63,6 +65,7 @@ function createWorld() {
     sideBottom.localPosition.Set(poolTable.width + poolTable.bumperThickness * 2, poolTable.height * 2 + poolTable.bumperThickness * 3);
 
     var table = new b2BodyDef();
+    table.friction = 0.5;
     table.AddShape(sideLeft);
     table.AddShape(sideTopLeft);
     table.AddShape(sideTopRight);

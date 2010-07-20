@@ -4,14 +4,19 @@ var canvasWidth;
 var canvasHeight;
 
 var poolTable = {
-  height: 148, // cm, regulation
-  width: 284, // cm, regulation
-  ballDiameter: 5.715, // cm, regulation
+  // cm, regulation
+  height: 148,
+  // cm, regulation
+  width: 284,
+  // cm, regulation
+  ballDiameter: 5.715,
   bumperThickness: 10
 };
 
+
+
 function step(cnt) {
-  var timeStep = 1.0/60;
+  var timeStep = 1.0 / 60;
   var iteration = 1;
   world.Step(timeStep, iteration);
   canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -21,10 +26,10 @@ function step(cnt) {
 
 $(window).load(function() {
   var canvasElm = $('#demo_canvas');
-  if(canvasElm){
+  if (canvasElm) {
 
-    canvasElm.attr('width', poolTable.width*2 + poolTable.bumperThickness*4);
-    canvasElm.attr('height', poolTable.height*2 + poolTable.bumperThickness*4);
+    canvasElm.attr('width', poolTable.width * 2 + poolTable.bumperThickness * 4);
+    canvasElm.attr('height', poolTable.height * 2 + poolTable.bumperThickness * 4);
 
     world = createWorld();
     canvasContext = canvasElm[0].getContext('2d');
@@ -40,17 +45,22 @@ $(window).load(function() {
   }
 });
 
-var createBall = function(world, x, y, radius, initialVelocity) {
+
+
+function createBall(world, x, y, radius, initialVelocity) {
   var ballSd = new b2CircleDef();
   ballSd.density = 1.0;
   ballSd.radius = radius;
   ballSd.restitution = 1;
+  ballSd.friction = 0.1;
 
   var ballBd = new b2BodyDef();
   ballBd.AddShape(ballSd);
-  ballBd.position.Set(x,y);
-  if(initialVelocity){
+  ballBd.position.Set(x, y);
+  if (initialVelocity) {
     ballBd.linearVelocity = initialVelocity;
   }
+  ballBd.linearDamping = 0.005;
+  ballBd.angularDamping = 0.005;
   return world.CreateBody(ballBd);
-};
+}
