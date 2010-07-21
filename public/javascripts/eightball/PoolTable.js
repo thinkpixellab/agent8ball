@@ -85,13 +85,17 @@ eightball.PoolTable.prototype._createWorld = function() {
 
   eightball.PoolTable._createTable(this.m_world, this.m_centerOffset);
   var balls = eightball.PoolTable._setupBalls(this.m_world);
-  this.m_theCueBall = balls[15];
+  this.m_theCueBall = balls[0];
 };
 
 eightball.PoolTable._setupBalls = function(world) {
   var balls = new Array(16);
   var index = 0;
   var ballRadius = eightball.PoolTable.ballDiameter * 2;
+
+  balls[index] = this._createBall(world, -0.5 * eightball.PoolTable.width, 0, ballRadius);
+  balls[index].userData = index;
+  index++;
 
   for (var col = 0; col < 5; col++) {
 
@@ -100,12 +104,13 @@ eightball.PoolTable._setupBalls = function(world) {
     var yStart = -col * ballRadius;
 
     for (var row = 0; row < ballCount; row++) {
-      balls[index++] = this._createBall(world, x, yStart + row * ballRadius * 2, ballRadius);
+      balls[index] = eightball.PoolTable._createBall(world, x, yStart + row * ballRadius * 2, ballRadius);
+      balls[index].userData = index;
+      index++;
     }
 
   }
 
-  balls[index++] = this._createBall(world, -0.5 * eightball.PoolTable.width, 0, ballRadius);
   return balls;
 };
 
@@ -230,18 +235,8 @@ eightball.PoolTable._drawShape = function(shape, context) {
       var circle = shape;
       var pos = circle.m_position;
       var r = circle.m_radius;
-      var segments = 16.0;
-      var theta = 0.0;
-      var dtheta = 2.0 * Math.PI / segments;
-      // draw circle
-      context.moveTo(pos.x + r, pos.y);
-      for (i = 0; i < segments; i++) {
-        var d = new b2Vec2(r * Math.cos(theta), r * Math.sin(theta));
-        v = b2Math.AddVV(pos, d);
-        context.lineTo(v.x, v.y);
-        theta += dtheta;
-      }
-      context.lineTo(pos.x + r, pos.y);
+
+      context.arc(circle.m_position.x, circle.m_position.y, circle.m_radius, 0, 2 * Math.PI, false);
 
       // draw radius
       context.moveTo(pos.x, pos.y);
