@@ -7,12 +7,13 @@ module JsCompile
     dir = 'box2d'
 
     prototype_lite_path = File.join(Rails.root, 'public','javascripts','prototype_lite.js')
+    goog_base_path = File.join(Rails.root, 'public','javascripts','closure-library','closure','goog','base.js')
 
     js_dir = File.join(Rails.root, 'public','javascripts')
     files = Util.get_js_dir(dir)
     files.collect!{ |file_name| File.join(js_dir, file_name)}
 
-    compile(dir, files, [prototype_lite_path])
+    compile(dir, files, [goog_base_path, prototype_lite_path])
   end
 
   def self.compile(output_prefix, js_file_paths, dependencies = [])
@@ -29,9 +30,13 @@ module JsCompile
       sys_command << " --externs #{file}"
     end
 
-    sys_command << " --js_output_file #{compiled_output_path} --compilation_level ADVANCED_OPTIMIZATIONS --summary_detail_level 3 --debug 1 --warning_level VERBOSE --manage_closure_dependencies 1"
+    sys_command << " --js_output_file #{compiled_output_path} --compilation_level ADVANCED_OPTIMIZATIONS --summary_detail_level 3 --debug true --warning_level VERBOSE --manage_closure_dependencies true"
 
-    #sys_command = "java -jar #{compiler_jar_path} --help"
+    # look at tree
+    # sys_command << "  --js_output_file #{compiled_output_path}.tree --compilation_level ADVANCED_OPTIMIZATIONS --print_tree true"
+
+    # easy way to see help
+    # sys_command = "java -jar #{compiler_jar_path} --help"
 
     puts sys_command.inspect
     `#{sys_command}`
@@ -48,5 +53,4 @@ end
 
 if(__FILE__ == $0)
   JsCompile.work
-  #([File.join(Rails.root, 'public','javascripts','eightball', 'PoolTable.js'),File.join(Rails.root, 'public/javascripts/closure-library/closure/goog/base.js')])
 end
