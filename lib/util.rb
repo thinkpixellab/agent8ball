@@ -9,10 +9,4 @@ module Util
     files.collect!{ |file| File.join(dir,file) }
   end
 
-  def self.create_temp_file(dir = '')
-    file_dir = File.join(Rails.root, 'tmp', dir)
-    Dir.mkdir(file_dir) unless File.exists?(file_dir)
-    Tempfile.new('', file_dir)
-  end
-
 end
