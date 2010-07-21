@@ -1,4 +1,5 @@
 goog.require('goog.math.Matrix');
+goog.require('goog.math.Line');
 goog.provide('eightball.PoolTable');
 
 eightball.PoolTable = {};
@@ -151,13 +152,19 @@ eightball.PoolTable._step = function(cnt) {
 };
 
 eightball.PoolTable._drawWorld = function(world, context) {
-  context.strokeStyle = '#ffffff';
-  context.beginPath();
-  context.moveTo(-10,-10);
-  context.lineTo(10,10);
-  context.moveTo(10,-10);
-  context.lineTo(-10,10);
-  context.stroke();
+  if (lastMouse) {
+    cueLine = new goog.math.Line(lastMouse.x, lastMouse.y, cueBall.GetCenterPosition().x, cueBall.GetCenterPosition().y);
+  } else {
+    cueLine = null;
+  }
+
+  if (cueLine) {
+    context.strokeStyle = '#ffffff';
+    context.beginPath();
+    context.moveTo(cueLine.x0, cueLine.y0);
+    context.lineTo(cueLine.x1, cueLine.y1);
+    context.stroke();
+  }
 
   for (var b = world.m_bodyList; b; b = b.m_next) {
     for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
@@ -169,6 +176,8 @@ eightball.PoolTable._drawWorld = function(world, context) {
 eightball.PoolTable._drawShape = function(shape, context) {
   context.strokeStyle = '#ffffff';
   context.beginPath();
+
+  var i, v;
   switch (shape.m_type) {
   case b2Shape.e_circleShape:
     {
@@ -180,14 +189,14 @@ eightball.PoolTable._drawShape = function(shape, context) {
       var dtheta = 2.0 * Math.PI / segments;
       // draw circle
       context.moveTo(pos.x + r, pos.y);
-      for (var i = 0; i < segments; i++) {
+      for (i = 0; i < segments; i++) {
         var d = new b2Vec2(r * Math.cos(theta), r * Math.sin(theta));
-        var v = b2Math.AddVV(pos, d);
+        v = b2Math.AddVV(pos, d);
         context.lineTo(v.x, v.y);
         theta += dtheta;
       }
       context.lineTo(pos.x + r, pos.y);
-  
+
       // draw radius
       context.moveTo(pos.x, pos.y);
       var ax = circle.m_R.col1;
@@ -200,8 +209,8 @@ eightball.PoolTable._drawShape = function(shape, context) {
       var poly = shape;
       var tV = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
       context.moveTo(tV.x, tV.y);
-      for (var i = 0; i < poly.m_vertexCount; i++) {
-        var v = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[i]));
+      for (i = 0; i < poly.m_vertexCount; i++) {
+        v = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[i]));
         context.lineTo(v.x, v.y);
       }
       context.lineTo(tV.x, tV.y);
