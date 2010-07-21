@@ -1,8 +1,52 @@
-goog.require('goog.math.Matrix');
-goog.require('goog.math.Line');
 goog.provide('eightball.PoolTable');
 
-eightball.PoolTable = {};
+goog.require('goog.math.Matrix');
+goog.require('goog.math.Line');
+goog.require('goog.math.Vec2');
+
+/**
+ @constructor
+ */
+eightball.PoolTable = function(canvasElement) {
+  this.m_canvasElement = canvasElement;
+
+  this.m_canvasElement.attr('width', eightball.PoolTable.width * 2 + eightball.PoolTable.bumperThickness * 4);
+  this.m_canvasElement.attr('height', eightball.PoolTable.height * 2 + eightball.PoolTable.bumperThickness * 4);
+
+  this.m_centerOffset = new b2Vec2(eightball.PoolTable.width + eightball.PoolTable.bumperThickness * 2, eightball.PoolTable.height + eightball.PoolTable.bumperThickness * 2);
+
+  world = this._createWorld();
+  this.m_canvasContext = this.m_canvasElement[0].getContext('2d');
+  this.m_canvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y);
+
+  var _this = this;
+  this.m_canvasElement.click(function(e) {
+    if (_this.m_cueLine) {
+      var velocity = new b2Vec2(_this.m_cueLine.x1 - _this.m_cueLine.x0, _this.m_cueLine.y1 - _this.m_cueLine.y0);
+      velocity.Normalize();
+      velocity.Multiply(300);
+      _this.m_theCueBall.SetLinearVelocity(velocity);
+      _this.m_theCueBall.WakeUp();
+    }
+  });
+
+  this.m_canvasElement.mousemove(function(e) {
+    var cursorPageOffset = new goog.math.Vec2(e.pageX, e.pageY);
+    var elementOffset = new goog.math.Vec2(_this.m_canvasElement.offset().left, _this.m_canvasElement.offset().top);
+    var elementLocation = cursorPageOffset.subtract(elementOffset);
+    _this.m_lastMouse = elementLocation.subtract(_this.m_centerOffset);
+  });
+
+  this.m_canvasElement.mouseleave(function(e) {
+    _this.m_lastMouse = null;
+  });
+
+  this._step();
+
+  this.m_lastMouse = null;
+  this.m_cueLine = null;
+
+};
 
 /**
  @const
@@ -30,7 +74,7 @@ eightball.PoolTable.ballDiameter = 5.715;
  */
 eightball.PoolTable.bumperThickness = 10;
 
-eightball.PoolTable.createWorld = function() {
+eightball.PoolTable.prototype._createWorld = function() {
 
   var worldAABB = new b2AABB();
   worldAABB.minVertex.Set(-1000, -1000);
@@ -39,13 +83,13 @@ eightball.PoolTable.createWorld = function() {
   var doSleep = true;
   var world = new b2World(worldAABB, gravity, doSleep);
 
-  eightball.PoolTable._createTable(world);
-  eightball.PoolTable._setupBalls(world);
+  this._createTable(world);
+  this._setupBalls(world);
 
   return world;
 };
 
-eightball.PoolTable._setupBalls = function(world) {
+eightball.PoolTable.prototype._setupBalls = function(world) {
   var ballRadius = eightball.PoolTable.ballDiameter * 2;
 
   for (var col = 0; col < 5; col++) {
@@ -55,15 +99,15 @@ eightball.PoolTable._setupBalls = function(world) {
     var yStart = -col * ballRadius;
 
     for (var row = 0; row < ballCount; row++) {
-      eightball.PoolTable._createBall(world, x, yStart + row * ballRadius * 2, ballRadius);
+      this._createBall(world, x, yStart + row * ballRadius * 2, ballRadius);
     }
 
   }
 
-  cueBall = eightball.PoolTable._createBall(world, -0.5 * eightball.PoolTable.width, 0, ballRadius);
+  this.m_theCueBall = this._createBall(world, -0.5 * eightball.PoolTable.width, 0, ballRadius);
 };
 
-eightball.PoolTable._createTable = function(world) {
+eightball.PoolTable.prototype._createTable = function(world) {
 
   var matrixFlipHorizontal = new goog.math.Matrix([
     [-1, 0],
@@ -82,10 +126,10 @@ eightball.PoolTable._createTable = function(world) {
   // Left
   side = new b2PolyDef();
   points = [
-    [-centerOffset.x, -centerOffset.y + eightball.PoolTable.bumperThickness * 2],
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, -centerOffset.y + eightball.PoolTable.bumperThickness * 4],
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, centerOffset.y - eightball.PoolTable.bumperThickness * 4],
-    [-centerOffset.x, centerOffset.y - eightball.PoolTable.bumperThickness * 2]];
+    [-this.m_centerOffset.x, -this.m_centerOffset.y + eightball.PoolTable.bumperThickness * 2],
+    [-this.m_centerOffset.x + eightball.PoolTable.bumperThickness * 2, -this.m_centerOffset.y + eightball.PoolTable.bumperThickness * 4],
+    [-this.m_centerOffset.x + eightball.PoolTable.bumperThickness * 2, this.m_centerOffset.y - eightball.PoolTable.bumperThickness * 4],
+    [-this.m_centerOffset.x, this.m_centerOffset.y - eightball.PoolTable.bumperThickness * 2]];
   side.SetVertices(points);
   table.AddShape(side);
 
@@ -97,10 +141,10 @@ eightball.PoolTable._createTable = function(world) {
 
   // top left
   points = [
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, -centerOffset.y],
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 4, -centerOffset.y + eightball.PoolTable.bumperThickness * 2],
-    [-eightball.PoolTable.bumperThickness * 2.2, -centerOffset.y + eightball.PoolTable.bumperThickness * 2],
-    [-eightball.PoolTable.bumperThickness * 2, -centerOffset.y]].reverse();
+    [-this.m_centerOffset.x + eightball.PoolTable.bumperThickness * 2, -this.m_centerOffset.y],
+    [-this.m_centerOffset.x + eightball.PoolTable.bumperThickness * 4, -this.m_centerOffset.y + eightball.PoolTable.bumperThickness * 2],
+    [-eightball.PoolTable.bumperThickness * 2.2, -this.m_centerOffset.y + eightball.PoolTable.bumperThickness * 2],
+    [-eightball.PoolTable.bumperThickness * 2, -this.m_centerOffset.y]].reverse();
 
   side = new b2PolyDef();
   side.SetVertices(points);
@@ -127,7 +171,7 @@ eightball.PoolTable._createTable = function(world) {
   return world.CreateBody(table);
 };
 
-eightball.PoolTable._createBall = function(world, x, y, radius) {
+eightball.PoolTable.prototype._createBall = function(world, x, y, radius) {
   var ballSd = new b2CircleDef();
   ballSd.density = 1.0;
   ballSd.radius = radius;
@@ -142,38 +186,38 @@ eightball.PoolTable._createBall = function(world, x, y, radius) {
   return world.CreateBody(ballBd);
 };
 
-eightball.PoolTable._step = function(cnt) {
+eightball.PoolTable.prototype._step = function(cnt) {
   var timeStep = 1.0 / 60;
   var iteration = 1;
   world.Step(timeStep, iteration);
-  canvasContext.clearRect(-centerOffset.x, -centerOffset.y, 2 * centerOffset.x, 2 * centerOffset.y);
-  eightball.PoolTable._drawWorld(world, canvasContext);
-  setTimeout('eightball.PoolTable._step(' + (cnt || 0) + ')', 10);
+  this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
+  this._drawWorld(world, this.m_canvasContext);
+  setTimeout('poolTable._step(' + (cnt || 0) + ')', 10);
 };
 
-eightball.PoolTable._drawWorld = function(world, context) {
-  if (lastMouse) {
-    cueLine = new goog.math.Line(lastMouse.x, lastMouse.y, cueBall.GetCenterPosition().x, cueBall.GetCenterPosition().y);
+eightball.PoolTable.prototype._drawWorld = function(world, context) {
+  if (this.m_lastMouse) {
+    this.m_cueLine = new goog.math.Line(this.m_lastMouse.x, this.m_lastMouse.y, this.m_theCueBall.GetCenterPosition().x, this.m_theCueBall.GetCenterPosition().y);
   } else {
-    cueLine = null;
+    this.m_cueLine = null;
   }
 
-  if (cueLine) {
+  if (this.m_cueLine) {
     context.strokeStyle = '#ffffff';
     context.beginPath();
-    context.moveTo(cueLine.x0, cueLine.y0);
-    context.lineTo(cueLine.x1, cueLine.y1);
+    context.moveTo(this.m_cueLine.x0, this.m_cueLine.y0);
+    context.lineTo(this.m_cueLine.x1, this.m_cueLine.y1);
     context.stroke();
   }
 
   for (var b = world.m_bodyList; b; b = b.m_next) {
     for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
-      eightball.PoolTable._drawShape(s, context);
+      this._drawShape(s, context);
     }
   }
 };
 
-eightball.PoolTable._drawShape = function(shape, context) {
+eightball.PoolTable.prototype._drawShape = function(shape, context) {
   context.strokeStyle = '#ffffff';
   context.beginPath();
 
