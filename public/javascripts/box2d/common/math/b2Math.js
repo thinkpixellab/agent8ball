@@ -29,8 +29,8 @@ b2Math.b2IsValid = function(x) {
 };
 /**
  @const 
- @param {number} a
- @param {number} b
+ @param {b2Vec2} a
+ @param {b2Vec2} b
  @return {number}
  */
 b2Math.b2Dot = function(a, b) {
@@ -49,11 +49,10 @@ b2Math.b2CrossVV = function(a, b) {
  @const 
  @param {b2Vec2} a
  @param {number} s
- @return {number}
+ @return {b2Vec2}
  */
 b2Math.b2CrossVF = function(a, s) {
-  var v = new b2Vec2(s * a.y, -s * a.x);
-  return v;
+  return new b2Vec2(s * a.y, -s * a.x);
 };
 /**
  @const 

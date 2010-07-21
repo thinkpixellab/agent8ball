@@ -18,13 +18,12 @@
 
 // b2Vec2 has no constructor so that it
 // can be placed in a union.
-/** @typedef {b2Vec2} */
-var b2Vec2 = Class.create();
-
-/** @constructor
- @param {number} x_
- @param {number} y_ */
-b2Vec2.prototype.initialize = function(x_, y_) {
+/**
+ @constructor
+ @param {number=} x_
+ @param {number=} y_
+*/
+var b2Vec2 = function(x_, y_) {
   this.x = x_;
   this.y = y_;
 };
@@ -132,12 +131,6 @@ b2Vec2.prototype.Normalize = function() {
 b2Vec2.prototype.IsValid = function() {
   return b2Math.b2IsValid(this.x) && b2Math.b2IsValid(this.y);
 };
-
-/** @type {?number} */
-b2Vec2.prototype.x = null;
-
-/** @type {?number} */
-b2Vec2.prototype.y = null;
 
 /**
  @param {number} x_

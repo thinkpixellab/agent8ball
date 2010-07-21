@@ -16,28 +16,27 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-/** @typedef {b2BodyDef} */
-var b2BodyDef = Class.create();
-b2BodyDef.prototype = {
-  initialize: function() {
-    // initialize instance variables for references
-    this.shapes = new Array();
-    //
-    this.userData = null;
-    for (var i = 0; i < b2Settings.b2_maxShapesPerBody; i++) {
-      this.shapes[i] = null;
-    }
-    this.position = new b2Vec2(0.0, 0.0);
-    this.rotation = 0.0;
-    this.linearVelocity = new b2Vec2(0.0, 0.0);
-    this.angularVelocity = 0.0;
-    this.linearDamping = 0.0;
-    this.angularDamping = 0.0;
-    this.allowSleep = true;
-    this.isSleeping = false;
-    this.preventRotation = false;
-  },
+/** @constructor */
+var b2BodyDef = function() {
+  // initialize instance variables for references
+  this.shapes = new Array();
+  //
+  this.userData = null;
+  for (var i = 0; i < b2Settings.b2_maxShapesPerBody; i++) {
+    this.shapes[i] = null;
+  }
+  this.position = new b2Vec2(0.0, 0.0);
+  this.rotation = 0.0;
+  this.linearVelocity = new b2Vec2(0.0, 0.0);
+  this.angularVelocity = 0.0;
+  this.linearDamping = 0.0;
+  this.angularDamping = 0.0;
+  this.allowSleep = true;
+  this.isSleeping = false;
+  this.preventRotation = false;
+};
 
+b2BodyDef.prototype = {
   userData: null,
   shapes: new Array(),
   position: null,
