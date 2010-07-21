@@ -218,6 +218,14 @@ eightball.PoolTable.prototype._drawWorld = function() {
   }
 
   for (var b = this.m_world.m_bodyList; b; b = b.m_next) {
+    var fill;
+    if (b.userData == 0) {
+      this.m_canvasContext.strokeStyle = 'black';
+      this.m_canvasContext.fillStyle = "white";
+    } else {
+      this.m_canvasContext.strokeStyle = 'white';
+      this.m_canvasContext.fillStyle = 'transparent';
+    }
     for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
       eightball.PoolTable._drawShape(s, this.m_canvasContext);
     }
@@ -225,7 +233,6 @@ eightball.PoolTable.prototype._drawWorld = function() {
 };
 
 eightball.PoolTable._drawShape = function(shape, context) {
-  context.strokeStyle = '#ffffff';
   context.beginPath();
 
   var i, v;
@@ -258,5 +265,6 @@ eightball.PoolTable._drawShape = function(shape, context) {
     }
     break;
   }
+  context.fill();
   context.stroke();
 };
