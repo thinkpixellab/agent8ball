@@ -21,9 +21,13 @@
  @param {b2Vec2=} c1
  @param {b2Vec2=} c2 */
 var b2Mat22 = function(angle, c1, c2) {
-  if (angle == null) angle = 0;
+  if (angle == null ) angle = 0;
   // initialize instance variables for references
+
+  /** @type {b2Vec2} */
   this.col1 = new b2Vec2();
+
+  /** @type {b2Vec2} */
   this.col2 = new b2Vec2();
   //
   if (c1 != null && c2 != null) {
@@ -132,9 +136,3 @@ b2Mat22.prototype.Abs = function() {
   this.col1.Abs();
   this.col2.Abs();
 };
-
-/** @type {b2Vec2} */
-b2Mat22.prototype.col1 = new b2Vec2();
-
-/** @type {b2Vec2} */
-b2Mat22.prototype.col2 = new b2Vec2();

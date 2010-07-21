@@ -16,19 +16,14 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-/** 
- @typedef {b2BoxDef} 
- */
-var b2BoxDef = Class.create();
-Object.extend(b2BoxDef.prototype, b2ShapeDef.prototype);
-
 /**
- @constructor
- */
-b2BoxDef.prototype.initialize = function() {
-  // The constructor for b2ShapeDef
+  @constructor
+  @extends {b2ShapeDef}
+*/
+var b2BoxDef = function() {
   this.type = b2Shape.e_unknownShape;
   this.userData = null;
+  /** @type {b2Vec2} */
   this.localPosition = new b2Vec2(0.0, 0.0);
   this.localRotation = 0.0;
   this.friction = 0.2;
@@ -39,7 +34,8 @@ b2BoxDef.prototype.initialize = function() {
   this.groupIndex = 0;
   //
   this.type = b2Shape.e_boxShape;
+  /** @type {b2Vec2} */
   this.extents = new b2Vec2(1.0, 1.0);
 };
 
-b2BoxDef.prototype.extents = null;
+goog.inherits(b2BoxDef, b2ShapeDef);

@@ -16,10 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-/** @typedef {b2ShapeDef} */
-var b2ShapeDef = Class.create();
-
-b2ShapeDef.prototype.initialize = function() {
+/** @constructor */
+var b2ShapeDef = function() {
   this.type = b2Shape.e_unknownShape;
   this.userData = null;
   this.localPosition = new b2Vec2(0.0, 0.0);

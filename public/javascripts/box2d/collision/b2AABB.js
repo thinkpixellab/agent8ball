@@ -16,31 +16,27 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
 // A manifold for two touching convex shapes.
-/** @typedef {b2AABB} */
-var b2AABB = Class.create();
-b2AABB.prototype = 
-{
-  IsValid: function(){
-    //var d = b2Math.SubtractVV(this.maxVertex, this.minVertex);
-    var dX = this.maxVertex.x;
-    var dY = this.maxVertex.y;
-    dX = this.maxVertex.x;
-    dY = this.maxVertex.y;
-    dX -= this.minVertex.x;
-    dY -= this.minVertex.y;
-    var valid = dX >= 0.0 && dY >= 0.0;
-    valid = valid && this.minVertex.IsValid() && this.maxVertex.IsValid();
-    return valid;
-  },
+/** @constructor */
+var b2AABB = function() {
 
-  minVertex: new b2Vec2(),
-  maxVertex: new b2Vec2(),
-  initialize: function() {
-    // initialize instance variables for references
-    this.minVertex = new b2Vec2();
-    this.maxVertex = new b2Vec2();
-    //
-}};
+  /** @type {b2Vec2} */
+  this.minVertex = new b2Vec2();
+
+  /** @type {b2Vec2} */
+  this.maxVertex = new b2Vec2();
+};
+
+/** @return {boolean} */
+b2AABB.prototype.IsValid = function() {
+  //var d = b2Math.SubtractVV(this.maxVertex, this.minVertex);
+  var dX = this.maxVertex.x;
+  var dY = this.maxVertex.y;
+  dX = this.maxVertex.x;
+  dY = this.maxVertex.y;
+  dX -= this.minVertex.x;
+  dY -= this.minVertex.y;
+  var valid = dX >= 0.0 && dY >= 0.0;
+  valid = valid && this.minVertex.IsValid() && this.maxVertex.IsValid();
+  return valid;
+};

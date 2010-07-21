@@ -18,8 +18,31 @@
 
 // Shapes are created automatically when a body is created.
 // Client code does not normally interact with shapes.
-/** @typedef {b2Shape} */
-var b2Shape = Class.create();
+/**
+  @constructor
+  @param {b2ShapeDef} def
+  @param {b2Body} body
+  */
+var b2Shape = function(def, body) {
+  // initialize instance variables for references
+  this.m_R = new b2Mat22();
+  this.m_position = new b2Vec2();
+  //
+  this.m_userData = def.userData;
+
+  this.m_friction = def.friction;
+  this.m_restitution = def.restitution;
+  this.m_body = body;
+
+  this.m_proxyId = b2Pair.b2_nullProxy;
+
+  this.m_maxRadius = 0.0;
+
+  this.m_categoryBits = def.categoryBits;
+  this.m_maskBits = def.maskBits;
+  this.m_groupIndex = def.groupIndex;
+};
+
 b2Shape.prototype = {
   TestPoint: function(p) {
     return false;
@@ -55,26 +78,6 @@ b2Shape.prototype = {
   },
 
   //--------------- Internals Below -------------------
-  initialize: function(def, body) {
-    // initialize instance variables for references
-    this.m_R = new b2Mat22();
-    this.m_position = new b2Vec2();
-    //
-    this.m_userData = def.userData;
-
-    this.m_friction = def.friction;
-    this.m_restitution = def.restitution;
-    this.m_body = body;
-
-    this.m_proxyId = b2Pair.b2_nullProxy;
-
-    this.m_maxRadius = 0.0;
-
-    this.m_categoryBits = def.categoryBits;
-    this.m_maskBits = def.maskBits;
-    this.m_groupIndex = def.groupIndex;
-  },
-
   // Internal use only. Do not call.
   //b2Shape::~b2Shape()
   //{
@@ -119,6 +122,11 @@ b2Shape.prototype = {
   // b2ShapeType
 };
 
+/**
+ @param {b2ShapeDef} def
+ @param {b2Body} body
+ @param {b2Vec2} center
+ */
 b2Shape.Create = function(def, body, center) {
   switch (def.type) {
   case b2Shape.e_circleShape:
