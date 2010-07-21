@@ -10,7 +10,7 @@ module JsCompile
     prototype_lite_path = File.join(Rails.root, 'public','javascripts','prototype_lite.js')
 
     concat(dir, tmp_file)
-    compile(tmp_file, [prototype_lite_path])
+    compile([tmp_file.path], [prototype_lite_path])
   end
 
   def self.concat(dir, temp_file)
@@ -28,17 +28,25 @@ module JsCompile
     temp_file.rewind
   end
 
-  def self.compile(concat_tmp_file, dependencies = [])
+  def self.compile(js_file_paths, dependencies = [])
     compiler_jar_path = File.join(Rails.root, 'vendor/jars/closure_compiler/compiler.jar')
-    compiled_output_path = concat_tmp_file.path + "_compiled.js"
+    compiled_output_path = js_file_paths[0] + '_compiled.js'
 
-    sys_command =
-    "java -jar #{compiler_jar_path} --js #{concat_tmp_file.path} --js_output_file #{compiled_output_path} --compilation_level ADVANCED_OPTIMIZATIONS --summary_detail_level 3 --debug 1 --warning_level VERBOSE"
+    sys_command = "java -jar #{compiler_jar_path}"
+
+    js_file_paths.each do |file|
+      sys_command << " --js #{file}"
+    end
 
     dependencies.each do |file|
       sys_command << " --externs #{file}"
     end
 
+    sys_command << " --js_output_file #{compiled_output_path} --compilation_level ADVANCED_OPTIMIZATIONS --summary_detail_level 3 --debug 1 --warning_level VERBOSE --manage_closure_dependencies 1"
+
+    #sys_command = "java -jar #{compiler_jar_path} --help"
+
+    puts sys_command.inspect
     `#{sys_command}`
   end
 
@@ -53,4 +61,5 @@ end
 
 if(__FILE__ == $0)
   JsCompile.work
+  #([File.join(Rails.root, 'public','javascripts','eightball', 'PoolTable.js'),File.join(Rails.root, 'public/javascripts/closure-library/closure/goog/base.js')])
 end
