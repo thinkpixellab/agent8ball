@@ -1,0 +1,86 @@
+* { 
+	margin: 0px;
+	padding: 0px;
+}
+
+html {
+	height:100%
+}
+
+body {
+	height:100%
+	text-align: center;
+}
+
+#woodbackground {
+	background-image: url("/images/wood.jpg");
+	background-repeat: repeat;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0px;
+	top: 0px;
+	z-index: -1000;
+}
+
+#vignette {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0px;
+	top: 0px;
+	z-index: -999;
+	/*
+	This is a more "pure" way of handling the vignette but it didn't look right so I'm switching over to using an image.
+ 	-moz-box-shadow: inset 0 0 120em #000000;  
+	-webkit-box-shadow: inset 0 0 320em #000000;   
+ 	box-shadow: inset 0 0 120em #000000;
+	*/
+}
+
+#vignetteimg {
+	margin: 0px;
+	margin-bottom: -5px;
+	padding: 0px;
+	border: 0px;
+}
+
+.stretch {
+	width: 100%;
+	height: 100%;
+}
+
+#topfloater {
+	float: left;
+	height: 40%;
+	margin-bottom: -310px;
+}
+
+#game {
+	width: 860px;
+	height: 620px;
+	margin-left: auto;
+	margin-right: auto;
+	clear: both; 
+	position: relative;
+}
+
+#tableborder {
+	background-image: url("/images/tableborder.png");
+	background-repeat: none;
+	width: 1113px;
+	height: 497px;
+	position: absolute;
+	top: 100px;
+	left: -130px;
+}
+
+#table {
+	background-image: url("/images/table.jpg");
+	background-repeat: none;
+	width: 847px;
+	height: 438px;
+	position: absolute;
+	top: 19px;
+	left: 137px;
+}
