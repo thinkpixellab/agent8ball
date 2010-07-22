@@ -136,8 +136,8 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
   side = new b2PolyDef();
   points = [
     [-centerOffset.x, -centerOffset.y + eightball.PoolTable.bumperThickness * 2],
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, -centerOffset.y + eightball.PoolTable.bumperThickness * 4],
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, centerOffset.y - eightball.PoolTable.bumperThickness * 4],
+    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, -centerOffset.y + eightball.PoolTable.bumperThickness * 5],
+    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, centerOffset.y - eightball.PoolTable.bumperThickness * 5],
     [-centerOffset.x, centerOffset.y - eightball.PoolTable.bumperThickness * 2]];
   side.SetVertices(points);
   table.AddShape(side);
@@ -151,7 +151,7 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
   // top left
   points = [
     [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, -centerOffset.y],
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 4, -centerOffset.y + eightball.PoolTable.bumperThickness * 2],
+    [-centerOffset.x + eightball.PoolTable.bumperThickness * 5, -centerOffset.y + eightball.PoolTable.bumperThickness * 2],
     [-eightball.PoolTable.bumperThickness * 2.2, -centerOffset.y + eightball.PoolTable.bumperThickness * 2],
     [-eightball.PoolTable.bumperThickness * 2, -centerOffset.y]].reverse();
 
