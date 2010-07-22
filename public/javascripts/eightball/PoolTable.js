@@ -83,7 +83,9 @@ eightball.PoolTable.prototype._createWorld = function() {
   var doSleep = true;
   this.m_world = new b2World(worldAABB, gravity, doSleep);
 
-  eightball.PoolTable._createTable(this.m_world, this.m_centerOffset);
+  var tableObject = eightball.PoolTable._createTable(this.m_world, this.m_centerOffset);
+  tableObject.userData = 'table';
+
   var balls = eightball.PoolTable._setupBalls(this.m_world);
   this.m_theCueBall = balls[0];
 };
@@ -222,10 +224,14 @@ eightball.PoolTable.prototype._drawWorld = function() {
     if (b.userData == 0) {
       this.m_canvasContext.strokeStyle = 'black';
       this.m_canvasContext.fillStyle = "white";
+    } else if (b.userData == 'table') {
+      this.m_canvasContext.strokeStyle = 'transparent';
+      this.m_canvasContext.fillStyle = "green";
     } else {
       this.m_canvasContext.strokeStyle = 'white';
       this.m_canvasContext.fillStyle = 'transparent';
     }
+
     for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
       eightball.PoolTable._drawShape(s, this.m_canvasContext);
     }
