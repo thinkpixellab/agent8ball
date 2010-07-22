@@ -16,29 +16,28 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
 // We use contact ids to facilitate warm starting.
-var b2ContactID = Class.create();
-b2ContactID.prototype = 
-{
-  initialize: function(){
-    // initialize instance variables for references
-    this.features = new Features();
-    //
+/**
+ @constructor
+ */
+var b2ContactID = function() {
+  // initialize instance variables for references
+  this.features = new Features();
+  //
+  this.features._m_id = this;
 
-    this.features._m_id = this;
+};
 
-  },
-  Set: function(id){
+b2ContactID.prototype = {
+  Set: function(id) {
     this.set_key(id._key);
   },
-  Copy: function(){
+  Copy: function() {
     var id = new b2ContactID();
     id.set_key(this._key);
     return id;
   },
-  get_key: function(){
+  get_key: function() {
     return this._key;
   },
   set_key: function(value) {
@@ -49,4 +48,5 @@ b2ContactID.prototype =
     this.features._flip = ((this._key & 0xff000000) >> 24) & 0x000000ff;
   },
   features: new Features(),
-  _key: 0};
+  _key: 0
+};

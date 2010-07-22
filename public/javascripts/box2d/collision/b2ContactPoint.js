@@ -16,20 +16,18 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
 // We use contact ids to facilitate warm starting.
-var b2ContactPoint = Class.create();
-b2ContactPoint.prototype = 
-{
-  position: new b2Vec2(),
+/**
+ @constructor
+ */
+var b2ContactPoint = function() {
+  // initialize instance variables for references
+  this.position = new b2Vec2();
+  this.id = new b2ContactID();
+  //
+};
+b2ContactPoint.prototype = {
   separation: null,
   normalImpulse: null,
-  tangentImpulse: null,
-  id: new b2ContactID(),
-  initialize: function() {
-    // initialize instance variables for references
-    this.position = new b2Vec2();
-    this.id = new b2ContactID();
-    //
-}};
+  tangentImpulse: null
+};

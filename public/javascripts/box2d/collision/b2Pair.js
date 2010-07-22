@@ -19,7 +19,10 @@
 // The pair manager is used by the broad-phase to quickly add/remove/find pairs
 // of overlapping proxies. It is based closely on code provided by Pierre Terdiman.
 // http:
-var b2Pair = Class.create();
+/**
+ @constructor
+ */
+var b2Pair = function() {};
 b2Pair.prototype = {
 
   SetBuffered: function() {
@@ -53,11 +56,7 @@ b2Pair.prototype = {
   proxyId1: 0,
   proxyId2: 0,
   next: 0,
-  status: 0,
-
-  // STATIC
-  // enum
-  initialize: function() {}
+  status: 0
 };
 
 /** @const @type {number} */

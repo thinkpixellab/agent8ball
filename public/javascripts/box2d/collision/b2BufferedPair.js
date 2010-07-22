@@ -16,11 +16,12 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+/**
+ @constructor
+ */
+var b2BufferedPair = function() {};
 
-
-var b2BufferedPair = Class.create();
 b2BufferedPair.prototype = {
   proxyId1: 0,
-  proxyId2: 0,
-
-  initialize: function() {}}
+  proxyId2: 0
+};
