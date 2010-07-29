@@ -133,7 +133,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
     // clear the cue canvas
     this._clearCueCanvas();
 
-    if (this.m_isCueVisible) {
+    if (this.m_isCueVisible && mousePoint) {
       // find the location of the cue ball in page coordinates
       var absCue = this._gameCoordinatesToAbsolute(this.m_theCueBall.GetCenterPosition().x, this.m_theCueBall.GetCenterPosition().y);
       var x = Math.round(absCue.x);
