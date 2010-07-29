@@ -1,5 +1,6 @@
 goog.provide('eightball.PoolTable');
 
+goog.require('pixelLab.Debug');
 goog.require('goog.math.Matrix');
 goog.require('goog.math.Line');
 goog.require('goog.math.Vec2');
@@ -89,10 +90,10 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
       // calculate strike power
       _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.maxStrikeDistance;
 
-      clearDebug();
-      writeDebug("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
-      writeDebug("Strike Angle: " + Math.round(strikeAngle));
-      writeDebug("Strike Power: " + _this.m_strikePower);
+      pixelLab.Debug.clearDebug();
+      pixelLab.Debug.writeDebug("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
+      pixelLab.Debug.writeDebug("Strike Angle: " + Math.round(strikeAngle));
+      pixelLab.Debug.writeDebug("Strike Power: " + _this.m_strikePower);
 
       _this._updateCue(_this.m_lastMouseDown, strikeOffset);
     } else {

@@ -18,7 +18,7 @@ module JsCompile
 
     output_path = File.join(js_path, 'deps.js')
 
-    ['box2d','eightball'].each do |files_dir|
+    ['box2d','eightball','helpers'].each do |files_dir|
       sys_command << " -p #{File.join(js_path, files_dir)}"
     end
 

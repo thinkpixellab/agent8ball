@@ -1,12 +1,16 @@
-﻿function preload(images) {
+﻿// preloader
+goog.provide('pixelLab.ImagePreloader');
+
+goog.require('goog.string');
+goog.require('goog.array');
+
+pixelLab.ImagePreloader.preload = function(images) {
   if (document.images) {
-    var i = 0;
-    var imageArray = new Array();
-    imageArray = images.split(',');
+    var imageArray = goog.array.map(images.split(','), goog.string.trim);
 
     var imageObj = new Image();
-    for (i = 0; i < imageArray.length; i++) {
+    for (var i = 0; i < imageArray.length; i++) {
       imageObj.src = imageArray[i];
     }
   }
-}
+};

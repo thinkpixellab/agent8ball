@@ -63,4 +63,6 @@ goog.addDependency("../../../box2d/dynamics/joints/b2PulleyJoint.js", [], []);
 goog.addDependency("../../../box2d/dynamics/joints/b2PulleyJointDef.js", [], []);
 goog.addDependency("../../../box2d/dynamics/joints/b2RevoluteJoint.js", [], []);
 goog.addDependency("../../../box2d/dynamics/joints/b2RevoluteJointDef.js", [], []);
-goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], ['goog.math.Matrix', 'goog.math.Line', 'goog.math.Vec2', 'b2Vec2', 'b2AABB', 'b2World', 'b2BodyDef', 'b2PolyDef', 'b2CircleDef']);
+goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], ['pixelLab.Debug', 'goog.math.Matrix', 'goog.math.Line', 'goog.math.Vec2', 'b2Vec2', 'b2AABB', 'b2World', 'b2BodyDef', 'b2PolyDef', 'b2CircleDef']);
+goog.addDependency("../../../helpers/debug.js", ['pixelLab.Debug'], []);
+goog.addDependency("../../../helpers/preload.js", ['pixelLab.ImagePreloader'], ['goog.string', 'goog.array']);
