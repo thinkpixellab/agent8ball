@@ -10,7 +10,7 @@ html {
 body {
     height: 100%;
     text-align: center;
-    background-image: url("/images/wood.jpg");
+    background-image: url("../images/wood.jpg");
     background-repeat: repeat;
 }
 
@@ -53,7 +53,7 @@ body {
 }
 
 #tableborder {
-    background-image: url("/images/tableborder.png");
+    background-image: url("../images/tableborder.png");
     background-repeat: no-repeat;
     width: 1113px;
     height: 497px;
@@ -63,7 +63,7 @@ body {
 }
 
 #table {
-    background-image: url("/images/table.jpg");
+    background-image: url("../images/table.jpg");
     background-repeat: no-repeat;
     width: 847px;
     height: 438px;
@@ -74,7 +74,7 @@ body {
 
 
 #timeremaining {
-    background-image: url("/images/timeremaining.png");
+    background-image: url("../images/timeremaining.png");
     background-repeat: no-repeat;
     text-align: center;
     font: 38px 'MolotRegular' , Arial, sans-serif;
@@ -92,7 +92,7 @@ body {
 
 
 #score {
-    background-image: url("/images/score.png");
+    background-image: url("../images/score.png");
     background-repeat: no-repeat;
     text-align: center;
     font: 32px 'MolotRegular' , Arial, sans-serif;
@@ -108,7 +108,7 @@ body {
 }
 
 #bestscore {
-    background-image: url("/images/bestscore.png");
+    background-image: url("../images/bestscore.png");
     background-repeat: no-repeat;
     text-align: center;
     font: 28px 'MolotRegular' , Arial, sans-serif;
@@ -125,7 +125,7 @@ body {
 }
 
 #progress {
-    background-image: url("/images/progressbg.png");
+    background-image: url("../images/progressbg.png");
     background-repeat: no-repeat;
     width: 446px;
     height: 36px;
@@ -146,5 +146,5 @@ body {
     top: 0px;
     position: absolute;
     z-index: 1000;
-    background-image: url("/images/transparent.png");
+    background-image: url("../images/transparent.png");
 }

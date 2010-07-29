@@ -31,7 +31,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   this.m_cueImage.onload = function() {
     _this._updateCue();
   };
-  this.m_cueImage.src = "/images/cue.png";
+  this.m_cueImage.src = "images/cue.png";
 
   // get local references for our canvas elements
   this.m_canvasElement = canvasElement;
