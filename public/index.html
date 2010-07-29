@@ -3,7 +3,7 @@
 <head>
     <title>Agent 008 Ball</title>
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
-    <link rel="shortcut icon" href="/favicon.ico"> 
+    <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="stylesheets/reset.css" />
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
     <link rel="stylesheet" type="text/css" href="fonts/molot/molot.css" />
@@ -11,79 +11,79 @@
     <script src="javascripts/helpers/debug.js" type="text/javascript"></script>
     <script src="javascripts/helpers/preload.js" type="text/javascript"></script>
 
-    <script>
+    <script type="text/javascript">
         enableDebug();
         preload("images/bestscore.png,images/cue.png,images/progressbg.png,images/progressunit.png,images/score.png,images/table.jpg,images/tableborder.png,images/timeremaining.png,wood.jpg");
     </script>
 
-    <script src='/javascripts/closure-library/closure/goog/base.js'></script> 
-    <script src="/javascripts/prototype_lite.js" type="text/javascript"></script> 
-    <script src="/javascripts/jquery-1.4.2.min.js" type="text/javascript"></script> 
+    <script src='/javascripts/closure-library/closure/goog/base.js' type="text/javascript"></script>
+    <script src="/javascripts/prototype_lite.js" type="text/javascript"></script>
+    <script src="/javascripts/jquery-1.4.2.min.js" type="text/javascript"></script>
 
-    <script src="/javascripts/box2d/common/b2Settings.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/common/math/b2Vec2.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/common/math/b2Mat22.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/common/math/b2Math.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2AABB.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2Bound.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2BoundValues.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2Pair.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2PairCallback.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2BufferedPair.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2PairManager.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2BroadPhase.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2Collision.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/Features.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2ContactID.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2ContactPoint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2Distance.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2Manifold.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2OBB.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/b2Proxy.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/ClipVertex.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/shapes/b2Shape.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/shapes/b2ShapeDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/shapes/b2BoxDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/shapes/b2CircleDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/shapes/b2CircleShape.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/shapes/b2MassData.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/shapes/b2PolyDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/collision/shapes/b2PolyShape.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/b2Body.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/b2BodyDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/b2CollisionFilter.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/b2Island.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/b2TimeStep.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2ContactNode.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2Contact.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2ContactConstraint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2ContactConstraintPoint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2ContactRegister.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2ContactSolver.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2CircleContact.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2Conservative.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2NullContact.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2PolyAndCircleContact.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/contacts/b2PolyContact.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/b2ContactManager.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/b2World.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/b2WorldListener.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2JointNode.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2Joint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2JointDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2DistanceJoint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2DistanceJointDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2Jacobian.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2GearJoint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2GearJointDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2MouseJoint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2MouseJointDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2PrismaticJoint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2PrismaticJointDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2PulleyJoint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2PulleyJointDef.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2RevoluteJoint.js" type="text/javascript"></script> 
-    <script src="/javascripts/box2d/dynamics/joints/b2RevoluteJointDef.js" type="text/javascript"></script> 
+    <script src="/javascripts/box2d/common/b2Settings.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/common/math/b2Vec2.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/common/math/b2Mat22.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/common/math/b2Math.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2AABB.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2Bound.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2BoundValues.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2Pair.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2PairCallback.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2BufferedPair.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2PairManager.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2BroadPhase.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2Collision.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/Features.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2ContactID.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2ContactPoint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2Distance.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2Manifold.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2OBB.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/b2Proxy.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/ClipVertex.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/shapes/b2Shape.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/shapes/b2ShapeDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/shapes/b2BoxDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/shapes/b2CircleDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/shapes/b2CircleShape.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/shapes/b2MassData.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/shapes/b2PolyDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/collision/shapes/b2PolyShape.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/b2Body.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/b2BodyDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/b2CollisionFilter.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/b2Island.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/b2TimeStep.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2ContactNode.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2Contact.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2ContactConstraint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2ContactConstraintPoint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2ContactRegister.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2ContactSolver.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2CircleContact.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2Conservative.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2NullContact.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2PolyAndCircleContact.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/contacts/b2PolyContact.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/b2ContactManager.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/b2World.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/b2WorldListener.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2JointNode.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2Joint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2JointDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2DistanceJoint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2DistanceJointDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2Jacobian.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2GearJoint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2GearJointDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2MouseJoint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2MouseJointDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2PrismaticJoint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2PrismaticJointDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2PulleyJoint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2PulleyJointDef.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2RevoluteJoint.js" type="text/javascript"></script>
+    <script src="/javascripts/box2d/dynamics/joints/b2RevoluteJointDef.js" type="text/javascript"></script>
 
 
 </head>
@@ -93,9 +93,9 @@
     <div id="vignette">
         <img id="vignetteimg" src="images/vignette.png" class="stretch" alt="" />
     </div>
-    
+
     <div id="topfloater"> </div>
-    <div id="game"> 
+    <div id="game">
 
 <!--        <svg width="1072" height="632" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -109,9 +109,9 @@
 -->
         <div id="tableborder">
             <div id="table">
-                <canvas id='demo_canvas' ></canvas> 
-                <script src="/javascripts/eightball/poolTable.js" type="text/javascript"></script> 
-                <script src="/javascripts/eightball/demos.js" type="text/javascript"></script> 
+                <canvas id='demo_canvas' ></canvas>
+                <script src="/javascripts/eightball/poolTable.js" type="text/javascript"></script>
+                <script src="/javascripts/eightball/demos.js" type="text/javascript"></script>
             </div>
         </div>
 
@@ -120,7 +120,7 @@
         </div>
 
         <div id="progress">
-            
+
         </div>
 
         <div id="score">
@@ -132,7 +132,7 @@
         </div>
 
     </div>
-    <canvas id='cue_canvas'></canvas> 
+    <canvas id='cue_canvas'></canvas>
 
 
 </body>
