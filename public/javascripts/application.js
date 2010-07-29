@@ -25,6 +25,6 @@ $(window).resize(function (e) {
     poolTable.updateLayout(width, height);
 });
 
-enableDebug();
+// enableDebug();
 
-preload("images/bestscore.png,images/cue.png,images/progressbg.png,images/progressunit.png,images/score.png,images/table.jpg,images/tableborder.png,images/timeremaining.png,wood.jpg");
+preload("/images/bestscore.png,/images/cue.png,/images/progressbg.png,/images/progressunit.png,/images/score.png,/images/table.jpg,/images/tableborder.png,/images/timeremaining.png,/images/wood.jpg");
