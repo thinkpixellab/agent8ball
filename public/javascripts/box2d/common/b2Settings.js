@@ -16,8 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-/** @const */
-var b2Settings = {};
+goog.provide('b2Settings');
+
 /** @const @type {number} */
 b2Settings.USHRT_MAX = 0x0000ffff;
 /** @const @type {number} */

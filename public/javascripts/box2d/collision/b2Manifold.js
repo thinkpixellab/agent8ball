@@ -16,11 +16,17 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2Manifold');
+
+goog.require('b2Settings');
+goog.require('b2Vec2');
+goog.require('b2ContactPoint');
+
 // A manifold for two touching convex shapes.
 /**
  @constructor
  */
-var b2Manifold = function() {
+b2Manifold = function() {
   this.points = new Array(b2Settings.b2_maxManifoldPoints);
   for (var i = 0; i < b2Settings.b2_maxManifoldPoints; i++) {
     this.points[i] = new b2ContactPoint();

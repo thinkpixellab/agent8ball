@@ -16,11 +16,15 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2ContactID');
+
+goog.require('Features');
+
 // We use contact ids to facilitate warm starting.
 /**
  @constructor
  */
-var b2ContactID = function() {
+b2ContactID = function() {
   // initialize instance variables for references
   this.features = new Features();
   //

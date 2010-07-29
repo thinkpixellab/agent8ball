@@ -16,8 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2CircleContact');
 
-
+goog.require('b2Contact');
+goog.require('b2Manifold');
+goog.require('b2Collision');
 
 var b2CircleContact = Class.create();
 Object.extend(b2CircleContact.prototype, b2Contact.prototype);

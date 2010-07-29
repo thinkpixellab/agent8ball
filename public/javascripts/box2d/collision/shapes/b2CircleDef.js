@@ -16,11 +16,16 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2CircleDef');
+goog.require('b2Shape');
+goog.require('b2Vec2');
+goog.require('b2ShapeDef');
+
 /**
   @constructor
   @extends {b2ShapeDef}
 */
-var b2CircleDef = function() {
+b2CircleDef = function() {
     // The constructor for b2ShapeDef
     this.type = b2Shape.e_unknownShape;
     this.userData = null;

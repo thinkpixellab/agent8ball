@@ -16,11 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2Mat22');
+
 /** @constructor
  @param {number=} angle
  @param {b2Vec2=} c1
  @param {b2Vec2=} c2 */
-var b2Mat22 = function(angle, c1, c2) {
+b2Mat22 = function(angle, c1, c2) {
   if (angle == null ) angle = 0;
   // initialize instance variables for references
 

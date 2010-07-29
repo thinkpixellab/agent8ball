@@ -16,13 +16,12 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2ContactConstraintPoint');
 
-
-
+goog.require('b2Vec2');
 
 var b2ContactConstraintPoint = Class.create();
-b2ContactConstraintPoint.prototype = 
-{
+b2ContactConstraintPoint.prototype = {
   localAnchor1: new b2Vec2(),
   localAnchor2: new b2Vec2(),
   normalImpulse: null,
@@ -37,4 +36,5 @@ b2ContactConstraintPoint.prototype =
     this.localAnchor1 = new b2Vec2();
     this.localAnchor2 = new b2Vec2();
     //
-}};
+  }
+};

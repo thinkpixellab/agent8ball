@@ -18,6 +18,10 @@
 
 goog.provide('b2PolyDef');
 
+goog.require('b2ShapeDef');
+goog.require('b2Shape');
+goog.require('b2Vec2');
+
 /**
  @constructor
  @extends {b2ShapeDef}

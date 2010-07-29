@@ -16,6 +16,15 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2World');
+
+goog.require('b2TimeStep');
+goog.require('b2ContactManager');
+goog.require('b2CollisionFilter');
+goog.require('b2BroadPhose');
+goog.require('b2Body');
+goog.require('b2Island');
+
 /** @typedef {b2World} */
 var b2World = Class.create();
 b2World.prototype = {
@@ -23,7 +32,6 @@ b2World.prototype = {
     // initialize instance variables for references
     this.step = new b2TimeStep();
     this.m_contactManager = new b2ContactManager();
-    //
 
     this.m_listener = null;
     this.m_filter = b2CollisionFilter.b2_defaultFilter;

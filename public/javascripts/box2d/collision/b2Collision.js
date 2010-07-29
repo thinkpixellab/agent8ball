@@ -16,7 +16,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-var b2Collision = {};
+goog.provide('b2Collision');
+
+goog.require('ClipVertex');
+
 b2Collision.b2_nullFeature = 0x000000ff;
 b2Collision.ClipSegmentToLine = function(vOut, vIn, normal, offset) {
   // Start with no output points

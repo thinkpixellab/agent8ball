@@ -16,15 +16,15 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2NullContact');
 
+goog.require('b2Contact');
+goog.require('b2ContactNode');
 
-
-
-var b2NullContact = Class.create();
+b2NullContact = Class.create();
 Object.extend(b2NullContact.prototype, b2Contact.prototype);
-Object.extend(b2NullContact.prototype, 
-{
-    initialize: function(s1, s2) {
+Object.extend(b2NullContact.prototype, {
+  initialize: function(s1, s2) {
     // The constructor for b2Contact
     // initialize instance variables for references
     this.m_node1 = new b2ContactNode();
@@ -32,7 +32,7 @@ Object.extend(b2NullContact.prototype,
     //
     this.m_flags = 0;
 
-    if (!s1 || !s2){
+    if (!s1 || !s2) {
       this.m_shape1 = null;
       this.m_shape2 = null;
       return;
@@ -59,7 +59,9 @@ Object.extend(b2NullContact.prototype,
     this.m_node2.next = null;
     this.m_node2.other = null;
     //
-},
+  },
   Evaluate: function() {},
-  GetManifolds: function(){ return null; }});
-
+  GetManifolds: function() {
+    return null;
+  }
+});

@@ -16,13 +16,18 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-//typedef b2Contact* b2ContactCreateFcn(b2Shape* shape1, b2Shape* shape2, b2BlockAllocator* allocator);
-//typedef void b2ContactDestroyFcn(b2Contact* contact, b2BlockAllocator* allocator);
+goog.provide('b2Contact');
+
+goog.require('b2ContactNode');
+goog.require('b2ContactRegister');
+goog.require('b2CircleContact');
+goog.require('b2PolyAndCircleContact');
+goog.require('b2PolyContact');
 
 /**
  @constructor
  */
-var b2Contact = function(s1, s2) {
+b2Contact = function(s1, s2) {
   // initialize instance variables for references
   this.m_node1 = new b2ContactNode();
   this.m_node2 = new b2ContactNode();
@@ -80,7 +85,6 @@ b2Contact.prototype = {
   //--------------- Internals Below -------------------
   // this.m_flags
   // enum
-
   //virtual ~b2Contact() {}
   Evaluate: function() {},
 
@@ -130,8 +134,7 @@ b2Contact.InitializeRegisters = function() {
 
   b2Contact.AddType(b2CircleContact.Create, b2CircleContact.Destroy, b2Shape.e_circleShape, b2Shape.e_circleShape);
   b2Contact.AddType(b2PolyAndCircleContact.Create, b2PolyAndCircleContact.Destroy, b2Shape.e_polyShape, b2Shape.e_circleShape);
-  b2Contact.AddType
-(b2PolyContact.Create, b2PolyContact.Destroy, b2Shape.e_polyShape, b2Shape.e_polyShape);
+  b2Contact.AddType(b2PolyContact.Create, b2PolyContact.Destroy, b2Shape.e_polyShape, b2Shape.e_polyShape);
 
 };
 b2Contact.Create = function(shape1, shape2, allocator) {

@@ -16,18 +16,16 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
+goog.provide('b2ContactSolver');
+goog.require('b2Settings');
+goog.require('b2ContactConstraint');
 
 var b2ContactSolver = Class.create();
-b2ContactSolver.prototype = 
-{
-  initialize: function(contacts, contactCount, allocator){
+b2ContactSolver.prototype = {
+  initialize: function(contacts, contactCount, allocator) {
     // initialize instance variables for references
     this.m_constraints = new Array();
     //
-
     this.m_allocator = allocator;
 
     var i = 0;
@@ -35,19 +33,17 @@ b2ContactSolver.prototype =
     var tMat;
 
     this.m_constraintCount = 0;
-    for (i = 0; i < contactCount; ++i)
-    {
+    for (i = 0; i < contactCount; ++i) {
       this.m_constraintCount += contacts[i].GetManifoldCount();
     }
 
     // fill array
-    for (i = 0; i < this.m_constraintCount; i++){
+    for (i = 0; i < this.m_constraintCount; i++) {
       this.m_constraints[i] = new b2ContactConstraint();
     }
 
     var count = 0;
-    for (i = 0; i < contactCount; ++i)
-    {
+    for (i = 0; i < contactCount; ++i) {
       var contact = contacts[i];
       var b1 = contact.m_shape1.m_body;
       var b2 = contact.m_shape2.m_body;
@@ -65,18 +61,16 @@ b2ContactSolver.prototype =
       var w1 = b1.m_angularVelocity;
       var w2 = b2.m_angularVelocity;
 
-      for (var j = 0; j < manifoldCount; ++j)
-      {
-        var manifold = manifolds[ j ];
+      for (var j = 0; j < manifoldCount; ++j) {
+        var manifold = manifolds[j];
 
         //b2Settings.b2Assert(manifold.pointCount > 0);
-
         //var normal = manifold.normal.Copy();
         var normalX = manifold.normal.x;
         var normalY = manifold.normal.y;
 
         //b2Settings.b2Assert(count < this.m_constraintCount);
-        var c = this.m_constraints[ count ];
+        var c = this.m_constraints[count];
         c.body1 = b1;
         c.body2 = b2;
         c.manifold = manifold;
@@ -87,10 +81,9 @@ b2ContactSolver.prototype =
         c.friction = friction;
         c.restitution = restitution;
 
-        for (var k = 0; k < c.pointCount; ++k)
-        {
-          var cp = manifold.points[ k ];
-          var ccp = c.points[ k ];
+        for (var k = 0; k < c.pointCount; ++k) {
+          var cp = manifold.points[k];
+          var ccp = c.points[k];
 
           ccp.normalImpulse = cp.normalImpulse;
           ccp.tangentImpulse = cp.tangentImpulse;
@@ -119,40 +112,38 @@ b2ContactSolver.prototype =
           var r2Sqr = r2X * r2X + r2Y * r2Y;
 
           //var rn1 = b2Math.b2Dot(r1, normal);
-          var rn1 = r1X*normalX + r1Y*normalY;
+          var rn1 = r1X * normalX + r1Y * normalY;
           //var rn2 = b2Math.b2Dot(r2, normal);
-          var rn2 = r2X*normalX + r2Y*normalY;
+          var rn2 = r2X * normalX + r2Y * normalY;
           var kNormal = b1.m_invMass + b2.m_invMass;
           kNormal += b1.m_invI * (r1Sqr - rn1 * rn1) + b2.m_invI * (r2Sqr - rn2 * rn2);
           //b2Settings.b2Assert(kNormal > Number.MIN_VALUE);
           ccp.normalMass = 1.0 / kNormal;
 
           //var tangent = b2Math.b2CrossVF(normal, 1.0);
-          var tangentX = normalY
+          var tangentX = normalY;
           var tangentY = -normalX;
 
           //var rt1 = b2Math.b2Dot(r1, tangent);
-          var rt1 = r1X*tangentX + r1Y*tangentY;
+          var rt1 = r1X * tangentX + r1Y * tangentY;
           //var rt2 = b2Math.b2Dot(r2, tangent);
-          var rt2 = r2X*tangentX + r2Y*tangentY;
+          var rt2 = r2X * tangentX + r2Y * tangentY;
           var kTangent = b1.m_invMass + b2.m_invMass;
           kTangent += b1.m_invI * (r1Sqr - rt1 * rt1) + b2.m_invI * (r2Sqr - rt2 * rt2);
           //b2Settings.b2Assert(kTangent > Number.MIN_VALUE);
-          ccp.tangentMass = 1.0 /  kTangent;
+          ccp.tangentMass = 1.0 / kTangent;
 
           // Setup a velocity bias for restitution.
           ccp.velocityBias = 0.0;
-          if (ccp.separation > 0.0)
-          {
+          if (ccp.separation > 0.0) {
             ccp.velocityBias = -60.0 * ccp.separation;
           }
           //var vRel = b2Math.b2Dot(c.normal, b2Math.SubtractVV( b2Math.SubtractVV( b2Math.AddVV( v2, b2Math.b2CrossFV(w2, r2)), v1 ), b2Math.b2CrossFV(w1, r1)));
-          var tX = v2X + (-w2*r2Y) - v1X - (-w1*r1Y);
-          var tY = v2Y + (w2*r2X) - v1Y - (w1*r1X);
+          var tX = v2X + (-w2 * r2Y) - v1X - (-w1 * r1Y);
+          var tY = v2Y + (w2 * r2X) - v1Y - (w1 * r1X);
           //var vRel = b2Dot(c.normal, tX/Y);
-          var vRel = c.normal.x*tX + c.normal.y*tY;
-          if (vRel < -b2Settings.b2_velocityThreshold)
-          {
+          var vRel = c.normal.x * tX + c.normal.y * tY;
+          if (vRel < -b2Settings.b2_velocityThreshold) {
             ccp.velocityBias += -c.restitution * vRel;
           }
         }
@@ -164,16 +155,14 @@ b2ContactSolver.prototype =
     //b2Settings.b2Assert(count == this.m_constraintCount);
   },
   //~b2ContactSolver();
-
-  PreSolve: function(){
+  PreSolve: function() {
     var tVec;
     var tVec2;
     var tMat;
 
     // Warm start.
-    for (var i = 0; i < this.m_constraintCount; ++i)
-    {
-      var c = this.m_constraints[ i ];
+    for (var i = 0; i < this.m_constraintCount; ++i) {
+      var c = this.m_constraints[i];
 
       var b1 = c.body1;
       var b2 = c.body2;
@@ -190,15 +179,13 @@ b2ContactSolver.prototype =
 
       var j = 0;
       var tCount = 0;
-      if (b2World.s_enableWarmStarting)
-      {
+      if (b2World.s_enableWarmStarting) {
         tCount = c.pointCount;
-        for (j = 0; j < tCount; ++j)
-        {
-          var ccp = c.points[ j ];
+        for (j = 0; j < tCount; ++j) {
+          var ccp = c.points[j];
           //var P = b2Math.AddVV( b2Math.MulFV(ccp.normalImpulse, normal), b2Math.MulFV(ccp.tangentImpulse, tangent));
-          var PX = ccp.normalImpulse*normalX + ccp.tangentImpulse*tangentX;
-          var PY = ccp.normalImpulse*normalY + ccp.tangentImpulse*tangentY;
+          var PX = ccp.normalImpulse * normalX + ccp.tangentImpulse * tangentX;
+          var PY = ccp.normalImpulse * normalY + ccp.tangentImpulse * tangentY;
 
           //var r1 = b2Math.b2MulMV(b1.m_R, ccp.localAnchor1);
           tMat = b1.m_R;
@@ -225,12 +212,10 @@ b2ContactSolver.prototype =
 
           ccp.positionImpulse = 0.0;
         }
-      }
-      else{
+      } else {
         tCount = c.pointCount;
-        for (j = 0; j < tCount; ++j)
-        {
-          var ccp2 = c.points[ j ];
+        for (j = 0; j < tCount; ++j) {
+          var ccp2 = c.points[j];
           ccp2.normalImpulse = 0.0;
           ccp2.tangentImpulse = 0.0;
 
@@ -239,7 +224,7 @@ b2ContactSolver.prototype =
       }
     }
   },
-  SolveVelocityConstraints: function(){
+  SolveVelocityConstraints: function() {
     var j = 0;
     var ccp;
     var r1X;
@@ -256,9 +241,8 @@ b2ContactSolver.prototype =
     var tMat;
     var tVec;
 
-    for (var i = 0; i < this.m_constraintCount; ++i)
-    {
-      var c = this.m_constraints[ i ];
+    for (var i = 0; i < this.m_constraintCount; ++i) {
+      var c = this.m_constraints[i];
       var b1 = c.body1;
       var b2 = c.body2;
       var b1_angularVelocity = b1.m_angularVelocity;
@@ -279,20 +263,19 @@ b2ContactSolver.prototype =
 
       // Solver normal constraints
       var tCount = c.pointCount;
-      for (j = 0; j < tCount; ++j)
-      {
-        ccp = c.points[ j ];
+      for (j = 0; j < tCount; ++j) {
+        ccp = c.points[j];
 
         //r1 = b2Math.b2MulMV(b1.m_R, ccp.localAnchor1);
         tMat = b1.m_R;
         tVec = ccp.localAnchor1;
-        r1X = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y
-        r1Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y
+        r1X = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y;
+        r1Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y;
         //r2 = b2Math.b2MulMV(b2.m_R, ccp.localAnchor2);
         tMat = b2.m_R;
         tVec = ccp.localAnchor2;
-        r2X = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y
-        r2Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y
+        r2X = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y;
+        r2Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y;
 
         // Relative velocity at contact
         //var dv = b2Math.SubtractVV( b2Math.AddVV( b2.m_linearVelocity, b2Math.b2CrossFV(b2.m_angularVelocity, r2)), b2Math.SubtractVV(b1.m_linearVelocity, b2Math.b2CrossFV(b1.m_angularVelocity, r1)));
@@ -326,8 +309,6 @@ b2ContactSolver.prototype =
 
         ccp.normalImpulse = newImpulse;
 
-
-
         // MOVED FROM BELOW
         // Relative velocity at contact
         //var dv = b2.m_linearVelocity + b2Cross(b2.m_angularVelocity, r2) - b1.m_linearVelocity - b2Cross(b1.m_angularVelocity, r1);
@@ -336,7 +317,7 @@ b2ContactSolver.prototype =
         dvY = b2_linearVelocity.y + (b2_angularVelocity * r2X) - b1_linearVelocity.y - (b1_angularVelocity * r1X);
 
         // Compute tangent impulse
-        var vt = dvX*tangentX + dvY*tangentY;
+        var vt = dvX * tangentX + dvY * tangentY;
         lambda = ccp.tangentMass * (-vt);
 
         // b2Clamp the accumulated impulse
@@ -361,8 +342,6 @@ b2ContactSolver.prototype =
 
         ccp.tangentImpulse = newImpulse;
       }
-
-
 
       // Solver tangent constraints
       // MOVED ABOVE FOR EFFICIENCY
@@ -419,15 +398,14 @@ b2ContactSolver.prototype =
       b2.m_angularVelocity = b2_angularVelocity;
     }
   },
-  SolvePositionConstraints: function(beta){
+  SolvePositionConstraints: function(beta) {
     var minSeparation = 0.0;
 
     var tMat;
     var tVec;
 
-    for (var i = 0; i < this.m_constraintCount; ++i)
-    {
-      var c = this.m_constraints[ i ];
+    for (var i = 0; i < this.m_constraintCount; ++i) {
+      var c = this.m_constraints[i];
       var b1 = c.body1;
       var b2 = c.body2;
       var b1_position = b1.m_position;
@@ -448,20 +426,19 @@ b2ContactSolver.prototype =
 
       // Solver normal constraints
       var tCount = c.pointCount;
-      for (var j = 0; j < tCount; ++j)
-      {
-        var ccp = c.points[ j ];
+      for (var j = 0; j < tCount; ++j) {
+        var ccp = c.points[j];
 
         //r1 = b2Math.b2MulMV(b1.m_R, ccp.localAnchor1);
         tMat = b1.m_R;
         tVec = ccp.localAnchor1;
-        var r1X = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y
-        var r1Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y
+        var r1X = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y;
+        var r1Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y;
         //r2 = b2Math.b2MulMV(b2.m_R, ccp.localAnchor2);
         tMat = b2.m_R;
         tVec = ccp.localAnchor2;
-        var r2X = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y
-        var r2Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y
+        var r2X = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y;
+        var r2Y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y;
 
         //var p1 = b2Math.AddVV(b1.m_position, r1);
         var p1X = b1_position.x + r1X;
@@ -477,7 +454,7 @@ b2ContactSolver.prototype =
 
         // Approximate the current separation.
         //var separation = b2Math.b2Dot(dp, normal) + ccp.separation;
-        var separation = (dpX*normalX + dpY*normalY) + ccp.separation;
+        var separation = (dpX * normalX + dpY * normalY) + ccp.separation;
 
         // Track max constraint error.
         minSeparation = b2Math.b2Min(minSeparation, separation);
@@ -516,14 +493,12 @@ b2ContactSolver.prototype =
 
     return minSeparation >= -b2Settings.b2_linearSlop;
   },
-  PostSolve: function(){
-    for (var i = 0; i < this.m_constraintCount; ++i)
-    {
-      var c = this.m_constraints[ i ];
+  PostSolve: function() {
+    for (var i = 0; i < this.m_constraintCount; ++i) {
+      var c = this.m_constraints[i];
       var m = c.manifold;
 
-      for (var j = 0; j < c.pointCount; ++j)
-      {
+      for (var j = 0; j < c.pointCount; ++j) {
         var mPoint = m.points[j];
         var cPoint = c.points[j];
         mPoint.normalImpulse = cPoint.normalImpulse;
@@ -534,4 +509,5 @@ b2ContactSolver.prototype =
 
   m_allocator: null,
   m_constraints: new Array(),
-  m_constraintCount: 0};
+  m_constraintCount: 0
+};

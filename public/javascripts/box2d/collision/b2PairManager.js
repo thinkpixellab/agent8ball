@@ -20,48 +20,43 @@
 // of overlapping proxies. It is based closely on code provided by Pierre Terdiman.
 // http:
 
+goog.provide('b2PairManager');
 
-
-
+goog.require('b2Pair');
+goog.require('b2BufferedPair');
 
 var b2PairManager = Class.create();
-b2PairManager.prototype = 
-{
-//public:
-  initialize: function(){
+b2PairManager.prototype = {
+  //public:
+  initialize: function() {
     var i = 0;
     //b2Settings.b2Assert(b2Math.b2IsPowerOfTwo(b2Pair.b2_tableCapacity) == true);
     //b2Settings.b2Assert(b2Pair.b2_tableCapacity >= b2Settings.b2_maxPairs);
     this.m_hashTable = new Array(b2Pair.b2_tableCapacity);
-    for (i = 0; i < b2Pair.b2_tableCapacity; ++i)
-    {
+    for (i = 0; i < b2Pair.b2_tableCapacity; ++i) {
       this.m_hashTable[i] = b2Pair.b2_nullPair;
     }
     this.m_pairs = new Array(b2Settings.b2_maxPairs);
-    for (i = 0; i < b2Settings.b2_maxPairs; ++i)
-    {
+    for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
       this.m_pairs[i] = new b2Pair();
     }
     this.m_pairBuffer = new Array(b2Settings.b2_maxPairs);
-    for (i = 0; i < b2Settings.b2_maxPairs; ++i)
-    {
+    for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
       this.m_pairBuffer[i] = new b2BufferedPair();
     }
 
-    for (i = 0; i < b2Settings.b2_maxPairs; ++i)
-    {
+    for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
       this.m_pairs[i].proxyId1 = b2Pair.b2_nullProxy;
       this.m_pairs[i].proxyId2 = b2Pair.b2_nullProxy;
       this.m_pairs[i].userData = null;
       this.m_pairs[i].status = 0;
       this.m_pairs[i].next = (i + 1);
     }
-    this.m_pairs[b2Settings.b2_maxPairs-1].next = b2Pair.b2_nullPair;
+    this.m_pairs[b2Settings.b2_maxPairs - 1].next = b2Pair.b2_nullPair;
     this.m_pairCount = 0;
   },
   //~b2PairManager();
-
-  Initialize: function(broadPhase, callback){
+  Initialize: function(broadPhase, callback) {
     this.m_broadPhase = broadPhase;
     this.m_callback = callback;
   },
@@ -82,18 +77,15 @@ b2PairManager.prototype =
   We may add a pair that is already in the pair manager and pair buffer.
   If the added pair is not a new pair, then it must be in the pair buffer (because this.RemovePair was called).
   */
-  AddBufferedPair: function(proxyId1, proxyId2){
+  AddBufferedPair: function(proxyId1, proxyId2) {
     //b2Settings.b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
     //b2Settings.b2Assert(this.m_pairBufferCount < b2_maxPairs);
-
     var pair = this.AddPair(proxyId1, proxyId2);
 
     // If this pair is not in the pair buffer ...
-    if (pair.IsBuffered() == false)
-    {
+    if (pair.IsBuffered() == false) {
       // This must be a newly added pair.
       //b2Settings.b2Assert(pair.IsFinal() == false);
-
       // Add it to the pair buffer.
       pair.SetBuffered();
       this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
@@ -106,31 +98,26 @@ b2PairManager.prototype =
     // Confirm this pair for the subsequent call to this.Commit.
     pair.ClearRemoved();
 
-    if (b2BroadPhase.s_validate)
-    {
+    if (b2BroadPhase.s_validate) {
       this.ValidateBuffer();
     }
   },
 
   // Buffer a pair for removal.
-  RemoveBufferedPair: function(proxyId1, proxyId2){
+  RemoveBufferedPair: function(proxyId1, proxyId2) {
     //b2Settings.b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
     //b2Settings.b2Assert(this.m_pairBufferCount < b2_maxPairs);
-
     var pair = this.Find(proxyId1, proxyId2);
 
-    if (pair == null)
-    {
+    if (pair == null) {
       // The pair never existed. This is legal (due to collision filtering).
       return;
     }
 
     // If this pair is not in the pair buffer ...
-    if (pair.IsBuffered() == false)
-    {
+    if (pair.IsBuffered() == false) {
       // This must be an old pair.
       //b2Settings.b2Assert(pair.IsFinal() == true);
-
       pair.SetBuffered();
       this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
       this.m_pairBuffer[this.m_pairBufferCount].proxyId2 = pair.proxyId2;
@@ -141,40 +128,34 @@ b2PairManager.prototype =
 
     pair.SetRemoved();
 
-    if (b2BroadPhase.s_validate)
-    {
+    if (b2BroadPhase.s_validate) {
       this.ValidateBuffer();
     }
   },
 
-  Commit: function(){
+  Commit: function() {
     var i = 0;
 
     var removeCount = 0;
 
     var proxies = this.m_broadPhase.m_proxyPool;
 
-    for (i = 0; i < this.m_pairBufferCount; ++i)
-    {
+    for (i = 0; i < this.m_pairBufferCount; ++i) {
       var pair = this.Find(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
       //b2Settings.b2Assert(pair.IsBuffered());
       pair.ClearBuffered();
 
       //b2Settings.b2Assert(pair.proxyId1 < b2Settings.b2_maxProxies && pair.proxyId2 < b2Settings.b2_maxProxies);
-
-      var proxy1 = proxies[ pair.proxyId1 ];
-      var proxy2 = proxies[ pair.proxyId2 ];
+      var proxy1 = proxies[pair.proxyId1];
+      var proxy2 = proxies[pair.proxyId2];
 
       //b2Settings.b2Assert(proxy1.IsValid());
       //b2Settings.b2Assert(proxy2.IsValid());
-
-      if (pair.IsRemoved())
-      {
+      if (pair.IsRemoved()) {
         // It is possible a pair was added then removed before a commit. Therefore,
         // we should be careful not to tell the user the pair was removed when the
         // the user didn't receive a matching add.
-        if (pair.IsFinal() == true)
-        {
+        if (pair.IsFinal() == true) {
           this.m_callback.PairRemoved(proxy1.userData, proxy2.userData, pair.userData);
         }
 
@@ -182,39 +163,32 @@ b2PairManager.prototype =
         this.m_pairBuffer[removeCount].proxyId1 = pair.proxyId1;
         this.m_pairBuffer[removeCount].proxyId2 = pair.proxyId2;
         ++removeCount;
-      }
-      else
-      {
+      } else {
         //b2Settings.b2Assert(this.m_broadPhase.TestOverlap(proxy1, proxy2) == true);
-
-        if (pair.IsFinal() == false)
-        {
+        if (pair.IsFinal() == false) {
           pair.userData = this.m_callback.PairAdded(proxy1.userData, proxy2.userData);
           pair.SetFinal();
         }
       }
     }
 
-    for (i = 0; i < removeCount; ++i)
-    {
+    for (i = 0; i < removeCount; ++i) {
       this.RemovePair(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
     }
 
     this.m_pairBufferCount = 0;
 
-    if (b2BroadPhase.s_validate)
-    {
+    if (b2BroadPhase.s_validate) {
       this.ValidateTable();
     }
   },
 
-//private:
-
+  //private:
   // Add a pair and return the new pair. If the pair already exists,
   // no new pair is created and the old one is returned.
-  AddPair: function(proxyId1, proxyId2){
+  AddPair: function(proxyId1, proxyId2) {
 
-    if (proxyId1 > proxyId2){
+    if (proxyId1 > proxyId2) {
       var temp = proxyId1;
       proxyId1 = proxyId2;
       proxyId2 = temp;
@@ -226,13 +200,11 @@ b2PairManager.prototype =
     //var pairIndex = this.FindHash(proxyId1, proxyId2, hash);
     var pair = pair = this.FindHash(proxyId1, proxyId2, hash);
 
-    if (pair != null)
-    {
+    if (pair != null) {
       return pair;
     }
 
     //b2Settings.b2Assert(this.m_pairCount < b2Settings.b2_maxPairs && this.m_freePair != b2_nullPair);
-
     var pIndex = this.m_freePair;
     pair = this.m_pairs[pIndex];
     this.m_freePair = pair.next;
@@ -251,11 +223,10 @@ b2PairManager.prototype =
   },
 
   // Remove a pair, return the pair's userData.
-  RemovePair: function(proxyId1, proxyId2){
+  RemovePair: function(proxyId1, proxyId2) {
 
     //b2Settings.b2Assert(this.m_pairCount > 0);
-
-    if (proxyId1 > proxyId2){
+    if (proxyId1 > proxyId2) {
       var temp = proxyId1;
       proxyId1 = proxyId2;
       proxyId2 = temp;
@@ -267,21 +238,18 @@ b2PairManager.prototype =
     var node = this.m_hashTable[hash];
     var pNode = null;
 
-    while (node != b2Pair.b2_nullPair)
-    {
-      if (b2PairManager.Equals(this.m_pairs[node], proxyId1, proxyId2))
-      {
+    while (node != b2Pair.b2_nullPair) {
+      if (b2PairManager.Equals(this.m_pairs[node], proxyId1, proxyId2)) {
         var index = node;
 
         //*node = this.m_pairs[*node].next;
-        if (pNode){
+        if (pNode) {
           pNode.next = this.m_pairs[node].next;
-        }
-        else{
+        } else {
           this.m_hashTable[hash] = this.m_pairs[node].next;
         }
 
-        var pair = this.m_pairs[ index ];
+        var pair = this.m_pairs[index];
         var userData = pair.userData;
 
         // Scrub
@@ -294,9 +262,7 @@ b2PairManager.prototype =
         this.m_freePair = index;
         --this.m_pairCount;
         return userData;
-      }
-      else
-      {
+      } else {
         //node = &this.m_pairs[*node].next;
         pNode = this.m_pairs[node];
         node = pNode.next;
@@ -307,9 +273,9 @@ b2PairManager.prototype =
     return null;
   },
 
-  Find: function(proxyId1, proxyId2){
+  Find: function(proxyId1, proxyId2) {
 
-    if (proxyId1 > proxyId2){
+    if (proxyId1 > proxyId2) {
       var temp = proxyId1;
       proxyId1 = proxyId2;
       proxyId2 = temp;
@@ -320,33 +286,30 @@ b2PairManager.prototype =
 
     return this.FindHash(proxyId1, proxyId2, hash);
   },
-  FindHash: function(proxyId1, proxyId2, hash){
+  FindHash: function(proxyId1, proxyId2, hash) {
     var index = this.m_hashTable[hash];
 
-    while( index != b2Pair.b2_nullPair && b2PairManager.Equals(this.m_pairs[index], proxyId1, proxyId2) == false)
-    {
+    while (index != b2Pair.b2_nullPair && b2PairManager.Equals(this.m_pairs[index], proxyId1, proxyId2) == false) {
       index = this.m_pairs[index].next;
     }
 
-    if ( index == b2Pair.b2_nullPair )
-    {
+    if (index == b2Pair.b2_nullPair) {
       return null;
     }
 
     //b2Settings.b2Assert(index < b2_maxPairs);
-
-    return this.m_pairs[ index ];
+    return this.m_pairs[index];
   },
 
-  ValidateBuffer: function(){
+  ValidateBuffer: function() {
     // DEBUG
   },
 
-  ValidateTable: function(){
+  ValidateTable: function() {
     // DEBUG
   },
 
-//public:
+  //public:
   m_broadPhase: null,
   m_callback: null,
   m_pairs: null,
@@ -358,29 +321,23 @@ b2PairManager.prototype =
 
   m_hashTable: null
 
-
-// static
+  // static
   // Thomas Wang's hash, see: http:
 
-
-
 };
-b2PairManager.Hash = function(proxyId1, proxyId2)
-  {
-    var key = ((proxyId2 << 16) & 0xffff0000) | proxyId1;
-    key = ~key + ((key << 15) & 0xFFFF8000);
-    key = key ^ ((key >> 12) & 0x000fffff);
-    key = key + ((key << 2) & 0xFFFFFFFC);
-    key = key ^ ((key >> 4) & 0x0fffffff);
-    key = key * 2057;
-    key = key ^ ((key >> 16) & 0x0000ffff);
-    return key;
-  };
-b2PairManager.Equals = function(pair, proxyId1, proxyId2)
-  {
-    return (pair.proxyId1 == proxyId1 && pair.proxyId2 == proxyId2);
-  };
-b2PairManager.EqualsPair = function(pair1, pair2)
-  {
-    return pair1.proxyId1 == pair2.proxyId1 && pair1.proxyId2 == pair2.proxyId2;
-  };
+b2PairManager.Hash = function(proxyId1, proxyId2) {
+  var key = ((proxyId2 << 16) & 0xffff0000) | proxyId1;
+  key = ~key + ((key << 15) & 0xFFFF8000);
+  key = key ^ ((key >> 12) & 0x000fffff);
+  key = key + ((key << 2) & 0xFFFFFFFC);
+  key = key ^ ((key >> 4) & 0x0fffffff);
+  key = key * 2057;
+  key = key ^ ((key >> 16) & 0x0000ffff);
+  return key;
+};
+b2PairManager.Equals = function(pair, proxyId1, proxyId2) {
+  return (pair.proxyId1 == proxyId1 && pair.proxyId2 == proxyId2);
+};
+b2PairManager.EqualsPair = function(pair1, pair2) {
+  return pair1.proxyId1 == pair2.proxyId1 && pair1.proxyId2 == pair2.proxyId2;
+};

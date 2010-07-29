@@ -3,6 +3,12 @@ goog.provide('eightball.PoolTable');
 goog.require('goog.math.Matrix');
 goog.require('goog.math.Line');
 goog.require('goog.math.Vec2');
+goog.require('b2Vec2');
+goog.require('b2AABB');
+goog.require('b2World');
+goog.require('b2BodyDef');
+goog.require('b2PolyDef');
+goog.require('b2CircleDef');
 
 /**
  @constructor

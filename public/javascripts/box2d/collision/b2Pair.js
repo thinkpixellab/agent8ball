@@ -16,6 +16,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2Pair');
+
+goog.require('b2Settings');
+
 // The pair manager is used by the broad-phase to quickly add/remove/find pairs
 // of overlapping proxies. It is based closely on code provided by Pierre Terdiman.
 // http:

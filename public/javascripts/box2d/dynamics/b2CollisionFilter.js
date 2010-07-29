@@ -16,10 +16,12 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2CollisionFilter');
+
 /**
  @constructor
  */
-var b2CollisionFilter = function() {};
+b2CollisionFilter = function() {};
 
 // Return true if contact calculations should be performed between these two shapes.
 b2CollisionFilter.prototype.ShouldCollide = function(shape1, shape2) {

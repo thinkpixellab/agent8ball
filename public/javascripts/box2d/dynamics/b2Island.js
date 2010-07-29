@@ -95,6 +95,10 @@ probably default to the slower Full NGS and let the user select the faster
 Baumgarte method in performance critical scenarios.
 */
 
+goog.provide('b2Island');
+
+goog.require('b2ContactSolver');
+
 /** @typedef {b2Island} */
 var b2Island = Class.create();
 b2Island.prototype = {

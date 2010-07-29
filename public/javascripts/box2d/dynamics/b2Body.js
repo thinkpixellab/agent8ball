@@ -16,6 +16,12 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2Body');
+goog.require('b2Mat22');
+goog.require('b2Vec2');
+goog.require('b2Math');
+goog.require('b2MassData');
+
 // A rigid body. Internal computation are done in terms
 // of the center of mass position. The center of mass may
 // be offset from the body's origin.

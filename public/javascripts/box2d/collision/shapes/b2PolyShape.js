@@ -16,6 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2PolyShape');
+goog.require('b2Mat22');
+goog.require('b2Vec2');
+goog.require('b2Settings');
+goog.require('b2Shape');
+goog.require('b2OBB');
+
 // A convex polygon. The position of the polygon (m_position) is the
 // position of the centroid. The vertices of the incoming polygon are pre-rotated
 // according to the local rotation. The vertices are also shifted to be centered

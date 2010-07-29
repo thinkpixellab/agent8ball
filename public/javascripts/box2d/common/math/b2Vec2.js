@@ -16,6 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2Vec2');
+
 // b2Vec2 has no constructor so that it
 // can be placed in a union.
 /**

@@ -16,6 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2AABB')
+
 // A manifold for two touching convex shapes.
 /** @constructor */
 var b2AABB = function() {

@@ -16,6 +16,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2MassData');
+
+goog.require('b2Vec2');
+
 /** @constructor */
 var b2MassData = function() {
   this.center = new b2Vec2(0, 0);

@@ -16,8 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-/** @const */
-var b2Math = {};
+goog.provide('b2Math');
 
 /**
  @const 

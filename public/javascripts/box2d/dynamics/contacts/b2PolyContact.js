@@ -16,11 +16,17 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2PolyContact');
+
+goog.require('b2ContactNode');
+goog.require('b2Math');
+goog.require('b2Manifold');
+
 /**
   @constructor
   @extends {b2Contact}
 */
-var b2PolyContact = function(s1, s2) {
+b2PolyContact = function(s1, s2) {
   // The constructor for b2Contact
   // initialize instance variables for references
   this.m_node1 = new b2ContactNode();

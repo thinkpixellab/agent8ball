@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
+goog.provide('b2ContactRegister');
 
 var b2ContactRegister = Class.create();
 b2ContactRegister.prototype = 

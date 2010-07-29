@@ -16,6 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2CircleShape');
+goog.require('b2Mat22');
+goog.require('b2Vec2');
+goog.require('b2AABB');
+
 /**
  @constructor
  @extends {b2Shape}
@@ -23,7 +28,7 @@
  @param {b2Body} body
  @param {b2Vec2} localCenter
  */
-var b2CircleShape = function(def, body, localCenter) {
+b2CircleShape = function(def, body, localCenter) {
   // initialize instance variables for references
   this.m_R = new b2Mat22();
   this.m_position = new b2Vec2();

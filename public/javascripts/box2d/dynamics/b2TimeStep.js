@@ -16,6 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2TimeStep');
+
 /** @typedef {b2TimeStep} */
 var b2TimeStep = Class.create();
 b2TimeStep.prototype = {

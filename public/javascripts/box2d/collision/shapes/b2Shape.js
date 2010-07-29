@@ -16,6 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2Shape');
+
+goog.require('b2Mat22');
+goog.require('b2Vec2');
+goog.require('b2PolyShape');
+goog.require('b2CircleShape');
+
 // Shapes are created automatically when a body is created.
 // Client code does not normally interact with shapes.
 /**
@@ -23,7 +30,7 @@
   @param {b2ShapeDef} def
   @param {b2Body} body
   */
-var b2Shape = function(def, body) {
+b2Shape = function(def, body) {
   // initialize instance variables for references
   this.m_R = new b2Mat22();
   this.m_position = new b2Vec2();
@@ -146,6 +153,7 @@ b2Shape.Create = function(def, body, center) {
   //b2Settings.b2Assert(false);
   return null;
 };
+
 b2Shape.Destroy = function(shape) {
   /*b2BlockAllocator& allocator = shape->m_body->m_world->m_blockAllocator;
 

@@ -16,8 +16,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2ShapeDef');
+
 /** @constructor */
-var b2ShapeDef = function() {
+b2ShapeDef = function() {
   this.type = b2Shape.e_unknownShape;
   this.userData = null;
   this.localPosition = new b2Vec2(0.0, 0.0);

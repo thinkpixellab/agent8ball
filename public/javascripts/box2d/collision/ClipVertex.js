@@ -16,13 +16,13 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('ClipVertex');
 
-
-
+goog.require('b2Vec2');
+goog.require('b2ContactID');
 
 var ClipVertex = Class.create();
-ClipVertex.prototype = 
-{
+ClipVertex.prototype = {
   v: new b2Vec2(),
   id: new b2ContactID(),
   initialize: function() {
@@ -30,6 +30,5 @@ ClipVertex.prototype =
     this.v = new b2Vec2();
     this.id = new b2ContactID();
     //
-}};
-
-
+  }
+};

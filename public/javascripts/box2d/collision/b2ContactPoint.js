@@ -16,6 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2ContactPoint');
+
+goog.require('b2Vec2');
+goog.require('b2ContactID');
+
 // We use contact ids to facilitate warm starting.
 /**
  @constructor
