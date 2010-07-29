@@ -1,10 +1,13 @@
-require File.expand_path('../../../config/application', __FILE__)
+require 'rubygems'
 require 'rake'
-require 'util'
+
+unless defined?(PROJECT_ROOT)
+   PROJECT_ROOT = File.join(File.dirname(__FILE__), '..')
+end
 
 module JsCompile
   def self.make_defs
-    js_path = File.join(Rails.root, 'public', 'javascripts')
+    js_path = File.join(PROJECT_ROOT, 'javascripts')
     closure_path = File.join(js_path, 'closure-library','closure')
 
     calcdeps_path = File.join(closure_path,'bin','calcdeps.py')
@@ -33,19 +36,19 @@ module JsCompile
   def self.work
     dir = 'box2d'
 
-    prototype_lite_path = File.join(Rails.root, 'public','javascripts','prototype_lite.js')
-    goog_base_path = File.join(Rails.root, 'public','javascripts','closure-library','closure','goog','base.js')
+    prototype_lite_path = File.join(PROJECT_ROOT,'javascripts','prototype_lite.js')
+    goog_base_path = File.join(PROJECT_ROOT,'javascripts','closure-library','closure','goog','base.js')
 
-    js_dir = File.join(Rails.root, 'public','javascripts')
-    files = Util.get_js_dir(dir)
+    js_dir = File.join(PROJECT_ROOT,'javascripts')
+    files = get_js_dir(dir)
     files.collect!{ |file_name| File.join(js_dir, file_name)}
 
     compile(dir, files, [goog_base_path, prototype_lite_path])
   end
 
   def self.compile(output_prefix, js_file_paths, dependencies = [])
-    compiler_jar_path = File.join(Rails.root, 'vendor/jars/closure_compiler/compiler.jar')
-    compiled_output_path = File.join(Rails.root, 'tmp/js_concat/', "#{output_prefix}_#{Time.now.strftime('%Y%m%d-%H%M%S')}.js")
+    compiler_jar_path = File.join(PROJECT_ROOT, 'vendor/jars/closure_compiler/compiler.jar')
+    compiled_output_path = File.join(PROJECT_ROOT, 'tmp/js_concat/', "#{output_prefix}_#{Time.now.strftime('%Y%m%d-%H%M%S')}.js")
 
     sys_command = "java -jar #{compiler_jar_path}"
 
@@ -74,7 +77,7 @@ end
 namespace :js do
   desc 'Concat and compile the local javascript'
   task :compile do
-    JsCompile.work
+    JsCompile.make_defs
   end
 end
 
