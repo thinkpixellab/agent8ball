@@ -1,4 +1,5 @@
 goog.provide('eightball.PoolTable');
+
 goog.require('goog.math.Matrix');
 goog.require('goog.math.Line');
 goog.require('goog.math.Vec2');
@@ -15,6 +16,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   this.m_strikePower = 0;
   // will be a number from 0 to 1 indicating strike power
   this.m_isCueVisible = true;
+
+  // get a local reference to this
+  var _this = this;
 
   // load our cuestick image (we'll need this for rendering in the updateCue function)
   this.m_cueImage = new Image();
@@ -39,9 +43,6 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   // setup our physics world
   this._createWorld(this.m_centerOffset);
   this.m_canvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y);
-
-  // get a local reference to this
-  var _this = this;
 
   // mouse tracking fields
   this.m_isMouseDown = false;
