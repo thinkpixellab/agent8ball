@@ -24,3 +24,7 @@ $(window).resize(function (e) {
     height = window.innerHeight;
     poolTable.updateLayout(width, height);
 });
+
+enableDebug();
+
+preload("images/bestscore.png,images/cue.png,images/progressbg.png,images/progressunit.png,images/score.png,images/table.jpg,images/tableborder.png,images/timeremaining.png,wood.jpg");
