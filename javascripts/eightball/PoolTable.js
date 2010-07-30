@@ -43,9 +43,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   this.m_cueCanvasContext = this.m_cueCanvasElement[0].getContext('2d');
 
   // set the width and height of the table
-  this.m_canvasElement.attr('width', eightball.PoolTable.width * 2 + eightball.PoolTable.bumperThickness * 4);
-  this.m_canvasElement.attr('height', eightball.PoolTable.height * 2 + eightball.PoolTable.bumperThickness * 4);
-  this.m_centerOffset = new b2Vec2(eightball.PoolTable.width + eightball.PoolTable.bumperThickness * 2, eightball.PoolTable.height + eightball.PoolTable.bumperThickness * 2);
+  this.m_canvasElement.attr('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.bumperThickness * 4);
+  this.m_canvasElement.attr('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.bumperThickness * 4);
+  this.m_centerOffset = new b2Vec2(eightball.PoolTable.s_width + eightball.PoolTable.bumperThickness * 2, eightball.PoolTable.s_height + eightball.PoolTable.bumperThickness * 2);
 
   // setup our physics world
   this._createWorld(this.m_centerOffset);
@@ -217,24 +217,27 @@ eightball.PoolTable.horizontalCueOffset = 7;
 
 /**
  @const
+ @private
  @type {number}
  cm, regulation
  */
-eightball.PoolTable.height = 192;
+eightball.PoolTable.s_height = 192;
 
 /**
  @const
+ @private
  @type {number}
  cm, regulation
  */
-eightball.PoolTable.width = 396;
+eightball.PoolTable.s_width = 396;
 
 /**
  @const
+ @private
  @type {number}
  cm, regulation
  */
-eightball.PoolTable.ballDiameter = 7;
+eightball.PoolTable.s_ballDiameter = 7;
 
 /**
  @const
@@ -261,16 +264,16 @@ eightball.PoolTable.prototype._createWorld = function() {
 eightball.PoolTable._setupBalls = function(world) {
   var balls = new Array(16);
   var index = 0;
-  var ballRadius = eightball.PoolTable.ballDiameter * 2;
+  var ballRadius = eightball.PoolTable.s_ballDiameter * 2;
 
-  balls[index] = this._createBall(world, -0.5 * eightball.PoolTable.width, 0, ballRadius);
+  balls[index] = this._createBall(world, -0.5 * eightball.PoolTable.s_width, 0, ballRadius);
   balls[index].userData = index;
   index++;
 
   for (var col = 0; col < 5; col++) {
 
     var ballCount = col + 1;
-    var x = 0.5 * eightball.PoolTable.width + col * ballRadius * Math.sqrt(3);
+    var x = 0.5 * eightball.PoolTable.s_width + col * ballRadius * Math.sqrt(3);
     var yStart = -col * ballRadius;
 
     for (var row = 0; row < ballCount; row++) {
