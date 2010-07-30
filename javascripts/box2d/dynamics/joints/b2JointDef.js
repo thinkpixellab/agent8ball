@@ -16,16 +16,14 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2JointDef');
 
-
-
+goog.require('b2Joint');
 
 var b2JointDef = Class.create();
-b2JointDef.prototype = 
-{
+b2JointDef.prototype = {
 
-  initialize: function()
-  {
+  initialize: function() {
     this.type = b2Joint.e_unknownJoint;
     this.userData = null;
     this.body1 = null;
@@ -37,4 +35,5 @@ b2JointDef.prototype =
   userData: null,
   body1: null,
   body2: null,
-  collideConnected: null}
+  collideConnected: null
+};

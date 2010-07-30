@@ -16,7 +16,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2AABB')
+goog.provide('b2AABB');
+
+goog.require('b2Vec2');
 
 // A manifold for two touching convex shapes.
 /** @constructor */

@@ -16,6 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2BoxDef');
+
+goog.require('b2ShapeDef');
+goog.require('b2Vec2');
+
 /**
   @constructor
   @extends {b2ShapeDef}

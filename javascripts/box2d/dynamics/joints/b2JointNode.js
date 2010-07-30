@@ -16,18 +16,15 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
+goog.provide('b2JointNode');
 
 var b2JointNode = Class.create();
-b2JointNode.prototype = 
-{
+b2JointNode.prototype = {
 
   other: null,
   joint: null,
   prev: null,
   next: null,
 
-
-  initialize: function() {}}
+  initialize: function() {}
+};

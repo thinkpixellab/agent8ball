@@ -16,9 +16,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2RevoluteJoint');
 
-
-
+goog.require('b2Joint');
 
 // Point-to-point constraint
 // C = p2 - p1
@@ -27,62 +27,52 @@
 // J = [-I -r1_skew I r2_skew ]
 // Identity used:
 // w k % (rx i + ry j) = w * (-ry i + rx j)
-
 // Motor constraint
 // Cdot = w2 - w1
 // J = [0 0 -1 0 0 1]
 // K = invI1 + invI2
-
 var b2RevoluteJoint = Class.create();
 Object.extend(b2RevoluteJoint.prototype, b2Joint.prototype);
-Object.extend(b2RevoluteJoint.prototype, 
-{
-  GetAnchor1: function(){
+Object.extend(b2RevoluteJoint.prototype, {
+  GetAnchor1: function() {
     var tMat = this.m_body1.m_R;
-    return new b2Vec2(  this.m_body1.m_position.x + (tMat.col1.x * this.m_localAnchor1.x + tMat.col2.x * this.m_localAnchor1.y),
-              this.m_body1.m_position.y + (tMat.col1.y * this.m_localAnchor1.x + tMat.col2.y * this.m_localAnchor1.y));
+    return new b2Vec2(this.m_body1.m_position.x + (tMat.col1.x * this.m_localAnchor1.x + tMat.col2.x * this.m_localAnchor1.y), this.m_body1.m_position.y + (tMat.col1.y * this.m_localAnchor1.x + tMat.col2.y * this.m_localAnchor1.y));
   },
-  GetAnchor2: function(){
+  GetAnchor2: function() {
     var tMat = this.m_body2.m_R;
-    return new b2Vec2(  this.m_body2.m_position.x + (tMat.col1.x * this.m_localAnchor2.x + tMat.col2.x * this.m_localAnchor2.y),
-              this.m_body2.m_position.y + (tMat.col1.y * this.m_localAnchor2.x + tMat.col2.y * this.m_localAnchor2.y));
+    return new b2Vec2(this.m_body2.m_position.x + (tMat.col1.x * this.m_localAnchor2.x + tMat.col2.x * this.m_localAnchor2.y), this.m_body2.m_position.y + (tMat.col1.y * this.m_localAnchor2.x + tMat.col2.y * this.m_localAnchor2.y));
   },
-  GetJointAngle: function(){
+  GetJointAngle: function() {
     return this.m_body2.m_rotation - this.m_body1.m_rotation;
   },
-  GetJointSpeed: function(){
+  GetJointSpeed: function() {
     return this.m_body2.m_angularVelocity - this.m_body1.m_angularVelocity;
   },
-  GetMotorTorque: function(invTimeStep){
-    return  invTimeStep * this.m_motorImpulse;
+  GetMotorTorque: function(invTimeStep) {
+    return invTimeStep * this.m_motorImpulse;
   },
 
-  SetMotorSpeed: function(speed)
-  {
+  SetMotorSpeed: function(speed) {
     this.m_motorSpeed = speed;
   },
 
-  SetMotorTorque: function(torque)
-  {
+  SetMotorTorque: function(torque) {
     this.m_maxMotorTorque = torque;
   },
 
-  GetReactionForce: function(invTimeStep)
-  {
+  GetReactionForce: function(invTimeStep) {
     var tVec = this.m_ptpImpulse.Copy();
     tVec.Multiply(invTimeStep);
     //return invTimeStep * this.m_ptpImpulse;
     return tVec;
   },
 
-  GetReactionTorque: function(invTimeStep)
-  {
+  GetReactionTorque: function(invTimeStep) {
     return invTimeStep * this.m_limitImpulse;
   },
 
   //--------------- Internals Below -------------------
-
-  initialize: function(def){
+  initialize: function(def) {
     // The constructor for b2Joint
     // initialize instance variables for references
     this.m_node1 = new b2JointNode();
@@ -97,7 +87,6 @@ Object.extend(b2RevoluteJoint.prototype,
     this.m_islandFlag = false;
     this.m_userData = def.userData;
     //
-
     // initialize instance variables for references
     this.K = new b2Mat22();
     this.K1 = new b2Mat22();
@@ -108,9 +97,7 @@ Object.extend(b2RevoluteJoint.prototype,
     this.m_ptpImpulse = new b2Vec2();
     this.m_ptpMass = new b2Mat22();
     //
-
     //super(def);
-
     var tMat;
     var tX;
     var tY;
@@ -148,7 +135,7 @@ Object.extend(b2RevoluteJoint.prototype,
   K1: new b2Mat22(),
   K2: new b2Mat22(),
   K3: new b2Mat22(),
-  PrepareVelocitySolver: function(){
+  PrepareVelocitySolver: function() {
     var b1 = this.m_body1;
     var b2 = this.m_body2;
 
@@ -173,16 +160,22 @@ Object.extend(b2RevoluteJoint.prototype,
     var invI2 = b2.m_invI;
 
     //var this.K1 = new b2Mat22();
-    this.K1.col1.x = invMass1 + invMass2;  this.K1.col2.x = 0.0;
-    this.K1.col1.y = 0.0;          this.K1.col2.y = invMass1 + invMass2;
+    this.K1.col1.x = invMass1 + invMass2;
+    this.K1.col2.x = 0.0;
+    this.K1.col1.y = 0.0;
+    this.K1.col2.y = invMass1 + invMass2;
 
     //var this.K2 = new b2Mat22();
-    this.K2.col1.x =  invI1 * r1Y * r1Y;  this.K2.col2.x = -invI1 * r1X * r1Y;
-    this.K2.col1.y = -invI1 * r1X * r1Y;  this.K2.col2.y =  invI1 * r1X * r1X;
+    this.K2.col1.x = invI1 * r1Y * r1Y;
+    this.K2.col2.x = -invI1 * r1X * r1Y;
+    this.K2.col1.y = -invI1 * r1X * r1Y;
+    this.K2.col2.y = invI1 * r1X * r1X;
 
     //var this.K3 = new b2Mat22();
-    this.K3.col1.x =  invI2 * r2Y * r2Y;  this.K3.col2.x = -invI2 * r2X * r2Y;
-    this.K3.col1.y = -invI2 * r2X * r2Y;  this.K3.col2.y =  invI2 * r2X * r2X;
+    this.K3.col1.x = invI2 * r2Y * r2Y;
+    this.K3.col2.x = -invI2 * r2X * r2Y;
+    this.K3.col1.y = -invI2 * r2X * r2Y;
+    this.K3.col2.y = invI2 * r2X * r2X;
 
     //var this.K = b2Math.AddMM(b2Math.AddMM(this.K1, this.K2), this.K3);
     this.K.SetM(this.K1);
@@ -194,48 +187,34 @@ Object.extend(b2RevoluteJoint.prototype,
 
     this.m_motorMass = 1.0 / (invI1 + invI2);
 
-    if (this.m_enableMotor == false)
-    {
+    if (this.m_enableMotor == false) {
       this.m_motorImpulse = 0.0;
     }
 
-    if (this.m_enableLimit)
-    {
+    if (this.m_enableLimit) {
       var jointAngle = b2.m_rotation - b1.m_rotation - this.m_intialAngle;
-      if (b2Math.b2Abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * b2Settings.b2_angularSlop)
-      {
+      if (b2Math.b2Abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * b2Settings.b2_angularSlop) {
         this.m_limitState = b2Joint.e_equalLimits;
-      }
-      else if (jointAngle <= this.m_lowerAngle)
-      {
-        if (this.m_limitState != b2Joint.e_atLowerLimit)
-        {
+      } else if (jointAngle <= this.m_lowerAngle) {
+        if (this.m_limitState != b2Joint.e_atLowerLimit) {
           this.m_limitImpulse = 0.0;
         }
         this.m_limitState = b2Joint.e_atLowerLimit;
-      }
-      else if (jointAngle >= this.m_upperAngle)
-      {
-        if (this.m_limitState != b2Joint.e_atUpperLimit)
-        {
+      } else if (jointAngle >= this.m_upperAngle) {
+        if (this.m_limitState != b2Joint.e_atUpperLimit) {
           this.m_limitImpulse = 0.0;
         }
         this.m_limitState = b2Joint.e_atUpperLimit;
-      }
-      else
-      {
+      } else {
         this.m_limitState = b2Joint.e_inactiveLimit;
         this.m_limitImpulse = 0.0;
       }
-    }
-    else
-    {
+    } else {
       this.m_limitImpulse = 0.0;
     }
 
     // Warm starting.
-    if (b2World.s_enableWarmStarting)
-    {
+    if (b2World.s_enableWarmStarting) {
       //b1.m_linearVelocity.Subtract( b2Math.MulFV( invMass1, this.m_ptpImpulse) );
       b1.m_linearVelocity.x -= invMass1 * this.m_ptpImpulse.x;
       b1.m_linearVelocity.y -= invMass1 * this.m_ptpImpulse.y;
@@ -247,8 +226,7 @@ Object.extend(b2RevoluteJoint.prototype,
       b2.m_linearVelocity.y += invMass2 * this.m_ptpImpulse.y;
       //b2.m_angularVelocity += invI2 * (b2Math.b2CrossVV(r2, this.m_ptpImpulse) + this.m_motorImpulse + this.m_limitImpulse);
       b2.m_angularVelocity += invI2 * ((r2X * this.m_ptpImpulse.y - r2Y * this.m_ptpImpulse.x) + this.m_motorImpulse + this.m_limitImpulse);
-    }
-    else{
+    } else {
       this.m_ptpImpulse.SetZero();
       this.m_motorImpulse = 0.0;
       this.m_limitImpulse = 0.0;
@@ -257,8 +235,7 @@ Object.extend(b2RevoluteJoint.prototype,
     this.m_limitPositionImpulse = 0.0;
   },
 
-
-  SolveVelocityConstraints: function(step){
+  SolveVelocityConstraints: function(step) {
     var b1 = this.m_body1;
     var b2 = this.m_body2;
 
@@ -298,8 +275,7 @@ Object.extend(b2RevoluteJoint.prototype,
     //b2->m_angularVelocity += b2->m_invI * b2Cross(r2, ptpImpulse);
     b2.m_angularVelocity += b2.m_invI * (r2X * ptpImpulseY - r2Y * ptpImpulseX);
 
-    if (this.m_enableMotor && this.m_limitState != b2Joint.e_equalLimits)
-    {
+    if (this.m_enableMotor && this.m_limitState != b2Joint.e_equalLimits) {
       var motorCdot = b2.m_angularVelocity - b1.m_angularVelocity - this.m_motorSpeed;
       var motorImpulse = -this.m_motorMass * motorCdot;
       var oldMotorImpulse = this.m_motorImpulse;
@@ -309,23 +285,17 @@ Object.extend(b2RevoluteJoint.prototype,
       b2.m_angularVelocity += b2.m_invI * motorImpulse;
     }
 
-    if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit)
-    {
+    if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit) {
       var limitCdot = b2.m_angularVelocity - b1.m_angularVelocity;
       var limitImpulse = -this.m_motorMass * limitCdot;
 
-      if (this.m_limitState == b2Joint.e_equalLimits)
-      {
+      if (this.m_limitState == b2Joint.e_equalLimits) {
         this.m_limitImpulse += limitImpulse;
-      }
-      else if (this.m_limitState == b2Joint.e_atLowerLimit)
-      {
+      } else if (this.m_limitState == b2Joint.e_atLowerLimit) {
         oldLimitImpulse = this.m_limitImpulse;
         this.m_limitImpulse = b2Math.b2Max(this.m_limitImpulse + limitImpulse, 0.0);
         limitImpulse = this.m_limitImpulse - oldLimitImpulse;
-      }
-      else if (this.m_limitState == b2Joint.e_atUpperLimit)
-      {
+      } else if (this.m_limitState == b2Joint.e_atUpperLimit) {
         oldLimitImpulse = this.m_limitImpulse;
         this.m_limitImpulse = b2Math.b2Min(this.m_limitImpulse + limitImpulse, 0.0);
         limitImpulse = this.m_limitImpulse - oldLimitImpulse;
@@ -336,8 +306,7 @@ Object.extend(b2RevoluteJoint.prototype,
     }
   },
 
-
-  SolvePositionConstraints: function(){
+  SolvePositionConstraints: function() {
 
     var oldLimitImpulse;
     var limitC;
@@ -371,12 +340,11 @@ Object.extend(b2RevoluteJoint.prototype,
     var ptpCY = p2Y - p1Y;
 
     //float32 positionError = ptpC.Length();
-    positionError = Math.sqrt(ptpCX*ptpCX + ptpCY*ptpCY);
+    positionError = Math.sqrt(ptpCX * ptpCX + ptpCY * ptpCY);
 
     // Prevent overly large corrections.
     //b2Vec2 dpMax(b2_maxLinearCorrection, b2_maxLinearCorrection);
     //ptpC = b2Clamp(ptpC, -dpMax, dpMax);
-
     //float32 invMass1 = b1->m_invMass, invMass2 = b2->m_invMass;
     var invMass1 = b1.m_invMass;
     var invMass2 = b2.m_invMass;
@@ -385,16 +353,22 @@ Object.extend(b2RevoluteJoint.prototype,
     var invI2 = b2.m_invI;
 
     //b2Mat22 this.K1;
-    this.K1.col1.x = invMass1 + invMass2;  this.K1.col2.x = 0.0;
-    this.K1.col1.y = 0.0;          this.K1.col2.y = invMass1 + invMass2;
+    this.K1.col1.x = invMass1 + invMass2;
+    this.K1.col2.x = 0.0;
+    this.K1.col1.y = 0.0;
+    this.K1.col2.y = invMass1 + invMass2;
 
     //b2Mat22 this.K2;
-    this.K2.col1.x =  invI1 * r1Y * r1Y;  this.K2.col2.x = -invI1 * r1X * r1Y;
-    this.K2.col1.y = -invI1 * r1X * r1Y;  this.K2.col2.y =  invI1 * r1X * r1X;
+    this.K2.col1.x = invI1 * r1Y * r1Y;
+    this.K2.col2.x = -invI1 * r1X * r1Y;
+    this.K2.col1.y = -invI1 * r1X * r1Y;
+    this.K2.col2.y = invI1 * r1X * r1X;
 
     //b2Mat22 this.K3;
-    this.K3.col1.x =  invI2 * r2Y * r2Y;    this.K3.col2.x = -invI2 * r2X * r2Y;
-    this.K3.col1.y = -invI2 * r2X * r2Y;    this.K3.col2.y =  invI2 * r2X * r2X;
+    this.K3.col1.x = invI2 * r2Y * r2Y;
+    this.K3.col2.x = -invI2 * r2X * r2Y;
+    this.K3.col1.y = -invI2 * r2X * r2Y;
+    this.K3.col2.y = invI2 * r2X * r2X;
 
     //b2Mat22 this.K = this.K1 + this.K2 + this.K3;
     this.K.SetM(this.K1);
@@ -419,24 +393,19 @@ Object.extend(b2RevoluteJoint.prototype,
     b2.m_rotation += b2.m_invI * (r2X * impulseY - r2Y * impulseX);
     b2.m_R.Set(b2.m_rotation);
 
-
     // Handle limits.
     var angularError = 0.0;
 
-    if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit)
-    {
+    if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit) {
       var angle = b2.m_rotation - b1.m_rotation - this.m_intialAngle;
       var limitImpulse = 0.0;
 
-      if (this.m_limitState == b2Joint.e_equalLimits)
-      {
+      if (this.m_limitState == b2Joint.e_equalLimits) {
         // Prevent large angular corrections
         limitC = b2Math.b2Clamp(angle, -b2Settings.b2_maxAngularCorrection, b2Settings.b2_maxAngularCorrection);
         limitImpulse = -this.m_motorMass * limitC;
         angularError = b2Math.b2Abs(limitC);
-      }
-      else if (this.m_limitState == b2Joint.e_atLowerLimit)
-      {
+      } else if (this.m_limitState == b2Joint.e_atLowerLimit) {
         limitC = angle - this.m_lowerAngle;
         angularError = b2Math.b2Max(0.0, -limitC);
 
@@ -446,9 +415,7 @@ Object.extend(b2RevoluteJoint.prototype,
         oldLimitImpulse = this.m_limitPositionImpulse;
         this.m_limitPositionImpulse = b2Math.b2Max(this.m_limitPositionImpulse + limitImpulse, 0.0);
         limitImpulse = this.m_limitPositionImpulse - oldLimitImpulse;
-      }
-      else if (this.m_limitState == b2Joint.e_atUpperLimit)
-      {
+      } else if (this.m_limitState == b2Joint.e_atUpperLimit) {
         limitC = angle - this.m_upperAngle;
         angularError = b2Math.b2Max(0.0, limitC);
 
@@ -486,6 +453,7 @@ Object.extend(b2RevoluteJoint.prototype,
 
   m_enableLimit: null,
   m_enableMotor: null,
-  m_limitState: 0});
+  m_limitState: 0
+});
 
 b2RevoluteJoint.tImpulse = new b2Vec2();
