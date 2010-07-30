@@ -255,7 +255,9 @@ eightball.PoolTable.prototype._createWorld = function() {
   this.m_world = new b2World(worldAABB, gravity, doSleep);
 
   var tableObject = eightball.PoolTable._createTable(this.m_world, this.m_centerOffset);
-  tableObject.userData = 'table';
+  tableObject.userData = eightball.PoolTable.s_bodyTypes.TABLE;
+
+  var pocket = eightball.PoolTable._createPockets(this.m_world, this.m_centerOffset);
 
   var balls = eightball.PoolTable._setupBalls(this.m_world);
   this.m_theCueBall = balls[0];
@@ -287,15 +289,6 @@ eightball.PoolTable._setupBalls = function(world) {
 };
 
 eightball.PoolTable._createTable = function(world, centerOffset) {
-
-  var matrixFlipHorizontal = new goog.math.Matrix([
-    [-1, 0],
-    [0, 1]]);
-
-  var matrixFlipVertical = new goog.math.Matrix([
-    [-1, 0],
-    [0, -1]]);
-
   var table = new b2BodyDef();
   table.friction = 1.0;
 
@@ -314,7 +307,7 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
 
   // Right
   side = new b2PolyDef();
-  points = new goog.math.Matrix(points).multiply(matrixFlipHorizontal).toArray().reverse();
+  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
   side.SetVertices(points);
   table.AddShape(side);
 
@@ -331,23 +324,68 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
 
   // top right
   side = new b2PolyDef();
-  points = new goog.math.Matrix(points).multiply(matrixFlipHorizontal).toArray().reverse();
+  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
   side.SetVertices(points);
   table.AddShape(side);
 
   // bottom right
   side = new b2PolyDef();
-  points = new goog.math.Matrix(points).multiply(matrixFlipVertical).toArray();
+  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
   side.SetVertices(points);
   table.AddShape(side);
 
   // bottom left
   side = new b2PolyDef();
-  points = new goog.math.Matrix(points).multiply(matrixFlipHorizontal).toArray().reverse();
+  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
   side.SetVertices(points);
   table.AddShape(side);
 
   return world.CreateBody(table);
+};
+
+/**
+ @private
+ */
+eightball.PoolTable._createPockets = function(world, centerOffset) {
+  var pockets = new Array(6);
+
+  var pocketCoords = [
+    [centerOffset.x - 21, centerOffset.y - 21]];
+  pockets[0] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray();
+  pockets[1] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
+  pockets[2] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray();
+  pockets[3] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords[0][0] = 0;
+  pocketCoords[0][1] = centerOffset.y - 12;
+  pockets[4] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
+  pockets[5] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  return pockets;
+};
+
+/**
+ @private
+ */
+eightball.PoolTable._createPocket = function(world, x, y) {
+  var pocketSd = new b2CircleDef();
+  pocketSd.radius = 21;
+
+  var pocketBd = new b2BodyDef();
+  pocketBd.AddShape(pocketSd);
+  pocketBd.position.Set(x, y);
+
+  var body = world.CreateBody(pocketBd);
+  body.userData = eightball.PoolTable.s_bodyTypes.POCKET;
+  return body;
 };
 
 eightball.PoolTable._createBall = function(world, x, y) {
@@ -392,10 +430,13 @@ eightball.PoolTable.prototype._drawWorld = function() {
     if (b.userData == 0) {
       this.m_canvasContext.strokeStyle = 'black';
       this.m_canvasContext.fillStyle = "white";
-    } else if (b.userData == 'table') {
+    } else if (b.userData == eightball.PoolTable.s_bodyTypes.TABLE) {
       this.m_canvasContext.strokeStyle = 'transparent';
       //this.m_canvasContext.fillStyle = "green";
-      this.m_canvasContext.fillStyle = "transparent";
+      this.m_canvasContext.fillStyle = "rgba(0,255,0,.5)";
+    } else if (b.userData == eightball.PoolTable.s_bodyTypes.POCKET) {
+      this.m_canvasContext.strokeStyle = 'white';
+      this.m_canvasContext.fillStyle = "rgba(255,0,0,.5)";
     } else {
       this.m_canvasContext.strokeStyle = 'white';
       this.m_canvasContext.fillStyle = 'transparent';
@@ -443,3 +484,31 @@ eightball.PoolTable._drawShape = function(shape, context) {
   context.fill();
   context.stroke();
 };
+
+/**
+ @const
+ @private
+ @enum {string}
+ */
+eightball.PoolTable.s_bodyTypes = {
+  TABLE: 'table',
+  POCKET: 'pocket'
+};
+
+/**
+ @const
+ @private
+ @type {goog.math.Matrix}
+ */
+eightball.PoolTable.s_matrixFlipHorizontal = new goog.math.Matrix([
+  [-1, 0],
+  [0, 1]]);
+
+/**
+ @const
+ @private
+ @type {goog.math.Matrix}
+ */
+eightball.PoolTable.s_matrixFlipVertical = new goog.math.Matrix([
+  [-1, 0],
+  [0, -1]]);
