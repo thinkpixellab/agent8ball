@@ -19,17 +19,14 @@ module JsCompile
     app_path = File.join(js_path, 'application.js')
     sys_command << " -i #{app_path}"
 
-    output_path = File.join(js_path, 'deps.js')
-
     ['box2d','eightball','helpers'].each do |files_dir|
       sys_command << " -p #{File.join(js_path, files_dir)}"
     end
 
+    output_path = File.join(js_path, 'deps.js')
     sys_command << " --output_file=#{output_path}"
 
-    #python path-to-closure-library/closure/bin/calcdeps.py -i path-to-your-src/requirements.js -o deps -d path-to-closure-library/closure/ -p path-to-your-src/ --output_file=path-to-your-src/deps.js
-
-    puts sys_command
+    puts "Now executing: #{sys_command.inspect}"
     `#{sys_command}`
   end
 
