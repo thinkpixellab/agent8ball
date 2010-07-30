@@ -21,6 +21,7 @@ goog.require('b2Mat22');
 goog.require('b2Vec2');
 goog.require('b2Math');
 goog.require('b2MassData');
+goog.require('b2ShapeFactory');
 
 // A rigid body. Internal computation are done in terms
 // of the center of mass position. The center of mass may
@@ -305,7 +306,7 @@ b2Body.prototype = {
     this.m_shapeList = null;
     for (i = 0; i < this.m_shapeCount; ++i) {
       sd = bd.shapes[i];
-      var shape = b2Shape.Create(sd, this, this.m_center);
+      var shape = b2ShapeFactory.Create(sd, this, this.m_center);
       shape.m_next = this.m_shapeList;
       this.m_shapeList = shape;
     }

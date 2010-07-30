@@ -17,9 +17,11 @@
 */
 
 goog.provide('b2CircleShape');
+
 goog.require('b2Mat22');
 goog.require('b2Vec2');
 goog.require('b2AABB');
+goog.require('b2Shape');
 
 /**
  @constructor

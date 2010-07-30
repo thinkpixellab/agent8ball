@@ -20,8 +20,6 @@ goog.provide('b2Shape');
 
 goog.require('b2Mat22');
 goog.require('b2Vec2');
-goog.require('b2PolyShape');
-goog.require('b2CircleShape');
 
 // Shapes are created automatically when a body is created.
 // Client code does not normally interact with shapes.
@@ -127,31 +125,6 @@ b2Shape.prototype = {
   m_groupIndex: 0
 
   // b2ShapeType
-};
-
-/**
- @param {b2ShapeDef} def
- @param {b2Body} body
- @param {b2Vec2} center
- */
-b2Shape.Create = function(def, body, center) {
-  switch (def.type) {
-  case b2Shape.e_circleShape:
-    {
-      //void* mem = body->m_world->m_blockAllocator.Allocate(sizeof(b2CircleShape));
-      return new b2CircleShape(def, body, center);
-    }
-
-  case b2Shape.e_boxShape:
-  case b2Shape.e_polyShape:
-    {
-      //void* mem = body->m_world->m_blockAllocator.Allocate(sizeof(b2PolyShape));
-      return new b2PolyShape(def, body, center);
-    }
-  }
-
-  //b2Settings.b2Assert(false);
-  return null;
 };
 
 b2Shape.Destroy = function(shape) {
