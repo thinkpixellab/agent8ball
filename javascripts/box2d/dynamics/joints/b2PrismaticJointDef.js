@@ -16,16 +16,15 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2PrismaticJointDef');
 
-
-
+goog.require('b2JointDef');
+goog.require('b2Vec2');
 
 var b2PrismaticJointDef = Class.create();
 Object.extend(b2PrismaticJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2PrismaticJointDef.prototype, 
-{
-  initialize: function()
-  {
+Object.extend(b2PrismaticJointDef.prototype, {
+  initialize: function() {
     // The constructor for b2JointDef
     this.type = b2Joint.e_unknownJoint;
     this.userData = null;
@@ -33,7 +32,6 @@ Object.extend(b2PrismaticJointDef.prototype,
     this.body2 = null;
     this.collideConnected = false;
     //
-
     this.type = b2Joint.e_prismaticJoint;
     this.anchorPoint = new b2Vec2(0.0, 0.0);
     this.axis = new b2Vec2(0.0, 0.0);
@@ -52,5 +50,5 @@ Object.extend(b2PrismaticJointDef.prototype,
   motorForce: null,
   motorSpeed: null,
   enableLimit: null,
-  enableMotor: null});
-
+  enableMotor: null
+});

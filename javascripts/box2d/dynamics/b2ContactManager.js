@@ -21,6 +21,7 @@ goog.provide('b2ContactManager');
 goog.require('b2Contact');
 goog.require('b2PairCallback');
 goog.require('b2NullContact');
+goog.require('b2ContactFactory');
 
 /** @constructor */
 b2ContactManager = function() {
@@ -73,7 +74,7 @@ b2ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserData2) 
   }
 
   // Call the factory.
-  var contact = b2Contact.Create(shape1, shape2, this.m_world.m_blockAllocator);
+  var contact = b2ContactFactory.Create(shape1, shape2, this.m_world.m_blockAllocator);
 
   if (contact == null) {
     return this.m_nullContact;
@@ -172,7 +173,7 @@ b2ContactManager.prototype.DestroyContact = function(c) {
   }
 
   // Call the factory.
-  b2Contact.Destroy(c, this.m_world.m_blockAllocator);
+  b2ContactFactory.Destroy(c, this.m_world.m_blockAllocator);
   --this.m_world.m_contactCount;
 };
 

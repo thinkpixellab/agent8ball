@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
+goog.provide('b2DistanceJoint');
 
 // C = norm(p2 - p1) - L
 // u = (p2 - p1) / norm(p2 - p1)
@@ -24,14 +24,11 @@
 // J = [-u -cross(r1, u) u cross(r2, u)]
 // K = J * invM * JT
 //   = invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
-
 var b2DistanceJoint = Class.create();
 Object.extend(b2DistanceJoint.prototype, b2Joint.prototype);
-Object.extend(b2DistanceJoint.prototype, 
-{
+Object.extend(b2DistanceJoint.prototype, {
   //--------------- Internals Below -------------------
-
-  initialize: function(def){
+  initialize: function(def) {
     // The constructor for b2Joint
     // initialize instance variables for references
     this.m_node1 = new b2JointNode();
@@ -46,15 +43,12 @@ Object.extend(b2DistanceJoint.prototype,
     this.m_islandFlag = false;
     this.m_userData = def.userData;
     //
-
     // initialize instance variables for references
     this.m_localAnchor1 = new b2Vec2();
     this.m_localAnchor2 = new b2Vec2();
     this.m_u = new b2Vec2();
     //
-
     //super(def);
-
     var tMat;
     var tX;
     var tY;
@@ -62,24 +56,24 @@ Object.extend(b2DistanceJoint.prototype,
     tMat = this.m_body1.m_R;
     tX = def.anchorPoint1.x - this.m_body1.m_position.x;
     tY = def.anchorPoint1.y - this.m_body1.m_position.y;
-    this.m_localAnchor1.x = tX*tMat.col1.x + tY*tMat.col1.y;
-    this.m_localAnchor1.y = tX*tMat.col2.x + tY*tMat.col2.y;
+    this.m_localAnchor1.x = tX * tMat.col1.x + tY * tMat.col1.y;
+    this.m_localAnchor1.y = tX * tMat.col2.x + tY * tMat.col2.y;
     //this.m_localAnchor2 = b2MulT(this.m_body2->m_R, def->anchorPoint2 - this.m_body2->m_position);
     tMat = this.m_body2.m_R;
     tX = def.anchorPoint2.x - this.m_body2.m_position.x;
     tY = def.anchorPoint2.y - this.m_body2.m_position.y;
-    this.m_localAnchor2.x = tX*tMat.col1.x + tY*tMat.col1.y;
-    this.m_localAnchor2.y = tX*tMat.col2.x + tY*tMat.col2.y;
+    this.m_localAnchor2.x = tX * tMat.col1.x + tY * tMat.col1.y;
+    this.m_localAnchor2.y = tX * tMat.col2.x + tY * tMat.col2.y;
 
     //b2Vec2 d = def->anchorPoint2 - def->anchorPoint1;
     tX = def.anchorPoint2.x - def.anchorPoint1.x;
     tY = def.anchorPoint2.y - def.anchorPoint1.y;
     //this.m_length = d.Length();
-    this.m_length = Math.sqrt(tX*tX + tY*tY);
+    this.m_length = Math.sqrt(tX * tX + tY * tY);
     this.m_impulse = 0.0;
   },
 
-  PrepareVelocitySolver: function(){
+  PrepareVelocitySolver: function() {
 
     var tMat;
 
@@ -98,14 +92,11 @@ Object.extend(b2DistanceJoint.prototype,
 
     // Handle singularity.
     //float32 length = this.m_u.Length();
-    var length = Math.sqrt(this.m_u.x*this.m_u.x + this.m_u.y*this.m_u.y);
-    if (length > b2Settings.b2_linearSlop)
-    {
+    var length = Math.sqrt(this.m_u.x * this.m_u.x + this.m_u.y * this.m_u.y);
+    if (length > b2Settings.b2_linearSlop) {
       //this.m_u *= 1.0 / length;
-      this.m_u.Multiply( 1.0 / length );
-    }
-    else
-    {
+      this.m_u.Multiply(1.0 / length);
+    } else {
       this.m_u.SetZero();
     }
 
@@ -118,8 +109,7 @@ Object.extend(b2DistanceJoint.prototype,
     //b2Settings.b2Assert(this.m_mass > Number.MIN_VALUE);
     this.m_mass = 1.0 / this.m_mass;
 
-    if (b2World.s_enableWarmStarting)
-    {
+    if (b2World.s_enableWarmStarting) {
       //b2Vec2 P = this.m_impulse * this.m_u;
       var PX = this.m_impulse * this.m_u.x;
       var PY = this.m_impulse * this.m_u.y;
@@ -133,17 +123,13 @@ Object.extend(b2DistanceJoint.prototype,
       this.m_body2.m_linearVelocity.y += this.m_body2.m_invMass * PY;
       //this.m_body2.m_angularVelocity += this.m_body2.m_invI * b2Cross(r2, P);
       this.m_body2.m_angularVelocity += this.m_body2.m_invI * (r2X * PY - r2Y * PX);
-    }
-    else
-    {
+    } else {
       this.m_impulse = 0.0;
     }
 
   },
 
-
-
-  SolveVelocityConstraints: function(step){
+  SolveVelocityConstraints: function(step) {
 
     var tMat;
 
@@ -184,7 +170,7 @@ Object.extend(b2DistanceJoint.prototype,
     this.m_body2.m_angularVelocity += this.m_body2.m_invI * (r2X * PY - r2Y * PX);
   },
 
-  SolvePositionConstraints: function(){
+  SolvePositionConstraints: function() {
 
     var tMat;
 
@@ -201,7 +187,7 @@ Object.extend(b2DistanceJoint.prototype,
     var dY = this.m_body2.m_position.y + r2Y - this.m_body1.m_position.y - r1Y;
 
     //float32 length = d.Normalize();
-    var length = Math.sqrt(dX*dX + dY*dY);
+    var length = Math.sqrt(dX * dX + dY * dY);
     dX /= length;
     dY /= length;
     //float32 C = length - this.m_length;
@@ -233,15 +219,14 @@ Object.extend(b2DistanceJoint.prototype,
 
   },
 
-  GetAnchor1: function(){
-    return b2Math.AddVV(this.m_body1.m_position , b2Math.b2MulMV(this.m_body1.m_R, this.m_localAnchor1));
+  GetAnchor1: function() {
+    return b2Math.AddVV(this.m_body1.m_position, b2Math.b2MulMV(this.m_body1.m_R, this.m_localAnchor1));
   },
-  GetAnchor2: function(){
-    return b2Math.AddVV(this.m_body2.m_position , b2Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor2));
+  GetAnchor2: function() {
+    return b2Math.AddVV(this.m_body2.m_position, b2Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor2));
   },
 
-  GetReactionForce: function(invTimeStep)
-  {
+  GetReactionForce: function(invTimeStep) {
     //var F = (this.m_impulse * invTimeStep) * this.m_u;
     var F = new b2Vec2();
     F.SetV(this.m_u);
@@ -249,8 +234,7 @@ Object.extend(b2DistanceJoint.prototype,
     return F;
   },
 
-  GetReactionTorque: function(invTimeStep)
-  {
+  GetReactionTorque: function(invTimeStep) {
     //NOT_USED(invTimeStep);
     return 0.0;
   },
@@ -260,5 +244,5 @@ Object.extend(b2DistanceJoint.prototype,
   m_u: new b2Vec2(),
   m_impulse: null,
   m_mass: null,
-  m_length: null});
-
+  m_length: null
+});

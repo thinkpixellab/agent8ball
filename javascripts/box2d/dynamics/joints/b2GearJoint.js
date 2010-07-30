@@ -16,43 +16,36 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
-
+goog.provide('b2GearJoint');
 
 var b2GearJoint = Class.create();
 Object.extend(b2GearJoint.prototype, b2Joint.prototype);
-Object.extend(b2GearJoint.prototype, 
-{
-  GetAnchor1: function(){
+Object.extend(b2GearJoint.prototype, {
+  GetAnchor1: function() {
     //return this.m_body1.m_position + b2MulMV(this.m_body1.m_R, this.m_localAnchor1);
     var tMat = this.m_body1.m_R;
-    return new b2Vec2(  this.m_body1.m_position.x + (tMat.col1.x * this.m_localAnchor1.x + tMat.col2.x * this.m_localAnchor1.y),
-              this.m_body1.m_position.y + (tMat.col1.y * this.m_localAnchor1.x + tMat.col2.y * this.m_localAnchor1.y));
+    return new b2Vec2(this.m_body1.m_position.x + (tMat.col1.x * this.m_localAnchor1.x + tMat.col2.x * this.m_localAnchor1.y), this.m_body1.m_position.y + (tMat.col1.y * this.m_localAnchor1.x + tMat.col2.y * this.m_localAnchor1.y));
   },
-  GetAnchor2: function(){
+  GetAnchor2: function() {
     //return this.m_body2->m_position + b2Mul(this.m_body2->m_R, this.m_localAnchor2);
     var tMat = this.m_body2.m_R;
-    return new b2Vec2(  this.m_body2.m_position.x + (tMat.col1.x * this.m_localAnchor2.x + tMat.col2.x * this.m_localAnchor2.y),
-              this.m_body2.m_position.y + (tMat.col1.y * this.m_localAnchor2.x + tMat.col2.y * this.m_localAnchor2.y));
+    return new b2Vec2(this.m_body2.m_position.x + (tMat.col1.x * this.m_localAnchor2.x + tMat.col2.x * this.m_localAnchor2.y), this.m_body2.m_position.y + (tMat.col1.y * this.m_localAnchor2.x + tMat.col2.y * this.m_localAnchor2.y));
   },
 
-  GetReactionForce: function(invTimeStep){
+  GetReactionForce: function(invTimeStep) {
     //b2Vec2 F(0.0f, 0.0f);
     return new b2Vec2();
   },
-  GetReactionTorque: function(invTimeStep){
+  GetReactionTorque: function(invTimeStep) {
     return 0.0;
   },
 
-  GetRatio: function(){
+  GetRatio: function() {
     return this.m_ratio;
   },
 
   //--------------- Internals Below -------------------
-
-  initialize: function(def){
+  initialize: function(def) {
     // The constructor for b2Joint
     // initialize instance variables for references
     this.m_node1 = new b2JointNode();
@@ -67,7 +60,6 @@ Object.extend(b2GearJoint.prototype,
     this.m_islandFlag = false;
     this.m_userData = def.userData;
     //
-
     // initialize instance variables for references
     this.m_groundAnchor1 = new b2Vec2();
     this.m_groundAnchor2 = new b2Vec2();
@@ -75,15 +67,12 @@ Object.extend(b2GearJoint.prototype,
     this.m_localAnchor2 = new b2Vec2();
     this.m_J = new b2Jacobian();
     //
-
     // parent constructor
     //super(def);
-
     //b2Settings.b2Assert(def.joint1.m_type == b2Joint.e_revoluteJoint || def.joint1.m_type == b2Joint.e_prismaticJoint);
     //b2Settings.b2Assert(def.joint2.m_type == b2Joint.e_revoluteJoint || def.joint2.m_type == b2Joint.e_prismaticJoint);
     //b2Settings.b2Assert(def.joint1.m_body1.IsStatic());
     //b2Settings.b2Assert(def.joint2.m_body1.IsStatic());
-
     this.m_revolute1 = null;
     this.m_prismatic1 = null;
     this.m_revolute2 = null;
@@ -94,35 +83,29 @@ Object.extend(b2GearJoint.prototype,
 
     this.m_ground1 = def.joint1.m_body1;
     this.m_body1 = def.joint1.m_body2;
-    if (def.joint1.m_type == b2Joint.e_revoluteJoint)
-    {
+    if (def.joint1.m_type == b2Joint.e_revoluteJoint) {
       this.m_revolute1 = def.joint1;
-      this.m_groundAnchor1.SetV( this.m_revolute1.m_localAnchor1 );
-      this.m_localAnchor1.SetV( this.m_revolute1.m_localAnchor2 );
+      this.m_groundAnchor1.SetV(this.m_revolute1.m_localAnchor1);
+      this.m_localAnchor1.SetV(this.m_revolute1.m_localAnchor2);
       coordinate1 = this.m_revolute1.GetJointAngle();
-    }
-    else
-    {
+    } else {
       this.m_prismatic1 = def.joint1;
-      this.m_groundAnchor1.SetV( this.m_prismatic1.m_localAnchor1 );
-      this.m_localAnchor1.SetV( this.m_prismatic1.m_localAnchor2 );
+      this.m_groundAnchor1.SetV(this.m_prismatic1.m_localAnchor1);
+      this.m_localAnchor1.SetV(this.m_prismatic1.m_localAnchor2);
       coordinate1 = this.m_prismatic1.GetJointTranslation();
     }
 
     this.m_ground2 = def.joint2.m_body1;
     this.m_body2 = def.joint2.m_body2;
-    if (def.joint2.m_type == b2Joint.e_revoluteJoint)
-    {
+    if (def.joint2.m_type == b2Joint.e_revoluteJoint) {
       this.m_revolute2 = def.joint2;
-      this.m_groundAnchor2.SetV( this.m_revolute2.m_localAnchor1 );
-      this.m_localAnchor2.SetV( this.m_revolute2.m_localAnchor2 );
+      this.m_groundAnchor2.SetV(this.m_revolute2.m_localAnchor1);
+      this.m_localAnchor2.SetV(this.m_revolute2.m_localAnchor2);
       coordinate2 = this.m_revolute2.GetJointAngle();
-    }
-    else
-    {
+    } else {
       this.m_prismatic2 = def.joint2;
-      this.m_groundAnchor2.SetV( this.m_prismatic2.m_localAnchor1 );
-      this.m_localAnchor2.SetV( this.m_prismatic2.m_localAnchor2 );
+      this.m_groundAnchor2.SetV(this.m_prismatic2.m_localAnchor1);
+      this.m_localAnchor2.SetV(this.m_prismatic2.m_localAnchor2);
       coordinate2 = this.m_prismatic2.GetJointTranslation();
     }
 
@@ -134,7 +117,7 @@ Object.extend(b2GearJoint.prototype,
 
   },
 
-  PrepareVelocitySolver: function(){
+  PrepareVelocitySolver: function() {
     var g1 = this.m_ground1;
     var g2 = this.m_ground2;
     var b1 = this.m_body1;
@@ -152,13 +135,10 @@ Object.extend(b2GearJoint.prototype,
     var K = 0.0;
     this.m_J.SetZero();
 
-    if (this.m_revolute1)
-    {
+    if (this.m_revolute1) {
       this.m_J.angular1 = -1.0;
       K += b1.m_invI;
-    }
-    else
-    {
+    } else {
       //b2Vec2 ug = b2MulMV(g1->m_R, this.m_prismatic1->m_localXAxis1);
       tMat = g1.m_R;
       tVec = this.m_prismatic1.m_localXAxis1;
@@ -177,13 +157,10 @@ Object.extend(b2GearJoint.prototype,
       K += b1.m_invMass + b1.m_invI * crug * crug;
     }
 
-    if (this.m_revolute2)
-    {
+    if (this.m_revolute2) {
       this.m_J.angular2 = -this.m_ratio;
       K += this.m_ratio * this.m_ratio * b2.m_invI;
-    }
-    else
-    {
+    } else {
       //b2Vec2 ug = b2Mul(g2->m_R, this.m_prismatic2->m_localXAxis1);
       tMat = g2.m_R;
       tVec = this.m_prismatic2.m_localXAxis1;
@@ -196,7 +173,7 @@ Object.extend(b2GearJoint.prototype,
       //float32 crug = b2Cross(r, ug);
       crug = rX * ugY - rY * ugX;
       //this.m_J.linear2 = -this.m_ratio * ug;
-      this.m_J.linear2.Set(-this.m_ratio*ugX, -this.m_ratio*ugY);
+      this.m_J.linear2.Set(-this.m_ratio * ugX, -this.m_ratio * ugY);
       this.m_J.angular2 = -this.m_ratio * crug;
       K += this.m_ratio * this.m_ratio * (b2.m_invMass + b2.m_invI * crug * crug);
     }
@@ -216,26 +193,24 @@ Object.extend(b2GearJoint.prototype,
     b2.m_angularVelocity += b2.m_invI * this.m_impulse * this.m_J.angular2;
   },
 
-
-  SolveVelocityConstraints: function(step){
+  SolveVelocityConstraints: function(step) {
     var b1 = this.m_body1;
     var b2 = this.m_body2;
 
-    var Cdot = this.m_J.Compute(  b1.m_linearVelocity, b1.m_angularVelocity,
-                    b2.m_linearVelocity, b2.m_angularVelocity);
+    var Cdot = this.m_J.Compute(b1.m_linearVelocity, b1.m_angularVelocity, b2.m_linearVelocity, b2.m_angularVelocity);
 
     var impulse = -this.m_mass * Cdot;
     this.m_impulse += impulse;
 
     b1.m_linearVelocity.x += b1.m_invMass * impulse * this.m_J.linear1.x;
     b1.m_linearVelocity.y += b1.m_invMass * impulse * this.m_J.linear1.y;
-    b1.m_angularVelocity  += b1.m_invI * impulse * this.m_J.angular1;
+    b1.m_angularVelocity += b1.m_invI * impulse * this.m_J.angular1;
     b2.m_linearVelocity.x += b2.m_invMass * impulse * this.m_J.linear2.x;
     b2.m_linearVelocity.y += b2.m_invMass * impulse * this.m_J.linear2.y;
-    b2.m_angularVelocity  += b2.m_invI * impulse * this.m_J.angular2;
+    b2.m_angularVelocity += b2.m_invI * impulse * this.m_J.angular2;
   },
 
-  SolvePositionConstraints: function(){
+  SolvePositionConstraints: function() {
     var linearError = 0.0;
 
     var b1 = this.m_body1;
@@ -243,21 +218,15 @@ Object.extend(b2GearJoint.prototype,
 
     var coordinate1;
     var coordinate2;
-    if (this.m_revolute1)
-    {
+    if (this.m_revolute1) {
       coordinate1 = this.m_revolute1.GetJointAngle();
-    }
-    else
-    {
+    } else {
       coordinate1 = this.m_prismatic1.GetJointTranslation();
     }
 
-    if (this.m_revolute2)
-    {
+    if (this.m_revolute2) {
       coordinate2 = this.m_revolute2.GetJointAngle();
-    }
-    else
-    {
+    } else {
       coordinate2 = this.m_prismatic2.GetJointTranslation();
     }
 
@@ -303,5 +272,5 @@ Object.extend(b2GearJoint.prototype,
   m_mass: null,
 
   // Impulse for accumulation/warm starting.
-  m_impulse: null});
-
+  m_impulse: null
+});

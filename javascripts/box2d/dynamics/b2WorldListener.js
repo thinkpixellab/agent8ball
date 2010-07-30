@@ -16,7 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-/** @typedef {b2WorldListener} */
+goog.provide('b2WorldListener');
+
 var b2WorldListener = Class.create();
 b2WorldListener.prototype = {
 

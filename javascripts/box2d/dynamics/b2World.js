@@ -24,6 +24,8 @@ goog.require('b2CollisionFilter');
 goog.require('b2BroadPhose');
 goog.require('b2Body');
 goog.require('b2Island');
+goog.require('b2JointFactory');
+goog.require('b2WorldListener');
 
 /** @typedef {b2World} */
 var b2World = Class.create();
@@ -155,7 +157,7 @@ b2World.prototype = {
   },
 
   CreateJoint: function(def) {
-    var j = b2Joint.Create(def, this.m_blockAllocator);
+    var j = b2JointFactory.Create(def, this.m_blockAllocator);
 
     // Connect to the world list.
     j.m_prev = null;
@@ -249,7 +251,7 @@ b2World.prototype = {
     j.m_node2.prev = null;
     j.m_node2.next = null;
 
-    b2Joint.Destroy(j, this.m_blockAllocator);
+    b2JointFactory.Destroy(j, this.m_blockAllocator);
 
     //b2Settings.b2Assert(this.m_jointCount > 0);
     --this.m_jointCount;

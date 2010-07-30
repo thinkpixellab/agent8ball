@@ -16,9 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-
-
-
+goog.provide('b2MouseJoint');
 
 // p = attached point, m = mouse point
 // C = p - m
@@ -27,22 +25,19 @@
 // J = [I r_skew]
 // Identity used:
 // w k % (rx i + ry j) = w * (-ry i + rx j)
-
 var b2MouseJoint = Class.create();
 Object.extend(b2MouseJoint.prototype, b2Joint.prototype);
-Object.extend(b2MouseJoint.prototype, 
-{
-  GetAnchor1: function(){
+Object.extend(b2MouseJoint.prototype, {
+  GetAnchor1: function() {
     return this.m_target;
   },
-  GetAnchor2: function(){
+  GetAnchor2: function() {
     var tVec = b2Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor);
     tVec.Add(this.m_body2.m_position);
     return tVec;
   },
 
-  GetReactionForce: function(invTimeStep)
-  {
+  GetReactionForce: function(invTimeStep) {
     //b2Vec2 F = invTimeStep * this.m_impulse;
     var F = new b2Vec2();
     F.SetV(this.m_impulse);
@@ -50,20 +45,18 @@ Object.extend(b2MouseJoint.prototype,
     return F;
   },
 
-  GetReactionTorque: function(invTimeStep)
-  {
+  GetReactionTorque: function(invTimeStep) {
     //NOT_USED(invTimeStep);
     return 0.0;
   },
 
-  SetTarget: function(target){
+  SetTarget: function(target) {
     this.m_body2.WakeUp();
     this.m_target = target;
   },
 
   //--------------- Internals Below -------------------
-
-  initialize: function(def){
+  initialize: function(def) {
     // The constructor for b2Joint
     // initialize instance variables for references
     this.m_node1 = new b2JointNode();
@@ -78,7 +71,6 @@ Object.extend(b2MouseJoint.prototype,
     this.m_islandFlag = false;
     this.m_userData = def.userData;
     //
-
     // initialize instance variables for references
     this.K = new b2Mat22();
     this.K1 = new b2Mat22();
@@ -89,9 +81,7 @@ Object.extend(b2MouseJoint.prototype,
     this.m_ptpMass = new b2Mat22();
     this.m_C = new b2Vec2();
     //
-
     //super(def);
-
     this.m_target.SetV(def.target);
     //this.m_localAnchor = b2Math.b2MulTMV(this.m_body2.m_R, b2Math.SubtractVV( this.m_target, this.m_body2.m_position ) );
     var tX = this.m_target.x - this.m_body2.m_position.x;
@@ -122,7 +112,7 @@ Object.extend(b2MouseJoint.prototype,
   K: new b2Mat22(),
   K1: new b2Mat22(),
   K2: new b2Mat22(),
-  PrepareVelocitySolver: function(){
+  PrepareVelocitySolver: function() {
     var b = this.m_body2;
 
     var tMat;
@@ -140,12 +130,16 @@ Object.extend(b2MouseJoint.prototype,
     var invI = b.m_invI;
 
     //b2Mat22 this.K1;
-    this.K1.col1.x = invMass;  this.K1.col2.x = 0.0;
-    this.K1.col1.y = 0.0;    this.K1.col2.y = invMass;
+    this.K1.col1.x = invMass;
+    this.K1.col2.x = 0.0;
+    this.K1.col1.y = 0.0;
+    this.K1.col2.y = invMass;
 
     //b2Mat22 this.K2;
-    this.K2.col1.x =  invI * rY * rY;  this.K2.col2.x = -invI * rX * rY;
-    this.K2.col1.y = -invI * rX * rY;  this.K2.col2.y =  invI * rX * rX;
+    this.K2.col1.x = invI * rY * rY;
+    this.K2.col2.x = -invI * rX * rY;
+    this.K2.col1.y = -invI * rX * rY;
+    this.K2.col2.y = invI * rX * rX;
 
     //b2Mat22 this.K = this.K1 + this.K2;
     this.K.SetM(this.K1);
@@ -174,8 +168,7 @@ Object.extend(b2MouseJoint.prototype,
     b.m_angularVelocity += invI * (rX * PY - rY * PX);
   },
 
-
-  SolveVelocityConstraints: function(step){
+  SolveVelocityConstraints: function(step) {
     var body = this.m_body2;
 
     var tMat;
@@ -203,8 +196,7 @@ Object.extend(b2MouseJoint.prototype,
     this.m_impulse.x += impulseX;
     this.m_impulse.y += impulseY;
     var length = this.m_impulse.Length();
-    if (length > step.dt * this.m_maxForce)
-    {
+    if (length > step.dt * this.m_maxForce) {
       //this.m_impulse *= step.dt * this.m_maxForce / length;
       this.m_impulse.Multiply(step.dt * this.m_maxForce / length);
     }
@@ -218,7 +210,7 @@ Object.extend(b2MouseJoint.prototype,
     //body.m_angularVelocity += body->m_invI * b2Cross(r, impulse);
     body.m_angularVelocity += body.m_invI * (rX * impulseY - rY * impulseX);
   },
-  SolvePositionConstraints: function(){
+  SolvePositionConstraints: function() {
     return true;
   },
 
@@ -230,5 +222,5 @@ Object.extend(b2MouseJoint.prototype,
   m_C: new b2Vec2(),
   m_maxForce: null,
   m_beta: null,
-  m_gamma: null});
-
+  m_gamma: null
+});

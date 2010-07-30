@@ -16,9 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
+goog.provide('b2PrismaticJoint');
 
-
-
+goog.require('b2Joint');
+goog.require('b2Vec2');
+goog.require('b2Jacobian');
 
 // Linear constraint (point-to-line)
 // d = p2 - p1 = x2 + r2 - x1 - r1
@@ -31,18 +33,15 @@
 // C = a2 - a1 + a_initial
 // Cdot = w2 - w1
 // J = [0 0 -1 0 0 1]
-
 // Motor/Limit linear constraint
 // C = dot(ax1, d)
 // Cdot = = -dot(ax1, v1) - dot(cross(d + r1, ax1), w1) + dot(ax1, v2) + dot(cross(r2, ax1), v2)
 // J = [-ax1 -cross(d+r1,ax1) ax1 cross(r2,ax1)]
 
-
 var b2PrismaticJoint = Class.create();
 Object.extend(b2PrismaticJoint.prototype, b2Joint.prototype);
-Object.extend(b2PrismaticJoint.prototype, 
-{
-  GetAnchor1: function(){
+Object.extend(b2PrismaticJoint.prototype, {
+  GetAnchor1: function() {
     var b1 = this.m_body1;
     //return b2Math.AddVV(b1.m_position, b2Math.b2MulMV(b1.m_R, this.m_localAnchor1));
     var tVec = new b2Vec2();
@@ -51,7 +50,7 @@ Object.extend(b2PrismaticJoint.prototype,
     tVec.Add(b1.m_position);
     return tVec;
   },
-  GetAnchor2: function(){
+  GetAnchor2: function() {
     var b2 = this.m_body2;
     //return b2Math.AddVV(b2.m_position, b2Math.b2MulMV(b2.m_R, this.m_localAnchor2));
     var tVec = new b2Vec2();
@@ -60,7 +59,7 @@ Object.extend(b2PrismaticJoint.prototype,
     tVec.Add(b2.m_position);
     return tVec;
   },
-  GetJointTranslation: function(){
+  GetJointTranslation: function() {
     var b1 = this.m_body1;
     var b2 = this.m_body2;
 
@@ -89,10 +88,10 @@ Object.extend(b2PrismaticJoint.prototype,
     var ax1Y = tMat.col1.y * this.m_localXAxis1.x + tMat.col2.y * this.m_localXAxis1.y;
 
     //var translation = b2Math.b2Dot(ax1, d);
-    var translation = ax1X*dX + ax1Y*dY;
+    var translation = ax1X * dX + ax1Y * dY;
     return translation;
   },
-  GetJointSpeed: function(){
+  GetJointSpeed: function() {
     var b1 = this.m_body1;
     var b2 = this.m_body2;
 
@@ -128,26 +127,23 @@ Object.extend(b2PrismaticJoint.prototype,
     //var speed = b2Math.b2Dot(d, b2Math.b2CrossFV(w1, ax1)) + b2Math.b2Dot(ax1, b2Math.SubtractVV( b2Math.SubtractVV( b2Math.AddVV( v2 , b2Math.b2CrossFV(w2, r2)) , v1) , b2Math.b2CrossFV(w1, r1)));
     //var b2D = (dX*(-w1 * ax1Y) + dY*(w1 * ax1X));
     //var b2D2 = (ax1X * ((( v2.x + (-w2 * r2Y)) - v1.x) - (-w1 * r1Y)) + ax1Y * ((( v2.y + (w2 * r2X)) - v1.y) - (w1 * r1X)));
-    var speed = (dX*(-w1 * ax1Y) + dY*(w1 * ax1X)) + (ax1X * ((( v2.x + (-w2 * r2Y)) - v1.x) - (-w1 * r1Y)) + ax1Y * ((( v2.y + (w2 * r2X)) - v1.y) - (w1 * r1X)));
+    var speed = (dX * (-w1 * ax1Y) + dY * (w1 * ax1X)) + (ax1X * (((v2.x + (-w2 * r2Y)) - v1.x) - (-w1 * r1Y)) + ax1Y * (((v2.y + (w2 * r2X)) - v1.y) - (w1 * r1X)));
 
     return speed;
   },
-  GetMotorForce: function(invTimeStep){
+  GetMotorForce: function(invTimeStep) {
     return invTimeStep * this.m_motorImpulse;
   },
 
-  SetMotorSpeed: function(speed)
-  {
+  SetMotorSpeed: function(speed) {
     this.m_motorSpeed = speed;
   },
 
-  SetMotorForce: function(force)
-  {
+  SetMotorForce: function(force) {
     this.m_maxMotorForce = force;
   },
 
-  GetReactionForce: function(invTimeStep)
-  {
+  GetReactionForce: function(invTimeStep) {
     var tImp = invTimeStep * this.m_limitImpulse;
     var tMat;
 
@@ -160,19 +156,15 @@ Object.extend(b2PrismaticJoint.prototype,
     var ay1Y = tImp * (tMat.col1.y * this.m_localYAxis1.x + tMat.col2.y * this.m_localYAxis1.y);
 
     //return (invTimeStep * this.m_limitImpulse) * ax1 + (invTimeStep * this.m_linearImpulse) * ay1;
-
-    return new b2Vec2(ax1X+ay1X, ax1Y+ay1Y);
+    return new b2Vec2(ax1X + ay1X, ax1Y + ay1Y);
   },
 
-  GetReactionTorque: function(invTimeStep)
-  {
+  GetReactionTorque: function(invTimeStep) {
     return invTimeStep * this.m_angularImpulse;
   },
 
-
   //--------------- Internals Below -------------------
-
-  initialize: function(def){
+  initialize: function(def) {
     // The constructor for b2Joint
     // initialize instance variables for references
     this.m_node1 = new b2JointNode();
@@ -187,7 +179,6 @@ Object.extend(b2PrismaticJoint.prototype,
     this.m_islandFlag = false;
     this.m_userData = def.userData;
     //
-
     // initialize instance variables for references
     this.m_localAnchor1 = new b2Vec2();
     this.m_localAnchor2 = new b2Vec2();
@@ -196,9 +187,7 @@ Object.extend(b2PrismaticJoint.prototype,
     this.m_linearJacobian = new b2Jacobian();
     this.m_motorJacobian = new b2Jacobian();
     //
-
     //super(def);
-
     var tMat;
     var tX;
     var tY;
@@ -207,19 +196,19 @@ Object.extend(b2PrismaticJoint.prototype,
     tMat = this.m_body1.m_R;
     tX = (def.anchorPoint.x - this.m_body1.m_position.x);
     tY = (def.anchorPoint.y - this.m_body1.m_position.y);
-    this.m_localAnchor1.Set((tX*tMat.col1.x + tY*tMat.col1.y), (tX*tMat.col2.x + tY*tMat.col2.y));
+    this.m_localAnchor1.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
 
     //this.m_localAnchor2 = b2Math.b2MulTMV(this.m_body2.m_R, b2Math.SubtractVV(def.anchorPoint , this.m_body2.m_position));
     tMat = this.m_body2.m_R;
     tX = (def.anchorPoint.x - this.m_body2.m_position.x);
     tY = (def.anchorPoint.y - this.m_body2.m_position.y);
-    this.m_localAnchor2.Set((tX*tMat.col1.x + tY*tMat.col1.y), (tX*tMat.col2.x + tY*tMat.col2.y));
+    this.m_localAnchor2.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
 
     //this.m_localXAxis1 = b2Math.b2MulTMV(this.m_body1.m_R, def.axis);
     tMat = this.m_body1.m_R;
     tX = def.axis.x;
     tY = def.axis.y;
-    this.m_localXAxis1.Set((tX*tMat.col1.x + tY*tMat.col1.y), (tX*tMat.col2.x + tY*tMat.col2.y));
+    this.m_localXAxis1.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
 
     //this.m_localYAxis1 = b2Math.b2CrossFV(1.0, this.m_localXAxis1);
     this.m_localYAxis1.x = -this.m_localXAxis1.y;
@@ -248,7 +237,7 @@ Object.extend(b2PrismaticJoint.prototype,
     this.m_enableMotor = def.enableMotor;
   },
 
-  PrepareVelocitySolver: function(){
+  PrepareVelocitySolver: function() {
     var b1 = this.m_body1;
     var b2 = this.m_body2;
 
@@ -289,8 +278,7 @@ Object.extend(b2PrismaticJoint.prototype,
     this.m_linearJacobian.angular1 = -(eX * ay1Y - eY * ay1X);
     this.m_linearJacobian.angular2 = r2X * ay1Y - r2Y * ay1X;
 
-    this.m_linearMass =  invMass1 + invI1 * this.m_linearJacobian.angular1 * this.m_linearJacobian.angular1 +
-            invMass2 + invI2 * this.m_linearJacobian.angular2 * this.m_linearJacobian.angular2;
+    this.m_linearMass = invMass1 + invI1 * this.m_linearJacobian.angular1 * this.m_linearJacobian.angular1 + invMass2 + invI2 * this.m_linearJacobian.angular2 * this.m_linearJacobian.angular2;
     //b2Settings.b2Assert(this.m_linearMass > Number.MIN_VALUE);
     this.m_linearMass = 1.0 / this.m_linearMass;
 
@@ -298,71 +286,58 @@ Object.extend(b2PrismaticJoint.prototype,
     this.m_angularMass = 1.0 / (invI1 + invI2);
 
     // Compute motor and limit terms.
-    if (this.m_enableLimit || this.m_enableMotor)
-    {
+    if (this.m_enableLimit || this.m_enableMotor) {
       // The motor and limit share a Jacobian and effective mass.
       //b2Vec2 ax1 = b2Mul(b1->m_R, this.m_localXAxis1);
       tMat = b1.m_R;
       var ax1X = tMat.col1.x * this.m_localXAxis1.x + tMat.col2.x * this.m_localXAxis1.y;
       var ax1Y = tMat.col1.y * this.m_localXAxis1.x + tMat.col2.y * this.m_localXAxis1.y;
       //this.m_motorJacobian.Set(-ax1, -b2Cross(e, ax1), ax1, b2Cross(r2, ax1));
-      this.m_motorJacobian.linear1.x = -ax1X; this.m_motorJacobian.linear1.y = -ax1Y;
-      this.m_motorJacobian.linear2.x = ax1X; this.m_motorJacobian.linear2.y = ax1Y;
+      this.m_motorJacobian.linear1.x = -ax1X;
+      this.m_motorJacobian.linear1.y = -ax1Y;
+      this.m_motorJacobian.linear2.x = ax1X;
+      this.m_motorJacobian.linear2.y = ax1Y;
       this.m_motorJacobian.angular1 = -(eX * ax1Y - eY * ax1X);
       this.m_motorJacobian.angular2 = r2X * ax1Y - r2Y * ax1X;
 
-      this.m_motorMass =  invMass1 + invI1 * this.m_motorJacobian.angular1 * this.m_motorJacobian.angular1 +
-              invMass2 + invI2 * this.m_motorJacobian.angular2 * this.m_motorJacobian.angular2;
+      this.m_motorMass = invMass1 + invI1 * this.m_motorJacobian.angular1 * this.m_motorJacobian.angular1 + invMass2 + invI2 * this.m_motorJacobian.angular2 * this.m_motorJacobian.angular2;
       //b2Settings.b2Assert(this.m_motorMass > Number.MIN_VALUE);
       this.m_motorMass = 1.0 / this.m_motorMass;
 
-      if (this.m_enableLimit)
-      {
+      if (this.m_enableLimit) {
         //b2Vec2 d = e - r1;
         var dX = eX - r1X;
         var dY = eY - r1Y;
         //float32 jointTranslation = b2Dot(ax1, d);
         var jointTranslation = ax1X * dX + ax1Y * dY;
-        if (b2Math.b2Abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * b2Settings.b2_linearSlop)
-        {
+        if (b2Math.b2Abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * b2Settings.b2_linearSlop) {
           this.m_limitState = b2Joint.e_equalLimits;
-        }
-        else if (jointTranslation <= this.m_lowerTranslation)
-        {
-          if (this.m_limitState != b2Joint.e_atLowerLimit)
-          {
+        } else if (jointTranslation <= this.m_lowerTranslation) {
+          if (this.m_limitState != b2Joint.e_atLowerLimit) {
             this.m_limitImpulse = 0.0;
           }
           this.m_limitState = b2Joint.e_atLowerLimit;
-        }
-        else if (jointTranslation >= this.m_upperTranslation)
-        {
-          if (this.m_limitState != b2Joint.e_atUpperLimit)
-          {
+        } else if (jointTranslation >= this.m_upperTranslation) {
+          if (this.m_limitState != b2Joint.e_atUpperLimit) {
             this.m_limitImpulse = 0.0;
           }
           this.m_limitState = b2Joint.e_atUpperLimit;
-        }
-        else
-        {
+        } else {
           this.m_limitState = b2Joint.e_inactiveLimit;
           this.m_limitImpulse = 0.0;
         }
       }
     }
 
-    if (this.m_enableMotor == false)
-    {
+    if (this.m_enableMotor == false) {
       this.m_motorImpulse = 0.0;
     }
 
-    if (this.m_enableLimit == false)
-    {
+    if (this.m_enableLimit == false) {
       this.m_limitImpulse = 0.0;
     }
 
-    if (b2World.s_enableWarmStarting)
-    {
+    if (b2World.s_enableWarmStarting) {
       //b2Vec2 P1 = this.m_linearImpulse * this.m_linearJacobian.linear1 + (this.m_motorImpulse + this.m_limitImpulse) * this.m_motorJacobian.linear1;
       var P1X = this.m_linearImpulse * this.m_linearJacobian.linear1.x + (this.m_motorImpulse + this.m_limitImpulse) * this.m_motorJacobian.linear1.x;
       var P1Y = this.m_linearImpulse * this.m_linearJacobian.linear1.y + (this.m_motorImpulse + this.m_limitImpulse) * this.m_motorJacobian.linear1.y;
@@ -385,9 +360,7 @@ Object.extend(b2PrismaticJoint.prototype,
       b2.m_linearVelocity.y += invMass2 * P2Y;
       //b2->m_angularVelocity += invI2 * L2;
       b2.m_angularVelocity += invI2 * L2;
-    }
-    else
-    {
+    } else {
       this.m_linearImpulse = 0.0;
       this.m_angularImpulse = 0.0;
       this.m_limitImpulse = 0.0;
@@ -398,7 +371,7 @@ Object.extend(b2PrismaticJoint.prototype,
 
   },
 
-  SolveVelocityConstraints: function(step){
+  SolveVelocityConstraints: function(step) {
     var b1 = this.m_body1;
     var b2 = this.m_body2;
 
@@ -435,8 +408,7 @@ Object.extend(b2PrismaticJoint.prototype,
     b2.m_angularVelocity += invI2 * angularImpulse;
 
     // Solve linear motor constraint.
-    if (this.m_enableMotor && this.m_limitState != b2Joint.e_equalLimits)
-    {
+    if (this.m_enableMotor && this.m_limitState != b2Joint.e_equalLimits) {
       var motorCdot = this.m_motorJacobian.Compute(b1.m_linearVelocity, b1.m_angularVelocity, b2.m_linearVelocity, b2.m_angularVelocity) - this.m_motorSpeed;
       var motorImpulse = -this.m_motorMass * motorCdot;
       var oldMotorImpulse = this.m_motorImpulse;
@@ -457,23 +429,17 @@ Object.extend(b2PrismaticJoint.prototype,
     }
 
     // Solve linear limit constraint.
-    if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit)
-    {
+    if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit) {
       var limitCdot = this.m_motorJacobian.Compute(b1.m_linearVelocity, b1.m_angularVelocity, b2.m_linearVelocity, b2.m_angularVelocity);
       var limitImpulse = -this.m_motorMass * limitCdot;
 
-      if (this.m_limitState == b2Joint.e_equalLimits)
-      {
+      if (this.m_limitState == b2Joint.e_equalLimits) {
         this.m_limitImpulse += limitImpulse;
-      }
-      else if (this.m_limitState == b2Joint.e_atLowerLimit)
-      {
+      } else if (this.m_limitState == b2Joint.e_atLowerLimit) {
         oldLimitImpulse = this.m_limitImpulse;
         this.m_limitImpulse = b2Math.b2Max(this.m_limitImpulse + limitImpulse, 0.0);
         limitImpulse = this.m_limitImpulse - oldLimitImpulse;
-      }
-      else if (this.m_limitState == b2Joint.e_atUpperLimit)
-      {
+      } else if (this.m_limitState == b2Joint.e_atUpperLimit) {
         oldLimitImpulse = this.m_limitImpulse;
         this.m_limitImpulse = b2Math.b2Min(this.m_limitImpulse + limitImpulse, 0.0);
         limitImpulse = this.m_limitImpulse - oldLimitImpulse;
@@ -493,9 +459,7 @@ Object.extend(b2PrismaticJoint.prototype,
     }
   },
 
-
-
-  SolvePositionConstraints: function(){
+  SolvePositionConstraints: function() {
 
     var limitC;
     var oldLimitImpulse;
@@ -534,7 +498,7 @@ Object.extend(b2PrismaticJoint.prototype,
 
     // Solve linear (point-to-line) constraint.
     //float32 linearC = b2Dot(ay1, d);
-    var linearC = ay1X*dX + ay1Y*dY;
+    var linearC = ay1X * dX + ay1Y * dY;
     // Prevent overly large corrections.
     linearC = b2Math.b2Clamp(linearC, -b2Settings.b2_maxLinearCorrection, b2Settings.b2_maxLinearCorrection);
     var linearImpulse = -this.m_linearMass * linearC;
@@ -550,7 +514,6 @@ Object.extend(b2PrismaticJoint.prototype,
     b2.m_position.y += (invMass2 * linearImpulse) * this.m_linearJacobian.linear2.y;
     b2.m_rotation += invI2 * linearImpulse * this.m_linearJacobian.angular2;
     //b2->m_R.Set(b2->m_rotation);
-
     var positionError = b2Math.b2Abs(linearC);
 
     // Solve angular constraint.
@@ -567,8 +530,7 @@ Object.extend(b2PrismaticJoint.prototype,
     var angularError = b2Math.b2Abs(angularC);
 
     // Solve linear limit constraint.
-    if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit)
-    {
+    if (this.m_enableLimit && this.m_limitState != b2Joint.e_inactiveLimit) {
 
       //b2Vec2 r1 = b2Mul(b1->m_R, this.m_localAnchor1);
       tMat = b1.m_R;
@@ -593,18 +555,15 @@ Object.extend(b2PrismaticJoint.prototype,
       var ax1Y = tMat.col1.y * this.m_localXAxis1.x + tMat.col2.y * this.m_localXAxis1.y;
 
       //float32 translation = b2Dot(ax1, d);
-      var translation = (ax1X*dX + ax1Y*dY);
+      var translation = (ax1X * dX + ax1Y * dY);
       var limitImpulse = 0.0;
 
-      if (this.m_limitState == b2Joint.e_equalLimits)
-      {
+      if (this.m_limitState == b2Joint.e_equalLimits) {
         // Prevent large angular corrections
         limitC = b2Math.b2Clamp(translation, -b2Settings.b2_maxLinearCorrection, b2Settings.b2_maxLinearCorrection);
         limitImpulse = -this.m_motorMass * limitC;
         positionError = b2Math.b2Max(positionError, b2Math.b2Abs(angularC));
-      }
-      else if (this.m_limitState == b2Joint.e_atLowerLimit)
-      {
+      } else if (this.m_limitState == b2Joint.e_atLowerLimit) {
         limitC = translation - this.m_lowerTranslation;
         positionError = b2Math.b2Max(positionError, -limitC);
 
@@ -614,9 +573,7 @@ Object.extend(b2PrismaticJoint.prototype,
         oldLimitImpulse = this.m_limitPositionImpulse;
         this.m_limitPositionImpulse = b2Math.b2Max(this.m_limitPositionImpulse + limitImpulse, 0.0);
         limitImpulse = this.m_limitPositionImpulse - oldLimitImpulse;
-      }
-      else if (this.m_limitState == b2Joint.e_atUpperLimit)
-      {
+      } else if (this.m_limitState == b2Joint.e_atUpperLimit) {
         limitC = translation - this.m_upperTranslation;
         positionError = b2Math.b2Max(positionError, limitC);
 
@@ -672,5 +629,5 @@ Object.extend(b2PrismaticJoint.prototype,
 
   m_enableLimit: null,
   m_enableMotor: null,
-  m_limitState: 0});
-
+  m_limitState: 0
+});
