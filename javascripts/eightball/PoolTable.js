@@ -266,7 +266,7 @@ eightball.PoolTable._setupBalls = function(world) {
   var index = 0;
   var ballRadius = eightball.PoolTable.s_ballDiameter * 2;
 
-  balls[index] = this._createBall(world, -0.5 * eightball.PoolTable.s_width, 0, ballRadius);
+  balls[index] = this._createBall(world, -0.5 * eightball.PoolTable.s_width, 0);
   balls[index].userData = index;
   index++;
 
@@ -277,7 +277,7 @@ eightball.PoolTable._setupBalls = function(world) {
     var yStart = -col * ballRadius;
 
     for (var row = 0; row < ballCount; row++) {
-      balls[index] = eightball.PoolTable._createBall(world, x, yStart + row * ballRadius * 2, ballRadius);
+      balls[index] = eightball.PoolTable._createBall(world, x, yStart + row * ballRadius * 2);
       balls[index].userData = index;
       index++;
     }
@@ -350,10 +350,10 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
   return world.CreateBody(table);
 };
 
-eightball.PoolTable._createBall = function(world, x, y, radius) {
+eightball.PoolTable._createBall = function(world, x, y) {
   var ballSd = new b2CircleDef();
   ballSd.density = 4.0;
-  ballSd.radius = radius;
+  ballSd.radius = eightball.PoolTable.s_ballDiameter * 2;
   ballSd.restitution = 1.2;
   ballSd.friction = 0.2;
 
