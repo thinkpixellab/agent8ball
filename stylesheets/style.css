@@ -21,7 +21,6 @@ body {
     height: 100%;
     left: 0px;
     top: 0px;
-    z-index: 100;
 }
 
 #vignetteimg {
@@ -49,7 +48,16 @@ body {
     margin-right: auto;
     clear: both;
     position: relative;
-    z-index: 200;
+}
+
+#gamecontrolsouter {
+    width: 860px;
+    height: 0px;
+    margin-top: -620px;
+    margin-left: auto;
+    margin-right: auto;
+    clear: both;
+    position: relative;
 }
 
 #tableborder {
@@ -124,27 +132,74 @@ body {
     left: 765px;
 }
 
-#progress {
+#progressbg {
     background-image: url("../images/progressbg.png");
     background-repeat: no-repeat;
-    width: 446px;
-    height: 36px;
     position: absolute;
     top: 50px;
     left: 100px;
+    width: 446px;
+    height: 36px;
+}
+
+#progress {
+    background-image: url("../images/progressunit.png");
+    background-repeat: repeat-x;
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 419px;
+    height: 34px;
+}
+
+#sounds {
+    left: 640px;
+    top: 590px;
+    position: absolute;
+    background-image: url("../images/speaker.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 210px;
+    height: 58px;
+}
+
+#musicbutton {
+    position: absolute;
+    height: 20px;
+    width: 65px;
+    top: 20px;
+    cursor: pointer;
+}
+
+#musicbutton img {
+     position: absolute;   
+     margin-top: 1px;
+}
+
+#soundsbutton {
+    position: absolute;
+    height: 20px;
+    width: 80px;
+    top: 20px;
+    left: 120px;
+    cursor: pointer;
+}
+
+#soundsbutton img {
+     position: absolute;   
+     margin-left: 69px; 
+     margin-top: 1px;
 }
 
 #demo_canvas {
     left: 6px;
     top: 6px;
     position: absolute;
-    z-index: 900;
 }
 
 #cue_canvas {
     left: 0px;
     top: 0px;
     position: absolute;
-    z-index: 1000;
     background-image: url("../images/transparent.png");
 }
