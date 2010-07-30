@@ -10,7 +10,16 @@ goog.require('goog.net.cookies');
  */
 eightball.Sounds = function(location) {
   this.isSoundEnabled = false;
+
+  /**
+   @private
+   */
   this.m_music = null;
+
+  /**
+   @private
+   @type {string}
+   */
   this.m_location = location;
 
   var cookieValue = goog.net.cookies.get(eightball.Sounds.s_CookieMusicOn, eightball.Sounds.s_CookieOnOffEnum.ON) == eightball.Sounds.s_CookieOnOffEnum.ON;
@@ -51,6 +60,9 @@ eightball.Sounds.prototype.toggleMusic = function() {
   }
 };
 
+/**
+ @private
+ */
 eightball.Sounds.prototype._clearMusic = function() {
   // stop the current music and remove the audio element
   if (this.m_music) {
