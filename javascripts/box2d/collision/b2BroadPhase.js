@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-goog.provide('b2BroadPhose');
+goog.provide('b2BroadPhase');
 
 goog.require('b2PairManager');
 goog.require('b2Vec2');
@@ -43,69 +43,72 @@ Bullet (http:/www.bulletphysics.com).
 //   cache misses (TODO_ERIN).
 // - no broadphase is perfect and neither is this one: it is not great for huge
 //   worlds (use a multi-SAP instead), it is not great for large objects.
-var b2BroadPhase = Class.create();
-b2BroadPhase.prototype = {
-  //public:
-  initialize: function(worldAABB, callback) {
-    // initialize instance variables for references
-    this.m_pairManager = new b2PairManager();
-    this.m_proxyPool = new Array(b2Settings.b2_maxPairs);
-    this.m_bounds = new Array(2 * b2Settings.b2_maxProxies);
-    this.m_queryResults = new Array(b2Settings.b2_maxProxies);
-    this.m_quantizationFactor = new b2Vec2();
-    //
-    //b2Settings.b2Assert(worldAABB.IsValid());
-    var i = 0;
+/**
+ @constructor
+ */
+b2BroadPhase = function(worldAABB, callback) {
+  // initialize instance variables for references
+  this.m_pairManager = new b2PairManager();
+  this.m_proxyPool = new Array(b2Settings.b2_maxPairs);
+  this.m_bounds = new Array(2 * b2Settings.b2_maxProxies);
+  this.m_queryResults = new Array(b2Settings.b2_maxProxies);
+  this.m_quantizationFactor = new b2Vec2();
+  //
+  //b2Settings.b2Assert(worldAABB.IsValid());
+  var i = 0;
 
-    this.m_pairManager.Initialize(this, callback);
+  this.m_pairManager.Initialize(this, callback);
 
-    this.m_worldAABB = worldAABB;
+  this.m_worldAABB = worldAABB;
 
-    this.m_proxyCount = 0;
+  this.m_proxyCount = 0;
 
-    // query results
-    for (i = 0; i < b2Settings.b2_maxProxies; i++) {
-      this.m_queryResults[i] = 0;
+  // query results
+  for (i = 0; i < b2Settings.b2_maxProxies; i++) {
+    this.m_queryResults[i] = 0;
+  }
+
+  // bounds array
+  this.m_bounds = new Array(2);
+  for (i = 0; i < 2; i++) {
+    this.m_bounds[i] = new Array(2 * b2Settings.b2_maxProxies);
+    for (var j = 0; j < 2 * b2Settings.b2_maxProxies; j++) {
+      this.m_bounds[i][j] = new b2Bound();
     }
+  }
 
-    // bounds array
-    this.m_bounds = new Array(2);
-    for (i = 0; i < 2; i++) {
-      this.m_bounds[i] = new Array(2 * b2Settings.b2_maxProxies);
-      for (var j = 0; j < 2 * b2Settings.b2_maxProxies; j++) {
-        this.m_bounds[i][j] = new b2Bound();
-      }
-    }
+  //var d = b2Math.SubtractVV(worldAABB.maxVertex, worldAABB.minVertex);
+  var dX = worldAABB.maxVertex.x;
+  var dY = worldAABB.maxVertex.y;
+  dX -= worldAABB.minVertex.x;
+  dY -= worldAABB.minVertex.y;
 
-    //var d = b2Math.SubtractVV(worldAABB.maxVertex, worldAABB.minVertex);
-    var dX = worldAABB.maxVertex.x;
-    var dY = worldAABB.maxVertex.y;
-    dX -= worldAABB.minVertex.x;
-    dY -= worldAABB.minVertex.y;
+  this.m_quantizationFactor.x = b2Settings.USHRT_MAX / dX;
+  this.m_quantizationFactor.y = b2Settings.USHRT_MAX / dY;
 
-    this.m_quantizationFactor.x = b2Settings.USHRT_MAX / dX;
-    this.m_quantizationFactor.y = b2Settings.USHRT_MAX / dY;
-
-    var tProxy;
-    for (i = 0; i < b2Settings.b2_maxProxies - 1; ++i) {
-      tProxy = new b2Proxy();
-      this.m_proxyPool[i] = tProxy;
-      tProxy.SetNext(i + 1);
-      tProxy.timeStamp = 0;
-      tProxy.overlapCount = b2BroadPhase.b2_invalid;
-      tProxy.userData = null;
-    }
+  var tProxy;
+  for (i = 0; i < b2Settings.b2_maxProxies - 1; ++i) {
     tProxy = new b2Proxy();
-    this.m_proxyPool[b2Settings.b2_maxProxies - 1] = tProxy;
-    tProxy.SetNext(b2Pair.b2_nullProxy);
+    this.m_proxyPool[i] = tProxy;
+    tProxy.SetNext(i + 1);
     tProxy.timeStamp = 0;
     tProxy.overlapCount = b2BroadPhase.b2_invalid;
     tProxy.userData = null;
-    this.m_freeProxy = 0;
+  }
+  tProxy = new b2Proxy();
+  this.m_proxyPool[b2Settings.b2_maxProxies - 1] = tProxy;
+  tProxy.SetNext(b2Pair.b2_nullProxy);
+  tProxy.timeStamp = 0;
+  tProxy.overlapCount = b2BroadPhase.b2_invalid;
+  tProxy.userData = null;
+  this.m_freeProxy = 0;
 
-    this.m_timeStamp = 1;
-    this.m_queryResultCount = 0;
-  },
+  this.m_timeStamp = 1;
+  this.m_queryResultCount = 0;
+};
+
+b2BroadPhase.prototype = {
+
   //~b2BroadPhase();
   // Use this to see if your proxy is in range. If it is not in range,
   // it should be destroyed. Otherwise you may get O(m^2) pairs, where m

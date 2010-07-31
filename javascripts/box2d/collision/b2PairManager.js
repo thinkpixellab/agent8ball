@@ -19,42 +19,43 @@
 // The pair manager is used by the broad-phase to quickly add/remove/find pairs
 // of overlapping proxies. It is based closely on code provided by Pierre Terdiman.
 // http:
-
 goog.provide('b2PairManager');
 
 goog.require('b2Pair');
 goog.require('b2BufferedPair');
 
-var b2PairManager = Class.create();
-b2PairManager.prototype = {
-  //public:
-  initialize: function() {
-    var i = 0;
-    //b2Settings.b2Assert(b2Math.b2IsPowerOfTwo(b2Pair.b2_tableCapacity) == true);
-    //b2Settings.b2Assert(b2Pair.b2_tableCapacity >= b2Settings.b2_maxPairs);
-    this.m_hashTable = new Array(b2Pair.b2_tableCapacity);
-    for (i = 0; i < b2Pair.b2_tableCapacity; ++i) {
-      this.m_hashTable[i] = b2Pair.b2_nullPair;
-    }
-    this.m_pairs = new Array(b2Settings.b2_maxPairs);
-    for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
-      this.m_pairs[i] = new b2Pair();
-    }
-    this.m_pairBuffer = new Array(b2Settings.b2_maxPairs);
-    for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
-      this.m_pairBuffer[i] = new b2BufferedPair();
-    }
+/**
+ @constructor
+ */
+b2PairManager = function() {
+  var i = 0;
+  //b2Settings.b2Assert(b2Math.b2IsPowerOfTwo(b2Pair.b2_tableCapacity) == true);
+  //b2Settings.b2Assert(b2Pair.b2_tableCapacity >= b2Settings.b2_maxPairs);
+  this.m_hashTable = new Array(b2Pair.b2_tableCapacity);
+  for (i = 0; i < b2Pair.b2_tableCapacity; ++i) {
+    this.m_hashTable[i] = b2Pair.b2_nullPair;
+  }
+  this.m_pairs = new Array(b2Settings.b2_maxPairs);
+  for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
+    this.m_pairs[i] = new b2Pair();
+  }
+  this.m_pairBuffer = new Array(b2Settings.b2_maxPairs);
+  for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
+    this.m_pairBuffer[i] = new b2BufferedPair();
+  }
 
-    for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
-      this.m_pairs[i].proxyId1 = b2Pair.b2_nullProxy;
-      this.m_pairs[i].proxyId2 = b2Pair.b2_nullProxy;
-      this.m_pairs[i].userData = null;
-      this.m_pairs[i].status = 0;
-      this.m_pairs[i].next = (i + 1);
-    }
-    this.m_pairs[b2Settings.b2_maxPairs - 1].next = b2Pair.b2_nullPair;
-    this.m_pairCount = 0;
-  },
+  for (i = 0; i < b2Settings.b2_maxPairs; ++i) {
+    this.m_pairs[i].proxyId1 = b2Pair.b2_nullProxy;
+    this.m_pairs[i].proxyId2 = b2Pair.b2_nullProxy;
+    this.m_pairs[i].userData = null;
+    this.m_pairs[i].status = 0;
+    this.m_pairs[i].next = (i + 1);
+  }
+  this.m_pairs[b2Settings.b2_maxPairs - 1].next = b2Pair.b2_nullPair;
+  this.m_pairCount = 0;
+};
+
+b2PairManager.prototype = {
   //~b2PairManager();
   Initialize: function(broadPhase, callback) {
     this.m_broadPhase = broadPhase;
@@ -323,7 +324,6 @@ b2PairManager.prototype = {
 
   // static
   // Thomas Wang's hash, see: http:
-
 };
 b2PairManager.Hash = function(proxyId1, proxyId2) {
   var key = ((proxyId2 << 16) & 0xffff0000) | proxyId1;

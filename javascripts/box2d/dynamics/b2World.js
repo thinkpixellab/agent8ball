@@ -21,7 +21,7 @@ goog.provide('b2World');
 goog.require('b2TimeStep');
 goog.require('b2ContactManager');
 goog.require('b2CollisionFilter');
-goog.require('b2BroadPhose');
+goog.require('b2BroadPhase');
 goog.require('b2Body');
 goog.require('b2Island');
 goog.require('b2JointFactory');

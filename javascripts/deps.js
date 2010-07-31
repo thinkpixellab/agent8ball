@@ -2,7 +2,7 @@
 goog.addDependency("../../../box2d/collision/b2AABB.js", ['b2AABB'], ['b2Vec2']);
 goog.addDependency("../../../box2d/collision/b2Bound.js", ['b2Bound'], []);
 goog.addDependency("../../../box2d/collision/b2BoundValues.js", ['b2BoundValues'], []);
-goog.addDependency("../../../box2d/collision/b2BroadPhase.js", ['b2BroadPhose'], ['b2PairManager', 'b2Vec2', 'b2Bound', 'b2Settings', 'b2Proxy', 'b2BoundValues']);
+goog.addDependency("../../../box2d/collision/b2BroadPhase.js", ['b2BroadPhase'], ['b2PairManager', 'b2Vec2', 'b2Bound', 'b2Settings', 'b2Proxy', 'b2BoundValues']);
 goog.addDependency("../../../box2d/collision/b2BufferedPair.js", ['b2BufferedPair'], []);
 goog.addDependency("../../../box2d/collision/b2Collision.js", ['b2Collision'], ['ClipVertex']);
 goog.addDependency("../../../box2d/collision/b2ContactID.js", ['b2ContactID'], ['Features']);
@@ -13,7 +13,7 @@ goog.addDependency("../../../box2d/collision/b2OBB.js", ['b2OBB'], ['b2Vec2', 'b
 goog.addDependency("../../../box2d/collision/b2Pair.js", ['b2Pair'], ['b2Settings']);
 goog.addDependency("../../../box2d/collision/b2PairCallback.js", ['b2PairCallback'], []);
 goog.addDependency("../../../box2d/collision/b2PairManager.js", ['b2PairManager'], ['b2Pair', 'b2BufferedPair']);
-goog.addDependency("../../../box2d/collision/b2Proxy.js", ['b2Proxy'], []);
+goog.addDependency("../../../box2d/collision/b2Proxy.js", ['b2Proxy'], ['b2BroadPhase']);
 goog.addDependency("../../../box2d/collision/ClipVertex.js", ['ClipVertex'], ['b2Vec2', 'b2ContactID']);
 goog.addDependency("../../../box2d/collision/Features.js", ['Features'], []);
 goog.addDependency("../../../box2d/collision/shapes/b2BoxDef.js", ['b2BoxDef'], ['b2ShapeDef', 'b2Vec2']);
@@ -35,7 +35,7 @@ goog.addDependency("../../../box2d/dynamics/b2CollisionFilter.js", ['b2Collision
 goog.addDependency("../../../box2d/dynamics/b2ContactManager.js", ['b2ContactManager'], ['b2Contact', 'b2PairCallback', 'b2NullContact', 'b2ContactFactory']);
 goog.addDependency("../../../box2d/dynamics/b2Island.js", ['b2Island'], ['b2ContactSolver']);
 goog.addDependency("../../../box2d/dynamics/b2TimeStep.js", ['b2TimeStep'], []);
-goog.addDependency("../../../box2d/dynamics/b2World.js", ['b2World'], ['b2TimeStep', 'b2ContactManager', 'b2CollisionFilter', 'b2BroadPhose', 'b2Body', 'b2Island', 'b2JointFactory', 'b2WorldListener']);
+goog.addDependency("../../../box2d/dynamics/b2World.js", ['b2World'], ['b2TimeStep', 'b2ContactManager', 'b2CollisionFilter', 'b2BroadPhase', 'b2Body', 'b2Island', 'b2JointFactory', 'b2WorldListener']);
 goog.addDependency("../../../box2d/dynamics/b2WorldListener.js", ['b2WorldListener'], []);
 goog.addDependency("../../../box2d/dynamics/contacts/b2CircleContact.js", ['b2CircleContact'], ['b2Contact', 'b2Manifold', 'b2Collision']);
 goog.addDependency("../../../box2d/dynamics/contacts/b2Conservative.js", [], []);
