@@ -18,13 +18,16 @@
 
 goog.provide('b2JointNode');
 
-var b2JointNode = Class.create();
+/** 
+ @constructor 
+ */
+b2JointNode = function() {};
+
 b2JointNode.prototype = {
 
   other: null,
   joint: null,
   prev: null,
-  next: null,
+  next: null
 
-  initialize: function() {}
 };

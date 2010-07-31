@@ -20,7 +20,16 @@ goog.provide('b2Jacobian');
 
 goog.require('b2Vec2');
 
-var b2Jacobian = Class.create();
+/** 
+ @constructor 
+ */
+b2Jacobian = function() {
+  // initialize instance variables for references
+  this.linear1 = new b2Vec2();
+  this.linear2 = new b2Vec2();
+  //
+};
+
 b2Jacobian.prototype = {
   linear1: new b2Vec2(),
   angular1: null,
@@ -43,11 +52,5 @@ b2Jacobian.prototype = {
 
     //return b2Math.b2Dot(this.linear1, x1) + this.angular1 * a1 + b2Math.b2Dot(this.linear2, x2) + this.angular2 * a2;
     return (this.linear1.x * x1.x + this.linear1.y * x1.y) + this.angular1 * a1 + (this.linear2.x * x2.x + this.linear2.y * x2.y) + this.angular2 * a2;
-  },
-  initialize: function() {
-    // initialize instance variables for references
-    this.linear1 = new b2Vec2();
-    this.linear2 = new b2Vec2();
-    //
   }
 };

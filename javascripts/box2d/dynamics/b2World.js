@@ -27,37 +27,39 @@ goog.require('b2Island');
 goog.require('b2JointFactory');
 goog.require('b2WorldListener');
 
-/** @typedef {b2World} */
-var b2World = Class.create();
+/**
+ @constructor
+ */
+b2World = function(worldAABB, gravity, doSleep) {
+  // initialize instance variables for references
+  this.step = new b2TimeStep();
+  this.m_contactManager = new b2ContactManager();
+
+  this.m_listener = null;
+  this.m_filter = b2CollisionFilter.b2_defaultFilter;
+
+  this.m_bodyList = null;
+  this.m_contactList = null;
+  this.m_jointList = null;
+
+  this.m_bodyCount = 0;
+  this.m_contactCount = 0;
+  this.m_jointCount = 0;
+
+  this.m_bodyDestroyList = null;
+
+  this.m_allowSleep = doSleep;
+
+  this.m_gravity = gravity;
+
+  this.m_contactManager.m_world = this;
+  this.m_broadPhase = new b2BroadPhase(worldAABB, this.m_contactManager);
+
+  var bd = new b2BodyDef();
+  this.m_groundBody = this.CreateBody(bd);
+};
+
 b2World.prototype = {
-  initialize: function(worldAABB, gravity, doSleep) {
-    // initialize instance variables for references
-    this.step = new b2TimeStep();
-    this.m_contactManager = new b2ContactManager();
-
-    this.m_listener = null;
-    this.m_filter = b2CollisionFilter.b2_defaultFilter;
-
-    this.m_bodyList = null;
-    this.m_contactList = null;
-    this.m_jointList = null;
-
-    this.m_bodyCount = 0;
-    this.m_contactCount = 0;
-    this.m_jointCount = 0;
-
-    this.m_bodyDestroyList = null;
-
-    this.m_allowSleep = doSleep;
-
-    this.m_gravity = gravity;
-
-    this.m_contactManager.m_world = this;
-    this.m_broadPhase = new b2BroadPhase(worldAABB, this.m_contactManager);
-
-    var bd = new b2BodyDef();
-    this.m_groundBody = this.CreateBody(bd);
-  },
   //~b2World(){
   //  this.DestroyBody(this.m_groundBody);
   //  delete this.m_broadPhase;

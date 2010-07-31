@@ -18,7 +18,83 @@
 
 goog.provide('b2PulleyJoint');
 
-var b2PulleyJoint = Class.create();
+/**
+ @constructor
+ */
+b2PulleyJoint = function(def) {
+  // The constructor for b2Joint
+  // initialize instance variables for references
+  this.m_node1 = new b2JointNode();
+  this.m_node2 = new b2JointNode();
+  //
+  this.m_type = def.type;
+  this.m_prev = null;
+  this.m_next = null;
+  this.m_body1 = def.body1;
+  this.m_body2 = def.body2;
+  this.m_collideConnected = def.collideConnected;
+  this.m_islandFlag = false;
+  this.m_userData = def.userData;
+  //
+  // initialize instance variables for references
+  this.m_groundAnchor1 = new b2Vec2();
+  this.m_groundAnchor2 = new b2Vec2();
+  this.m_localAnchor1 = new b2Vec2();
+  this.m_localAnchor2 = new b2Vec2();
+  this.m_u1 = new b2Vec2();
+  this.m_u2 = new b2Vec2();
+  //
+  // parent
+  //super(def);
+  var tMat;
+  var tX;
+  var tY;
+
+  this.m_ground = this.m_body1.m_world.m_groundBody;
+  //this.m_groundAnchor1 = def.groundPoint1 - this.m_ground.m_position;
+  this.m_groundAnchor1.x = def.groundPoint1.x - this.m_ground.m_position.x;
+  this.m_groundAnchor1.y = def.groundPoint1.y - this.m_ground.m_position.y;
+  //this.m_groundAnchor2 = def.groundPoint2 - this.m_ground.m_position;
+  this.m_groundAnchor2.x = def.groundPoint2.x - this.m_ground.m_position.x;
+  this.m_groundAnchor2.y = def.groundPoint2.y - this.m_ground.m_position.y;
+  //this.m_localAnchor1 = b2MulT(this.m_body1.m_R, def.anchorPoint1 - this.m_body1.m_position);
+  tMat = this.m_body1.m_R;
+  tX = def.anchorPoint1.x - this.m_body1.m_position.x;
+  tY = def.anchorPoint1.y - this.m_body1.m_position.y;
+  this.m_localAnchor1.x = tX * tMat.col1.x + tY * tMat.col1.y;
+  this.m_localAnchor1.y = tX * tMat.col2.x + tY * tMat.col2.y;
+  //this.m_localAnchor2 = b2MulT(this.m_body2.m_R, def.anchorPoint2 - this.m_body2.m_position);
+  tMat = this.m_body2.m_R;
+  tX = def.anchorPoint2.x - this.m_body2.m_position.x;
+  tY = def.anchorPoint2.y - this.m_body2.m_position.y;
+  this.m_localAnchor2.x = tX * tMat.col1.x + tY * tMat.col1.y;
+  this.m_localAnchor2.y = tX * tMat.col2.x + tY * tMat.col2.y;
+
+  this.m_ratio = def.ratio;
+
+  //var d1 = def.groundPoint1 - def.anchorPoint1;
+  tX = def.groundPoint1.x - def.anchorPoint1.x;
+  tY = def.groundPoint1.y - def.anchorPoint1.y;
+  var d1Len = Math.sqrt(tX * tX + tY * tY);
+  //var d2 = def.groundPoint2 - def.anchorPoint2;
+  tX = def.groundPoint2.x - def.anchorPoint2.x;
+  tY = def.groundPoint2.y - def.anchorPoint2.y;
+  var d2Len = Math.sqrt(tX * tX + tY * tY);
+
+  var length1 = b2Math.b2Max(0.5 * b2PulleyJoint.b2_minPulleyLength, d1Len);
+  var length2 = b2Math.b2Max(0.5 * b2PulleyJoint.b2_minPulleyLength, d2Len);
+
+  this.m_constant = length1 + this.m_ratio * length2;
+
+  this.m_maxLength1 = b2Math.b2Clamp(def.maxLength1, length1, this.m_constant - this.m_ratio * b2PulleyJoint.b2_minPulleyLength);
+  this.m_maxLength2 = b2Math.b2Clamp(def.maxLength2, length2, (this.m_constant - b2PulleyJoint.b2_minPulleyLength) / this.m_ratio);
+
+  this.m_pulleyImpulse = 0.0;
+  this.m_limitImpulse1 = 0.0;
+  this.m_limitImpulse2 = 0.0;
+
+};
+
 Object.extend(b2PulleyJoint.prototype, b2Joint.prototype);
 Object.extend(b2PulleyJoint.prototype, {
   GetAnchor1: function() {
@@ -78,81 +154,6 @@ Object.extend(b2PulleyJoint.prototype, {
   },
 
   //--------------- Internals Below -------------------
-  initialize: function(def) {
-    // The constructor for b2Joint
-    // initialize instance variables for references
-    this.m_node1 = new b2JointNode();
-    this.m_node2 = new b2JointNode();
-    //
-    this.m_type = def.type;
-    this.m_prev = null;
-    this.m_next = null;
-    this.m_body1 = def.body1;
-    this.m_body2 = def.body2;
-    this.m_collideConnected = def.collideConnected;
-    this.m_islandFlag = false;
-    this.m_userData = def.userData;
-    //
-    // initialize instance variables for references
-    this.m_groundAnchor1 = new b2Vec2();
-    this.m_groundAnchor2 = new b2Vec2();
-    this.m_localAnchor1 = new b2Vec2();
-    this.m_localAnchor2 = new b2Vec2();
-    this.m_u1 = new b2Vec2();
-    this.m_u2 = new b2Vec2();
-    //
-
-    // parent
-    //super(def);
-    var tMat;
-    var tX;
-    var tY;
-
-    this.m_ground = this.m_body1.m_world.m_groundBody;
-    //this.m_groundAnchor1 = def.groundPoint1 - this.m_ground.m_position;
-    this.m_groundAnchor1.x = def.groundPoint1.x - this.m_ground.m_position.x;
-    this.m_groundAnchor1.y = def.groundPoint1.y - this.m_ground.m_position.y;
-    //this.m_groundAnchor2 = def.groundPoint2 - this.m_ground.m_position;
-    this.m_groundAnchor2.x = def.groundPoint2.x - this.m_ground.m_position.x;
-    this.m_groundAnchor2.y = def.groundPoint2.y - this.m_ground.m_position.y;
-    //this.m_localAnchor1 = b2MulT(this.m_body1.m_R, def.anchorPoint1 - this.m_body1.m_position);
-    tMat = this.m_body1.m_R;
-    tX = def.anchorPoint1.x - this.m_body1.m_position.x;
-    tY = def.anchorPoint1.y - this.m_body1.m_position.y;
-    this.m_localAnchor1.x = tX * tMat.col1.x + tY * tMat.col1.y;
-    this.m_localAnchor1.y = tX * tMat.col2.x + tY * tMat.col2.y;
-    //this.m_localAnchor2 = b2MulT(this.m_body2.m_R, def.anchorPoint2 - this.m_body2.m_position);
-    tMat = this.m_body2.m_R;
-    tX = def.anchorPoint2.x - this.m_body2.m_position.x;
-    tY = def.anchorPoint2.y - this.m_body2.m_position.y;
-    this.m_localAnchor2.x = tX * tMat.col1.x + tY * tMat.col1.y;
-    this.m_localAnchor2.y = tX * tMat.col2.x + tY * tMat.col2.y;
-
-    this.m_ratio = def.ratio;
-
-    //var d1 = def.groundPoint1 - def.anchorPoint1;
-    tX = def.groundPoint1.x - def.anchorPoint1.x;
-    tY = def.groundPoint1.y - def.anchorPoint1.y;
-    var d1Len = Math.sqrt(tX * tX + tY * tY);
-    //var d2 = def.groundPoint2 - def.anchorPoint2;
-    tX = def.groundPoint2.x - def.anchorPoint2.x;
-    tY = def.groundPoint2.y - def.anchorPoint2.y;
-    var d2Len = Math.sqrt(tX * tX + tY * tY);
-
-    var length1 = b2Math.b2Max(0.5 * b2PulleyJoint.b2_minPulleyLength, d1Len);
-    var length2 = b2Math.b2Max(0.5 * b2PulleyJoint.b2_minPulleyLength, d2Len);
-
-    this.m_constant = length1 + this.m_ratio * length2;
-
-    this.m_maxLength1 = b2Math.b2Clamp(def.maxLength1, length1, this.m_constant - this.m_ratio * b2PulleyJoint.b2_minPulleyLength);
-    this.m_maxLength2 = b2Math.b2Clamp(def.maxLength2, length2, (this.m_constant - b2PulleyJoint.b2_minPulleyLength) / this.m_ratio);
-
-    this.m_pulleyImpulse = 0.0;
-    this.m_limitImpulse1 = 0.0;
-    this.m_limitImpulse2 = 0.0;
-
-  },
-
   PrepareVelocitySolver: function() {
     var b1 = this.m_body1;
     var b2 = this.m_body2;

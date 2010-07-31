@@ -20,16 +20,18 @@ goog.provide('b2JointDef');
 
 goog.require('b2Joint');
 
-var b2JointDef = Class.create();
-b2JointDef.prototype = {
+/** 
+ @constructor 
+ */
+b2JointDef = function() {
+  this.type = b2Joint.e_unknownJoint;
+  this.userData = null;
+  this.body1 = null;
+  this.body2 = null;
+  this.collideConnected = false;
+};
 
-  initialize: function() {
-    this.type = b2Joint.e_unknownJoint;
-    this.userData = null;
-    this.body1 = null;
-    this.body2 = null;
-    this.collideConnected = false;
-  },
+b2JointDef.prototype = {
 
   type: 0,
   userData: null,

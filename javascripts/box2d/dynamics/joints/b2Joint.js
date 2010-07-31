@@ -21,9 +21,23 @@ goog.provide('b2Joint');
 goog.require('b2JointNode');
 
 /** 
- @const
+ @constructor
  */
-var b2Joint = Class.create();
+b2Joint = function(def) {
+  // initialize instance variables for references
+  this.m_node1 = new b2JointNode();
+  this.m_node2 = new b2JointNode();
+  //
+  this.m_type = def.type;
+  this.m_prev = null;
+  this.m_next = null;
+  this.m_body1 = def.body1;
+  this.m_body2 = def.body2;
+  this.m_collideConnected = def.collideConnected;
+  this.m_islandFlag = false;
+  this.m_userData = def.userData;
+};
+
 b2Joint.prototype = {
   GetType: function() {
     return this.m_type;
@@ -60,20 +74,6 @@ b2Joint.prototype = {
   },
 
   //--------------- Internals Below -------------------
-  initialize: function(def) {
-    // initialize instance variables for references
-    this.m_node1 = new b2JointNode();
-    this.m_node2 = new b2JointNode();
-    //
-    this.m_type = def.type;
-    this.m_prev = null;
-    this.m_next = null;
-    this.m_body1 = def.body1;
-    this.m_body2 = def.body2;
-    this.m_collideConnected = def.collideConnected;
-    this.m_islandFlag = false;
-    this.m_userData = def.userData;
-  },
   //virtual ~b2Joint() {}
   PrepareVelocitySolver: function() {},
   SolveVelocityConstraints: function(step) {},

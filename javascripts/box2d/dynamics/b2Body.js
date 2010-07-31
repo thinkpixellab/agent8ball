@@ -26,8 +26,119 @@ goog.require('b2ShapeFactory');
 // A rigid body. Internal computation are done in terms
 // of the center of mass position. The center of mass may
 // be offset from the body's origin.
-/** @typedef {b2Body} */
-var b2Body = Class.create();
+/** @constructor */
+b2Body = function(bd, world) {
+  // initialize instance variables for references
+  this.sMat0 = new b2Mat22();
+  this.m_position = new b2Vec2();
+  this.m_R = new b2Mat22(0);
+  this.m_position0 = new b2Vec2();
+  //
+  var i = 0;
+  var sd;
+  var massData;
+
+  this.m_flags = 0;
+  this.m_position.SetV(bd.position);
+  this.m_rotation = bd.rotation;
+  this.m_R.Set(this.m_rotation);
+  this.m_position0.SetV(this.m_position);
+  this.m_rotation0 = this.m_rotation;
+  this.m_world = world;
+
+  this.m_linearDamping = b2Math.b2Clamp(1.0 - bd.linearDamping, 0.0, 1.0);
+  this.m_angularDamping = b2Math.b2Clamp(1.0 - bd.angularDamping, 0.0, 1.0);
+
+  this.m_force = new b2Vec2(0.0, 0.0);
+  this.m_torque = 0.0;
+
+  this.m_mass = 0.0;
+
+  var massDatas = new Array(b2Settings.b2_maxShapesPerBody);
+  for (i = 0; i < b2Settings.b2_maxShapesPerBody; i++) {
+    massDatas[i] = new b2MassData();
+  }
+
+  // Compute the shape mass properties, the bodies total mass and COM.
+  this.m_shapeCount = 0;
+  this.m_center = new b2Vec2(0.0, 0.0);
+  for (i = 0; i < b2Settings.b2_maxShapesPerBody; ++i) {
+    sd = bd.shapes[i];
+    if (sd == null) break;
+    massData = massDatas[i];
+    sd.ComputeMass(massData);
+    this.m_mass += massData.mass;
+    //this.m_center += massData->mass * (sd->localPosition + massData->center);
+    this.m_center.x += massData.mass * (sd.localPosition.x + massData.center.x);
+    this.m_center.y += massData.mass * (sd.localPosition.y + massData.center.y);
+    ++this.m_shapeCount;
+  }
+
+  // Compute center of mass, and shift the origin to the COM.
+  if (this.m_mass > 0.0) {
+    this.m_center.Multiply(1.0 / this.m_mass);
+    this.m_position.Add(b2Math.b2MulMV(this.m_R, this.m_center));
+  } else {
+    this.m_flags |= b2Body.e_staticFlag;
+  }
+
+  // Compute the moment of inertia.
+  this.m_I = 0.0;
+  for (i = 0; i < this.m_shapeCount; ++i) {
+    sd = bd.shapes[i];
+    massData = massDatas[i];
+    this.m_I += massData.I;
+    var r = b2Math.SubtractVV(b2Math.AddVV(sd.localPosition, massData.center), this.m_center);
+    this.m_I += massData.mass * b2Math.b2Dot(r, r);
+  }
+
+  if (this.m_mass > 0.0) {
+    this.m_invMass = 1.0 / this.m_mass;
+  } else {
+    this.m_invMass = 0.0;
+  }
+
+  if (this.m_I > 0.0 && bd.preventRotation == false) {
+    this.m_invI = 1.0 / this.m_I;
+  } else {
+    this.m_I = 0.0;
+    this.m_invI = 0.0;
+  }
+
+  // Compute the center of mass velocity.
+  this.m_linearVelocity = b2Math.AddVV(bd.linearVelocity, b2Math.b2CrossFV(bd.angularVelocity, this.m_center));
+  this.m_angularVelocity = bd.angularVelocity;
+
+  this.m_jointList = null;
+  this.m_contactList = null;
+  this.m_prev = null;
+  this.m_next = null;
+
+  // Create the shapes.
+  this.m_shapeList = null;
+  for (i = 0; i < this.m_shapeCount; ++i) {
+    sd = bd.shapes[i];
+    var shape = b2ShapeFactory.Create(sd, this, this.m_center);
+    shape.m_next = this.m_shapeList;
+    this.m_shapeList = shape;
+  }
+
+  this.m_sleepTime = 0.0;
+  if (bd.allowSleep) {
+    this.m_flags |= b2Body.e_allowSleepFlag;
+  }
+  if (bd.isSleeping) {
+    this.m_flags |= b2Body.e_sleepFlag;
+  }
+
+  if ((this.m_flags & b2Body.e_sleepFlag) || this.m_invMass == 0.0) {
+    this.m_linearVelocity.Set(0.0, 0.0);
+    this.m_angularVelocity = 0.0;
+  }
+
+  this.m_userData = bd.userData;
+};
+
 b2Body.prototype = {
   // Set the position of the body's origin and rotation (radians).
   // This breaks any contacts and wakes the other bodies.
@@ -214,118 +325,6 @@ b2Body.prototype = {
     return this.m_userData;
   },
 
-  //--------------- Internals Below -------------------
-  initialize: function(bd, world) {
-    // initialize instance variables for references
-    this.sMat0 = new b2Mat22();
-    this.m_position = new b2Vec2();
-    this.m_R = new b2Mat22(0);
-    this.m_position0 = new b2Vec2();
-    //
-    var i = 0;
-    var sd;
-    var massData;
-
-    this.m_flags = 0;
-    this.m_position.SetV(bd.position);
-    this.m_rotation = bd.rotation;
-    this.m_R.Set(this.m_rotation);
-    this.m_position0.SetV(this.m_position);
-    this.m_rotation0 = this.m_rotation;
-    this.m_world = world;
-
-    this.m_linearDamping = b2Math.b2Clamp(1.0 - bd.linearDamping, 0.0, 1.0);
-    this.m_angularDamping = b2Math.b2Clamp(1.0 - bd.angularDamping, 0.0, 1.0);
-
-    this.m_force = new b2Vec2(0.0, 0.0);
-    this.m_torque = 0.0;
-
-    this.m_mass = 0.0;
-
-    var massDatas = new Array(b2Settings.b2_maxShapesPerBody);
-    for (i = 0; i < b2Settings.b2_maxShapesPerBody; i++) {
-      massDatas[i] = new b2MassData();
-    }
-
-    // Compute the shape mass properties, the bodies total mass and COM.
-    this.m_shapeCount = 0;
-    this.m_center = new b2Vec2(0.0, 0.0);
-    for (i = 0; i < b2Settings.b2_maxShapesPerBody; ++i) {
-      sd = bd.shapes[i];
-      if (sd == null) break;
-      massData = massDatas[i];
-      sd.ComputeMass(massData);
-      this.m_mass += massData.mass;
-      //this.m_center += massData->mass * (sd->localPosition + massData->center);
-      this.m_center.x += massData.mass * (sd.localPosition.x + massData.center.x);
-      this.m_center.y += massData.mass * (sd.localPosition.y + massData.center.y);
-      ++this.m_shapeCount;
-    }
-
-    // Compute center of mass, and shift the origin to the COM.
-    if (this.m_mass > 0.0) {
-      this.m_center.Multiply(1.0 / this.m_mass);
-      this.m_position.Add(b2Math.b2MulMV(this.m_R, this.m_center));
-    } else {
-      this.m_flags |= b2Body.e_staticFlag;
-    }
-
-    // Compute the moment of inertia.
-    this.m_I = 0.0;
-    for (i = 0; i < this.m_shapeCount; ++i) {
-      sd = bd.shapes[i];
-      massData = massDatas[i];
-      this.m_I += massData.I;
-      var r = b2Math.SubtractVV(b2Math.AddVV(sd.localPosition, massData.center), this.m_center);
-      this.m_I += massData.mass * b2Math.b2Dot(r, r);
-    }
-
-    if (this.m_mass > 0.0) {
-      this.m_invMass = 1.0 / this.m_mass;
-    } else {
-      this.m_invMass = 0.0;
-    }
-
-    if (this.m_I > 0.0 && bd.preventRotation == false) {
-      this.m_invI = 1.0 / this.m_I;
-    } else {
-      this.m_I = 0.0;
-      this.m_invI = 0.0;
-    }
-
-    // Compute the center of mass velocity.
-    this.m_linearVelocity = b2Math.AddVV(bd.linearVelocity, b2Math.b2CrossFV(bd.angularVelocity, this.m_center));
-    this.m_angularVelocity = bd.angularVelocity;
-
-    this.m_jointList = null;
-    this.m_contactList = null;
-    this.m_prev = null;
-    this.m_next = null;
-
-    // Create the shapes.
-    this.m_shapeList = null;
-    for (i = 0; i < this.m_shapeCount; ++i) {
-      sd = bd.shapes[i];
-      var shape = b2ShapeFactory.Create(sd, this, this.m_center);
-      shape.m_next = this.m_shapeList;
-      this.m_shapeList = shape;
-    }
-
-    this.m_sleepTime = 0.0;
-    if (bd.allowSleep) {
-      this.m_flags |= b2Body.e_allowSleepFlag;
-    }
-    if (bd.isSleeping) {
-      this.m_flags |= b2Body.e_sleepFlag;
-    }
-
-    if ((this.m_flags & b2Body.e_sleepFlag) || this.m_invMass == 0.0) {
-      this.m_linearVelocity.Set(0.0, 0.0);
-      this.m_angularVelocity = 0.0;
-    }
-
-    this.m_userData = bd.userData;
-  },
   // does not support destructors
   /*~b2Body(){
     b2Shape* s = this.m_shapeList;

@@ -31,7 +31,67 @@ goog.require('b2Joint');
 // Cdot = w2 - w1
 // J = [0 0 -1 0 0 1]
 // K = invI1 + invI2
-var b2RevoluteJoint = Class.create();
+/** 
+ @constructor 
+ */
+b2RevoluteJoint = function(def) {
+  // The constructor for b2Joint
+  // initialize instance variables for references
+  this.m_node1 = new b2JointNode();
+  this.m_node2 = new b2JointNode();
+  //
+  this.m_type = def.type;
+  this.m_prev = null;
+  this.m_next = null;
+  this.m_body1 = def.body1;
+  this.m_body2 = def.body2;
+  this.m_collideConnected = def.collideConnected;
+  this.m_islandFlag = false;
+  this.m_userData = def.userData;
+  //
+  // initialize instance variables for references
+  this.K = new b2Mat22();
+  this.K1 = new b2Mat22();
+  this.K2 = new b2Mat22();
+  this.K3 = new b2Mat22();
+  this.m_localAnchor1 = new b2Vec2();
+  this.m_localAnchor2 = new b2Vec2();
+  this.m_ptpImpulse = new b2Vec2();
+  this.m_ptpMass = new b2Mat22();
+  //
+  //super(def);
+  var tMat;
+  var tX;
+  var tY;
+
+  //this.m_localAnchor1 = b2Math.b2MulTMV(this.m_body1.m_R, b2Math.SubtractVV( def.anchorPoint, this.m_body1.m_position));
+  tMat = this.m_body1.m_R;
+  tX = def.anchorPoint.x - this.m_body1.m_position.x;
+  tY = def.anchorPoint.y - this.m_body1.m_position.y;
+  this.m_localAnchor1.x = tX * tMat.col1.x + tY * tMat.col1.y;
+  this.m_localAnchor1.y = tX * tMat.col2.x + tY * tMat.col2.y;
+  //this.m_localAnchor2 = b2Math.b2MulTMV(this.m_body2.m_R, b2Math.SubtractVV( def.anchorPoint, this.m_body2.m_position));
+  tMat = this.m_body2.m_R;
+  tX = def.anchorPoint.x - this.m_body2.m_position.x;
+  tY = def.anchorPoint.y - this.m_body2.m_position.y;
+  this.m_localAnchor2.x = tX * tMat.col1.x + tY * tMat.col1.y;
+  this.m_localAnchor2.y = tX * tMat.col2.x + tY * tMat.col2.y;
+
+  this.m_intialAngle = this.m_body2.m_rotation - this.m_body1.m_rotation;
+
+  this.m_ptpImpulse.Set(0.0, 0.0);
+  this.m_motorImpulse = 0.0;
+  this.m_limitImpulse = 0.0;
+  this.m_limitPositionImpulse = 0.0;
+
+  this.m_lowerAngle = def.lowerAngle;
+  this.m_upperAngle = def.upperAngle;
+  this.m_maxMotorTorque = def.motorTorque;
+  this.m_motorSpeed = def.motorSpeed;
+  this.m_enableLimit = def.enableLimit;
+  this.m_enableMotor = def.enableMotor;
+};
+
 Object.extend(b2RevoluteJoint.prototype, b2Joint.prototype);
 Object.extend(b2RevoluteJoint.prototype, {
   GetAnchor1: function() {
@@ -72,64 +132,6 @@ Object.extend(b2RevoluteJoint.prototype, {
   },
 
   //--------------- Internals Below -------------------
-  initialize: function(def) {
-    // The constructor for b2Joint
-    // initialize instance variables for references
-    this.m_node1 = new b2JointNode();
-    this.m_node2 = new b2JointNode();
-    //
-    this.m_type = def.type;
-    this.m_prev = null;
-    this.m_next = null;
-    this.m_body1 = def.body1;
-    this.m_body2 = def.body2;
-    this.m_collideConnected = def.collideConnected;
-    this.m_islandFlag = false;
-    this.m_userData = def.userData;
-    //
-    // initialize instance variables for references
-    this.K = new b2Mat22();
-    this.K1 = new b2Mat22();
-    this.K2 = new b2Mat22();
-    this.K3 = new b2Mat22();
-    this.m_localAnchor1 = new b2Vec2();
-    this.m_localAnchor2 = new b2Vec2();
-    this.m_ptpImpulse = new b2Vec2();
-    this.m_ptpMass = new b2Mat22();
-    //
-    //super(def);
-    var tMat;
-    var tX;
-    var tY;
-
-    //this.m_localAnchor1 = b2Math.b2MulTMV(this.m_body1.m_R, b2Math.SubtractVV( def.anchorPoint, this.m_body1.m_position));
-    tMat = this.m_body1.m_R;
-    tX = def.anchorPoint.x - this.m_body1.m_position.x;
-    tY = def.anchorPoint.y - this.m_body1.m_position.y;
-    this.m_localAnchor1.x = tX * tMat.col1.x + tY * tMat.col1.y;
-    this.m_localAnchor1.y = tX * tMat.col2.x + tY * tMat.col2.y;
-    //this.m_localAnchor2 = b2Math.b2MulTMV(this.m_body2.m_R, b2Math.SubtractVV( def.anchorPoint, this.m_body2.m_position));
-    tMat = this.m_body2.m_R;
-    tX = def.anchorPoint.x - this.m_body2.m_position.x;
-    tY = def.anchorPoint.y - this.m_body2.m_position.y;
-    this.m_localAnchor2.x = tX * tMat.col1.x + tY * tMat.col1.y;
-    this.m_localAnchor2.y = tX * tMat.col2.x + tY * tMat.col2.y;
-
-    this.m_intialAngle = this.m_body2.m_rotation - this.m_body1.m_rotation;
-
-    this.m_ptpImpulse.Set(0.0, 0.0);
-    this.m_motorImpulse = 0.0;
-    this.m_limitImpulse = 0.0;
-    this.m_limitPositionImpulse = 0.0;
-
-    this.m_lowerAngle = def.lowerAngle;
-    this.m_upperAngle = def.upperAngle;
-    this.m_maxMotorTorque = def.motorTorque;
-    this.m_motorSpeed = def.motorSpeed;
-    this.m_enableLimit = def.enableLimit;
-    this.m_enableMotor = def.enableMotor;
-  },
-
   // internal vars
   K: new b2Mat22(),
   K1: new b2Mat22(),

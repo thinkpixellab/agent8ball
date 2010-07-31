@@ -25,7 +25,61 @@ goog.provide('b2MouseJoint');
 // J = [I r_skew]
 // Identity used:
 // w k % (rx i + ry j) = w * (-ry i + rx j)
-var b2MouseJoint = Class.create();
+/** 
+ @constructor 
+ */
+b2MouseJoint = function(def) {
+  // The constructor for b2Joint
+  // initialize instance variables for references
+  this.m_node1 = new b2JointNode();
+  this.m_node2 = new b2JointNode();
+  //
+  this.m_type = def.type;
+  this.m_prev = null;
+  this.m_next = null;
+  this.m_body1 = def.body1;
+  this.m_body2 = def.body2;
+  this.m_collideConnected = def.collideConnected;
+  this.m_islandFlag = false;
+  this.m_userData = def.userData;
+  //
+  // initialize instance variables for references
+  this.K = new b2Mat22();
+  this.K1 = new b2Mat22();
+  this.K2 = new b2Mat22();
+  this.m_localAnchor = new b2Vec2();
+  this.m_target = new b2Vec2();
+  this.m_impulse = new b2Vec2();
+  this.m_ptpMass = new b2Mat22();
+  this.m_C = new b2Vec2();
+  //
+  //super(def);
+  this.m_target.SetV(def.target);
+  //this.m_localAnchor = b2Math.b2MulTMV(this.m_body2.m_R, b2Math.SubtractVV( this.m_target, this.m_body2.m_position ) );
+  var tX = this.m_target.x - this.m_body2.m_position.x;
+  var tY = this.m_target.y - this.m_body2.m_position.y;
+  this.m_localAnchor.x = (tX * this.m_body2.m_R.col1.x + tY * this.m_body2.m_R.col1.y);
+  this.m_localAnchor.y = (tX * this.m_body2.m_R.col2.x + tY * this.m_body2.m_R.col2.y);
+
+  this.m_maxForce = def.maxForce;
+  this.m_impulse.SetZero();
+
+  var mass = this.m_body2.m_mass;
+
+  // Frequency
+  var omega = 2.0 * b2Settings.b2_pi * def.frequencyHz;
+
+  // Damping coefficient
+  var d = 2.0 * mass * def.dampingRatio * omega;
+
+  // Spring stiffness
+  var k = mass * omega * omega;
+
+  // magic formulas
+  this.m_gamma = 1.0 / (d + def.timeStep * k);
+  this.m_beta = def.timeStep * k / (d + def.timeStep * k);
+};
+
 Object.extend(b2MouseJoint.prototype, b2Joint.prototype);
 Object.extend(b2MouseJoint.prototype, {
   GetAnchor1: function() {
@@ -56,58 +110,6 @@ Object.extend(b2MouseJoint.prototype, {
   },
 
   //--------------- Internals Below -------------------
-  initialize: function(def) {
-    // The constructor for b2Joint
-    // initialize instance variables for references
-    this.m_node1 = new b2JointNode();
-    this.m_node2 = new b2JointNode();
-    //
-    this.m_type = def.type;
-    this.m_prev = null;
-    this.m_next = null;
-    this.m_body1 = def.body1;
-    this.m_body2 = def.body2;
-    this.m_collideConnected = def.collideConnected;
-    this.m_islandFlag = false;
-    this.m_userData = def.userData;
-    //
-    // initialize instance variables for references
-    this.K = new b2Mat22();
-    this.K1 = new b2Mat22();
-    this.K2 = new b2Mat22();
-    this.m_localAnchor = new b2Vec2();
-    this.m_target = new b2Vec2();
-    this.m_impulse = new b2Vec2();
-    this.m_ptpMass = new b2Mat22();
-    this.m_C = new b2Vec2();
-    //
-    //super(def);
-    this.m_target.SetV(def.target);
-    //this.m_localAnchor = b2Math.b2MulTMV(this.m_body2.m_R, b2Math.SubtractVV( this.m_target, this.m_body2.m_position ) );
-    var tX = this.m_target.x - this.m_body2.m_position.x;
-    var tY = this.m_target.y - this.m_body2.m_position.y;
-    this.m_localAnchor.x = (tX * this.m_body2.m_R.col1.x + tY * this.m_body2.m_R.col1.y);
-    this.m_localAnchor.y = (tX * this.m_body2.m_R.col2.x + tY * this.m_body2.m_R.col2.y);
-
-    this.m_maxForce = def.maxForce;
-    this.m_impulse.SetZero();
-
-    var mass = this.m_body2.m_mass;
-
-    // Frequency
-    var omega = 2.0 * b2Settings.b2_pi * def.frequencyHz;
-
-    // Damping coefficient
-    var d = 2.0 * mass * def.dampingRatio * omega;
-
-    // Spring stiffness
-    var k = mass * omega * omega;
-
-    // magic formulas
-    this.m_gamma = 1.0 / (d + def.timeStep * k);
-    this.m_beta = def.timeStep * k / (d + def.timeStep * k);
-  },
-
   // Presolve vars
   K: new b2Mat22(),
   K1: new b2Mat22(),

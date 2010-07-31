@@ -18,11 +18,13 @@
 
 goog.provide('b2ContactNode');
 
-b2ContactNode = Class.create();
+/**
+ @constructor
+ */
+b2ContactNode = function() {};
 b2ContactNode.prototype = {
   other: null,
   contact: null,
   prev: null,
-  next: null,
-  initialize: function() {}
+  next: null
 };

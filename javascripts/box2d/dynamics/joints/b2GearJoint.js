@@ -18,7 +18,81 @@
 
 goog.provide('b2GearJoint');
 
-var b2GearJoint = Class.create();
+/** 
+ @constructor 
+ */
+b2GearJoint = function(def) {
+  // The constructor for b2Joint
+  // initialize instance variables for references
+  this.m_node1 = new b2JointNode();
+  this.m_node2 = new b2JointNode();
+  //
+  this.m_type = def.type;
+  this.m_prev = null;
+  this.m_next = null;
+  this.m_body1 = def.body1;
+  this.m_body2 = def.body2;
+  this.m_collideConnected = def.collideConnected;
+  this.m_islandFlag = false;
+  this.m_userData = def.userData;
+  //
+  // initialize instance variables for references
+  this.m_groundAnchor1 = new b2Vec2();
+  this.m_groundAnchor2 = new b2Vec2();
+  this.m_localAnchor1 = new b2Vec2();
+  this.m_localAnchor2 = new b2Vec2();
+  this.m_J = new b2Jacobian();
+  //
+  // parent constructor
+  //super(def);
+  //b2Settings.b2Assert(def.joint1.m_type == b2Joint.e_revoluteJoint || def.joint1.m_type == b2Joint.e_prismaticJoint);
+  //b2Settings.b2Assert(def.joint2.m_type == b2Joint.e_revoluteJoint || def.joint2.m_type == b2Joint.e_prismaticJoint);
+  //b2Settings.b2Assert(def.joint1.m_body1.IsStatic());
+  //b2Settings.b2Assert(def.joint2.m_body1.IsStatic());
+  this.m_revolute1 = null;
+  this.m_prismatic1 = null;
+  this.m_revolute2 = null;
+  this.m_prismatic2 = null;
+
+  var coordinate1;
+  var coordinate2;
+
+  this.m_ground1 = def.joint1.m_body1;
+  this.m_body1 = def.joint1.m_body2;
+  if (def.joint1.m_type == b2Joint.e_revoluteJoint) {
+    this.m_revolute1 = def.joint1;
+    this.m_groundAnchor1.SetV(this.m_revolute1.m_localAnchor1);
+    this.m_localAnchor1.SetV(this.m_revolute1.m_localAnchor2);
+    coordinate1 = this.m_revolute1.GetJointAngle();
+  } else {
+    this.m_prismatic1 = def.joint1;
+    this.m_groundAnchor1.SetV(this.m_prismatic1.m_localAnchor1);
+    this.m_localAnchor1.SetV(this.m_prismatic1.m_localAnchor2);
+    coordinate1 = this.m_prismatic1.GetJointTranslation();
+  }
+
+  this.m_ground2 = def.joint2.m_body1;
+  this.m_body2 = def.joint2.m_body2;
+  if (def.joint2.m_type == b2Joint.e_revoluteJoint) {
+    this.m_revolute2 = def.joint2;
+    this.m_groundAnchor2.SetV(this.m_revolute2.m_localAnchor1);
+    this.m_localAnchor2.SetV(this.m_revolute2.m_localAnchor2);
+    coordinate2 = this.m_revolute2.GetJointAngle();
+  } else {
+    this.m_prismatic2 = def.joint2;
+    this.m_groundAnchor2.SetV(this.m_prismatic2.m_localAnchor1);
+    this.m_localAnchor2.SetV(this.m_prismatic2.m_localAnchor2);
+    coordinate2 = this.m_prismatic2.GetJointTranslation();
+  }
+
+  this.m_ratio = def.ratio;
+
+  this.m_constant = coordinate1 + this.m_ratio * coordinate2;
+
+  this.m_impulse = 0.0;
+
+};
+
 Object.extend(b2GearJoint.prototype, b2Joint.prototype);
 Object.extend(b2GearJoint.prototype, {
   GetAnchor1: function() {
@@ -45,78 +119,6 @@ Object.extend(b2GearJoint.prototype, {
   },
 
   //--------------- Internals Below -------------------
-  initialize: function(def) {
-    // The constructor for b2Joint
-    // initialize instance variables for references
-    this.m_node1 = new b2JointNode();
-    this.m_node2 = new b2JointNode();
-    //
-    this.m_type = def.type;
-    this.m_prev = null;
-    this.m_next = null;
-    this.m_body1 = def.body1;
-    this.m_body2 = def.body2;
-    this.m_collideConnected = def.collideConnected;
-    this.m_islandFlag = false;
-    this.m_userData = def.userData;
-    //
-    // initialize instance variables for references
-    this.m_groundAnchor1 = new b2Vec2();
-    this.m_groundAnchor2 = new b2Vec2();
-    this.m_localAnchor1 = new b2Vec2();
-    this.m_localAnchor2 = new b2Vec2();
-    this.m_J = new b2Jacobian();
-    //
-    // parent constructor
-    //super(def);
-    //b2Settings.b2Assert(def.joint1.m_type == b2Joint.e_revoluteJoint || def.joint1.m_type == b2Joint.e_prismaticJoint);
-    //b2Settings.b2Assert(def.joint2.m_type == b2Joint.e_revoluteJoint || def.joint2.m_type == b2Joint.e_prismaticJoint);
-    //b2Settings.b2Assert(def.joint1.m_body1.IsStatic());
-    //b2Settings.b2Assert(def.joint2.m_body1.IsStatic());
-    this.m_revolute1 = null;
-    this.m_prismatic1 = null;
-    this.m_revolute2 = null;
-    this.m_prismatic2 = null;
-
-    var coordinate1;
-    var coordinate2;
-
-    this.m_ground1 = def.joint1.m_body1;
-    this.m_body1 = def.joint1.m_body2;
-    if (def.joint1.m_type == b2Joint.e_revoluteJoint) {
-      this.m_revolute1 = def.joint1;
-      this.m_groundAnchor1.SetV(this.m_revolute1.m_localAnchor1);
-      this.m_localAnchor1.SetV(this.m_revolute1.m_localAnchor2);
-      coordinate1 = this.m_revolute1.GetJointAngle();
-    } else {
-      this.m_prismatic1 = def.joint1;
-      this.m_groundAnchor1.SetV(this.m_prismatic1.m_localAnchor1);
-      this.m_localAnchor1.SetV(this.m_prismatic1.m_localAnchor2);
-      coordinate1 = this.m_prismatic1.GetJointTranslation();
-    }
-
-    this.m_ground2 = def.joint2.m_body1;
-    this.m_body2 = def.joint2.m_body2;
-    if (def.joint2.m_type == b2Joint.e_revoluteJoint) {
-      this.m_revolute2 = def.joint2;
-      this.m_groundAnchor2.SetV(this.m_revolute2.m_localAnchor1);
-      this.m_localAnchor2.SetV(this.m_revolute2.m_localAnchor2);
-      coordinate2 = this.m_revolute2.GetJointAngle();
-    } else {
-      this.m_prismatic2 = def.joint2;
-      this.m_groundAnchor2.SetV(this.m_prismatic2.m_localAnchor1);
-      this.m_localAnchor2.SetV(this.m_prismatic2.m_localAnchor2);
-      coordinate2 = this.m_prismatic2.GetJointTranslation();
-    }
-
-    this.m_ratio = def.ratio;
-
-    this.m_constant = coordinate1 + this.m_ratio * coordinate2;
-
-    this.m_impulse = 0.0;
-
-  },
-
   PrepareVelocitySolver: function() {
     var g1 = this.m_ground1;
     var g2 = this.m_ground2;

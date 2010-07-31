@@ -21,8 +21,10 @@ goog.provide('b2AABB');
 goog.require('b2Vec2');
 
 // A manifold for two touching convex shapes.
-/** @constructor */
-var b2AABB = function() {
+/** 
+ @constructor 
+ */
+b2AABB = function() {
 
   /** @type {b2Vec2} */
   this.minVertex = new b2Vec2();

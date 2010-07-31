@@ -92,14 +92,14 @@ b2BroadPhase = function(worldAABB, callback) {
     this.m_proxyPool[i] = tProxy;
     tProxy.SetNext(i + 1);
     tProxy.timeStamp = 0;
-    tProxy.overlapCount = b2BroadPhase.b2_invalid;
+    tProxy.overlapCount = b2Settings.invalid;
     tProxy.userData = null;
   }
   tProxy = new b2Proxy();
   this.m_proxyPool[b2Settings.b2_maxProxies - 1] = tProxy;
   tProxy.SetNext(b2Pair.b2_nullProxy);
   tProxy.timeStamp = 0;
-  tProxy.overlapCount = b2BroadPhase.b2_invalid;
+  tProxy.overlapCount = b2Settings.invalid;
   tProxy.userData = null;
   this.m_freeProxy = 0;
 
@@ -374,11 +374,11 @@ b2BroadPhase.prototype = {
 
     // Return the proxy to the pool.
     proxy.userData = null;
-    proxy.overlapCount = b2BroadPhase.b2_invalid;
-    proxy.lowerBounds[0] = b2BroadPhase.b2_invalid;
-    proxy.lowerBounds[1] = b2BroadPhase.b2_invalid;
-    proxy.upperBounds[0] = b2BroadPhase.b2_invalid;
-    proxy.upperBounds[1] = b2BroadPhase.b2_invalid;
+    proxy.overlapCount = b2Settings.invalid;
+    proxy.lowerBounds[0] = b2Settings.invalid;
+    proxy.lowerBounds[1] = b2Settings.invalid;
+    proxy.upperBounds[0] = b2Settings.invalid;
+    proxy.upperBounds[1] = b2Settings.invalid;
 
     proxy.SetNext(this.m_freeProxy);
     this.m_freeProxy = proxyId;
@@ -794,7 +794,6 @@ b2BroadPhase.prototype = {
   m_timeStamp: 0
 };
 b2BroadPhase.s_validate = false;
-b2BroadPhase.b2_invalid = b2Settings.USHRT_MAX;
 b2BroadPhase.b2_nullEdge = b2Settings.USHRT_MAX;
 b2BroadPhase.BinarySearch = function(bounds, count, value) {
   var low = 0;

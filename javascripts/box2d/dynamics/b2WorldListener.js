@@ -18,7 +18,8 @@
 
 goog.provide('b2WorldListener');
 
-var b2WorldListener = Class.create();
+/** @constructor */
+b2WorldListener = function() {};
 b2WorldListener.prototype = {
 
   // If a body is destroyed, then any joints attached to it are also destroyed.
@@ -37,9 +38,7 @@ b2WorldListener.prototype = {
   NotifyBoundaryViolated: function(body) {
     //NOT_USED(body);
     return b2WorldListener.b2_freezeBody;
-  },
-
-  initialize: function() {}
+  }
 };
 b2WorldListener.b2_freezeBody = 0;
 b2WorldListener.b2_destroyBody = 1;

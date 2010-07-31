@@ -18,13 +18,12 @@
 
 goog.provide('b2ContactRegister');
 
-var b2ContactRegister = Class.create();
-b2ContactRegister.prototype = 
-{
+/**
+ @constructor
+ */
+b2ContactRegister = function() {};
+b2ContactRegister.prototype = {
   createFcn: null,
   destroyFcn: null,
-  primary: null,
-  initialize: function() {}};
-
-
-
+  primary: null
+};

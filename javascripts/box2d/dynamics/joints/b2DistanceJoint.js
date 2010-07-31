@@ -24,54 +24,57 @@ goog.provide('b2DistanceJoint');
 // J = [-u -cross(r1, u) u cross(r2, u)]
 // K = J * invM * JT
 //   = invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
-var b2DistanceJoint = Class.create();
+/** 
+ @constructor 
+ */
+b2DistanceJoint =  function(def) {
+   // The constructor for b2Joint
+   // initialize instance variables for references
+   this.m_node1 = new b2JointNode();
+   this.m_node2 = new b2JointNode();
+   //
+   this.m_type = def.type;
+   this.m_prev = null;
+   this.m_next = null;
+   this.m_body1 = def.body1;
+   this.m_body2 = def.body2;
+   this.m_collideConnected = def.collideConnected;
+   this.m_islandFlag = false;
+   this.m_userData = def.userData;
+   //
+   // initialize instance variables for references
+   this.m_localAnchor1 = new b2Vec2();
+   this.m_localAnchor2 = new b2Vec2();
+   this.m_u = new b2Vec2();
+   //
+   //super(def);
+   var tMat;
+   var tX;
+   var tY;
+   //this.m_localAnchor1 = b2MulT(this.m_body1->m_R, def->anchorPoint1 - this.m_body1->m_position);
+   tMat = this.m_body1.m_R;
+   tX = def.anchorPoint1.x - this.m_body1.m_position.x;
+   tY = def.anchorPoint1.y - this.m_body1.m_position.y;
+   this.m_localAnchor1.x = tX * tMat.col1.x + tY * tMat.col1.y;
+   this.m_localAnchor1.y = tX * tMat.col2.x + tY * tMat.col2.y;
+   //this.m_localAnchor2 = b2MulT(this.m_body2->m_R, def->anchorPoint2 - this.m_body2->m_position);
+   tMat = this.m_body2.m_R;
+   tX = def.anchorPoint2.x - this.m_body2.m_position.x;
+   tY = def.anchorPoint2.y - this.m_body2.m_position.y;
+   this.m_localAnchor2.x = tX * tMat.col1.x + tY * tMat.col1.y;
+   this.m_localAnchor2.y = tX * tMat.col2.x + tY * tMat.col2.y;
+
+   //b2Vec2 d = def->anchorPoint2 - def->anchorPoint1;
+   tX = def.anchorPoint2.x - def.anchorPoint1.x;
+   tY = def.anchorPoint2.y - def.anchorPoint1.y;
+   //this.m_length = d.Length();
+   this.m_length = Math.sqrt(tX * tX + tY * tY);
+   this.m_impulse = 0.0;
+ };
+
 Object.extend(b2DistanceJoint.prototype, b2Joint.prototype);
 Object.extend(b2DistanceJoint.prototype, {
   //--------------- Internals Below -------------------
-  initialize: function(def) {
-    // The constructor for b2Joint
-    // initialize instance variables for references
-    this.m_node1 = new b2JointNode();
-    this.m_node2 = new b2JointNode();
-    //
-    this.m_type = def.type;
-    this.m_prev = null;
-    this.m_next = null;
-    this.m_body1 = def.body1;
-    this.m_body2 = def.body2;
-    this.m_collideConnected = def.collideConnected;
-    this.m_islandFlag = false;
-    this.m_userData = def.userData;
-    //
-    // initialize instance variables for references
-    this.m_localAnchor1 = new b2Vec2();
-    this.m_localAnchor2 = new b2Vec2();
-    this.m_u = new b2Vec2();
-    //
-    //super(def);
-    var tMat;
-    var tX;
-    var tY;
-    //this.m_localAnchor1 = b2MulT(this.m_body1->m_R, def->anchorPoint1 - this.m_body1->m_position);
-    tMat = this.m_body1.m_R;
-    tX = def.anchorPoint1.x - this.m_body1.m_position.x;
-    tY = def.anchorPoint1.y - this.m_body1.m_position.y;
-    this.m_localAnchor1.x = tX * tMat.col1.x + tY * tMat.col1.y;
-    this.m_localAnchor1.y = tX * tMat.col2.x + tY * tMat.col2.y;
-    //this.m_localAnchor2 = b2MulT(this.m_body2->m_R, def->anchorPoint2 - this.m_body2->m_position);
-    tMat = this.m_body2.m_R;
-    tX = def.anchorPoint2.x - this.m_body2.m_position.x;
-    tY = def.anchorPoint2.y - this.m_body2.m_position.y;
-    this.m_localAnchor2.x = tX * tMat.col1.x + tY * tMat.col1.y;
-    this.m_localAnchor2.y = tX * tMat.col2.x + tY * tMat.col2.y;
-
-    //b2Vec2 d = def->anchorPoint2 - def->anchorPoint1;
-    tX = def.anchorPoint2.x - def.anchorPoint1.x;
-    tY = def.anchorPoint2.y - def.anchorPoint1.y;
-    //this.m_length = d.Length();
-    this.m_length = Math.sqrt(tX * tX + tY * tY);
-    this.m_impulse = 0.0;
-  },
 
   PrepareVelocitySolver: function() {
 

@@ -37,8 +37,82 @@ goog.require('b2Jacobian');
 // C = dot(ax1, d)
 // Cdot = = -dot(ax1, v1) - dot(cross(d + r1, ax1), w1) + dot(ax1, v2) + dot(cross(r2, ax1), v2)
 // J = [-ax1 -cross(d+r1,ax1) ax1 cross(r2,ax1)]
+/**
+ @constructor
+ */
+b2PrismaticJoint = function(def) {
+  // The constructor for b2Joint
+  // initialize instance variables for references
+  this.m_node1 = new b2JointNode();
+  this.m_node2 = new b2JointNode();
+  //
+  this.m_type = def.type;
+  this.m_prev = null;
+  this.m_next = null;
+  this.m_body1 = def.body1;
+  this.m_body2 = def.body2;
+  this.m_collideConnected = def.collideConnected;
+  this.m_islandFlag = false;
+  this.m_userData = def.userData;
+  //
+  // initialize instance variables for references
+  this.m_localAnchor1 = new b2Vec2();
+  this.m_localAnchor2 = new b2Vec2();
+  this.m_localXAxis1 = new b2Vec2();
+  this.m_localYAxis1 = new b2Vec2();
+  this.m_linearJacobian = new b2Jacobian();
+  this.m_motorJacobian = new b2Jacobian();
+  //
+  //super(def);
+  var tMat;
+  var tX;
+  var tY;
 
-var b2PrismaticJoint = Class.create();
+  //this.m_localAnchor1 = b2Math.b2MulTMV(this.m_body1.m_R, b2Math.SubtractVV(def.anchorPoint , this.m_body1.m_position));
+  tMat = this.m_body1.m_R;
+  tX = (def.anchorPoint.x - this.m_body1.m_position.x);
+  tY = (def.anchorPoint.y - this.m_body1.m_position.y);
+  this.m_localAnchor1.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
+
+  //this.m_localAnchor2 = b2Math.b2MulTMV(this.m_body2.m_R, b2Math.SubtractVV(def.anchorPoint , this.m_body2.m_position));
+  tMat = this.m_body2.m_R;
+  tX = (def.anchorPoint.x - this.m_body2.m_position.x);
+  tY = (def.anchorPoint.y - this.m_body2.m_position.y);
+  this.m_localAnchor2.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
+
+  //this.m_localXAxis1 = b2Math.b2MulTMV(this.m_body1.m_R, def.axis);
+  tMat = this.m_body1.m_R;
+  tX = def.axis.x;
+  tY = def.axis.y;
+  this.m_localXAxis1.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
+
+  //this.m_localYAxis1 = b2Math.b2CrossFV(1.0, this.m_localXAxis1);
+  this.m_localYAxis1.x = -this.m_localXAxis1.y;
+  this.m_localYAxis1.y = this.m_localXAxis1.x;
+
+  this.m_initialAngle = this.m_body2.m_rotation - this.m_body1.m_rotation;
+
+  this.m_linearJacobian.SetZero();
+  this.m_linearMass = 0.0;
+  this.m_linearImpulse = 0.0;
+
+  this.m_angularMass = 0.0;
+  this.m_angularImpulse = 0.0;
+
+  this.m_motorJacobian.SetZero();
+  this.m_motorMass = 0.0;
+  this.m_motorImpulse = 0.0;
+  this.m_limitImpulse = 0.0;
+  this.m_limitPositionImpulse = 0.0;
+
+  this.m_lowerTranslation = def.lowerTranslation;
+  this.m_upperTranslation = def.upperTranslation;
+  this.m_maxMotorForce = def.motorForce;
+  this.m_motorSpeed = def.motorSpeed;
+  this.m_enableLimit = def.enableLimit;
+  this.m_enableMotor = def.enableMotor;
+};
+
 Object.extend(b2PrismaticJoint.prototype, b2Joint.prototype);
 Object.extend(b2PrismaticJoint.prototype, {
   GetAnchor1: function() {
@@ -164,79 +238,6 @@ Object.extend(b2PrismaticJoint.prototype, {
   },
 
   //--------------- Internals Below -------------------
-  initialize: function(def) {
-    // The constructor for b2Joint
-    // initialize instance variables for references
-    this.m_node1 = new b2JointNode();
-    this.m_node2 = new b2JointNode();
-    //
-    this.m_type = def.type;
-    this.m_prev = null;
-    this.m_next = null;
-    this.m_body1 = def.body1;
-    this.m_body2 = def.body2;
-    this.m_collideConnected = def.collideConnected;
-    this.m_islandFlag = false;
-    this.m_userData = def.userData;
-    //
-    // initialize instance variables for references
-    this.m_localAnchor1 = new b2Vec2();
-    this.m_localAnchor2 = new b2Vec2();
-    this.m_localXAxis1 = new b2Vec2();
-    this.m_localYAxis1 = new b2Vec2();
-    this.m_linearJacobian = new b2Jacobian();
-    this.m_motorJacobian = new b2Jacobian();
-    //
-    //super(def);
-    var tMat;
-    var tX;
-    var tY;
-
-    //this.m_localAnchor1 = b2Math.b2MulTMV(this.m_body1.m_R, b2Math.SubtractVV(def.anchorPoint , this.m_body1.m_position));
-    tMat = this.m_body1.m_R;
-    tX = (def.anchorPoint.x - this.m_body1.m_position.x);
-    tY = (def.anchorPoint.y - this.m_body1.m_position.y);
-    this.m_localAnchor1.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
-
-    //this.m_localAnchor2 = b2Math.b2MulTMV(this.m_body2.m_R, b2Math.SubtractVV(def.anchorPoint , this.m_body2.m_position));
-    tMat = this.m_body2.m_R;
-    tX = (def.anchorPoint.x - this.m_body2.m_position.x);
-    tY = (def.anchorPoint.y - this.m_body2.m_position.y);
-    this.m_localAnchor2.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
-
-    //this.m_localXAxis1 = b2Math.b2MulTMV(this.m_body1.m_R, def.axis);
-    tMat = this.m_body1.m_R;
-    tX = def.axis.x;
-    tY = def.axis.y;
-    this.m_localXAxis1.Set((tX * tMat.col1.x + tY * tMat.col1.y), (tX * tMat.col2.x + tY * tMat.col2.y));
-
-    //this.m_localYAxis1 = b2Math.b2CrossFV(1.0, this.m_localXAxis1);
-    this.m_localYAxis1.x = -this.m_localXAxis1.y;
-    this.m_localYAxis1.y = this.m_localXAxis1.x;
-
-    this.m_initialAngle = this.m_body2.m_rotation - this.m_body1.m_rotation;
-
-    this.m_linearJacobian.SetZero();
-    this.m_linearMass = 0.0;
-    this.m_linearImpulse = 0.0;
-
-    this.m_angularMass = 0.0;
-    this.m_angularImpulse = 0.0;
-
-    this.m_motorJacobian.SetZero();
-    this.m_motorMass = 0.0;
-    this.m_motorImpulse = 0.0;
-    this.m_limitImpulse = 0.0;
-    this.m_limitPositionImpulse = 0.0;
-
-    this.m_lowerTranslation = def.lowerTranslation;
-    this.m_upperTranslation = def.upperTranslation;
-    this.m_maxMotorForce = def.motorForce;
-    this.m_motorSpeed = def.motorSpeed;
-    this.m_enableLimit = def.enableLimit;
-    this.m_enableMotor = def.enableMotor;
-  },
-
   PrepareVelocitySolver: function() {
     var b1 = this.m_body1;
     var b2 = this.m_body2;

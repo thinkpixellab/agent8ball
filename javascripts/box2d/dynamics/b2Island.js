@@ -99,36 +99,38 @@ goog.provide('b2Island');
 
 goog.require('b2ContactSolver');
 
-/** @typedef {b2Island} */
-var b2Island = Class.create();
+/**
+ @constructor
+ */
+b2Island = function(bodyCapacity, contactCapacity, jointCapacity, allocator) {
+  var i = 0;
+
+  this.m_bodyCapacity = bodyCapacity;
+  this.m_contactCapacity = contactCapacity;
+  this.m_jointCapacity = jointCapacity;
+  this.m_bodyCount = 0;
+  this.m_contactCount = 0;
+  this.m_jointCount = 0;
+
+  //this.m_bodies = (b2Body**)allocator->Allocate(bodyCapacity * sizeof(b2Body*));
+  this.m_bodies = new Array(bodyCapacity);
+  for (i = 0; i < bodyCapacity; i++)
+  this.m_bodies[i] = null;
+
+  //this.m_contacts = (b2Contact**)allocator->Allocate(contactCapacity   * sizeof(b2Contact*));
+  this.m_contacts = new Array(contactCapacity);
+  for (i = 0; i < contactCapacity; i++)
+  this.m_contacts[i] = null;
+
+  //this.m_joints = (b2Joint**)allocator->Allocate(jointCapacity * sizeof(b2Joint*));
+  this.m_joints = new Array(jointCapacity);
+  for (i = 0; i < jointCapacity; i++)
+  this.m_joints[i] = null;
+
+  this.m_allocator = allocator;
+};
+
 b2Island.prototype = {
-  initialize: function(bodyCapacity, contactCapacity, jointCapacity, allocator) {
-    var i = 0;
-
-    this.m_bodyCapacity = bodyCapacity;
-    this.m_contactCapacity = contactCapacity;
-    this.m_jointCapacity = jointCapacity;
-    this.m_bodyCount = 0;
-    this.m_contactCount = 0;
-    this.m_jointCount = 0;
-
-    //this.m_bodies = (b2Body**)allocator->Allocate(bodyCapacity * sizeof(b2Body*));
-    this.m_bodies = new Array(bodyCapacity);
-    for (i = 0; i < bodyCapacity; i++)
-    this.m_bodies[i] = null;
-
-    //this.m_contacts = (b2Contact**)allocator->Allocate(contactCapacity   * sizeof(b2Contact*));
-    this.m_contacts = new Array(contactCapacity);
-    for (i = 0; i < contactCapacity; i++)
-    this.m_contacts[i] = null;
-
-    //this.m_joints = (b2Joint**)allocator->Allocate(jointCapacity * sizeof(b2Joint*));
-    this.m_joints = new Array(jointCapacity);
-    for (i = 0; i < jointCapacity; i++)
-    this.m_joints[i] = null;
-
-    this.m_allocator = allocator;
-  },
   //~b2Island();
   Clear: function() {
     this.m_bodyCount = 0;

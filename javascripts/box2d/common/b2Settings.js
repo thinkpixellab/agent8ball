@@ -21,6 +21,8 @@ goog.provide('b2Settings');
 /** @const @type {number} */
 b2Settings.USHRT_MAX = 0x0000ffff;
 /** @const @type {number} */
+b2Settings.invalid = b2Settings.USHRT_MAX;
+/** @const @type {number} */
 b2Settings.b2_pi = Math.PI;
 /** @const @type {number} */
 b2Settings.b2_massUnitsPerKilogram = 1.0;

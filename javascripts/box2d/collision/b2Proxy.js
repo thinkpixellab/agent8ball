@@ -18,7 +18,7 @@
 
 goog.provide('b2Proxy');
 
-goog.require('b2BroadPhase');
+goog.require('b2Settings');
 
 /**
   @constructor
@@ -34,7 +34,7 @@ b2Proxy.prototype = {
   GetNext: function(){ return this.lowerBounds[0]; },
   SetNext: function(next) { this.lowerBounds[0] = next /*& 0x0000ffff*/; },
 
-  IsValid: function(){ return this.overlapCount != b2BroadPhase.b2_invalid; },
+  IsValid: function(){ return this.overlapCount != b2Settings.invalid; },
 
   lowerBounds: [/*uint*/(0), /*uint*/(0)],
   upperBounds: [/*uint*/(0), /*uint*/(0)],
