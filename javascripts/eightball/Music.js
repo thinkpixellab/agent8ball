@@ -1,6 +1,5 @@
 ﻿// a line to make the builder happy
-goog.provide('eightball.Sounds');
-goog.provide('eightball.SoundEffect');
+goog.provide('eightball.Music');
 
 goog.require('goog.net.cookies');
 
@@ -8,8 +7,7 @@ goog.require('goog.net.cookies');
  @constructor
  @param {string} location
  */
-eightball.Sounds = function(location) {
-  this.isSoundEnabled = false;
+eightball.Music = function(location) {
 
   /**
    @private
@@ -22,13 +20,13 @@ eightball.Sounds = function(location) {
    */
   this.m_location = location;
 
-  var cookieValue = goog.net.cookies.get(eightball.Sounds.s_CookieMusicOn, eightball.Sounds.s_CookieOnOffEnum.ON) == eightball.Sounds.s_CookieOnOffEnum.ON;
+  var cookieValue = goog.net.cookies.get(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.ON) == eightball.Music.s_CookieOnOffEnum.ON;
   if (cookieValue) {
     this.startMusic();
   }
 };
 
-eightball.Sounds.prototype.startMusic = function() {
+eightball.Music.prototype.startMusic = function() {
 
   this._clearMusic();
 
@@ -41,18 +39,18 @@ eightball.Sounds.prototype.startMusic = function() {
   // add it to the document
   document.body.appendChild(this.m_music);
 
-  goog.net.cookies.set(eightball.Sounds.s_CookieMusicOn, eightball.Sounds.s_CookieOnOffEnum.ON);
+  goog.net.cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.ON);
 };
 
-eightball.Sounds.prototype.stopMusic = function() {
+eightball.Music.prototype.stopMusic = function() {
   this._clearMusic();
-  goog.net.cookies.set(eightball.Sounds.s_CookieMusicOn, eightball.Sounds.s_CookieOnOffEnum.OFF);
+  goog.net.cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.OFF);
 };
 
-eightball.Sounds.prototype.isMusicOn = function() {
+eightball.Music.prototype.isMusicOn = function() {
   return (this.m_music != null);
 };
-eightball.Sounds.prototype.toggleMusic = function() {
+eightball.Music.prototype.toggleMusic = function() {
   if (this.isMusicOn()) {
     this.stopMusic();
   } else {
@@ -63,7 +61,7 @@ eightball.Sounds.prototype.toggleMusic = function() {
 /**
  @private
  */
-eightball.Sounds.prototype._clearMusic = function() {
+eightball.Music.prototype._clearMusic = function() {
   // stop the current music and remove the audio element
   if (this.m_music) {
     this.m_music.pause();
@@ -77,18 +75,15 @@ eightball.Sounds.prototype._clearMusic = function() {
  @private
  @type {string}
  */
-eightball.Sounds.s_CookieMusicOn = "eightball.Sounds.musicOn";
+eightball.Music.s_CookieMusicOn = "eightball.Music.musicOn";
 
 /** 
  @const
  @private
  @enum {string}
  */
-eightball.Sounds.s_CookieOnOffEnum = {
+eightball.Music.s_CookieOnOffEnum = {
   ON: 'on',
   OFF: 'off'
 };
 
-eightball.SoundEffect = function() {
-
-};

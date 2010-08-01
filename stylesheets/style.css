@@ -203,3 +203,23 @@ body {
     position: absolute;
     background-image: url("../images/transparent.png");
 }
+
+/* TEMP */
+
+#soundstestarea {
+    left: 0px;
+    width: 500px;
+    top: 580px;
+    position: absolute;
+}
+
+.soundtest {
+    background: gold;
+    width: 60px;
+    height: 20px;
+    font-family: Verdana;
+    font-size: 10px;
+    color: black;
+    cursor: pointer;
+    padding-top: 2px;
+}
