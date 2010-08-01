@@ -18,6 +18,7 @@
 
 goog.provide('b2GearJoint');
 
+goog.require('b2Joint');
 /** 
  @constructor 
  */

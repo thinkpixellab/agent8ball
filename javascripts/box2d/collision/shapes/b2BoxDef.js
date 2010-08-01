@@ -25,7 +25,7 @@ goog.require('b2Vec2');
   @constructor
   @extends {b2ShapeDef}
 */
-var b2BoxDef = function() {
+b2BoxDef = function() {
   this.type = b2Shape.e_unknownShape;
   this.userData = null;
   /** @type {b2Vec2} */

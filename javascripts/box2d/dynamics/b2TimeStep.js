@@ -18,7 +18,9 @@
 
 goog.provide('b2TimeStep');
 
-/** @typedef {b2TimeStep} */
+/**
+  @constructor
+ */
 b2TimeStep = function() {};
 b2TimeStep.prototype = {
   dt: null,

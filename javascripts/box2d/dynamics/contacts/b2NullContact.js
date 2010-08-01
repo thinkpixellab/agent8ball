@@ -23,6 +23,8 @@ goog.require('b2ContactNode');
 
 /**
  @constructor
+ @param {Object=} s1
+ @param {Object=} s2
  */
 b2NullContact = function(s1, s2) {
   // The constructor for b2Contact

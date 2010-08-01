@@ -49,9 +49,9 @@ goog.addDependency("../../../box2d/dynamics/contacts/b2ContactSolver.js", ['b2Co
 goog.addDependency("../../../box2d/dynamics/contacts/b2NullContact.js", ['b2NullContact'], ['b2Contact', 'b2ContactNode']);
 goog.addDependency("../../../box2d/dynamics/contacts/b2PolyAndCircleContact.js", ['b2PolyAndCircleContact'], ['b2Contact', 'b2ContactNode', 'b2Manifold']);
 goog.addDependency("../../../box2d/dynamics/contacts/b2PolyContact.js", ['b2PolyContact'], ['b2ContactNode', 'b2Math', 'b2Manifold']);
-goog.addDependency("../../../box2d/dynamics/joints/b2DistanceJoint.js", ['b2DistanceJoint'], []);
+goog.addDependency("../../../box2d/dynamics/joints/b2DistanceJoint.js", ['b2DistanceJoint'], ['b2Joint']);
 goog.addDependency("../../../box2d/dynamics/joints/b2DistanceJointDef.js", ['b2DistanceJointDef'], []);
-goog.addDependency("../../../box2d/dynamics/joints/b2GearJoint.js", ['b2GearJoint'], []);
+goog.addDependency("../../../box2d/dynamics/joints/b2GearJoint.js", ['b2GearJoint'], ['b2Joint']);
 goog.addDependency("../../../box2d/dynamics/joints/b2GearJointDef.js", ['b2GearJointDef'], []);
 goog.addDependency("../../../box2d/dynamics/joints/b2Jacobian.js", ['b2Jacobian'], ['b2Vec2']);
 goog.addDependency("../../../box2d/dynamics/joints/b2Joint.js", ['b2Joint'], ['b2JointNode']);

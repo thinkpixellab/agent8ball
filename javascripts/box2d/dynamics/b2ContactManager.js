@@ -23,7 +23,10 @@ goog.require('b2PairCallback');
 goog.require('b2NullContact');
 goog.require('b2ContactFactory');
 
-/** @constructor */
+/** 
+  @constructor
+  @extends {b2PairCallback}
+*/
 b2ContactManager = function() {
   // The constructor for b2PairCallback
   //
