@@ -16,7 +16,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-var b2Distance = {};
+goog.provide('b2Distance');
+
+goog.require('b2Math');
 
 b2Distance.ProcessTwo = function(p1Out, p2Out, p1s, p2s, points) {
   // If in point[1] region

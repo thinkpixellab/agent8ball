@@ -18,6 +18,8 @@
 
 goog.provide('b2ShapeDef');
 
+goog.require('b2Vec2');
+
 /** @constructor */
 b2ShapeDef = function() {
   this.type = b2Shape.e_unknownShape;

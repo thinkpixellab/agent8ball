@@ -18,6 +18,8 @@
 
 goog.provide('b2Vec2');
 
+goog.require('b2Math');
+
 // b2Vec2 has no constructor so that it
 // can be placed in a union.
 /**

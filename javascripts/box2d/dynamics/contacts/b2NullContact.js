@@ -22,6 +22,7 @@ goog.require('b2Contact');
 goog.require('b2ContactNode');
 
 /**
+ @extends {b2Contact}
  @constructor
  @param {Object=} s1
  @param {Object=} s2
@@ -63,10 +64,9 @@ b2NullContact = function(s1, s2) {
   //
 };
 
-Object.extend(b2NullContact.prototype, b2Contact.prototype);
-Object.extend(b2NullContact.prototype, {
-  Evaluate: function() {},
-  GetManifolds: function() {
-    return null;
-  }
-});
+goog.inherits(b2NullContact, b2Contact);
+
+b2NullContact.prototype.Evaluate = function() {};
+b2NullContact.prototype.GetManifolds = function() {
+  return null;
+};
