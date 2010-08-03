@@ -10,7 +10,7 @@ application_js_path = os.path.join(js_path, 'application.js')
 js_dirs = ['box2d','eightball','helpers']
 
 # deps
-calcdeps_js_path = os.path.join(closure_path, "bin/calcdeps.py")
+calcdeps_py_path = os.path.join(closure_path, "bin", "calcdeps.py")
 deps_js_path = os.path.join(js_path, "deps.js")
 
 # compile
@@ -20,25 +20,25 @@ extern_dir = os.path.join(js_path, 'externs')
 
 def make_deps():
   
-  command = 'python'
-  command += " %s" % calcdeps_js_path
+  command = ['python']
+  command += [calcdeps_py_path]
   
-  command += " --output_file %s" % deps_js_path
-  command += " --d %s " % closure_path
-  command += " -o deps"
+  command += ["--output_file", deps_js_path]
+  command += ["--d", closure_path]
+  command += ["-o", "deps"]
   
-  command += " -i %s " % application_js_path
+  command += ["-i", application_js_path]
   
   for js_dir in js_dirs:
-    command += " -p %s" % os.path.join(js_path, js_dir)
+    command += ["-p", os.path.join(js_path, js_dir)]
   
   return command
 
 def get_closure_base():
-  return "java -jar %s" % jar_path
+  return ["java", "-jar", jar_path]
 
 def get_closure_inputs():
-  command = ""
+  command_inputs = []
   files = []
   # add js files in goog dir, without files in demos
   for file in find_files(closure_path, '*.js'):
@@ -54,17 +54,17 @@ def get_closure_inputs():
   files.append(os.path.join(js_path, 'application.js'))
   
   for file in files:
-    command += " --js %s" % file
+    command_inputs += ["--js", file]
   
   externs = []
   for file in find_files(extern_dir, '*.js'):
     externs.append(file)
   
   for file in externs:
-    command += " --externs %s" % file
+    command_inputs += ["--externs", file]
   
-  command += " --manage_closure_dependencies true"
-  return command
+  command_inputs += ["--manage_closure_dependencies", "true"]
+  return command_inputs
 
 def get_command_with_inputs():
   return get_closure_base() + get_closure_inputs()
@@ -72,14 +72,14 @@ def get_command_with_inputs():
 def compile():
   command = get_command_with_inputs()
   
-  command += " --compilation_level ADVANCED_OPTIMIZATIONS" # SIMPLE_OPTIMIZATIONS
-  command += " --summary_detail_level 3"
+  command += ["--compilation_level", "ADVANCED_OPTIMIZATIONS"] # SIMPLE_OPTIMIZATIONS
+  command += ["--summary_detail_level", "3"]
   # debug makes var names readabel, but was causing weirdness..
   # command += " --debug true"
-  command += " --warning_level VERBOSE"
+  command += ["--warning_level", "VERBOSE"]
   # make sure everything is in a good order
-  command += " --jscomp_dev_mode EVERY_PASS"
-  command += " --js_output_file %s" % compiled_js_path
+  command += ["--jscomp_dev_mode", "EVERY_PASS"]
+  command += ["--js_output_file", compiled_js_path]
   
   # command += " --formatting PRETTY_PRINT"
   # command += " --formatting PRINT_INPUT_DELIMITER"
@@ -95,10 +95,10 @@ def find_files(directory, pattern):
 
 def print_help():
   command = get_closure_base()
-  command += " --help"
+  command.append("--help")
   return command
 
 if __name__ == '__main__':
-  command = compile()
-  print command
-  call(command, shell=True)
+  command_args = compile()
+  print command_args
+  call(command_args)
