@@ -403,13 +403,11 @@ eightball.PoolTable._createBall = function(world, x, y) {
   return world.CreateBody(ballBd);
 };
 
-eightball.PoolTable.prototype._step = function(cnt) {
-  var timeStep = 1.0 / 60;
-  var iteration = 1;
-  this.m_world.Step(timeStep, iteration);
+eightball.PoolTable.prototype._step = function() {
+  this.m_world.Step(eightball.PoolTable._secondsPerFrame, 1);
   this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
   this._drawWorld();
-  setTimeout('poolTable._step(' + (cnt || 0) + ')', 10);
+  goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable._millisecondsPerFrame);
 };
 
 eightball.PoolTable.prototype._drawWorld = function() {
@@ -512,3 +510,17 @@ eightball.PoolTable.s_matrixFlipHorizontal = new goog.math.Matrix([
 eightball.PoolTable.s_matrixFlipVertical = new goog.math.Matrix([
   [-1, 0],
   [0, -1]]);
+
+/**
+ @private
+ @const
+ @type {number}
+ */
+eightball.PoolTable._secondsPerFrame = 1.0 / 60;
+
+/**
+ @private
+ @const
+ @type {number}
+ */
+eightball.PoolTable._millisecondsPerFrame = eightball.PoolTable._secondsPerFrame * 1000;
