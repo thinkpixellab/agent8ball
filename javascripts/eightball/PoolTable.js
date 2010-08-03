@@ -43,9 +43,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   this.m_cueCanvasContext = this.m_cueCanvasElement[0].getContext('2d');
 
   // set the width and height of the table
-  this.m_canvasElement.attr('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.bumperThickness * 4);
-  this.m_canvasElement.attr('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.bumperThickness * 4);
-  this.m_centerOffset = new b2Vec2(eightball.PoolTable.s_width + eightball.PoolTable.bumperThickness * 2, eightball.PoolTable.s_height + eightball.PoolTable.bumperThickness * 2);
+  this.m_canvasElement.attr('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.s_bumperThickness * 4);
+  this.m_canvasElement.attr('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
+  this.m_centerOffset = new b2Vec2(eightball.PoolTable.s_width + eightball.PoolTable.s_bumperThickness * 2, eightball.PoolTable.s_height + eightball.PoolTable.s_bumperThickness * 2);
 
   // setup our physics world
   this._createWorld(this.m_centerOffset);
@@ -79,7 +79,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
     if (_this.m_isMouseDown) {
       // if the mouse is down we prepare to strike the ball
       var strikeLine = new goog.math.Line(_this.m_lastMouse.x, _this.m_lastMouse.y, _this.m_lastMouseDown.x, _this.m_lastMouseDown.y);
-      var strikeOffset = Math.min(strikeLine.getSegmentLength(), eightball.PoolTable.maxStrikeDistance);
+      var strikeOffset = Math.min(strikeLine.getSegmentLength(), eightball.PoolTable.s_maxStrikeDistance);
 
       // calculate the angle range that we'll allow (to prevent backtracking)
       // TODO: there is an obvious bug with the math here related to wrap-around angles
@@ -88,7 +88,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
       if (strikeAngle < cueAngle - 90 || strikeAngle > cueAngle + 90) strikeOffset = 0;
 
       // calculate strike power
-      _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.maxStrikeDistance;
+      _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.s_maxStrikeDistance;
 
       pixelLab.Debug.clearDebug();
       pixelLab.Debug.writeDebug("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
@@ -151,7 +151,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
 
       // draw the cue stick
       this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width(), this.m_cueCanvasElement.height());
-      this.m_cueCanvasContext.drawImage(this.m_cueImage, eightball.PoolTable.horizontalCueOffset + cueOffset, eightball.PoolTable.verticalCueOffset);
+      this.m_cueCanvasContext.drawImage(this.m_cueImage, eightball.PoolTable.s_horizontalCueOffset + cueOffset, eightball.PoolTable.s_verticalCueOffset);
     }
   }
 };
@@ -193,57 +193,6 @@ eightball.PoolTable.prototype._getLineAngleDegrees = function(line) {
   if (d < 0) d = (360 - (d * -1));
   return d;
 };
-
-/**
- @const
- @type {number}
- cm, regulation
- */
-eightball.PoolTable.maxStrikeDistance = 175;
-
-/**
- @const
- @type {number}
- cm, regulation
- */
-eightball.PoolTable.verticalCueOffset = -15;
-
-/**
- @const
- @type {number}
- cm, regulation
- */
-eightball.PoolTable.horizontalCueOffset = 7;
-
-/**
- @const
- @private
- @type {number}
- cm, regulation
- */
-eightball.PoolTable.s_height = 192;
-
-/**
- @const
- @private
- @type {number}
- cm, regulation
- */
-eightball.PoolTable.s_width = 396;
-
-/**
- @const
- @private
- @type {number}
- cm, regulation
- */
-eightball.PoolTable.s_ballDiameter = 7;
-
-/**
- @const
- @type {number}
- */
-eightball.PoolTable.bumperThickness = 10;
 
 eightball.PoolTable.prototype._createWorld = function() {
 
@@ -298,10 +247,10 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
   // Left
   side = new b2PolyDef();
   points = [
-    [-centerOffset.x, -centerOffset.y + eightball.PoolTable.bumperThickness * 2.5],
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, -centerOffset.y + eightball.PoolTable.bumperThickness * 4.5],
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2, centerOffset.y - eightball.PoolTable.bumperThickness * 4.5],
-    [-centerOffset.x, centerOffset.y - eightball.PoolTable.bumperThickness * 2.5]];
+    [-centerOffset.x, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2.5],
+    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 4.5],
+    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2, centerOffset.y - eightball.PoolTable.s_bumperThickness * 4.5],
+    [-centerOffset.x, centerOffset.y - eightball.PoolTable.s_bumperThickness * 2.5]];
   side.SetVertices(points);
   table.AddShape(side);
 
@@ -313,10 +262,10 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
 
   // top left
   points = [
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 2.3, -centerOffset.y],
-    [-centerOffset.x + eightball.PoolTable.bumperThickness * 4.5, -centerOffset.y + eightball.PoolTable.bumperThickness * 2],
-    [-eightball.PoolTable.bumperThickness * 2.3, -centerOffset.y + eightball.PoolTable.bumperThickness * 2],
-    [-eightball.PoolTable.bumperThickness * 1.5, -centerOffset.y]].reverse();
+    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2.3, -centerOffset.y],
+    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 4.5, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2],
+    [-eightball.PoolTable.s_bumperThickness * 2.3, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2],
+    [-eightball.PoolTable.s_bumperThickness * 1.5, -centerOffset.y]].reverse();
 
   side = new b2PolyDef();
   side.SetVertices(points);
@@ -404,10 +353,10 @@ eightball.PoolTable._createBall = function(world, x, y) {
 };
 
 eightball.PoolTable.prototype._step = function() {
-  this.m_world.Step(eightball.PoolTable._secondsPerFrame, 1);
+  this.m_world.Step(eightball.PoolTable.s_secondsPerFrame, 1);
   this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
   this._drawWorld();
-  goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable._millisecondsPerFrame);
+  goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable.s_millisecondsPerFrame);
 };
 
 eightball.PoolTable.prototype._drawWorld = function() {
@@ -516,11 +465,67 @@ eightball.PoolTable.s_matrixFlipVertical = new goog.math.Matrix([
  @const
  @type {number}
  */
-eightball.PoolTable._secondsPerFrame = 1.0 / 60;
+eightball.PoolTable.s_secondsPerFrame = 1.0 / 60;
 
 /**
  @private
  @const
  @type {number}
  */
-eightball.PoolTable._millisecondsPerFrame = eightball.PoolTable._secondsPerFrame * 1000;
+eightball.PoolTable.s_millisecondsPerFrame = eightball.PoolTable.s_secondsPerFrame * 1000;
+
+/**
+ @private
+ @const
+ @type {number}
+ cm, regulation
+ */
+eightball.PoolTable.s_maxStrikeDistance = 175;
+
+/**
+ @private
+ @const
+ @type {number}
+ cm, regulation
+ */
+eightball.PoolTable.s_verticalCueOffset = -15;
+
+/**
+ @private
+ @const
+ @type {number}
+ cm, regulation
+ */
+eightball.PoolTable.s_horizontalCueOffset = 7;
+
+/**
+ @private
+ @const
+ @private
+ @type {number}
+ cm, regulation
+ */
+eightball.PoolTable.s_height = 192;
+
+/**
+ @private
+ @const
+ @type {number}
+ cm, regulation
+ */
+eightball.PoolTable.s_width = 396;
+
+/**
+ @private
+ @const
+ @type {number}
+ cm, regulation
+ */
+eightball.PoolTable.s_ballDiameter = 7;
+
+/**
+ @private
+ @const
+ @type {number}
+ */
+eightball.PoolTable.s_bumperThickness = 10;
