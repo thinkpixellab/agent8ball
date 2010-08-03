@@ -1,0 +1,21 @@
+﻿Some quick notes on naming conventions for javascript:
+
+CASING
+Use camel casing (camelCasing) for all members and pascal casing (PascalCasing)
+for classes.
+
+MEMBERS
+
+* Private members: append an m_ in front of the name (m_name)
+* Static members: append an s_ in from the name (s_name)
+* Public methods: standard camel cased name (name)
+* Private methods: append a _ in front of the name (_name)
+
+CONSTANTS
+
+* Constants should be treated as static so they use the s_ (s_name). Additionally,
+  they should be declared with @const in the comments
+
+ENUMS
+
+* Use all caps for the key name (e.g. EventType = { FOO: 'foo', BAR: 'bar} )
