@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
+import sys
 import os
 import fnmatch
-from subprocess import call
+import subprocess
+import logging
 
 js_path = "javascripts"
 closure_path = os.path.join(js_path, 'closure-library','closure')
@@ -98,7 +100,17 @@ def print_help():
   command.append("--help")
   return command
 
+def main():
+  logging.basicConfig(format='make_deps.py: %(message)s', level=logging.INFO)
+  args = compile()
+  logging.info('Running the following command: %s', ' '.join(args))
+  proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+  (stdoutdata, stderrdata) = proc.communicate()
+  if proc.returncode != 0:
+    logging.error('JavaScript compilation failed.')
+    sys.exit(1)
+  else:
+    sys.stdout.write(stdoutdata)
+
 if __name__ == '__main__':
-  command_args = compile()
-  print command_args
-  call(command_args)
+  main()
