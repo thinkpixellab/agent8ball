@@ -32,7 +32,7 @@ goog.require('b2WorldListener');
  */
 b2World = function(worldAABB, gravity, doSleep) {
   // initialize instance variables for references
-  this.step = new b2TimeStep();
+  this.m_step = new b2TimeStep();
   this.m_contactManager = new b2ContactManager();
 
   this.m_listener = null;
@@ -271,19 +271,17 @@ b2World.prototype.GetGroundBody = function() {
   return this.m_groundBody;
 };
 
-b2World.prototype.step = new b2TimeStep();
-// this.Step
 b2World.prototype.Step = function(dt, iterations) {
 
   var b;
   var other;
 
-  this.step.dt = dt;
-  this.step.iterations = iterations;
+  this.m_step.dt = dt;
+  this.m_step.iterations = iterations;
   if (dt > 0.0) {
-    this.step.inv_dt = 1.0 / dt;
+    this.m_step.inv_dt = 1.0 / dt;
   } else {
-    this.step.inv_dt = 0.0;
+    this.m_step.inv_dt = 0.0;
   }
 
   this.m_positionIterationCount = 0;
@@ -383,7 +381,7 @@ b2World.prototype.Step = function(dt, iterations) {
       }
     }
 
-    island.Solve(this.step, this.m_gravity);
+    island.Solve(this.m_step, this.m_gravity);
 
     this.m_positionIterationCount = b2Math.b2Max(this.m_positionIterationCount, b2Island.m_positionIterationCount);
 
@@ -458,7 +456,7 @@ b2World.prototype.m_bodyCount = 0;
 b2World.prototype.m_contactCount = 0;
 b2World.prototype.m_jointCount = 0;
 
-// These bodies will be destroyed at the next time this.step.
+// These bodies will be destroyed at the next time this.m_step.
 b2World.prototype.m_bodyDestroyList = null;
 
 b2World.prototype.m_gravity = null;
