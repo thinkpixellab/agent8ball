@@ -24,9 +24,10 @@ def make_deps():
   
   for js_dir in js_dirs:
     command += " -p %s" % os.path.join(js_path, js_dir)
-  
-  print command
-  call(command, shell=True)
+
+  return command
 
 if __name__ == '__main__':
-  make_deps()
+  command = compile()
+  print command
+  call(command, shell=True)
