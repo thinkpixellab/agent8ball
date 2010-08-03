@@ -1,16 +1,21 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
+goog.require('goog.events');
+goog.require('goog.events.EventType');
+
+goog.require('pixelLab.ImagePreloader');
+goog.require('pixelLab.Debug');
+
 goog.require('eightball.PoolTable');
 goog.require('eightball.Music');
 goog.require('eightball.SoundEffect');
 goog.require('eightball.SoundEffectManager');
-goog.require('pixelLab.ImagePreloader');
-goog.require('pixelLab.Debug');
 
 var poolTable;
 var musicManager;
+var soundManager;
 
-$(window).load(function () {
+var loadApp =  function() {
   pixelLab.Debug.enable();
   pixelLab.ImagePreloader.preload("images/bestscore.png, images/cue.png, images/progressbg.png, images/progressunit.png, images/score.png, images/table.jpg, images/tableborder.png, images/timeremaining.png, images/wood.jpg");
 
@@ -35,20 +40,20 @@ $(window).load(function () {
   if (canvasElement[0]) {
     poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement);
 
-    width = window.innerWidth;
-    height = window.innerHeight;
+    var width = window.innerWidth;
+    var height = window.innerHeight;
     poolTable.updateLayout(width, height);
   }
 
-  var updateMusicButton = function () {
+  var updateMusicButton = function() {
     if (musicManager.isMusicOn()) {
       $("#musicbuttonon").fadeIn("fast");
     } else {
       $("#musicbuttonon").fadeOut("fast");
-    } 
+    }
   };
 
-  var updateSoundButton = function () {
+  var updateSoundButton = function() {
     if (soundManager.isSoundOn()) {
       $("#soundsbuttonon").fadeIn("fast");
     } else {
@@ -57,13 +62,13 @@ $(window).load(function () {
   };
 
   // music on/off
-  $("#musicbutton").click(function () {
+  $("#musicbutton").click(function() {
     musicManager.toggleMusic();
     updateMusicButton();
   });
 
   // sound effects on/off
-  $("#soundsbutton").click(function () {
+  $("#soundsbutton").click(function() {
     soundManager.toggleSound();
     updateSoundButton();
   });
@@ -72,14 +77,16 @@ $(window).load(function () {
   updateSoundButton();
 
   // sound effects test code
-  $(".soundtest").click(function () {
+  $(".soundtest").click(function() {
     soundManager.play(this.id);
   });
+}
 
-});
+
+$(window).load(loadApp);
 
 $(window).resize(function(e) {
-  width = window.innerWidth;
-  height = window.innerHeight;
+  var width = window.innerWidth;
+  var height = window.innerHeight;
   poolTable.updateLayout(width, height);
 });

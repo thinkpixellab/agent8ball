@@ -78,6 +78,6 @@ def find_files(directory, pattern):
                 yield filename
 
 if __name__ == '__main__':
-  command = compile()
+  command = make_deps()
   print command
   call(command, shell=True)

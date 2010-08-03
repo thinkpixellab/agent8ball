@@ -26,7 +26,7 @@ pixelLab.Debug.writeEval = function(code) {
 
 // writes all of the properties of the object passed to it
 pixelLab.Debug.writeDebugObject = function(object) {
-  for (property in object) {
+  for (var property in object) {
     pixelLab.Debug.writeDebug(property);
   }
 };

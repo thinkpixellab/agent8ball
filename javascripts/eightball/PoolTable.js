@@ -217,7 +217,7 @@ eightball.PoolTable._setupBalls = function(world) {
   var index = 0;
   var ballRadius = eightball.PoolTable.s_ballDiameter * 2;
 
-  balls[index] = this._createBall(world, -0.5 * eightball.PoolTable.s_width, 0);
+  balls[index] = eightball.PoolTable._createBall(world, -0.5 * eightball.PoolTable.s_width, 0);
   balls[index].userData = index;
   index++;
 
@@ -501,7 +501,6 @@ eightball.PoolTable.s_horizontalCueOffset = 7;
 /**
  @private
  @const
- @private
  @type {number}
  cm, regulation
  */
