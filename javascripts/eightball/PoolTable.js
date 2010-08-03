@@ -260,6 +260,7 @@ eightball.PoolTable._setupBalls = function(world) {
 */
 eightball.PoolTable._createTable = function(world, centerOffset) {
   var table = new b2BodyDef();
+  table.restitution = 1;
   table.friction = 1.0;
 
   var side;
