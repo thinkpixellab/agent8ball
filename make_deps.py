@@ -12,7 +12,6 @@ deps_js_path = os.path.join(js_path, "deps.js")
 js_dirs = ['box2d','eightball','helpers']
 
 def make_deps():
-  logging.basicConfig(format='make_deps.py: %(message)s', level=logging.INFO)
   
   command = 'python'
   command += " %s" % calcdeps_js_path
