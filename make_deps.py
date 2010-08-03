@@ -34,10 +34,11 @@ def make_deps():
   
   return command
 
-def compile():
-  command = "java"
-  command += " -jar %s" % jar_path
-  
+def get_closure_base():
+  return "java -jar %s" % jar_path
+
+def get_closure_inputs():
+  command = ""
   files = []
   # add js files in goog dir, without files in demos
   for file in find_files(closure_path, '*.js'):
@@ -62,13 +63,21 @@ def compile():
   for file in externs:
     command += " --externs %s" % file
   
+  command += " --manage_closure_dependencies true"
+  return command
+
+def get_command_with_inputs():
+  return get_closure_base() + get_closure_inputs()
+
+def compile():
+  command = get_command_with_inputs()
+  
   command += " --compilation_level ADVANCED_OPTIMIZATIONS" # SIMPLE_OPTIMIZATIONS
   command += " --summary_detail_level 3"
   # debug makes var names readabel, but was causing weirdness..
   # command += " --debug true"
   command += " --warning_level VERBOSE"
   # make sure everything is in a good order
-  command += " --manage_closure_dependencies true"
   command += " --jscomp_dev_mode EVERY_PASS"
   command += " --js_output_file %s" % compiled_js_path
   
@@ -83,6 +92,11 @@ def find_files(directory, pattern):
             if fnmatch.fnmatch(basename, pattern):
                 filename = os.path.join(root, basename)
                 yield filename
+
+def print_help():
+  command = get_closure_base()
+  command += " --help"
+  return command
 
 if __name__ == '__main__':
   command = compile()
