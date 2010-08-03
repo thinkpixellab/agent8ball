@@ -39,12 +39,12 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   this.m_cueCanvasElement = cueCanvasElement;
 
   // get local references for our canvas drawing contexts
-  this.m_canvasContext = this.m_canvasElement[0].getContext('2d');
-  this.m_cueCanvasContext = this.m_cueCanvasElement[0].getContext('2d');
+  this.m_canvasContext = this.m_canvasElement.getContext('2d');
+  this.m_cueCanvasContext = this.m_cueCanvasElement.getContext('2d');
 
   // set the width and height of the table
-  this.m_canvasElement.attr('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.s_bumperThickness * 4);
-  this.m_canvasElement.attr('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
+  this.m_canvasElement.setAttribute('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.s_bumperThickness * 4);
+  this.m_canvasElement.setAttribute('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
   this.m_centerOffset = new b2Vec2(eightball.PoolTable.s_width + eightball.PoolTable.s_bumperThickness * 2, eightball.PoolTable.s_height + eightball.PoolTable.s_bumperThickness * 2);
 
   // setup our physics world
@@ -55,14 +55,14 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   this.m_isMouseDown = false;
 
   // mouse down
-  this.m_cueCanvasElement.mousedown(function(e) {
+  $(this.m_cueCanvasElement).mousedown(function(e) {
     _this.m_isMouseDown = true;
     _this.m_lastMouseDown = _this.m_lastMouse;
     _this.m_cueLine = new goog.math.Line(_this.m_lastMouseDown.x, _this.m_lastMouseDown.y, _this.m_theCueBall.GetCenterPosition().x, _this.m_theCueBall.GetCenterPosition().y);
   });
 
   // mouse up
-  this.m_cueCanvasElement.mouseup(function(e) {
+  $(this.m_cueCanvasElement).mouseup(function(e) {
     _this.m_isMouseDown = false;
     _this.m_isCueVisible = false;
     _this._strikeCue();
@@ -70,9 +70,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   });
 
   // mouse move
-  this.m_cueCanvasElement.mousemove(function(e) {
+  $(this.m_cueCanvasElement).mousemove(function(e) {
     var cursorPageOffset = new goog.math.Vec2(e.pageX, e.pageY);
-    var elementOffset = new goog.math.Vec2(_this.m_canvasElement.offset().left, _this.m_canvasElement.offset().top);
+    var elementOffset = new goog.math.Vec2($(_this.m_canvasElement).offset().left, $(_this.m_canvasElement).offset().top);
     var elementLocation = cursorPageOffset.subtract(elementOffset);
     _this.m_lastMouse = elementLocation.subtract(_this.m_centerOffset);
 
@@ -103,7 +103,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   });
 
   // mouse leave
-  this.m_cueCanvasElement.mouseleave(function(e) {
+  $(this.m_cueCanvasElement).mouseleave(function(e) {
     _this.m_lastMouse = null;
     _this.m_isMouseDown = false;
   });
@@ -150,25 +150,31 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
       this.m_cueCanvasContext.rotate(r);
 
       // draw the cue stick
-      this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width(), this.m_cueCanvasElement.height());
+      this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width, this.m_cueCanvasElement.height);
       this.m_cueCanvasContext.drawImage(this.m_cueImage, eightball.PoolTable.s_horizontalCueOffset + cueOffset, eightball.PoolTable.s_verticalCueOffset);
     }
   }
 };
 
+/*
+  @private
+*/
 eightball.PoolTable.prototype._clearCueCanvas = function() {
   // reset the current transform to the identity and the clear the entire thing
   this.m_cueCanvasContext.setTransform(1, 0, 0, 1, 0, 0);
-  this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width(), this.m_cueCanvasElement.height());
+  this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width, this.m_cueCanvasElement.height);
 };
 
+/*
+  @private
+*/
 eightball.PoolTable.prototype._gameCoordinatesToAbsolute = function(x, y) {
 
   // translate our game coordinates (where 0,0 is in the center of
   // the table) to absolute coordinates for the page
-  var gameTableOffset = new goog.math.Vec2(this.m_canvasElement.offset().left, this.m_canvasElement.offset().top);
-  gameTableOffset.x += this.m_canvasElement.width() / 2;
-  gameTableOffset.y += this.m_canvasElement.height() / 2;
+  var gameTableOffset = new goog.math.Vec2($(this.m_canvasElement).offset().left, $(this.m_canvasElement).offset().top);
+  gameTableOffset.x += this.m_canvasElement.width / 2;
+  gameTableOffset.y += this.m_canvasElement.height / 2;
 
   var newX = gameTableOffset.x + x;
   var newY = gameTableOffset.y + y;
@@ -179,6 +185,9 @@ eightball.PoolTable.prototype._gameCoordinatesToAbsolute = function(x, y) {
   };
 };
 
+/*
+  @private
+*/
 eightball.PoolTable.prototype._getLineAngle = function(line) {
   var dX = line.x0 - line.x1;
   var dY = line.y1 - line.y0;
@@ -187,6 +196,9 @@ eightball.PoolTable.prototype._getLineAngle = function(line) {
   return r;
 };
 
+/*
+  @private
+*/
 eightball.PoolTable.prototype._getLineAngleDegrees = function(line) {
   var r = this._getLineAngle(line);
   var d = r * 180 / Math.PI;
@@ -194,6 +206,9 @@ eightball.PoolTable.prototype._getLineAngleDegrees = function(line) {
   return d;
 };
 
+/*
+  @private
+*/
 eightball.PoolTable.prototype._createWorld = function() {
 
   var worldAABB = new b2AABB();
@@ -212,6 +227,9 @@ eightball.PoolTable.prototype._createWorld = function() {
   this.m_theCueBall = balls[0];
 };
 
+/*
+  @private
+*/
 eightball.PoolTable._setupBalls = function(world) {
   var balls = new Array(16);
   var index = 0;
@@ -237,6 +255,9 @@ eightball.PoolTable._setupBalls = function(world) {
   return balls;
 };
 
+/*
+  @private
+*/
 eightball.PoolTable._createTable = function(world, centerOffset) {
   var table = new b2BodyDef();
   table.friction = 1.0;
@@ -352,6 +373,9 @@ eightball.PoolTable._createBall = function(world, x, y) {
   return world.CreateBody(ballBd);
 };
 
+/*
+  @private
+*/
 eightball.PoolTable.prototype._step = function() {
   this.m_world.Step(eightball.PoolTable.s_secondsPerFrame, 1);
   this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
@@ -359,6 +383,9 @@ eightball.PoolTable.prototype._step = function() {
   goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable.s_millisecondsPerFrame);
 };
 
+/*
+  @private
+*/
 eightball.PoolTable.prototype._drawWorld = function() {
   //    if (this.m_lastMouse) {
   //        this.m_cueLine = new goog.math.Line(this.m_lastMouse.x, this.m_lastMouse.y, this.m_theCueBall.GetCenterPosition().x, this.m_theCueBall.GetCenterPosition().y);
@@ -395,6 +422,9 @@ eightball.PoolTable.prototype._drawWorld = function() {
   }
 };
 
+/*
+  @private
+*/
 eightball.PoolTable._drawShape = function(shape, context) {
   context.beginPath();
 

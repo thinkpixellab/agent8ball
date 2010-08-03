@@ -15,7 +15,7 @@ var poolTable;
 var musicManager;
 var soundManager;
 
-var loadApp =  function() {
+var loadApp = function() {
   pixelLab.Debug.enable();
   pixelLab.ImagePreloader.preload("images/bestscore.png, images/cue.png, images/progressbg.png, images/progressunit.png, images/score.png, images/table.jpg, images/tableborder.png, images/timeremaining.png, images/wood.jpg");
 
@@ -35,9 +35,9 @@ var loadApp =  function() {
   soundManager.add("shot05", new eightball.SoundEffect("sounds/shot05.mp3", 3));
   soundManager.add("shotsingle01", new eightball.SoundEffect("sounds/shotsingle01.mp3", 3));
 
-  var canvasElement = $('canvas#demo_canvas');
-  var cueCanvasElement = $('canvas#cue_canvas');
-  if (canvasElement[0]) {
+  var canvasElement = $('canvas#demo_canvas')[0];
+  var cueCanvasElement = $('canvas#cue_canvas')[0];
+  if (canvasElement) {
     poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement);
 
     var width = window.innerWidth;
@@ -80,8 +80,7 @@ var loadApp =  function() {
   $(".soundtest").click(function() {
     soundManager.play(this.id);
   });
-}
-
+};
 
 $(window).load(loadApp);
 

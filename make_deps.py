@@ -16,6 +16,7 @@ deps_js_path = os.path.join(js_path, "deps.js")
 # compile
 compiled_js_path = os.path.join(js_path, "compiled.js")
 jar_path = os.path.join('_tools', 'closure_compiler', 'compiler.jar')
+extern_dir = os.path.join(js_path, 'externs')
 
 def make_deps():
   
@@ -54,19 +55,25 @@ def compile():
   for file in files:
     command += " --js %s" % file
   
-  #  command += " --compilation_level ADVANCED_OPTIMIZATIONS"
-  command += " --compilation_level SIMPLE_OPTIMIZATIONS"
+  externs = []
+  for file in find_files(extern_dir, '*.js'):
+    externs.append(file)
+  
+  for file in externs:
+    command += " --externs %s" % file
+  
+  command += " --compilation_level ADVANCED_OPTIMIZATIONS" # SIMPLE_OPTIMIZATIONS
   command += " --summary_detail_level 3"
   # debug makes var names readabel, but was causing weirdness..
-  command += " --debug true"
+  # command += " --debug true"
   command += " --warning_level VERBOSE"
   # make sure everything is in a good order
   command += " --manage_closure_dependencies true"
   command += " --jscomp_dev_mode EVERY_PASS"
   command += " --js_output_file %s" % compiled_js_path
   
-  command += " --formatting PRETTY_PRINT"
-  command += " --formatting PRINT_INPUT_DELIMITER"
+  # command += " --formatting PRETTY_PRINT"
+  # command += " --formatting PRINT_INPUT_DELIMITER"
   
   return command
 
@@ -78,6 +85,6 @@ def find_files(directory, pattern):
                 yield filename
 
 if __name__ == '__main__':
-  command = make_deps()
+  command = compile()
   print command
   call(command, shell=True)
