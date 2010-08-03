@@ -6,41 +6,6 @@
  *
  *--------------------------------------------------------------------------*/
 
-/* Based on Alex Arnell's inheritance implementation. */
-
-var Class = (function() {
-
-  function subclass() {};
-
-  function create() {
-    var parent = null;
-
-    function klass() {
-      this.initialize.apply(this, arguments);
-    }
-
-    klass.superclass = parent;
-    klass.subclasses = [];
-
-    if (parent) {
-      subclass.prototype = parent.prototype;
-      klass.prototype = new subclass;
-      parent.subclasses.push(klass);
-    }
-
-    if (!klass.prototype.initialize) {
-      klass.prototype.initialize = function() {};
-    }
-
-    klass.prototype.constructor = klass;
-    return klass;
-  }
-
-  return {
-    create: create
-  };
-})();
-
 (function() {
 
   function extend(destination, source) {
