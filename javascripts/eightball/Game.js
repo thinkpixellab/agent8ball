@@ -31,7 +31,7 @@ eightball.Game = function () {
   this.m_timer = null;
 
 
-}
+};
 goog.inherits(eightball.Game, goog.events.EventTarget);
 
 eightball.Game.prototype.start = function () {
@@ -52,7 +52,7 @@ eightball.Game.prototype.start = function () {
   // set the game state
   this.gameState = eightball.Music.GameState.STARTED;
 
-}
+};
 
 eightball.Game.prototype.togglePaused = function () {
 
@@ -66,7 +66,7 @@ eightball.Game.prototype.togglePaused = function () {
     this._dispatchGameEvent(eightball.Game.EventType.RESUME);
   }
 
-}
+};
 
 eightball.Game.prototype._tickAction = function () {
   if (this.gameState == eightball.Music.GameState.STARTED) {
@@ -154,6 +154,6 @@ eightball.Game.EventType = {
   /**
   * Dispatched when the game timer is updated. Occurs once per second.
   */
-  TICK: 'tick',
+  TICK: 'tick'
 };
 
