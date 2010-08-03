@@ -104,5 +104,13 @@ b2Contact.prototype = {
   m_friction: null,
   m_restitution: null
 };
+/*
+  @const
+  @type {number}
+*/
 b2Contact.e_islandFlag = 0x0001;
+/*
+  @const
+  @type {number}
+*/
 b2Contact.e_destroyFlag = 0x0002;
