@@ -74,8 +74,8 @@ b2DistanceJoint =  function(def) {
    this.m_impulse = 0.0;
  };
 
-Object.extend(b2DistanceJoint.prototype, b2Joint.prototype);
-Object.extend(b2DistanceJoint.prototype, {
+goog.object.extend(b2DistanceJoint.prototype, b2Joint.prototype);
+goog.object.extend(b2DistanceJoint.prototype, {
   //--------------- Internals Below -------------------
 
   PrepareVelocitySolver: function() {

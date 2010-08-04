@@ -38,8 +38,8 @@ b2GearJointDef = function() {
   this.ratio = 1.0;
 };
 
-Object.extend(b2GearJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2GearJointDef.prototype, {
+goog.object.extend(b2GearJointDef.prototype, b2JointDef.prototype);
+goog.object.extend(b2GearJointDef.prototype, {
 
   joint1: null,
   joint2: null,

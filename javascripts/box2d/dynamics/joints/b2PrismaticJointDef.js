@@ -43,8 +43,8 @@ b2PrismaticJointDef = function() {
   this.enableMotor = false;
 };
 
-Object.extend(b2PrismaticJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2PrismaticJointDef.prototype, {
+goog.object.extend(b2PrismaticJointDef.prototype, b2JointDef.prototype);
+goog.object.extend(b2PrismaticJointDef.prototype, {
 
   anchorPoint: null,
   axis: null,

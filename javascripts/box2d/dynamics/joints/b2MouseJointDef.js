@@ -39,8 +39,8 @@ b2MouseJointDef = function() {
   this.timeStep = 1.0 / 60.0;
 };
 
-Object.extend(b2MouseJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2MouseJointDef.prototype, {
+goog.object.extend(b2MouseJointDef.prototype, b2JointDef.prototype);
+goog.object.extend(b2MouseJointDef.prototype, {
 
   target: new b2Vec2(),
   maxForce: null,

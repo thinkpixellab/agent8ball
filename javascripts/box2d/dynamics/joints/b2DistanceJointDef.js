@@ -38,8 +38,8 @@ b2DistanceJointDef = function() {
   //this.anchorPoint2.Set(0.0, 0.0);
 };
 
-Object.extend(b2DistanceJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2DistanceJointDef.prototype, {
+goog.object.extend(b2DistanceJointDef.prototype, b2JointDef.prototype);
+goog.object.extend(b2DistanceJointDef.prototype, {
 
   anchorPoint1: new b2Vec2(),
   anchorPoint2: new b2Vec2()

@@ -95,8 +95,8 @@ b2PulleyJoint = function(def) {
 
 };
 
-Object.extend(b2PulleyJoint.prototype, b2Joint.prototype);
-Object.extend(b2PulleyJoint.prototype, {
+goog.object.extend(b2PulleyJoint.prototype, b2Joint.prototype);
+goog.object.extend(b2PulleyJoint.prototype, {
   GetAnchor1: function() {
     //return this.m_body1->m_position + b2Mul(this.m_body1->m_R, this.m_localAnchor1);
     var tMat = this.m_body1.m_R;

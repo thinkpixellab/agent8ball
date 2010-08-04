@@ -92,8 +92,8 @@ b2RevoluteJoint = function(def) {
   this.m_enableMotor = def.enableMotor;
 };
 
-Object.extend(b2RevoluteJoint.prototype, b2Joint.prototype);
-Object.extend(b2RevoluteJoint.prototype, {
+goog.object.extend(b2RevoluteJoint.prototype, b2Joint.prototype);
+goog.object.extend(b2RevoluteJoint.prototype, {
   GetAnchor1: function() {
     var tMat = this.m_body1.m_R;
     return new b2Vec2(this.m_body1.m_position.x + (tMat.col1.x * this.m_localAnchor1.x + tMat.col2.x * this.m_localAnchor1.y), this.m_body1.m_position.y + (tMat.col1.y * this.m_localAnchor1.x + tMat.col2.y * this.m_localAnchor1.y));

@@ -52,8 +52,8 @@ b2PulleyJointDef = function() {
   this.collideConnected = true;
 };
 
-Object.extend(b2PulleyJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2PulleyJointDef.prototype, {
+goog.object.extend(b2PulleyJointDef.prototype, b2JointDef.prototype);
+goog.object.extend(b2PulleyJointDef.prototype, {
   groundPoint1: new b2Vec2(),
   groundPoint2: new b2Vec2(),
   anchorPoint1: new b2Vec2(),

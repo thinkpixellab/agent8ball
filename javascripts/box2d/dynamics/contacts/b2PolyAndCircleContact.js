@@ -71,8 +71,8 @@ b2PolyAndCircleContact =  function(s1, s2) {
    this.m_manifold[0].points[0].tangentImpulse = 0.0;
  };
 
-Object.extend(b2PolyAndCircleContact.prototype, b2Contact.prototype);
-Object.extend(b2PolyAndCircleContact.prototype, {
+goog.object.extend(b2PolyAndCircleContact.prototype, b2Contact.prototype);
+goog.object.extend(b2PolyAndCircleContact.prototype, {
 
   //~b2PolyAndCircleContact() {}
   Evaluate: function() {

@@ -94,8 +94,8 @@ b2GearJoint = function(def) {
 
 };
 
-Object.extend(b2GearJoint.prototype, b2Joint.prototype);
-Object.extend(b2GearJoint.prototype, {
+goog.object.extend(b2GearJoint.prototype, b2Joint.prototype);
+goog.object.extend(b2GearJoint.prototype, {
   GetAnchor1: function() {
     //return this.m_body1.m_position + b2MulMV(this.m_body1.m_R, this.m_localAnchor1);
     var tMat = this.m_body1.m_R;

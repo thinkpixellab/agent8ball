@@ -43,8 +43,8 @@ b2RevoluteJointDef = function() {
   this.enableMotor = false;
 };
 
-Object.extend(b2RevoluteJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2RevoluteJointDef.prototype, {
+goog.object.extend(b2RevoluteJointDef.prototype, b2JointDef.prototype);
+goog.object.extend(b2RevoluteJointDef.prototype, {
 
   anchorPoint: null,
   lowerAngle: null,

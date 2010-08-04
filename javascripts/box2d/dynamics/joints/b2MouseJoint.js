@@ -80,8 +80,8 @@ b2MouseJoint = function(def) {
   this.m_beta = def.timeStep * k / (d + def.timeStep * k);
 };
 
-Object.extend(b2MouseJoint.prototype, b2Joint.prototype);
-Object.extend(b2MouseJoint.prototype, {
+goog.object.extend(b2MouseJoint.prototype, b2Joint.prototype);
+goog.object.extend(b2MouseJoint.prototype, {
   GetAnchor1: function() {
     return this.m_target;
   },

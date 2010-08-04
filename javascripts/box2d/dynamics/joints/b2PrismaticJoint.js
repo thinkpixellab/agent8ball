@@ -113,8 +113,8 @@ b2PrismaticJoint = function(def) {
   this.m_enableMotor = def.enableMotor;
 };
 
-Object.extend(b2PrismaticJoint.prototype, b2Joint.prototype);
-Object.extend(b2PrismaticJoint.prototype, {
+goog.object.extend(b2PrismaticJoint.prototype, b2Joint.prototype);
+goog.object.extend(b2PrismaticJoint.prototype, {
   GetAnchor1: function() {
     var b1 = this.m_body1;
     //return b2Math.AddVV(b1.m_position, b2Math.b2MulMV(b1.m_R, this.m_localAnchor1));
