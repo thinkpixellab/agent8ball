@@ -37,8 +37,8 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
     @type {number}
   */
   this.m_strikePower = 0;
-  // will be a number from 0 to 1 indicating strike power
   /**
+    will be a number from 0 to 1 indicating strike power
     @private
     @type {boolean}
   */
@@ -254,7 +254,7 @@ eightball.PoolTable.prototype._createWorld = function() {
 
 /**
   @private
-  @param {b2World} world
+  @param {!b2World} world
 */
 eightball.PoolTable._setupBalls = function(world) {
   var balls = new Array(16);
@@ -283,7 +283,8 @@ eightball.PoolTable._setupBalls = function(world) {
 
 /**
   @private
-  @param {b2World} world
+  @param {!b2World} world
+  @param {!b2Vec2} centerOffset
 */
 eightball.PoolTable._createTable = function(world, centerOffset) {
   var table = new b2BodyDef();
@@ -343,7 +344,8 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
 
 /**
  @private
- @param {b2World} world
+ @param {!b2World} world
+ @param {!b2Vec2} centerOffset
  */
 eightball.PoolTable._createPockets = function(world, centerOffset) {
   var pockets = new Array(6);
@@ -373,7 +375,7 @@ eightball.PoolTable._createPockets = function(world, centerOffset) {
 
 /**
  @private
- @param {b2World} world
+ @param {!b2World} world
  @param {number} x
  @param {number} y
  */
@@ -392,7 +394,7 @@ eightball.PoolTable._createPocket = function(world, x, y) {
 
 /**
  @private
- @param {b2World} world
+ @param {!b2World} world
  @param {number} x
  @param {number} y
  */
@@ -415,28 +417,26 @@ eightball.PoolTable._createBall = function(world, x, y) {
   @private
 */
 eightball.PoolTable.prototype._step = function() {
-  this.m_world.Step(eightball.PoolTable.s_secondsPerFrame, 1);
+  var delta;
+  if(this.m_lastStep > 0){
+    delta = eightball.PoolTable._floatSeconds() - this.m_lastStep;
+  }
+  else{
+    delta = eightball.PoolTable.s_secondsPerFrame;
+  }
+
+  this.m_world.Step(delta, 1);
   this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
   this._drawWorld();
   goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable.s_millisecondsPerFrame);
+
+  this.m_lastStep = eightball.PoolTable._floatSeconds();
 };
 
 /**
   @private
 */
 eightball.PoolTable.prototype._drawWorld = function() {
-  //    if (this.m_lastMouse) {
-  //        this.m_cueLine = new goog.math.Line(this.m_lastMouse.x, this.m_lastMouse.y, this.m_theCueBall.GetCenterPosition().x, this.m_theCueBall.GetCenterPosition().y);
-  //    } else {
-  //        this.m_cueLine = null;
-  //    }
-  //    if (this.m_cueLine) {
-  //        this.m_canvasContext.strokeStyle = '#ffffff';
-  //        this.m_canvasContext.beginPath();
-  //        this.m_canvasContext.moveTo(this.m_cueLine.x0, this.m_cueLine.y0);
-  //        this.m_canvasContext.lineTo(this.m_cueLine.x1, this.m_cueLine.y1);
-  //        this.m_canvasContext.stroke();
-  //    }
   for (var b = this.m_world.m_bodyList; b; b = b.m_next) {
     var fill;
     if (b.userData == 0) {
@@ -498,6 +498,20 @@ eightball.PoolTable._drawShape = function(shape, context) {
   }
   context.fill();
   context.stroke();
+};
+
+/**
+ @private
+ @type {number}
+ */
+eightball.PoolTable.prototype.m_lastStep = 0;
+
+/**
+  @private
+  @returns {number}
+*/
+eightball.PoolTable._floatSeconds = function(){
+  return goog.now() / 1000.0;
 };
 
 /**
