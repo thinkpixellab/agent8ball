@@ -71,20 +71,21 @@ def get_closure_inputs():
 def get_command_with_inputs():
   return get_closure_base() + get_closure_inputs()
 
-def compile():
+def compile(debug=False):
   command = get_command_with_inputs()
   
   command += ["--compilation_level", "ADVANCED_OPTIMIZATIONS"] # SIMPLE_OPTIMIZATIONS
   command += ["--summary_detail_level", "3"]
-  # debug makes var names readabel, but was causing weirdness..
-  # command += " --debug true"
   command += ["--warning_level", "VERBOSE"]
   # make sure everything is in a good order
   command += ["--jscomp_dev_mode", "EVERY_PASS"]
   command += ["--js_output_file", compiled_js_path]
-  
-  # command += " --formatting PRETTY_PRINT"
-  # command += " --formatting PRINT_INPUT_DELIMITER"
+
+  if(debug):
+    # debug makes var names readable, but was causing weirdness..
+    command += ["--debug", "true"]
+    command += ["--formatting", "PRETTY_PRINT"]
+    command += ["--formatting", "PRINT_INPUT_DELIMITER"]
   
   return command
 
