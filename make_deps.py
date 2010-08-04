@@ -35,10 +35,6 @@ def compile():
 
 def get_js_files():
   files = []
-  # add js files in goog dir, without files in demos
-  for file in ClosureShared.find_files(closure_path, '*.js'):
-    if(file.find('demos') == -1):
-      files.append(file)
   
   # add all js files in each of js_dirs
   for js_dir in js_dirs:
