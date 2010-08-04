@@ -5,11 +5,12 @@ import os
 import fnmatch
 import subprocess
 import logging
+from _tools import ClosureShared
 
 js_path = "javascripts"
 closure_path = os.path.join(js_path, 'closure-library','closure')
 application_js_path = os.path.join(js_path, 'application.js')
-js_dirs = ['box2d','eightball','helpers']
+js_dirs = map(lambda dir: os.path.join(js_path, dir), ['box2d','eightball','helpers'])
 
 # deps
 calcdeps_py_path = os.path.join(closure_path, "bin", "calcdeps.py")
@@ -21,88 +22,37 @@ jar_path = os.path.join('_tools', 'closure_compiler', 'compiler.jar')
 extern_dir = os.path.join(js_path, 'externs')
 
 def make_deps():
-  
-  command = ['python']
-  command += [calcdeps_py_path]
-  
-  command += ["--output_file", deps_js_path]
-  command += ["--d", closure_path]
-  command += ["-o", "deps"]
-  
-  command += ["-i", application_js_path]
-  
-  for js_dir in js_dirs:
-    command += ["-p", os.path.join(js_path, js_dir)]
-  
-  return command
+  return ClosureShared.make_deps(calcdeps_py_path, deps_js_path, closure_path, application_js_path, js_dirs)
 
-def get_closure_base():
-  return ["java", "-jar", jar_path]
+def compile():
+  js_files = get_js_files()
+  
+  extern_files = []
+  for file in ClosureShared.find_files(extern_dir, '*.js'):
+    extern_files.append(file)
+  
+  return ClosureShared.compile(jar_path, closure_path, js_files, extern_files, compiled_js_path)
 
-def get_closure_inputs():
-  command_inputs = []
+def get_js_files():
   files = []
   # add js files in goog dir, without files in demos
-  for file in find_files(closure_path, '*.js'):
+  for file in ClosureShared.find_files(closure_path, '*.js'):
     if(file.find('demos') == -1):
       files.append(file)
   
   # add all js files in each of js_dirs
   for js_dir in js_dirs:
-    js_dir = os.path.join(js_path, js_dir)
-    for file in find_files(js_dir, '*.js'):
+    for file in ClosureShared.find_files(js_dir, '*.js'):
       files.append(file)
   
   files.append(os.path.join(js_path, 'application.js'))
-  
-  for file in files:
-    command_inputs += ["--js", file]
-  
-  externs = []
-  for file in find_files(extern_dir, '*.js'):
-    externs.append(file)
-  
-  for file in externs:
-    command_inputs += ["--externs", file]
-  
-  command_inputs += ["--manage_closure_dependencies", "true"]
-  return command_inputs
-
-def get_command_with_inputs():
-  return get_closure_base() + get_closure_inputs()
-
-def compile(debug=False):
-  command = get_command_with_inputs()
-  
-  command += ["--compilation_level", "ADVANCED_OPTIMIZATIONS"] # SIMPLE_OPTIMIZATIONS
-  command += ["--summary_detail_level", "3"]
-  command += ["--warning_level", "VERBOSE"]
-  # make sure everything is in a good order
-  command += ["--jscomp_dev_mode", "EVERY_PASS"]
-  command += ["--js_output_file", compiled_js_path]
-
-  if(debug):
-    # debug makes var names readable, but was causing weirdness..
-    command += ["--debug", "true"]
-    command += ["--formatting", "PRETTY_PRINT"]
-    command += ["--formatting", "PRINT_INPUT_DELIMITER"]
-  
-  return command
-
-def find_files(directory, pattern):
-    for root, dirs, files in os.walk(directory):
-        for basename in files:
-            if fnmatch.fnmatch(basename, pattern):
-                filename = os.path.join(root, basename)
-                yield filename
+  return files
 
 def print_help():
-  command = get_closure_base()
-  command.append("--help")
-  return command
+  return ClosureShared.print_help(jar_path)
 
 def main():
-  logging.basicConfig(format='make_deps.py: %(message)s', level=logging.INFO)
+  logging.basicConfig(format='%(message)s', level=logging.INFO)
   args = compile()
   logging.info('Running the following command: %s', ' '.join(args))
   proc = subprocess.Popen(args, stdout=subprocess.PIPE)
