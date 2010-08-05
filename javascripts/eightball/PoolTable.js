@@ -18,30 +18,30 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
 
   // variables
   /**
-    @private
-    @type {goog.math.Vec2}
-  */
+   @private
+   @type {goog.math.Vec2}
+   */
   this.m_lastMouse = null;
   /**
-    @private
-    @type {goog.math.Vec2}
-  */
+   @private
+   @type {goog.math.Vec2}
+   */
   this.m_lastMouseDown = null;
   /**
-    @private
-    @type {goog.math.Line}
-  */
+   @private
+   @type {goog.math.Line}
+   */
   this.m_cueLine = null;
   /**
-    @private
-    @type {number}
-  */
+   @private
+   @type {number}
+   */
   this.m_strikePower = 0;
   /**
-    will be a number from 0 to 1 indicating strike power
-    @private
-    @type {boolean}
-  */
+   will be a number from 0 to 1 indicating strike power
+   @private
+   @type {boolean}
+   */
   this.m_isCueVisible = true;
 
   // get a local reference to this
@@ -149,10 +149,10 @@ eightball.PoolTable.prototype._strikeCue = function() {
 };
 
 /**
-  @private
-  @param {goog.math.Vec2=} mousePoint
-  @param {number=} cueOffset
-*/
+ @private
+ @param {goog.math.Vec2=} mousePoint
+ @param {number=} cueOffset
+ */
 eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
   if (this.m_cueImage != null && this.m_cueImage.complete) {
 
@@ -182,8 +182,8 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
 };
 
 /**
-  @private
-*/
+ @private
+ */
 eightball.PoolTable.prototype._clearCueCanvas = function() {
   // reset the current transform to the identity and the clear the entire thing
   this.m_cueCanvasContext.setTransform(1, 0, 0, 1, 0, 0);
@@ -191,8 +191,8 @@ eightball.PoolTable.prototype._clearCueCanvas = function() {
 };
 
 /**
-  @private
-*/
+ @private
+ */
 eightball.PoolTable.prototype._gameCoordinatesToAbsolute = function(x, y) {
 
   // translate our game coordinates (where 0,0 is in the center of
@@ -211,8 +211,8 @@ eightball.PoolTable.prototype._gameCoordinatesToAbsolute = function(x, y) {
 };
 
 /**
-  @private
-*/
+ @private
+ */
 eightball.PoolTable.prototype._getLineAngle = function(line) {
   var dX = line.x0 - line.x1;
   var dY = line.y1 - line.y0;
@@ -222,8 +222,8 @@ eightball.PoolTable.prototype._getLineAngle = function(line) {
 };
 
 /**
-  @private
-*/
+ @private
+ */
 eightball.PoolTable.prototype._getLineAngleDegrees = function(line) {
   var r = this._getLineAngle(line);
   var d = r * 180 / Math.PI;
@@ -232,8 +232,8 @@ eightball.PoolTable.prototype._getLineAngleDegrees = function(line) {
 };
 
 /**
-  @private
-*/
+ @private
+ */
 eightball.PoolTable.prototype._createWorld = function() {
 
   var worldAABB = new b2AABB();
@@ -253,9 +253,9 @@ eightball.PoolTable.prototype._createWorld = function() {
 };
 
 /**
-  @private
-  @param {!b2World} world
-*/
+ @private
+ @param {!b2World} world
+ */
 eightball.PoolTable._setupBalls = function(world) {
   var balls = new Array(16);
   var index = 0;
@@ -282,10 +282,10 @@ eightball.PoolTable._setupBalls = function(world) {
 };
 
 /**
-  @private
-  @param {!b2World} world
-  @param {!b2Vec2} centerOffset
-*/
+ @private
+ @param {!b2World} world
+ @param {!b2Vec2} centerOffset
+ */
 eightball.PoolTable._createTable = function(world, centerOffset) {
   var table = new b2BodyDef();
   table.restitution = 1;
@@ -402,7 +402,7 @@ eightball.PoolTable._createBall = function(world, x, y) {
   var ballSd = new b2CircleDef();
   ballSd.density = 4.0;
   ballSd.radius = eightball.PoolTable.s_ballDiameter * 2;
-  ballSd.restitution = .95;
+  ballSd.restitution = 0.95;
   ballSd.friction = 0.2;
 
   var ballBd = new b2BodyDef();
@@ -414,14 +414,13 @@ eightball.PoolTable._createBall = function(world, x, y) {
 };
 
 /**
-  @private
-*/
+ @private
+ */
 eightball.PoolTable.prototype._step = function() {
   var delta;
-  if(this.m_lastStep > 0){
+  if (this.m_lastStep > 0) {
     delta = eightball.PoolTable._floatSeconds() - this.m_lastStep;
-  }
-  else{
+  } else {
     delta = eightball.PoolTable.s_secondsPerFrame;
   }
 
@@ -434,8 +433,8 @@ eightball.PoolTable.prototype._step = function() {
 };
 
 /**
-  @private
-*/
+ @private
+ */
 eightball.PoolTable.prototype._drawWorld = function() {
   for (var b = this.m_world.m_bodyList; b; b = b.m_next) {
     var fill;
@@ -461,8 +460,8 @@ eightball.PoolTable.prototype._drawWorld = function() {
 };
 
 /**
-  @private
-*/
+ @private
+ */
 eightball.PoolTable._drawShape = function(shape, context) {
   context.beginPath();
 
@@ -507,10 +506,10 @@ eightball.PoolTable._drawShape = function(shape, context) {
 eightball.PoolTable.prototype.m_lastStep = 0;
 
 /**
-  @private
-  @returns {number}
-*/
-eightball.PoolTable._floatSeconds = function(){
+ @private
+ @returns {number}
+ */
+eightball.PoolTable._floatSeconds = function() {
   return goog.now() / 1000.0;
 };
 
