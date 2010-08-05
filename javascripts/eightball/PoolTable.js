@@ -417,16 +417,13 @@ eightball.PoolTable._createBall = function(world, x, y) {
  @private
  */
 eightball.PoolTable.prototype._step = function() {
-  var delta;
   if (this.m_lastStep > 0) {
-    delta = eightball.PoolTable._floatSeconds() - this.m_lastStep;
-  } else {
-    delta = eightball.PoolTable.s_secondsPerFrame;
+    var delta = eightball.PoolTable._floatSeconds() - this.m_lastStep;
+    this.m_world.Step(delta, 1);
+    this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
+    this._drawWorld();
   }
 
-  this.m_world.Step(delta, 1);
-  this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
-  this._drawWorld();
   goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable.s_millisecondsPerFrame);
 
   this.m_lastStep = eightball.PoolTable._floatSeconds();
@@ -546,14 +543,7 @@ eightball.PoolTable.s_matrixFlipVertical = new goog.math.Matrix([
  @const
  @type {number}
  */
-eightball.PoolTable.s_secondsPerFrame = 1.0 / 60;
-
-/**
- @private
- @const
- @type {number}
- */
-eightball.PoolTable.s_millisecondsPerFrame = eightball.PoolTable.s_secondsPerFrame * 1000;
+eightball.PoolTable.s_millisecondsPerFrame = 1000.0 / 60.0;
 
 /**
  @private
