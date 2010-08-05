@@ -499,66 +499,35 @@ eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
  */
 eightball.PoolTable.prototype._drawWorld = function() {
   for (var b = this.m_world.m_bodyList; b; b = b.m_next) {
-    var fill;
-    if (b.GetUserData() == 0) {
+    var userData = b.GetUserData();
+    if (goog.isNumber(userData)) {
       this.m_canvasContext.strokeStyle = 'black';
       this.m_canvasContext.fillStyle = "white";
-    } else if (b.GetUserData() == eightball.PoolTable.s_bodyTypes.TABLE) {
-      this.m_canvasContext.strokeStyle = 'transparent';
-      //this.m_canvasContext.fillStyle = "green";
-      this.m_canvasContext.fillStyle = "rgba(0,255,0,.5)";
-    } else if (b.GetUserData() == eightball.PoolTable.s_bodyTypes.POCKET) {
-      this.m_canvasContext.strokeStyle = 'white';
-      this.m_canvasContext.fillStyle = "rgba(255,0,0,.5)";
-    } else {
-      this.m_canvasContext.strokeStyle = 'white';
-      this.m_canvasContext.fillStyle = 'transparent';
-    }
-
-    for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
-      eightball.PoolTable._drawShape(s, this.m_canvasContext);
+      this._drawBall(b);
     }
   }
 };
 
 /**
- @private
- */
-eightball.PoolTable._drawShape = function(shape, context) {
+  @private
+  @param {!b2Body} ballBody
+*/
+eightball.PoolTable.prototype._drawBall = function(ballBody) {
+  var shape = ballBody.GetShapeList();
+  // TODO: why is this *ever* null? WEIRD!!
+  if (shape != null) {
+    var ctx = this.m_canvasContext;
 
-  var i, v;
-  switch (shape.m_type) {
-  case b2Shape.e_circleShape:
-    {
-      context.beginPath();
-      var circle = shape;
-      var pos = circle.m_position;
-      var r = circle.m_radius;
-
-      context.arc(circle.m_position.x, circle.m_position.y, circle.m_radius, 0, 2 * Math.PI, false);
-
-      // draw radius
-      context.moveTo(pos.x, pos.y);
-      var ax = circle.m_R.col1;
-      var pos2 = new b2Vec2(pos.x + r * ax.x, pos.y + r * ax.y);
-      context.lineTo(pos2.x, pos2.y);
-      context.fill();
-      context.stroke();
+    ctx.strokeStyle = 'black';
+    if (ballBody.GetUserData() == 0) {
+      ctx.fillStyle = 'white';
+    } else {
+      ctx.fillStyle = 'gray';
     }
-    break;
-    /*
-  case b2Shape.e_polyShape:
-    {
-      var poly = shape;
-      var tV = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
-      context.moveTo(tV.x, tV.y);
-      for (i = 0; i < poly.m_vertexCount; i++) {
-        v = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[i]));
-        context.lineTo(v.x, v.y);
-      }
-      context.lineTo(tV.x, tV.y);
-    }
-    break;*/
+    ctx.beginPath();
+    ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
+    ctx.fill();
+    ctx.stroke();
   }
 };
 
