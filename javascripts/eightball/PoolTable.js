@@ -402,14 +402,14 @@ eightball.PoolTable._createBall = function(world, x, y) {
   var ballSd = new b2CircleDef();
   ballSd.density = 4.0;
   ballSd.radius = eightball.PoolTable.s_ballDiameter * 2;
-  ballSd.restitution = 1;
+  ballSd.restitution = .95;
   ballSd.friction = 0.2;
 
   var ballBd = new b2BodyDef();
   ballBd.AddShape(ballSd);
   ballBd.position.Set(x, y);
-  ballBd.linearDamping = 0.006;
-  ballBd.angularDamping = 0.01;
+  ballBd.linearDamping = 0.02;
+  ballBd.angularDamping = 0.015;
   return world.CreateBody(ballBd);
 };
 
