@@ -217,14 +217,6 @@ b2Body.prototype = {
     return this.m_R;
   },
 
-  // Set/Get the linear velocity of the center of mass.
-  SetLinearVelocity: function(v) {
-    this.m_linearVelocity.SetV(v);
-  },
-  GetLinearVelocity: function() {
-    return this.m_linearVelocity;
-  },
-
   // Set/Get the angular velocity.
   SetAngularVelocity: function(w) {
     this.m_angularVelocity = w;
@@ -431,6 +423,20 @@ b2Body.prototype = {
 
   m_sleepTime: null
 };
+
+/**
+  @param {!b2Vec2} v
+*/
+b2Body.prototype.SetLinearVelocity= function(v) {
+  this.m_linearVelocity.SetV(v);
+};
+/**
+  @returns {!b2Vec2}
+*/
+b2Body.prototype.GetLinearVelocity= function() {
+  return this.m_linearVelocity;
+};
+
 b2Body.e_staticFlag = 0x0001;
 b2Body.e_frozenFlag = 0x0002;
 b2Body.e_islandFlag = 0x0004;

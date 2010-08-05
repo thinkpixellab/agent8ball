@@ -256,17 +256,31 @@ eightball.PoolTable.prototype._createWorld = function() {
   var doSleep = true;
   this.m_world = new b2World(worldAABB, gravity, doSleep);
 
-  var tableObject = eightball.PoolTable._createTable(this.m_world, this.m_centerOffset);
-
-  var pocket = eightball.PoolTable._createPockets(this.m_world, this.m_centerOffset);
+  eightball.PoolTable._createTable(this.m_world, this.m_centerOffset);
+  eightball.PoolTable._createPockets(this.m_world, this.m_centerOffset);
   this.rackEm();
 };
 
 eightball.PoolTable.prototype.rackEm = function() {
   this._clearTable();
+
+  this._rackEm();
+  //this._testRack();
+};
+
+eightball.PoolTable.prototype._testRack = function() {
   var index = 0;
   var ballRadius = eightball.PoolTable.s_ballDiameter * 2;
+  this.m_balls.push(this._createBall(index, -0.5 * eightball.PoolTable.s_width, 0));
+  this.m_theCueBall = this.m_balls[0];
+  index++;
 
+  this.m_theCueBall.SetLinearVelocity(new b2Vec2(150, 150));
+};
+
+eightball.PoolTable.prototype._rackEm = function() {
+  var index = 0;
+  var ballRadius = eightball.PoolTable.s_ballDiameter * 2;
   this.m_balls.push(this._createBall(index, -0.5 * eightball.PoolTable.s_width, 0));
   this.m_theCueBall = this.m_balls[0];
   index++;
