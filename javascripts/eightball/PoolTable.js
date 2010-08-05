@@ -525,12 +525,12 @@ eightball.PoolTable.prototype._drawWorld = function() {
  @private
  */
 eightball.PoolTable._drawShape = function(shape, context) {
-  context.beginPath();
 
   var i, v;
   switch (shape.m_type) {
   case b2Shape.e_circleShape:
     {
+      context.beginPath();
       var circle = shape;
       var pos = circle.m_position;
       var r = circle.m_radius;
@@ -542,8 +542,11 @@ eightball.PoolTable._drawShape = function(shape, context) {
       var ax = circle.m_R.col1;
       var pos2 = new b2Vec2(pos.x + r * ax.x, pos.y + r * ax.y);
       context.lineTo(pos2.x, pos2.y);
+      context.fill();
+      context.stroke();
     }
     break;
+    /*
   case b2Shape.e_polyShape:
     {
       var poly = shape;
@@ -555,10 +558,8 @@ eightball.PoolTable._drawShape = function(shape, context) {
       }
       context.lineTo(tV.x, tV.y);
     }
-    break;
+    break;*/
   }
-  context.fill();
-  context.stroke();
 };
 
 /**
