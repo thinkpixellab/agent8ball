@@ -66,6 +66,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
     _this._updateCue();
   };
   this.m_cueImage.src = "images/cue.png";
+  
+  this.m_ballVignetteImage = new Image();
+  this.m_ballVignetteImage.src = "images/ballvignette.png";
 
   // get local references for our canvas elements
   this.m_canvasElement = canvasElement;
@@ -518,7 +521,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   if (shape != null) {
     var ctx = this.m_canvasContext;
 
-    ctx.strokeStyle = 'black';
+//    ctx.strokeStyle = 'rgb(170,170,170)';
     /*if (ballBody.GetUserData() == 0) {
       ctx.fillStyle = 'white';
     } else {
@@ -555,7 +558,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 			ctx.fillStyle = 'rgb(127,10,19)';
 			break;
 		case 8:
-			ctx.fillStyle = 'rgb(37,25,29)';
+			ctx.fillStyle = 'rgb(34,34,34)';
 			break;
 		default:
 			ctx.fillStyle = 'white';
@@ -563,7 +566,9 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     ctx.beginPath();
     ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
     ctx.fill();	
-    ctx.stroke();
+	//ctx.stroke();
+
+	ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
   }
 };
 
