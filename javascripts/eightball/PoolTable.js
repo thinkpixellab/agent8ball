@@ -519,14 +519,50 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     var ctx = this.m_canvasContext;
 
     ctx.strokeStyle = 'black';
-    if (ballBody.GetUserData() == 0) {
+    /*if (ballBody.GetUserData() == 0) {
       ctx.fillStyle = 'white';
     } else {
       ctx.fillStyle = 'gray';
-    }
+    }*/
+	switch(ballBody.GetUserData())
+	{
+		case 1:
+		case 9:
+			ctx.fillStyle = 'rgb(250,233,0)';
+			break;
+		case 2:
+		case 10:
+			ctx.fillStyle = 'rgb(0,32,168)';
+			break;
+		case 3:
+		case 11:
+			ctx.fillStyle = 'rgb(252,0,31)';
+			break;
+		case 4:
+		case 12:
+			ctx.fillStyle = 'rgb(52,31,134)';
+			break;
+		case 5:
+		case 13:
+			ctx.fillStyle = 'rgb(250,149,67)';
+			break;
+		case 6:
+		case 14:
+			ctx.fillStyle = 'rgb(9,123,74)';
+			break;
+		case 7:
+		case 15:
+			ctx.fillStyle = 'rgb(127,10,19)';
+			break;
+		case 8:
+			ctx.fillStyle = 'rgb(37,25,29)';
+			break;
+		default:
+			ctx.fillStyle = 'white';
+	}
     ctx.beginPath();
     ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
-    ctx.fill();
+    ctx.fill();	
     ctx.stroke();
   }
 };
