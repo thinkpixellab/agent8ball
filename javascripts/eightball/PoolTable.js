@@ -1,6 +1,7 @@
 goog.provide('eightball.PoolTable');
 
 goog.require('pixelLab.Debug');
+goog.require('goog.array');
 goog.require('goog.math.Matrix');
 goog.require('goog.math.Line');
 goog.require('goog.math.Vec2');
@@ -244,7 +245,6 @@ eightball.PoolTable.prototype._createWorld = function() {
   this.m_world = new b2World(worldAABB, gravity, doSleep);
 
   var tableObject = eightball.PoolTable._createTable(this.m_world, this.m_centerOffset);
-  tableObject.userData = eightball.PoolTable.s_bodyTypes.TABLE;
 
   var pocket = eightball.PoolTable._createPockets(this.m_world, this.m_centerOffset);
 
@@ -261,8 +261,7 @@ eightball.PoolTable._setupBalls = function(world) {
   var index = 0;
   var ballRadius = eightball.PoolTable.s_ballDiameter * 2;
 
-  balls[index] = eightball.PoolTable._createBall(world, -0.5 * eightball.PoolTable.s_width, 0);
-  balls[index].userData = index;
+  balls[index] = eightball.PoolTable._createBall(world, index, -0.5 * eightball.PoolTable.s_width, 0);
   index++;
 
   for (var col = 0; col < 5; col++) {
@@ -272,8 +271,7 @@ eightball.PoolTable._setupBalls = function(world) {
     var yStart = -col * ballRadius;
 
     for (var row = 0; row < ballCount; row++) {
-      balls[index] = eightball.PoolTable._createBall(world, x, yStart + row * ballRadius * 2);
-      balls[index].userData = index;
+      balls[index] = eightball.PoolTable._createBall(world, index, x, yStart + row * ballRadius * 2);
       index++;
     }
   }
@@ -290,6 +288,7 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
   var table = new b2BodyDef();
   table.restitution = 1;
   table.friction = 1.0;
+  table.userData = eightball.PoolTable.s_bodyTypes.TABLE;
 
   var side;
   var points;
@@ -386,9 +385,9 @@ eightball.PoolTable._createPocket = function(world, x, y) {
   var pocketBd = new b2BodyDef();
   pocketBd.AddShape(pocketSd);
   pocketBd.position.Set(x, y);
+  pocketBd.userData = eightball.PoolTable.s_bodyTypes.POCKET;
 
   var body = world.CreateBody(pocketBd);
-  body.userData = eightball.PoolTable.s_bodyTypes.POCKET;
   return body;
 };
 
@@ -398,7 +397,7 @@ eightball.PoolTable._createPocket = function(world, x, y) {
  @param {number} x
  @param {number} y
  */
-eightball.PoolTable._createBall = function(world, x, y) {
+eightball.PoolTable._createBall = function(world, index, x, y) {
   var ballSd = new b2CircleDef();
   ballSd.density = 4.0;
   ballSd.radius = eightball.PoolTable.s_ballDiameter * 2;
@@ -410,6 +409,7 @@ eightball.PoolTable._createBall = function(world, x, y) {
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.02;
   ballBd.angularDamping = 0.015;
+  ballBd.userData = index;
   return world.CreateBody(ballBd);
 };
 
@@ -419,9 +419,10 @@ eightball.PoolTable._createBall = function(world, x, y) {
 eightball.PoolTable.prototype._step = function() {
   if (this.m_lastStep > 0) {
     var delta = eightball.PoolTable._floatSeconds() - this.m_lastStep;
-    this.m_world.Step(delta, 1);
+    var pairs = this.m_world.Step(delta, 1);
     this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
     this._drawWorld();
+    this._processPairs(pairs);
   }
 
   goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable.s_millisecondsPerFrame);
@@ -431,18 +432,52 @@ eightball.PoolTable.prototype._step = function() {
 
 /**
  @private
+ @param {!Array.<b2Pair>} pairs
+ */
+eightball.PoolTable.prototype._processPairs = function(pairs) {
+  var _this = this;
+  goog.array.forEach(pairs, function(pair, index, array) {
+    var pocket = null,
+      ball = null;
+    if (pair.m_shape1.m_body.GetUserData() == eightball.PoolTable.s_bodyTypes.POCKET) {
+      pocket = pair.m_shape1.m_body;
+      ball = pair.m_shape2.m_body;
+    } else if (pair.m_shape2.m_body.GetUserData() == eightball.PoolTable.s_bodyTypes.POCKET) {
+      pocket = pair.m_shape2.m_body;
+      ball = pair.m_shape1.m_body;
+    }
+
+    if (pocket != null) {
+      _this._processPocket(pocket, ball);
+    }
+
+  });
+};
+
+/**
+ @private
+ @param {!b2Body} pocketBody
+ @param {!b2Body} ballBody
+ */
+eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
+  this.m_world.DestroyBody(ballBody);
+  // TODO: RAISE an event!!
+};
+
+/**
+ @private
  */
 eightball.PoolTable.prototype._drawWorld = function() {
   for (var b = this.m_world.m_bodyList; b; b = b.m_next) {
     var fill;
-    if (b.userData == 0) {
+    if (b.GetUserData() == 0) {
       this.m_canvasContext.strokeStyle = 'black';
       this.m_canvasContext.fillStyle = "white";
-    } else if (b.userData == eightball.PoolTable.s_bodyTypes.TABLE) {
+    } else if (b.GetUserData() == eightball.PoolTable.s_bodyTypes.TABLE) {
       this.m_canvasContext.strokeStyle = 'transparent';
       //this.m_canvasContext.fillStyle = "green";
       this.m_canvasContext.fillStyle = "rgba(0,255,0,.5)";
-    } else if (b.userData == eightball.PoolTable.s_bodyTypes.POCKET) {
+    } else if (b.GetUserData() == eightball.PoolTable.s_bodyTypes.POCKET) {
       this.m_canvasContext.strokeStyle = 'white';
       this.m_canvasContext.fillStyle = "rgba(255,0,0,.5)";
     } else {
