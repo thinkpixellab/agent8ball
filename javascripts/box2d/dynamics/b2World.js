@@ -33,12 +33,18 @@ goog.require('b2WorldListener');
 b2World = function(worldAABB, gravity, doSleep) {
   // initialize instance variables for references
   this.m_step = new b2TimeStep();
-  this.m_contactManager = new b2ContactManager();
+
+  /**
+   @private
+   @type {!b2ContactManager}
+   */
+  this.m_contactManager = new b2ContactManager(this);
 
   this.m_listener = null;
   this.m_filter = b2CollisionFilter.b2_defaultFilter;
 
   this.m_bodyList = null;
+
   this.m_contactList = null;
   this.m_jointList = null;
 
@@ -446,10 +452,8 @@ b2World.prototype.GetContactList = function() {
 b2World.prototype.m_blockAllocator = null;
 b2World.prototype.m_stackAllocator = null;
 b2World.prototype.m_broadPhase = null;
-b2World.prototype.m_contactManager = new b2ContactManager();
 
 b2World.prototype.m_bodyList = null;
-b2World.prototype.m_contactList = null;
 b2World.prototype.m_jointList = null;
 
 b2World.prototype.m_bodyCount = 0;
@@ -465,7 +469,6 @@ b2World.prototype.m_allowSleep = null;
 b2World.prototype.m_groundBody = null;
 
 b2World.prototype.m_listener = null;
-b2World.prototype.m_filter = null;
 
 b2World.prototype.m_positionIterationCount = 0;
 

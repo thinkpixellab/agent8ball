@@ -43,8 +43,8 @@ b2Shape = function(def, body) {
 
   this.m_maxRadius = 0.0;
 
-  this.m_categoryBits = def.categoryBits;
-  this.m_maskBits = def.maskBits;
+  this.categoryBits = def.categoryBits;
+  this.maskBits = def.maskBits;
   this.m_groupIndex = def.groupIndex;
 };
 
@@ -120,8 +120,8 @@ b2Shape.prototype = {
   m_maxRadius: null,
 
   m_proxyId: 0,
-  m_categoryBits: 0,
-  m_maskBits: 0,
+  categoryBits: 0,
+  maskBits: 0,
   m_groupIndex: 0
 
   // b2ShapeType

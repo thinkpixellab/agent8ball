@@ -50,8 +50,8 @@ var b2PolyShape = function(def, body, newOrigin) {
 
   this.m_maxRadius = 0.0;
 
-  this.m_categoryBits = def.categoryBits;
-  this.m_maskBits = def.maskBits;
+  this.categoryBits = def.categoryBits;
+  this.maskBits = def.maskBits;
   this.m_groupIndex = def.groupIndex;
   //
   // initialize instance variables for references

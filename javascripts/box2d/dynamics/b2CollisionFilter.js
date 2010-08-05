@@ -23,14 +23,24 @@ goog.provide('b2CollisionFilter');
  */
 b2CollisionFilter = function() {};
 
-// Return true if contact calculations should be performed between these two shapes.
+
+/**
+  Return true if contact calculations should be performed between these two shapes.
+  @param {!b2Shape} shape1
+  @param {!b2Shape} shape2
+  @returns {boolean}
+*/
 b2CollisionFilter.prototype.ShouldCollide = function(shape1, shape2) {
   if (shape1.m_groupIndex == shape2.m_groupIndex && shape1.m_groupIndex != 0) {
     return shape1.m_groupIndex > 0;
   }
 
-  var collide = (shape1.m_maskBits & shape2.m_categoryBits) != 0 && (shape1.m_categoryBits & shape2.m_maskBits) != 0;
+  var collide = (shape1.maskBits & shape2.categoryBits) != 0 && (shape1.categoryBits & shape2.maskBits) != 0;
   return collide;
 };
 
+/**
+  @type {!b2CollisionFilter}
+  @const
+*/
 b2CollisionFilter.b2_defaultFilter = new b2CollisionFilter();

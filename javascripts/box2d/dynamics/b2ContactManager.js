@@ -24,16 +24,21 @@ goog.require('b2NullContact');
 goog.require('b2ContactFactory');
 
 /** 
-  @constructor
-  @extends {b2PairCallback}
-*/
-b2ContactManager = function() {
+ @constructor
+ @extends {b2PairCallback}
+ @param {!b2World} world
+ */
+b2ContactManager = function(world) {
   // The constructor for b2PairCallback
   //
   // initialize instance variables for references
   this.m_nullContact = new b2NullContact();
   //
-  this.m_world = null;
+  /**
+   @private
+   @type {!b2World}
+   */
+  this.m_world = world;
   this.m_destroyImmediate = false;
 };
 
@@ -283,8 +288,3 @@ b2ContactManager.prototype.Collide = function() {
     }
   }
 };
-
-// This lets us provide broadphase proxy pair user data for
-// contacts that shouldn't exist.
-b2ContactManager.prototype.m_nullContact = new b2NullContact();
-b2ContactManager.prototype.m_destroyImmediate = null;
