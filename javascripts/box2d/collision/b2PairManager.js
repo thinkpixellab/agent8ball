@@ -139,7 +139,7 @@ b2PairManager.prototype = {
 
     var removeCount = 0;
 
-    var proxies = this.m_broadPhase.m_proxyPool;
+    var proxies = this.m_broadPhase.proxyPool;
 
     for (i = 0; i < this.m_pairBufferCount; ++i) {
       var pair = this.Find(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);

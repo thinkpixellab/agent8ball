@@ -24,14 +24,14 @@ extern_dir = os.path.join(js_path, 'externs')
 def make_deps():
   return ClosureShared.make_deps(calcdeps_py_path, deps_js_path, closure_path, application_js_path, js_dirs)
 
-def compile():
+def compile(debug=False):
   js_files = get_js_files()
   
   extern_files = []
   for file in ClosureShared.find_files(extern_dir, '*.js'):
     extern_files.append(file)
   
-  return ClosureShared.compile(jar_path, closure_path, js_files, extern_files, compiled_js_path)
+  return ClosureShared.compile(jar_path, closure_path, js_files, extern_files, compiled_js_path, debug)
 
 def get_js_files():
   files = []

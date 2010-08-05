@@ -41,7 +41,10 @@ b2World = function(worldAABB, gravity, doSleep) {
   this.m_contactManager = new b2ContactManager(this);
 
   this.m_listener = null;
-  this.m_filter = b2CollisionFilter.b2_defaultFilter;
+  /**
+    @type {!b2CollisionFilter}
+  */
+  this.collisionFilter = b2CollisionFilter.b2_defaultFilter;
 
   this.m_bodyList = null;
 
@@ -75,10 +78,14 @@ b2World.prototype.SetListener = function(listener) {
   this.m_listener = listener;
 };
 
-// Register a collision filter to provide specific control over collision.
-// Otherwise the default filter is used (b2CollisionFilter).
+
+/**
+  Register a collision filter to provide specific control over collision.
+  Otherwise the default filter is used (b2CollisionFilter).
+  @param {!b2CollisionFilter} filter
+*/
 b2World.prototype.SetFilter = function(filter) {
-  this.m_filter = filter;
+  this.collisionFilter = filter;
 };
 
 // Create and destroy rigid bodies. Destruction is deferred until the

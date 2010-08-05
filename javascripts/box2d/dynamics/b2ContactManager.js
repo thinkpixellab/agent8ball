@@ -44,8 +44,13 @@ b2ContactManager = function(world) {
 
 goog.inherits(b2ContactManager, b2PairCallback);
 
-// This is a callback from the broadphase when two AABB proxies begin
-// to overlap. We create a b2Contact to manage the narrow phase.
+/**
+  // This is a callback from the broadphase when two AABB proxies begin
+  // to overlap. We create a b2Contact to manage the narrow phase.
+  @param {!b2Shape} proxyUserData1
+  @param {!b2Shape} proxyUserData2
+  @returns {!b2Contact}
+*/
 b2ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserData2) {
   var shape1 = proxyUserData1;
   var shape2 = proxyUserData2;
@@ -65,7 +70,7 @@ b2ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserData2) 
     return this.m_nullContact;
   }
 
-  if (this.m_world.m_filter != null && this.m_world.m_filter.ShouldCollide(shape1, shape2) == false) {
+  if (this.m_world.collisionFilter.ShouldCollide(shape1, shape2) == false) {
     return this.m_nullContact;
   }
 

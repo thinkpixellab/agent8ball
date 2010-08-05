@@ -49,7 +49,11 @@ Bullet (http:/www.bulletphysics.com).
 b2BroadPhase = function(worldAABB, callback) {
   // initialize instance variables for references
   this.m_pairManager = new b2PairManager();
-  this.m_proxyPool = new Array(b2Settings.b2_maxPairs);
+
+  /**
+    @type {!Array.<b2Proxy>}
+  */
+  this.proxyPool = new Array(b2Settings.b2_maxPairs);
   this.m_bounds = new Array(2 * b2Settings.b2_maxProxies);
   this.m_queryResults = new Array(b2Settings.b2_maxProxies);
   this.m_quantizationFactor = new b2Vec2();
@@ -89,14 +93,14 @@ b2BroadPhase = function(worldAABB, callback) {
   var tProxy;
   for (i = 0; i < b2Settings.b2_maxProxies - 1; ++i) {
     tProxy = new b2Proxy();
-    this.m_proxyPool[i] = tProxy;
+    this.proxyPool[i] = tProxy;
     tProxy.SetNext(i + 1);
     tProxy.timeStamp = 0;
     tProxy.overlapCount = b2Settings.invalid;
     tProxy.userData = null;
   }
   tProxy = new b2Proxy();
-  this.m_proxyPool[b2Settings.b2_maxProxies - 1] = tProxy;
+  this.proxyPool[b2Settings.b2_maxProxies - 1] = tProxy;
   tProxy.SetNext(b2Pair.b2_nullProxy);
   tProxy.timeStamp = 0;
   tProxy.overlapCount = b2Settings.invalid;
@@ -138,144 +142,17 @@ b2BroadPhase.prototype = {
 
   // Get a single proxy. Returns NULL if the id is invalid.
   GetProxy: function(proxyId) {
-    if (proxyId == b2Pair.b2_nullProxy || this.m_proxyPool[proxyId].IsValid() == false) {
+    if (proxyId == b2Pair.b2_nullProxy || this.proxyPool[proxyId].IsValid() == false) {
       return null;
     }
 
-    return this.m_proxyPool[proxyId];
-  },
-
-  // Create and destroy proxies. These call Flush first.
-  CreateProxy: function(aabb, userData) {
-    var index = 0;
-    var proxy;
-
-    //b2Settings.b2Assert(this.m_proxyCount < b2_maxProxies);
-    //b2Settings.b2Assert(this.m_freeProxy != b2Pair.b2_nullProxy);
-    var proxyId = this.m_freeProxy;
-    proxy = this.m_proxyPool[proxyId];
-    this.m_freeProxy = proxy.GetNext();
-
-    proxy.overlapCount = 0;
-    proxy.userData = userData;
-
-    var boundCount = 2 * this.m_proxyCount;
-
-    var lowerValues = new Array();
-    var upperValues = new Array();
-    this.ComputeBounds(lowerValues, upperValues, aabb);
-
-    for (var axis = 0; axis < 2; ++axis) {
-      var bounds = this.m_bounds[axis];
-      var lowerIndex = 0;
-      var upperIndex = 0;
-      var lowerIndexOut = [lowerIndex];
-      var upperIndexOut = [upperIndex];
-      this.Query(lowerIndexOut, upperIndexOut, lowerValues[axis], upperValues[axis], bounds, boundCount, axis);
-      lowerIndex = lowerIndexOut[0];
-      upperIndex = upperIndexOut[0];
-
-      // Replace memmove calls
-      //memmove(bounds + upperIndex + 2, bounds + upperIndex, (edgeCount - upperIndex) * sizeof(b2Bound));
-      var tArr = new Array();
-      var j = 0;
-      var tEnd = boundCount - upperIndex;
-      var tBound1;
-      var tBound2;
-      // make temp array
-      for (j = 0; j < tEnd; j++) {
-        tArr[j] = new b2Bound();
-        tBound1 = tArr[j];
-        tBound2 = bounds[upperIndex + j];
-        tBound1.value = tBound2.value;
-        tBound1.proxyId = tBound2.proxyId;
-        tBound1.stabbingCount = tBound2.stabbingCount;
-      }
-      // move temp array back in to bounds
-      tEnd = tArr.length;
-      var tIndex = upperIndex + 2;
-      for (j = 0; j < tEnd; j++) {
-        //bounds[tIndex+j] = tArr[j];
-        tBound2 = tArr[j];
-        tBound1 = bounds[tIndex + j];
-        tBound1.value = tBound2.value;
-        tBound1.proxyId = tBound2.proxyId;
-        tBound1.stabbingCount = tBound2.stabbingCount;
-      }
-      //memmove(bounds + lowerIndex + 1, bounds + lowerIndex, (upperIndex - lowerIndex) * sizeof(b2Bound));
-      // make temp array
-      tArr = new Array();
-      tEnd = upperIndex - lowerIndex;
-      for (j = 0; j < tEnd; j++) {
-        tArr[j] = new b2Bound();
-        tBound1 = tArr[j];
-        tBound2 = bounds[lowerIndex + j];
-        tBound1.value = tBound2.value;
-        tBound1.proxyId = tBound2.proxyId;
-        tBound1.stabbingCount = tBound2.stabbingCount;
-      }
-      // move temp array back in to bounds
-      tEnd = tArr.length;
-      tIndex = lowerIndex + 1;
-      for (j = 0; j < tEnd; j++) {
-        //bounds[tIndex+j] = tArr[j];
-        tBound2 = tArr[j];
-        tBound1 = bounds[tIndex + j];
-        tBound1.value = tBound2.value;
-        tBound1.proxyId = tBound2.proxyId;
-        tBound1.stabbingCount = tBound2.stabbingCount;
-      }
-
-      // The upper index has increased because of the lower bound insertion.
-      ++upperIndex;
-
-      // Copy in the new bounds.
-      bounds[lowerIndex].value = lowerValues[axis];
-      bounds[lowerIndex].proxyId = proxyId;
-      bounds[upperIndex].value = upperValues[axis];
-      bounds[upperIndex].proxyId = proxyId;
-
-      bounds[lowerIndex].stabbingCount = lowerIndex == 0 ? 0 : bounds[lowerIndex - 1].stabbingCount;
-      bounds[upperIndex].stabbingCount = bounds[upperIndex - 1].stabbingCount;
-
-      // Adjust the stabbing count between the new bounds.
-      for (index = lowerIndex; index < upperIndex; ++index) {
-        bounds[index].stabbingCount++;
-      }
-
-      // Adjust the all the affected bound indices.
-      for (index = lowerIndex; index < boundCount + 2; ++index) {
-        var proxy2 = this.m_proxyPool[bounds[index].proxyId];
-        if (bounds[index].IsLower()) {
-          proxy2.lowerBounds[axis] = index;
-        } else {
-          proxy2.upperBounds[axis] = index;
-        }
-      }
-    }
-
-    ++this.m_proxyCount;
-
-    //b2Settings.b2Assert(this.m_queryResultCount < b2Settings.b2_maxProxies);
-    for (var i = 0; i < this.m_queryResultCount; ++i) {
-      //b2Settings.b2Assert(this.m_queryResults[i] < b2_maxProxies);
-      //b2Settings.b2Assert(this.m_proxyPool[this.m_queryResults[i]].IsValid());
-      this.m_pairManager.AddBufferedPair(proxyId, this.m_queryResults[i]);
-    }
-
-    this.m_pairManager.Commit();
-
-    // Prepare for next query.
-    this.m_queryResultCount = 0;
-    this.IncrementTimeStamp();
-
-    return proxyId;
+    return this.proxyPool[proxyId];
   },
 
   DestroyProxy: function(proxyId) {
 
     //b2Settings.b2Assert(0 < this.m_proxyCount && this.m_proxyCount <= b2_maxProxies);
-    var proxy = this.m_proxyPool[proxyId];
+    var proxy = this.proxyPool[proxyId];
     //b2Settings.b2Assert(proxy.IsValid());
     var boundCount = 2 * this.m_proxyCount;
 
@@ -341,7 +218,7 @@ b2BroadPhase.prototype = {
       // Fix bound indices.
       tEnd = boundCount - 2;
       for (var index = lowerIndex; index < tEnd; ++index) {
-        var proxy2 = this.m_proxyPool[bounds[index].proxyId];
+        var proxy2 = this.proxyPool[bounds[index].proxyId];
         if (bounds[index].IsLower()) {
           proxy2.lowerBounds[axis] = index;
         } else {
@@ -362,7 +239,7 @@ b2BroadPhase.prototype = {
 
     //b2Settings.b2Assert(this.m_queryResultCount < b2Settings.b2_maxProxies);
     for (var i = 0; i < this.m_queryResultCount; ++i) {
-      //b2Settings.b2Assert(this.m_proxyPool[this.m_queryResults[i]].IsValid());
+      //b2Settings.b2Assert(this.proxyPool[this.m_queryResults[i]].IsValid());
       this.m_pairManager.RemoveBufferedPair(proxyId, this.m_queryResults[i]);
     }
 
@@ -408,7 +285,7 @@ b2BroadPhase.prototype = {
 
     var boundCount = 2 * this.m_proxyCount;
 
-    var proxy = this.m_proxyPool[proxyId];
+    var proxy = this.proxyPool[proxyId];
     // Get new bound values
     var newValues = new b2BoundValues();
     this.ComputeBounds(newValues.lowerValues, newValues.upperValues, aabb);
@@ -446,7 +323,7 @@ b2BroadPhase.prototype = {
           prevBound = bounds[index - 1];
 
           var prevProxyId = prevBound.proxyId;
-          var prevProxy = this.m_proxyPool[prevBound.proxyId];
+          var prevProxy = this.proxyPool[prevBound.proxyId];
 
           prevBound.stabbingCount++;
 
@@ -481,7 +358,7 @@ b2BroadPhase.prototype = {
           bound = bounds[index];
           nextBound = bounds[index + 1];
           nextProxyId = nextBound.proxyId;
-          nextProxy = this.m_proxyPool[nextProxyId];
+          nextProxy = this.proxyPool[nextProxyId];
 
           nextBound.stabbingCount++;
 
@@ -519,7 +396,7 @@ b2BroadPhase.prototype = {
           nextBound = bounds[index + 1];
 
           nextProxyId = nextBound.proxyId;
-          nextProxy = this.m_proxyPool[nextProxyId];
+          nextProxy = this.proxyPool[nextProxyId];
 
           nextBound.stabbingCount--;
 
@@ -554,7 +431,7 @@ b2BroadPhase.prototype = {
           prevBound = bounds[index - 1];
 
           prevProxyId = prevBound.proxyId;
-          prevProxy = this.m_proxyPool[prevProxyId];
+          prevProxy = this.proxyPool[prevProxyId];
 
           prevBound.stabbingCount--;
 
@@ -605,7 +482,7 @@ b2BroadPhase.prototype = {
     var count = 0;
     for (var i = 0; i < this.m_queryResultCount && count < maxCount; ++i, ++count) {
       //b2Settings.b2Assert(this.m_queryResults[i] < b2Settings.b2_maxProxies);
-      var proxy = this.m_proxyPool[this.m_queryResults[i]];
+      var proxy = this.proxyPool[this.m_queryResults[i]];
       //b2Settings.b2Assert(proxy.IsValid());
       userData[i] = proxy.userData;
     }
@@ -633,12 +510,12 @@ b2BroadPhase.prototype = {
         var bound = bounds[i];
         //b2Settings.b2Assert(i == 0 || bounds[i-1].value <= bound->value);
         //b2Settings.b2Assert(bound->proxyId != b2_nullProxy);
-        //b2Settings.b2Assert(this.m_proxyPool[bound->proxyId].IsValid());
+        //b2Settings.b2Assert(this.proxyPool[bound->proxyId].IsValid());
         if (bound.IsLower() == true) {
-          //b2Settings.b2Assert(this.m_proxyPool[bound.proxyId].lowerBounds[axis] == i);
+          //b2Settings.b2Assert(this.proxyPool[bound.proxyId].lowerBounds[axis] == i);
           stabbingCount++;
         } else {
-          //b2Settings.b2Assert(this.m_proxyPool[bound.proxyId].upperBounds[axis] == i);
+          //b2Settings.b2Assert(this.proxyPool[bound.proxyId].upperBounds[axis] == i);
           stabbingCount--;
         }
 
@@ -741,7 +618,7 @@ b2BroadPhase.prototype = {
       while (s) {
         //b2Settings.b2Assert(i >= 0);
         if (bounds[i].IsLower()) {
-          var proxy = this.m_proxyPool[bounds[i].proxyId];
+          var proxy = this.proxyPool[bounds[i].proxyId];
           if (lowerQuery <= proxy.upperBounds[axis]) {
             this.IncrementOverlapCount(bounds[i].proxyId);
             --s;
@@ -755,7 +632,7 @@ b2BroadPhase.prototype = {
   },
 
   IncrementOverlapCount: function(proxyId) {
-    var proxy = this.m_proxyPool[proxyId];
+    var proxy = this.proxyPool[proxyId];
     if (proxy.timeStamp < this.m_timeStamp) {
       proxy.timeStamp = this.m_timeStamp;
       proxy.overlapCount = 1;
@@ -769,7 +646,7 @@ b2BroadPhase.prototype = {
   IncrementTimeStamp: function() {
     if (this.m_timeStamp == b2Settings.USHRT_MAX) {
       for (var i = 0; i < b2Settings.b2_maxProxies; ++i) {
-        this.m_proxyPool[i].timeStamp = 0;
+        this.proxyPool[i].timeStamp = 0;
       }
       this.m_timeStamp = 1;
     } else {
@@ -780,8 +657,7 @@ b2BroadPhase.prototype = {
   //public:
   m_pairManager: new b2PairManager(),
 
-  m_proxyPool: new Array(b2Settings.b2_maxPairs),
-  m_freeProxy: 0,
+  proxyPool: new Array(b2Settings.b2_maxPairs),
 
   m_bounds: new Array(2 * b2Settings.b2_maxProxies),
 
@@ -793,6 +669,146 @@ b2BroadPhase.prototype = {
   m_proxyCount: 0,
   m_timeStamp: 0
 };
+
+/**
+  // Create and destroy proxies. These call Flush first.
+  @param {!b2AABB} aabb
+  @param {!b2Shape} userData
+  @returns {number}
+*/
+b2BroadPhase.prototype.CreateProxy = function(aabb, userData) {
+  var index = 0;
+  var proxy;
+
+  //b2Settings.b2Assert(this.m_proxyCount < b2_maxProxies);
+  //b2Settings.b2Assert(this.m_freeProxy != b2Pair.b2_nullProxy);
+  var proxyId = this.m_freeProxy;
+  proxy = this.proxyPool[proxyId];
+  this.m_freeProxy = proxy.GetNext();
+
+  proxy.overlapCount = 0;
+  proxy.userData = userData;
+
+  var boundCount = 2 * this.m_proxyCount;
+
+  var lowerValues = new Array();
+  var upperValues = new Array();
+  this.ComputeBounds(lowerValues, upperValues, aabb);
+
+  for (var axis = 0; axis < 2; ++axis) {
+    var bounds = this.m_bounds[axis];
+    var lowerIndex = 0;
+    var upperIndex = 0;
+    var lowerIndexOut = [lowerIndex];
+    var upperIndexOut = [upperIndex];
+    this.Query(lowerIndexOut, upperIndexOut, lowerValues[axis], upperValues[axis], bounds, boundCount, axis);
+    lowerIndex = lowerIndexOut[0];
+    upperIndex = upperIndexOut[0];
+
+    // Replace memmove calls
+    //memmove(bounds + upperIndex + 2, bounds + upperIndex, (edgeCount - upperIndex) * sizeof(b2Bound));
+    var tArr = new Array();
+    var j = 0;
+    var tEnd = boundCount - upperIndex;
+    var tBound1;
+    var tBound2;
+    // make temp array
+    for (j = 0; j < tEnd; j++) {
+      tArr[j] = new b2Bound();
+      tBound1 = tArr[j];
+      tBound2 = bounds[upperIndex + j];
+      tBound1.value = tBound2.value;
+      tBound1.proxyId = tBound2.proxyId;
+      tBound1.stabbingCount = tBound2.stabbingCount;
+    }
+    // move temp array back in to bounds
+    tEnd = tArr.length;
+    var tIndex = upperIndex + 2;
+    for (j = 0; j < tEnd; j++) {
+      //bounds[tIndex+j] = tArr[j];
+      tBound2 = tArr[j];
+      tBound1 = bounds[tIndex + j];
+      tBound1.value = tBound2.value;
+      tBound1.proxyId = tBound2.proxyId;
+      tBound1.stabbingCount = tBound2.stabbingCount;
+    }
+    //memmove(bounds + lowerIndex + 1, bounds + lowerIndex, (upperIndex - lowerIndex) * sizeof(b2Bound));
+    // make temp array
+    tArr = new Array();
+    tEnd = upperIndex - lowerIndex;
+    for (j = 0; j < tEnd; j++) {
+      tArr[j] = new b2Bound();
+      tBound1 = tArr[j];
+      tBound2 = bounds[lowerIndex + j];
+      tBound1.value = tBound2.value;
+      tBound1.proxyId = tBound2.proxyId;
+      tBound1.stabbingCount = tBound2.stabbingCount;
+    }
+    // move temp array back in to bounds
+    tEnd = tArr.length;
+    tIndex = lowerIndex + 1;
+    for (j = 0; j < tEnd; j++) {
+      //bounds[tIndex+j] = tArr[j];
+      tBound2 = tArr[j];
+      tBound1 = bounds[tIndex + j];
+      tBound1.value = tBound2.value;
+      tBound1.proxyId = tBound2.proxyId;
+      tBound1.stabbingCount = tBound2.stabbingCount;
+    }
+
+    // The upper index has increased because of the lower bound insertion.
+    ++upperIndex;
+
+    // Copy in the new bounds.
+    bounds[lowerIndex].value = lowerValues[axis];
+    bounds[lowerIndex].proxyId = proxyId;
+    bounds[upperIndex].value = upperValues[axis];
+    bounds[upperIndex].proxyId = proxyId;
+
+    bounds[lowerIndex].stabbingCount = lowerIndex == 0 ? 0 : bounds[lowerIndex - 1].stabbingCount;
+    bounds[upperIndex].stabbingCount = bounds[upperIndex - 1].stabbingCount;
+
+    // Adjust the stabbing count between the new bounds.
+    for (index = lowerIndex; index < upperIndex; ++index) {
+      bounds[index].stabbingCount++;
+    }
+
+    // Adjust the all the affected bound indices.
+    for (index = lowerIndex; index < boundCount + 2; ++index) {
+      var proxy2 = this.proxyPool[bounds[index].proxyId];
+      if (bounds[index].IsLower()) {
+        proxy2.lowerBounds[axis] = index;
+      } else {
+        proxy2.upperBounds[axis] = index;
+      }
+    }
+  }
+
+  ++this.m_proxyCount;
+
+  //b2Settings.b2Assert(this.m_queryResultCount < b2Settings.b2_maxProxies);
+  for (var i = 0; i < this.m_queryResultCount; ++i) {
+    //b2Settings.b2Assert(this.m_queryResults[i] < b2_maxProxies);
+    //b2Settings.b2Assert(this.proxyPool[this.m_queryResults[i]].IsValid());
+    this.m_pairManager.AddBufferedPair(proxyId, this.m_queryResults[i]);
+  }
+
+  this.m_pairManager.Commit();
+
+  // Prepare for next query.
+  this.m_queryResultCount = 0;
+  this.IncrementTimeStamp();
+
+  return proxyId;
+};
+
+/**
+  @private
+  @type {number}
+*/
+b2BroadPhase.m_freeProxy = 0;
+
+
 b2BroadPhase.s_validate = false;
 b2BroadPhase.b2_nullEdge = b2Settings.USHRT_MAX;
 b2BroadPhase.BinarySearch = function(bounds, count, value) {
