@@ -14,7 +14,6 @@ body {
     background-repeat: repeat;
 }
 
-
 #vignette {
     position: absolute;
     width: 100%;
@@ -35,29 +34,20 @@ body {
     height: 100%;
 }
 
-#topfloater {
-    float: left;
-    height: 40%;
-    margin-bottom: -310px;
-}
-
-#game {
+.content {
     width: 860px;
-    height: 620px;
+    top: 50px;
     margin-left: auto;
     margin-right: auto;
-    clear: both;
     position: relative;
 }
 
 #gamecontrolsouter {
-    width: 860px;
-    height: 0px;
-    margin-top: -620px;
-    margin-left: auto;
-    margin-right: auto;
-    clear: both;
-    position: relative;
+    display:none;
+}
+
+#game {
+    display: none;
 }
 
 #tableborder {
@@ -80,64 +70,80 @@ body {
     left: 137px;
 }
 
-
 #timeremaining {
     background-image: url("../images/timeremaining.png");
     background-repeat: no-repeat;
-    text-align: center;
-    font: 38px 'MolotRegular' , Arial, sans-serif;
-    color: #e8914a;
+    text-align: left;
+    font: 30px 'RadiolandRegular', Arial, sans-serif;
+    color: #cb512c;
+    color: #b23711;
     letter-spacing: 0;
-    text-shadow: 1px 1px 2px #000000;
-    width: 89px;
-    height: 89px;
-    padding-top: 39px;
-    padding-left: 3px;
+    width: 110px;
+    height: 67px;
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 20px;
+    left: 10px;
 }
 
+#minutesremaining {
+    text-align: right;
+    position: absolute;
+    top: 19px;
+    left: 28px;
+}
+
+#secondsremainingtens {
+    text-align: right;
+    position: absolute;
+    top: 19px;
+    left: 58px;
+}
+
+#secondsremainingones {
+    text-align: right;
+    position: absolute;
+    top: 19px;
+    left: 78px;
+}
 
 #score {
     background-image: url("../images/score.png");
     background-repeat: no-repeat;
     text-align: center;
-    font: 32px 'MolotRegular' , Arial, sans-serif;
-    color: #c53c25;
+    font: 30px 'MolotRegular' , Arial, sans-serif;
+    color: #c34414;
     letter-spacing: 0;
-    width: 131px;
-    height: 109px;
-    padding-top: 50px;
+    width: 81px;
+    height: 71px;
+    padding-top: 28px;
     padding-left: 0px;
     position: absolute;
-    top: 0px;
-    left: 635px;
+    top: 17px;
+    left: 759px;
 }
 
 #bestscore {
     background-image: url("../images/bestscore.png");
     background-repeat: no-repeat;
     text-align: center;
-    font: 28px 'MolotRegular' , Arial, sans-serif;
-    color: #aba67b;
+    font: 22px 'MolotRegular' , Arial, sans-serif;
+    color: #47341d;
     letter-spacing: 0;
-    text-shadow: 1px 1px 2px #000000;
-    width: 89px;
-    height: 89px;
-    padding-top: 50px;
-    padding-left: 0px;
+    width: 135px;
+    height: 118px;
+    padding-top: 56px;
+    padding-left: 2px;
     position: absolute;
-    top: 5px;
-    left: 765px;
+    top: -6px;
+    left: 653px;
 }
 
 #progressbg {
     background-image: url("../images/progressbg.png");
     background-repeat: no-repeat;
     position: absolute;
-    top: 50px;
-    left: 100px;
+    top: 45px;
+    left: 130px;
     width: 446px;
     height: 36px;
 }
@@ -148,13 +154,13 @@ body {
     position: absolute;
     top: 6px;
     left: 6px;
-    width: 419px;
+    width: 435px;
     height: 34px;
 }
 
 #sounds {
     left: 640px;
-    top: 590px;
+    top: 583px;
     position: absolute;
     background-image: url("../images/speaker.png");
     background-position: center;
@@ -185,6 +191,46 @@ body {
     cursor: pointer;
 }
 
+#smalllogo {
+    left: 5px;
+    top: 595px;
+    position: absolute;
+    background-image: url("../images/smalllogo.png");
+    background-repeat: no-repeat;
+    width: 237px;
+    height: 42px;
+}
+
+#instructions {
+    left: 274px;
+    top: 598px;
+    position: absolute;
+    background-image: url("../images/instructions.png");
+    background-repeat: no-repeat;
+    width: 96px;
+    height: 30px;
+}
+
+#pause {
+    left: 380px;
+    top: 579px;
+    position: absolute;
+    background-image: url("../images/pause.png");
+    background-repeat: no-repeat;
+    width: 89px;
+    height: 71px;
+}
+
+#startover {
+    left: 492px;
+    top: 598px;
+    position: absolute;
+    background-image: url("../images/startover.png");
+    background-repeat: no-repeat;
+    width: 83px;
+    height: 30px;
+}
+
 #soundsbutton img {
      position: absolute;   
      margin-left: 69px; 
@@ -204,6 +250,43 @@ body {
     background-image: url("../images/transparent.png");
 }
 
+#overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    z-index: 100;
+    background: #101010;
+    opacity: 0.5;
+}
+
+.overlaymessage{
+    font: 60px 'MolotRegular', Arial, sans-serif;
+    color: #ebd09c;
+    letter-spacing: 1px;
+    text-shadow: 7px 7px 6px rgba(0,0,0,0.5);
+    cursor: pointer;
+    text-align: center;
+    position: absolute;
+    top: 280px;
+    width: 860px;
+}
+
+#loading {
+    z-index: 400;
+}
+
+#start {
+    z-index: 300;
+    display: none;
+}
+
+#resume {
+    z-index: 500;
+    display: none;
+}
+
 /* TEMP */
 
 #soundstestarea {
@@ -211,6 +294,7 @@ body {
     width: 500px;
     top: 580px;
     position: absolute;
+    
 }
 
 .soundtest {
@@ -222,4 +306,5 @@ body {
     color: black;
     cursor: pointer;
     padding-top: 2px;
+    display:none;
 }

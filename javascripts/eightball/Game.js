@@ -14,18 +14,35 @@ goog.require('goog.net.cookies');
  @constructor
  @extends {goog.events.EventTarget}
  */
-eightball.Game = function() {
-
-  this.gameState = eightball.Music.GameState.READY;
-  this.secondsLeft = eightball.Game.s_gameSeconds;
+eightball.Game = function () {
 
   /**
-   @private
-   */
+  @private
+  */
   this.m_timer = null;
+  this.reset();
 
 };
 goog.inherits(eightball.Game, goog.events.EventTarget);
+
+eightball.Game.prototype.reset = function () {
+
+  // reset the timer and our clock
+  if (this.m_timer) {
+    this.m_timer.dispose();
+    this.secondsLeft = eightball.Game.s_gameSeconds;
+  }
+
+  this.secondsLeft = eightball.Game.s_gameSeconds;
+  this.score = 0;
+
+  this.highScore = this._loadHighScore();
+  this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
+
+  this.gameState = eightball.Music.GameState.READY;
+  this._dispatchGameEvent(eightball.Game.EventType.READY);
+
+};
 
 eightball.Game.prototype.start = function() {
 
@@ -57,6 +74,11 @@ eightball.Game.prototype.togglePaused = function() {
     this._dispatchGameEvent(eightball.Game.EventType.RESUME);
   }
   // TODO: else?
+};
+
+eightball.Game.prototype._loadHighScore = function () {
+  var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, 1000);
+  return highScoreValue;
 };
 
 eightball.Game.prototype._tickAction = function() {
@@ -124,8 +146,8 @@ eightball.Music.GameState = {
  */
 eightball.Game.EventType = {
   /**
-   * Dispatched when the game is ready to be played (presumably after the preloader has downloaded assets, etc.)
-   */
+  * Dispatched when the game is ready to be started.
+  */
   READY: 'ready',
 
   /**
@@ -144,14 +166,24 @@ eightball.Game.EventType = {
   RESUME: 'resume',
 
   /**
-   * Dispatched when the game comes to an end (because the timer has reaced a value of 0).
+   * Dispatched when the game comes to an end (because the timer has reached a value of 0).
    */
   END: 'end',
 
   /**
    * Dispatched when the game timer is updated. Occurs once per second.
    */
-  TICK: 'tick'
+  TICK: 'tick',
+
+  /**
+   * Dispatched when the score changes.
+   */
+  SCORE: 'score',
+
+  /**
+   * Dispatched when the score changes.
+   */
+  HIGHSCORE: 'highscore'
 };
 
 /**
@@ -160,3 +192,10 @@ eightball.Game.EventType = {
  @type {number}
  */
 eightball.Game.s_gameSeconds = 120;
+
+/** 
+ @const
+ @private
+ @type {string}
+ */
+eightball.Game.s_CookieGameHighScore = "eightball.Game.highScore";

@@ -21,44 +21,90 @@ var musicManager;
 var game;
 var soundManager;
 
-var loadApp = function() {
-  pixelLab.Debug.enable();
-  pixelLab.ImagePreloader.preload("images/bestscore.png, images/cue.png, images/progressbg.png, images/progressunit.png, images/score.png, images/table.jpg, images/tableborder.png, images/timeremaining.png, images/wood.jpg");
+// displays loading information and preloads all other content then
+// calls loadApp
 
-  // create our music manager
+var loadContent = function () {
+  pixelLab.ImagePreloader.preload("images/bestscore.png, images/cue.png, images/progressbg.png, images/progressunit.png, images/score.png, images/table.jpg, images/tableborder.png, images/timeremaining.png, images/wood.jpg");
+  setTimeout("loadApp();", 2000);
+}
+
+
+var loadApp = function () {
+
+  // show the content, hide the loading element
+  $('#loading').fadeOut(400);
+  $('#game').fadeIn(1000);
+  $('#gamecontrolsouter').fadeIn(1000);
+
+  pixelLab.Debug.enable();
+
+  // music
   musicManager = new eightball.Music("sounds/theme.mp4");
 
-  // create our sounds manager
+  // sound
   soundManager = new eightball.SoundEffectManager();
+  soundManager.add("tick", new eightball.SoundEffect("sounds/tick.mp3", 1));
 
-  // add sounds
-  soundManager.add("blip1", new eightball.SoundEffect("sounds/blip1.mp3", 3));
-  soundManager.add("blip2", new eightball.SoundEffect("sounds/blip2.mp3", 3));
-  soundManager.add("blip3", new eightball.SoundEffect("sounds/blip3.mp3", 3));
-  soundManager.add("blip4", new eightball.SoundEffect("sounds/blip4.mp3", 3));
-  soundManager.add("bounce01", new eightball.SoundEffect("sounds/bounce01.mp3", 3));
-  soundManager.add("pocket01", new eightball.SoundEffect("sounds/pocket01.mp3", 3));
-  soundManager.add("shot05", new eightball.SoundEffect("sounds/shot05.mp3", 3));
-  soundManager.add("shotsingle01", new eightball.SoundEffect("sounds/shotsingle01.mp3", 3));
+  // global elements
+  var minutesremaining = $('#minutesremaining');
+  var secondsremainingtens = $('#secondsremainingtens');
+  var secondsremainingones = $('#secondsremainingones');
+  var progress = $('#progress');
+  var overlay = $('#overlay');
+  var start = $('#start');
 
-  // create a game object
-  game = new eightball.Game();
-  game.start();
+  // other globals 
+  var lastBars = 29;
 
-  var timeRemaining = $('#timeremaining');
-  var _tickAction = function() {
+  // event handlers
+
+  var _tickAction = function () {
 
     var min = Math.floor(game.secondsLeft / 60);
     var sec = game.secondsLeft % 60;
+    var sectens = Math.floor(sec / 10);
+    var secones = sec % 10;
 
-    timeRemaining.html(min + ":" + (sec < 10 ? "0" + sec : sec));
+    minutesremaining.html(min);
+    secondsremainingtens.html(sectens);
+    secondsremainingones.html(secones);
 
-    pixelLab.Debug.clearDebug();
-    pixelLab.Debug.writeDebug("0" + min + ":" + (sec < 10 ? "0" + sec : sec));
+    var bars = Math.floor((game.secondsLeft - 1) / 4);
+
+    if (bars != lastBars) {
+      lastBars = bars;
+      progress.width(15 * bars);
+      //soundManager.play("tick");
+    }
+
   };
+
+  var _highScoreAction = function () {
+    $('#bestscore').html(game.highScore);
+  }
+
+  var _readyAction = function () {
+    start.delay(800).fadeIn(400);
+  }
+
+  start.click(function () {
+    start.fadeOut(100, start.hide());
+    overlay.fadeOut(400);
+    game.start();
+  });
+
+  // create a game object
+  game = new eightball.Game();
 
   // register for game events
   goog.events.listen(game, eightball.Game.EventType.TICK, _tickAction);
+  goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, _highScoreAction);
+  goog.events.listen(game, eightball.Game.EventType.READY, _readyAction);
+
+  // calling reset after the game has been loaded fires the events we 
+  // need to initialize everything for game play
+  game.reset();
 
   var canvasElement = $('canvas#demo_canvas')[0];
   var cueCanvasElement = $('canvas#cue_canvas')[0];
@@ -70,7 +116,7 @@ var loadApp = function() {
     poolTable.updateLayout(width, height);
   }
 
-  var updateMusicButton = function() {
+  var updateMusicButton = function () {
     if (musicManager.isMusicOn()) {
       $("#musicbuttonon").fadeIn("fast");
     } else {
@@ -78,7 +124,7 @@ var loadApp = function() {
     }
   };
 
-  var updateSoundButton = function() {
+  var updateSoundButton = function () {
     if (soundManager.isSoundOn()) {
       $("#soundsbuttonon").fadeIn("fast");
     } else {
@@ -87,13 +133,13 @@ var loadApp = function() {
   };
 
   // music on/off
-  $("#musicbutton").click(function() {
+  $("#musicbutton").click(function () {
     musicManager.toggleMusic();
     updateMusicButton();
   });
 
   // sound effects on/off
-  $("#soundsbutton").click(function() {
+  $("#soundsbutton").click(function () {
     soundManager.toggleSound();
     updateSoundButton();
   });
@@ -102,14 +148,18 @@ var loadApp = function() {
   updateSoundButton();
 
   // sound effects test code
-  $(".soundtest").click(function() {
+  $(".soundtest").click(function () {
     soundManager.play(this.id);
   });
 };
 
-$(window).load(loadApp);
 
-$(window).resize(function(e) {
+$(window).load(loadContent);
+
+
+
+
+$(window).resize(function (e) {
   var width = window.innerWidth;
   var height = window.innerHeight;
   poolTable.updateLayout(width, height);

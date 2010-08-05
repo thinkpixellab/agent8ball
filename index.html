@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
+<head>
     <title>Agent 008 Ball</title>
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="stylesheets/reset.css" />
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
     <link rel="stylesheet" type="text/css" href="fonts/molot/molot.css" />
-
+    <link rel="stylesheet" type="text/css" href="fonts/radioland/radioland.css" />
     <script src="javascripts/closure-library/closure/goog/base.js" type="text/javascript"></script>
     <script src="javascripts/jquery-1.4.2.min.js" type="text/javascript"></script>
     <script src="javascripts/deps.js" type="text/javascript"></script>
     <script src="javascripts/application.js" type="text/javascript"></script>
-  </head>
-
+</head>
 <body>
-
     <div id="vignette">
         <img id="vignetteimg" src="images/vignette.png" class="stretch" alt="" />
     </div>
-
-    <div id="topfloater"> </div>
-    <div id="game">
-
+    <div id="game" class="content">
         <div id="tableborder">
             <div id="table">
-                <canvas id='demo_canvas' ></canvas>
+                <canvas id='demo_canvas'></canvas>
             </div>
         </div>
-
         <div id="timeremaining">
-            01:15
+            <div id="minutesremaining">
+                2</div>
+            <div id="secondsremainingtens">
+                0</div>
+            <div id="secondsremainingones">
+                0</div>
         </div>
         <div id="progressbg">
             <div id="progress">
             </div>
         </div>
-
-        <div id="score">
-           1300
-        </div>
-
         <div id="bestscore">
-           8800
+            
         </div>
-
+        <div id="score">
+            00
+        </div>
     </div>
     <canvas id="cue_canvas"></canvas>
-    <div id="gamecontrolsouter">
+    <div id="gamecontrolsouter" class="content">
+        <div id="smalllogo"> </div>
+        <div id="instructions"> </div>
+        <div id="pause"> </div>
+        <div id="startover"> </div>
         <div id="sounds">
             <div id="musicbutton">
                 <img src="images/lightoff.png" />
@@ -58,16 +58,41 @@
                 <img id="soundsbuttonon" src="images/lighton.png" />
             </div>
         </div>
+
         <div id="soundstestarea">
-            <div class="soundtest" id="blip1">blip1</div>
-            <div class="soundtest" id="blip2">blip2</div>
-            <div class="soundtest" id="blip3">blip3</div>
-            <div class="soundtest" id="blip4">blip4</div>
-            <div class="soundtest" id="bounce01">bounce</div>
-            <div class="soundtest" id="pocket01">pocket</div>
-            <div class="soundtest" id="shot05">shot</div>
-            <div class="soundtest" id="shotsingle01">shotsingle</div>
+            <div class="soundtest" id="organic1">
+                blip1</div>
+            <div class="soundtest" id="organic2">
+                blip2</div>
+            <div class="soundtest" id="organic3">
+                blip3</div>
+            <div class="soundtest" id="organic4">
+                blip4</div>
+            <div class="soundtest" id="bounce01">
+                bounce</div>
+            <div class="soundtest" id="pocket01">
+                pocket</div>
+            <div class="soundtest" id="shot05">
+                shot</div>
+            <div class="soundtest" id="shotsingle01">
+                shotsingle</div>
         </div>
     </div>
-  </body>
+    
+    <div id="overlay">
+    </div>
+
+    <div class="content">
+        <div id="start" class="overlaymessage">
+            CLICK TO START
+        </div>
+        <div id="loading" class="overlaymessage">
+            LOADING...
+        </div>
+        <div id="resume" class="overlaymessage">
+            CLICK TO RESUME
+        </div>
+    </div>
+
+</body>
 </html>
