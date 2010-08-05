@@ -45,6 +45,18 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
    */
   this.m_isCueVisible = true;
 
+  /**
+   @private
+   @type {number}
+   */
+  this.m_lastStep = 0;
+
+  /**
+   @private
+   @type {!Array.<b2Body>}
+   */
+  this.m_balls = [];
+
   // get a local reference to this
   var _this = this;
 
@@ -247,21 +259,16 @@ eightball.PoolTable.prototype._createWorld = function() {
   var tableObject = eightball.PoolTable._createTable(this.m_world, this.m_centerOffset);
 
   var pocket = eightball.PoolTable._createPockets(this.m_world, this.m_centerOffset);
-
-  var balls = eightball.PoolTable._setupBalls(this.m_world);
-  this.m_theCueBall = balls[0];
+  this.rackEm();
 };
 
-/**
- @private
- @param {!b2World} world
- */
-eightball.PoolTable._setupBalls = function(world) {
-  var balls = new Array(16);
+eightball.PoolTable.prototype.rackEm = function() {
+  this._clearTable();
   var index = 0;
   var ballRadius = eightball.PoolTable.s_ballDiameter * 2;
 
-  balls[index] = eightball.PoolTable._createBall(world, index, -0.5 * eightball.PoolTable.s_width, 0);
+  this.m_balls.push(this._createBall(index, -0.5 * eightball.PoolTable.s_width, 0));
+  this.m_theCueBall = this.m_balls[0];
   index++;
 
   for (var col = 0; col < 5; col++) {
@@ -271,12 +278,20 @@ eightball.PoolTable._setupBalls = function(world) {
     var yStart = -col * ballRadius;
 
     for (var row = 0; row < ballCount; row++) {
-      balls[index] = eightball.PoolTable._createBall(world, index, x, yStart + row * ballRadius * 2);
+      this.m_balls.push(this._createBall(index, x, yStart + row * ballRadius * 2));
       index++;
     }
   }
+};
 
-  return balls;
+/**
+ @private
+ */
+eightball.PoolTable.prototype._clearTable = function() {
+  while (this.m_balls.length > 0) {
+    this.m_world.DestroyBody(this.m_balls.pop());
+  }
+  this.m_world.CleanBodyList();
 };
 
 /**
@@ -393,11 +408,12 @@ eightball.PoolTable._createPocket = function(world, x, y) {
 
 /**
  @private
- @param {!b2World} world
+ @param {number} index
  @param {number} x
  @param {number} y
+ @returns {!b2Body}
  */
-eightball.PoolTable._createBall = function(world, index, x, y) {
+eightball.PoolTable.prototype._createBall = function(index, x, y) {
   var ballSd = new b2CircleDef();
   ballSd.density = 4.0;
   ballSd.radius = eightball.PoolTable.s_ballDiameter * 2;
@@ -410,7 +426,7 @@ eightball.PoolTable._createBall = function(world, index, x, y) {
   ballBd.linearDamping = 0.02;
   ballBd.angularDamping = 0.015;
   ballBd.userData = index;
-  return world.CreateBody(ballBd);
+  return this.m_world.CreateBody(ballBd);
 };
 
 /**
@@ -530,12 +546,6 @@ eightball.PoolTable._drawShape = function(shape, context) {
   context.fill();
   context.stroke();
 };
-
-/**
- @private
- @type {number}
- */
-eightball.PoolTable.prototype.m_lastStep = 0;
 
 /**
  @private

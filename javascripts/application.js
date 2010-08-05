@@ -114,3 +114,10 @@ $(window).resize(function(e) {
   var height = window.innerHeight;
   poolTable.updateLayout(width, height);
 });
+
+$(window).keypress(function(e){
+  // 114 -> 'r'
+  if(e.which == 114){
+    poolTable.rackEm();
+  }
+});

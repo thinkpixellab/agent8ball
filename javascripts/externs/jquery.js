@@ -35,6 +35,11 @@ jQueryObject.prototype.mousemove = function(fn) {};
  * @return {jQueryObject}
  */
 jQueryObject.prototype.mouseup = function(fn) {};
+/**
+ * @param {Function} fn
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.keypress = function(fn) {};
 
 /**
  * @return {Object}
