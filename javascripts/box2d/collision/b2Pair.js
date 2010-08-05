@@ -56,12 +56,16 @@ b2Pair.prototype = {
     return (this.status & b2Pair.e_pairFinal) == b2Pair.e_pairFinal;
   },
 
-  userData: null,
   proxyId1: 0,
   proxyId2: 0,
   next: 0,
   status: 0
 };
+
+/**
+  @type {b2Contact}
+*/
+b2Pair.prototype.contactData = null;
 
 /** @const @type {number} */
 b2Pair.b2_nullPair = b2Settings.USHRT_MAX;

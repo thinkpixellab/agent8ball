@@ -460,10 +460,6 @@ b2BroadPhase.prototype = {
     }
   },
 
-  Commit: function() {
-    this.m_pairManager.Commit();
-  },
-
   // this.Query an AABB for overlapping proxies, returns the user data and
   // the count, up to the supplied maximum count.
   QueryAABB: function(aabb, userData, maxCount) {
@@ -668,6 +664,13 @@ b2BroadPhase.prototype = {
   m_quantizationFactor: new b2Vec2(),
   m_proxyCount: 0,
   m_timeStamp: 0
+};
+
+/**
+  @returns {!Array.<b2Pair>}
+*/
+b2BroadPhase.prototype.Commit= function() {
+  return this.m_pairManager.Commit();
 };
 
 /**

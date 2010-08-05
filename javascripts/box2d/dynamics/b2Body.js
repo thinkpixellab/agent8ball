@@ -26,7 +26,11 @@ goog.require('b2ShapeFactory');
 // A rigid body. Internal computation are done in terms
 // of the center of mass position. The center of mass may
 // be offset from the body's origin.
-/** @constructor */
+/** 
+ @constructor 
+ @param {!b2BodyDef} bd
+ @param {!b2World} world
+ */
 b2Body = function(bd, world) {
   // initialize instance variables for references
   this.sMat0 = new b2Mat22();
@@ -40,6 +44,10 @@ b2Body = function(bd, world) {
 
   this.m_flags = 0;
   this.m_position.SetV(bd.position);
+  /**
+   @private
+   @type {number}
+   */
   this.m_rotation = bd.rotation;
   this.m_R.Set(this.m_rotation);
   this.m_position0.SetV(this.m_position);
@@ -106,6 +114,10 @@ b2Body = function(bd, world) {
   }
 
   // Compute the center of mass velocity.
+  /**
+   @private
+   @type {!b2Vec2}
+   */
   this.m_linearVelocity = b2Math.AddVV(bd.linearVelocity, b2Math.b2CrossFV(bd.angularVelocity, this.m_center));
   this.m_angularVelocity = bd.angularVelocity;
 
@@ -386,14 +398,12 @@ b2Body.prototype = {
   m_flags: 0,
 
   m_position: new b2Vec2(),
-  m_rotation: null,
   m_R: new b2Mat22(0),
 
   // Conservative advancement data.
   m_position0: new b2Vec2(),
   m_rotation0: null,
 
-  m_linearVelocity: null,
   m_angularVelocity: null,
 
   m_force: null,
@@ -419,9 +429,7 @@ b2Body.prototype = {
   m_linearDamping: null,
   m_angularDamping: null,
 
-  m_sleepTime: null,
-
-  m_userData: null
+  m_sleepTime: null
 };
 b2Body.e_staticFlag = 0x0001;
 b2Body.e_frozenFlag = 0x0002;

@@ -30,8 +30,14 @@ var b2BodyDef = function() {
     this.shapes[i] = null;
   }
   this.position = new b2Vec2(0.0, 0.0);
+  /**
+    @type {number}
+  */
   this.rotation = 0.0;
   this.linearVelocity = new b2Vec2(0.0, 0.0);
+  /**
+    @type {number}
+  */
   this.angularVelocity = 0.0;
   this.linearDamping = 0.0;
   this.angularDamping = 0.0;
@@ -44,9 +50,7 @@ b2BodyDef.prototype = {
   userData: null,
   shapes: new Array(),
   position: null,
-  rotation: null,
   linearVelocity: null,
-  angularVelocity: null,
   linearDamping: null,
   angularDamping: null,
   allowSleep: null,

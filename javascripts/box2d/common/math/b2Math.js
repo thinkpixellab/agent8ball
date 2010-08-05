@@ -57,7 +57,7 @@ b2Math.b2CrossVF = function(a, s) {
  @const 
  @param {number} s
  @param {b2Vec2} a
- @return {b2Vec2}
+ @return {!b2Vec2}
  */
 b2Math.b2CrossFV = function(s, a) {
   return new b2Vec2(-s * a.y, s * a.x);
@@ -84,7 +84,7 @@ b2Math.b2MulTMV = function(A, v) {
  @const 
  @param {b2Vec2} a
  @param {b2Vec2} b
- @return {b2Vec2}
+ @return {!b2Vec2}
  */
 b2Math.AddVV = function(a, b) {
   return new b2Vec2(a.x + b.x, a.y + b.y);
