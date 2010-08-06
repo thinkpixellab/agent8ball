@@ -450,7 +450,7 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   var ballBd = new b2BodyDef();
   ballBd.AddShape(ballSd);
   ballBd.position.Set(x, y);
-  ballBd.linearDamping = 0.02;
+  ballBd.linearDamping = 0.005;
   ballBd.angularDamping = 0.015;
   ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index];
   return this.m_world.CreateBody(ballBd);
