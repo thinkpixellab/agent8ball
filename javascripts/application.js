@@ -2,9 +2,10 @@
 // This file is automatically included by javascript_include_tag :defaults
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.debug.LogManager');
 
 goog.require('pixelLab.ImagePreloader');
-goog.require('pixelLab.Debug');
+goog.require('pixelLab.DebugDiv');
 
 goog.require('eightball.PoolTable');
 goog.require('eightball.Music');
@@ -13,8 +14,6 @@ goog.require('eightball.SoundEffectManager');
 goog.require('eightball.Game');
 goog.require('eightball.Game.EventType');
 goog.require('eightball.Game.GameState');
-goog.require('pixelLab.ImagePreloader');
-goog.require('pixelLab.Debug');
 
 var poolTable;
 var musicManager;
@@ -25,6 +24,7 @@ var soundManager;
 // calls loadApp
 
 var loadContent = function () {
+  pixelLab.DebugDiv.enable();
   pixelLab.ImagePreloader.preload("images/bestscore.png, images/cue.png, images/progressbg.png, images/progressunit.png, images/score.png, images/table.jpg, images/tableborder.png, images/timeremaining.png, images/wood.jpg");
   setTimeout("loadApp();", 500);
 }
@@ -36,8 +36,6 @@ var loadApp = function () {
   $('#loading').fadeOut(400);
   $('#game').fadeIn(1000);
   $('#gamecontrolsouter').fadeIn(1000);
-
-  pixelLab.Debug.enable();
 
   // music
   musicManager = new eightball.Music("sounds/theme.mp4");
@@ -78,6 +76,8 @@ var loadApp = function () {
       //soundManager.play("tick");
     }
 
+    pixelLab.DebugDiv.clear();
+    goog.debug.LogManager.getRoot().info("0" + min + ":" + (sec < 10 ? "0" + sec : sec));
   };
 
   var _highScoreAction = function () {

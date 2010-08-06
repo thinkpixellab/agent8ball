@@ -1,10 +1,13 @@
 goog.provide('eightball.PoolTable');
 
-goog.require('pixelLab.Debug');
 goog.require('goog.array');
 goog.require('goog.math.Matrix');
 goog.require('goog.math.Line');
 goog.require('goog.math.Vec2');
+goog.require('goog.debug.LogManager');
+
+goog.require('pixelLab.DebugDiv');
+
 goog.require('b2Vec2');
 goog.require('b2AABB');
 goog.require('b2World');
@@ -126,10 +129,10 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
       // calculate strike power
       _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.s_maxStrikeDistance;
 
-      pixelLab.Debug.clearDebug();
-      pixelLab.Debug.writeDebug("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
-      pixelLab.Debug.writeDebug("Strike Angle: " + Math.round(strikeAngle));
-      pixelLab.Debug.writeDebug("Strike Power: " + _this.m_strikePower);
+      pixelLab.DebugDiv.clear();
+      goog.debug.LogManager.getRoot().info("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
+      goog.debug.LogManager.getRoot().info("Strike Angle: " + Math.round(strikeAngle));
+      goog.debug.LogManager.getRoot().info("Strike Power: " + _this.m_strikePower);
 
       _this._updateCue(_this.m_lastMouseDown, strikeOffset);
     } else {
