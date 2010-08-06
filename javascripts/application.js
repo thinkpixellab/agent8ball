@@ -26,7 +26,7 @@ var soundManager;
 
 var loadContent = function () {
   pixelLab.ImagePreloader.preload("images/bestscore.png, images/cue.png, images/progressbg.png, images/progressunit.png, images/score.png, images/table.jpg, images/tableborder.png, images/timeremaining.png, images/wood.jpg");
-  setTimeout("loadApp();", 2000);
+  setTimeout("loadApp();", 500);
 }
 
 
