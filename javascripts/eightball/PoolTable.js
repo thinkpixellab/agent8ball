@@ -7,6 +7,7 @@ goog.require('goog.math.Vec2');
 goog.require('goog.debug.LogManager');
 
 goog.require('pixelLab.DebugDiv');
+goog.require('pixelLab.fpsLogger');
 
 goog.require('b2Vec2');
 goog.require('b2AABB');
@@ -61,14 +62,10 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   this.m_balls = [];
 
   /**
-   @type {number}
+   @private
+   @type {!pixelLab.fpsLogger}
    */
-  this.startTick = -1;
-
-  /**
-   @type {number}
-   */
-  this.stepCount = 0;
+  this.m_fpsLogger = new pixelLab.fpsLogger();
 
   // get a local reference to this
   var _this = this;
@@ -464,10 +461,8 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
  */
 eightball.PoolTable.prototype._step = function() {
   if (this.m_lastStep > 0) {
-    if (this.startTick < 0) {
-      this.startTick = goog.now();
-    }
     var delta = eightball.PoolTable._floatSeconds() - this.m_lastStep;
+    this.m_fpsLogger.AddInterval(delta);
     var pairs = this.m_world.Step(delta, 1);
     this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
     this._drawWorld();
@@ -586,7 +581,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
  @returns {number}
  */
 eightball.PoolTable.prototype.stepsPerSecond = function() {
-  return 1000 * this.stepCount / (goog.now() - this.startTick);
+  return this.m_fpsLogger.fps;
 };
 
 /**

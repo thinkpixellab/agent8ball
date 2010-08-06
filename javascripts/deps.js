@@ -68,8 +68,9 @@ goog.addDependency("../../../box2d/dynamics/joints/b2RevoluteJoint.js", ['b2Revo
 goog.addDependency("../../../box2d/dynamics/joints/b2RevoluteJointDef.js", ['b2RevoluteJointDef'], ['b2Vec2', 'b2JointDef', 'b2Joint']);
 goog.addDependency("../../../eightball/Game.js", ['eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState'], ['goog.Timer', 'goog.array', 'goog.events.Event', 'goog.events.EventTarget', 'goog.object', 'goog.net.cookies']);
 goog.addDependency("../../../eightball/Music.js", ['eightball.Music'], ['goog.net.cookies']);
-goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], ['goog.array', 'goog.math.Matrix', 'goog.math.Line', 'goog.math.Vec2', 'goog.debug.LogManager', 'pixelLab.DebugDiv', 'b2Vec2', 'b2AABB', 'b2World', 'b2BodyDef', 'b2PolyDef', 'b2CircleDef']);
+goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], ['goog.array', 'goog.math.Matrix', 'goog.math.Line', 'goog.math.Vec2', 'goog.debug.LogManager', 'pixelLab.DebugDiv', 'pixelLab.fpsLogger', 'b2Vec2', 'b2AABB', 'b2World', 'b2BodyDef', 'b2PolyDef', 'b2CircleDef']);
 goog.addDependency("../../../eightball/SoundEffect.js", ['eightball.SoundEffect'], []);
 goog.addDependency("../../../eightball/SoundEffectManager.js", ['eightball.SoundEffectManager'], ['eightball.SoundEffect', 'goog.net.cookies']);
 goog.addDependency("../../../helpers/DebugDiv.js", ['pixelLab.DebugDiv'], ['goog.debug.LogManager', 'goog.dom']);
+goog.addDependency("../../../helpers/fpsLogger.js", ['pixelLab.fpsLogger'], []);
 goog.addDependency("../../../helpers/preload.js", ['pixelLab.ImagePreloader'], ['goog.string', 'goog.array']);
