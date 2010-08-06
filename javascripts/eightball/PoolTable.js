@@ -422,7 +422,7 @@ eightball.PoolTable._createPockets = function(world, centerOffset) {
  */
 eightball.PoolTable._createPocket = function(world, x, y) {
   var pocketSd = new b2CircleDef();
-  pocketSd.radius = 21;
+  pocketSd.radius = 7;
 
   var pocketBd = new b2BodyDef();
   pocketBd.AddShape(pocketSd);
