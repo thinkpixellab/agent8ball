@@ -471,7 +471,7 @@ eightball.PoolTable.prototype._step = function() {
   }
 
   this.m_lastStep = eightball.PoolTable._floatSeconds();
-  goog.global.setTimeout(goog.bind(this._step, this), 1 /*eightball.PoolTable.s_millisecondsPerFrame*/);
+  goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable.s_millisecondsPerFrame);
 };
 
 /**
