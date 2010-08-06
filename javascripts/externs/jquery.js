@@ -60,6 +60,19 @@ jQueryObject.prototype.fadeIn = function(opt_speed, opt_fn) {};
 jQueryObject.prototype.fadeOut = function(opt_speed, opt_fn) {};
 
 /**
+ * @param {(number|string)=} opt_speed
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.delay = function(opt_speed) {};
+
+/**
+ * @param {(number|string)=} opt_speed
+ * @param {Function=} opt_fn
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.hide = function(opt_speed, opt_fn) {};
+
+/**
  * @param {string} opt_val
  * @return {string|jQueryObject}
  */

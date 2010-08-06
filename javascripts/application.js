@@ -23,15 +23,13 @@ var soundManager;
 
 // displays loading information and preloads all other content then
 // calls loadApp
-
-var loadContent = function () {
+var loadContent = function() {
   pixelLab.DebugDiv.enable();
   pixelLab.ImagePreloader.preload("images/bestscore.png, images/cue.png, images/progressbg.png, images/progressunit.png, images/score.png, images/table.jpg, images/tableborder.png, images/timeremaining.png, images/wood.jpg");
-  setTimeout("loadApp();", 500);
-}
+  goog.global.setTimeout(loadApp, 500);
+};
 
-
-var loadApp = function () {
+var loadApp = function() {
 
   // show the content, hide the loading element
   $('#loading').fadeOut(400);
@@ -57,8 +55,7 @@ var loadApp = function () {
   var lastBars = 29;
 
   // event handlers
-
-  var _tickAction = function () {
+  var _tickAction = function() {
 
     var min = Math.floor(game.secondsLeft / 60);
     var sec = game.secondsLeft % 60;
@@ -84,15 +81,15 @@ var loadApp = function () {
     goog.debug.LogManager.getRoot().info("FPS: " + str);
   };
 
-  var _highScoreAction = function () {
+  var _highScoreAction = function() {
     $('#bestscore').html(game.highScore);
-  }
+  };
 
-  var _readyAction = function () {
+  var _readyAction = function() {
     start.delay(800).fadeIn(400);
-  }
+  };
 
-  start.click(function () {
+  start.click(function() {
     start.fadeOut(100, start.hide());
     overlay.fadeOut(400);
     game.start();
@@ -120,7 +117,7 @@ var loadApp = function () {
     poolTable.updateLayout(width, height);
   }
 
-  var updateMusicButton = function () {
+  var updateMusicButton = function() {
     if (musicManager.isMusicOn()) {
       $("#musicbuttonon").fadeIn("fast");
     } else {
@@ -128,7 +125,7 @@ var loadApp = function () {
     }
   };
 
-  var updateSoundButton = function () {
+  var updateSoundButton = function() {
     if (soundManager.isSoundOn()) {
       $("#soundsbuttonon").fadeIn("fast");
     } else {
@@ -137,13 +134,13 @@ var loadApp = function () {
   };
 
   // music on/off
-  $("#musicbutton").click(function () {
+  $("#musicbutton").click(function() {
     musicManager.toggleMusic();
     updateMusicButton();
   });
 
   // sound effects on/off
-  $("#soundsbutton").click(function () {
+  $("#soundsbutton").click(function() {
     soundManager.toggleSound();
     updateSoundButton();
   });
@@ -152,26 +149,22 @@ var loadApp = function () {
   updateSoundButton();
 
   // sound effects test code
-  $(".soundtest").click(function () {
+  $(".soundtest").click(function() {
     soundManager.play(this.id);
   });
 };
 
-
 $(window).load(loadContent);
 
-
-
-
-$(window).resize(function (e) {
+$(window).resize(function(e) {
   var width = window.innerWidth;
   var height = window.innerHeight;
   poolTable.updateLayout(width, height);
 });
 
-$(window).keypress(function(e){
+$(window).keypress(function(e) {
   // 114 -> 'r'
-  if(e.which == 114){
+  if (e.which == 114) {
     poolTable.rackEm();
   }
 });

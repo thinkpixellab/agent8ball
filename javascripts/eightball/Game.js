@@ -77,7 +77,7 @@ eightball.Game.prototype.togglePaused = function() {
 };
 
 eightball.Game.prototype._loadHighScore = function () {
-  var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, 1000);
+  var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, '1000');
   return highScoreValue;
 };
 
