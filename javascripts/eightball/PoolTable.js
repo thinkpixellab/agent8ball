@@ -445,7 +445,7 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballSd.density = 4.0;
   ballSd.radius = eightball.PoolTable.s_ballDiameter * 2;
   ballSd.restitution = 0.95;
-  ballSd.friction = 0.2;
+  ballSd.friction = 0.05;
 
   var ballBd = new b2BodyDef();
   ballBd.AddShape(ballSd);
