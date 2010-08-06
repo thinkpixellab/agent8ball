@@ -66,7 +66,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
     _this._updateCue();
   };
   this.m_cueImage.src = "images/cue.png";
-  
+
   this.m_ballVignetteImage = new Image();
   this.m_ballVignetteImage.src = "images/ballvignette.png";
 
@@ -320,7 +320,6 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
   var table = new b2BodyDef();
   table.restitution = 1;
   table.friction = 1.0;
-  table.userData = eightball.PoolTable.s_bodyTypes.TABLE;
 
   var side;
   var points;
@@ -370,6 +369,7 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
   side.SetVertices(points);
   table.AddShape(side);
 
+  table.userData = [eightball.PoolTable.s_bodyTypes.TABLE];
   return world.CreateBody(table);
 };
 
@@ -417,7 +417,7 @@ eightball.PoolTable._createPocket = function(world, x, y) {
   var pocketBd = new b2BodyDef();
   pocketBd.AddShape(pocketSd);
   pocketBd.position.Set(x, y);
-  pocketBd.userData = eightball.PoolTable.s_bodyTypes.POCKET;
+  pocketBd.userData = [eightball.PoolTable.s_bodyTypes.POCKET];
 
   var body = world.CreateBody(pocketBd);
   return body;
@@ -442,7 +442,7 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.02;
   ballBd.angularDamping = 0.015;
-  ballBd.userData = index;
+  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index];
   return this.m_world.CreateBody(ballBd);
 };
 
@@ -501,75 +501,69 @@ eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
  @private
  */
 eightball.PoolTable.prototype._drawWorld = function() {
-  for (var b = this.m_world.m_bodyList; b; b = b.m_next) {
-    var userData = b.GetUserData();
-    if (goog.isNumber(userData)) {
-      this.m_canvasContext.strokeStyle = 'black';
-      this.m_canvasContext.fillStyle = "white";
-      this._drawBall(b);
+  for (var body = this.m_world.m_bodyList; body; body = body.m_next) {
+    var userData = body.GetUserData();
+    if (userData) {
+      switch (userData[0]) {
+      case eightball.PoolTable.s_bodyTypes.BALL:
+        {
+          this._drawBall(body);
+          break;
+        }
+      }
     }
   }
 };
 
 /**
-  @private
-  @param {!b2Body} ballBody
-*/
+ @private
+ @param {!b2Body} ballBody
+ */
 eightball.PoolTable.prototype._drawBall = function(ballBody) {
+  var ballNumber = ballBody.GetUserData()[1];
   var shape = ballBody.GetShapeList();
-  // TODO: why is this *ever* null? WEIRD!!
-  if (shape != null) {
-    var ctx = this.m_canvasContext;
+  var ctx = this.m_canvasContext;
 
-//    ctx.strokeStyle = 'rgb(170,170,170)';
-    /*if (ballBody.GetUserData() == 0) {
-      ctx.fillStyle = 'white';
-    } else {
-      ctx.fillStyle = 'gray';
-    }*/
-	switch(ballBody.GetUserData())
-	{
-		case 1:
-		case 9:
-			ctx.fillStyle = 'rgb(250,233,0)';
-			break;
-		case 2:
-		case 10:
-			ctx.fillStyle = 'rgb(0,32,168)';
-			break;
-		case 3:
-		case 11:
-			ctx.fillStyle = 'rgb(252,0,31)';
-			break;
-		case 4:
-		case 12:
-			ctx.fillStyle = 'rgb(52,31,134)';
-			break;
-		case 5:
-		case 13:
-			ctx.fillStyle = 'rgb(250,149,67)';
-			break;
-		case 6:
-		case 14:
-			ctx.fillStyle = 'rgb(9,123,74)';
-			break;
-		case 7:
-		case 15:
-			ctx.fillStyle = 'rgb(127,10,19)';
-			break;
-		case 8:
-			ctx.fillStyle = 'rgb(34,34,34)';
-			break;
-		default:
-			ctx.fillStyle = 'white';
-	}
-    ctx.beginPath();
-    ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
-    ctx.fill();	
-	//ctx.stroke();
-
-	ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
+  switch (ballNumber) {
+  case 1:
+  case 9:
+    ctx.fillStyle = 'rgb(250,233,0)';
+    break;
+  case 2:
+  case 10:
+    ctx.fillStyle = 'rgb(0,32,168)';
+    break;
+  case 3:
+  case 11:
+    ctx.fillStyle = 'rgb(252,0,31)';
+    break;
+  case 4:
+  case 12:
+    ctx.fillStyle = 'rgb(52,31,134)';
+    break;
+  case 5:
+  case 13:
+    ctx.fillStyle = 'rgb(250,149,67)';
+    break;
+  case 6:
+  case 14:
+    ctx.fillStyle = 'rgb(9,123,74)';
+    break;
+  case 7:
+  case 15:
+    ctx.fillStyle = 'rgb(127,10,19)';
+    break;
+  case 8:
+    ctx.fillStyle = 'rgb(34,34,34)';
+    break;
+  default:
+    ctx.fillStyle = 'white';
   }
+  ctx.beginPath();
+  ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
+  ctx.fill();
+
+  ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
 };
 
 /**
@@ -587,7 +581,8 @@ eightball.PoolTable._floatSeconds = function() {
  */
 eightball.PoolTable.s_bodyTypes = {
   TABLE: 'table',
-  POCKET: 'pocket'
+  POCKET: 'pocket',
+  BALL: 'ball'
 };
 
 /**
