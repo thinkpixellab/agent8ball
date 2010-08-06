@@ -29,7 +29,7 @@ var loadContent = function() {
   goog.global.setTimeout(loadApp, 500);
 };
 
-var loadApp = function() {
+var loadApp = function () {
 
   // show the content, hide the loading element
   $('#loading').fadeOut(400);
@@ -50,12 +50,13 @@ var loadApp = function() {
   var progress = $('#progress');
   var overlay = $('#overlay');
   var start = $('#start');
+  var pause = $('#pause');
 
   // other globals 
   var lastBars = 29;
 
   // event handlers
-  var _tickAction = function() {
+  var _tickAction = function () {
 
     var min = Math.floor(game.secondsLeft / 60);
     var sec = game.secondsLeft % 60;
@@ -71,7 +72,6 @@ var loadApp = function() {
     if (bars != lastBars) {
       lastBars = bars;
       progress.width(15 * bars);
-      //soundManager.play("tick");
     }
 
     pixelLab.DebugDiv.clear();
@@ -81,18 +81,28 @@ var loadApp = function() {
     goog.debug.LogManager.getRoot().info("FPS: " + str);
   };
 
-  var _highScoreAction = function() {
+  var _highScoreAction = function () {
     $('#bestscore').html(game.highScore);
   };
 
-  var _readyAction = function() {
+  var _scoreAction = function () {
+    var s = game.score;
+    if (s == 0) s = "00";
+    $('#score').html(s);
+  };
+
+  var _readyAction = function () {
     start.delay(800).fadeIn(400);
   };
 
-  start.click(function() {
+  start.click(function () {
     start.fadeOut(100, start.hide());
     overlay.fadeOut(400);
     game.start();
+  });
+
+  pause.click(function () {
+    game.addPoints(100);
   });
 
   // create a game object
@@ -100,6 +110,7 @@ var loadApp = function() {
 
   // register for game events
   goog.events.listen(game, eightball.Game.EventType.TICK, _tickAction);
+  goog.events.listen(game, eightball.Game.EventType.SCORE, _scoreAction);
   goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, _highScoreAction);
   goog.events.listen(game, eightball.Game.EventType.READY, _readyAction);
 
@@ -117,7 +128,7 @@ var loadApp = function() {
     poolTable.updateLayout(width, height);
   }
 
-  var updateMusicButton = function() {
+  var updateMusicButton = function () {
     if (musicManager.isMusicOn()) {
       $("#musicbuttonon").fadeIn("fast");
     } else {
@@ -125,7 +136,7 @@ var loadApp = function() {
     }
   };
 
-  var updateSoundButton = function() {
+  var updateSoundButton = function () {
     if (soundManager.isSoundOn()) {
       $("#soundsbuttonon").fadeIn("fast");
     } else {
@@ -134,13 +145,13 @@ var loadApp = function() {
   };
 
   // music on/off
-  $("#musicbutton").click(function() {
+  $("#musicbutton").click(function () {
     musicManager.toggleMusic();
     updateMusicButton();
   });
 
   // sound effects on/off
-  $("#soundsbutton").click(function() {
+  $("#soundsbutton").click(function () {
     soundManager.toggleSound();
     updateSoundButton();
   });
@@ -149,7 +160,7 @@ var loadApp = function() {
   updateSoundButton();
 
   // sound effects test code
-  $(".soundtest").click(function() {
+  $(".soundtest").click(function () {
     soundManager.play(this.id);
   });
 };

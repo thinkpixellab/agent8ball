@@ -34,7 +34,9 @@ eightball.Game.prototype.reset = function () {
   }
 
   this.secondsLeft = eightball.Game.s_gameSeconds;
+
   this.score = 0;
+  this._dispatchGameEvent(eightball.Game.EventType.SCORE);
 
   this.highScore = this._loadHighScore();
   this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
@@ -74,6 +76,23 @@ eightball.Game.prototype.togglePaused = function() {
     this._dispatchGameEvent(eightball.Game.EventType.RESUME);
   }
   // TODO: else?
+};
+
+eightball.Game.prototype.addPoints = function (points) {
+
+  this.score += points;
+  this._dispatchGameEvent(eightball.Game.EventType.SCORE);
+
+  if (this.score > this.highScore) {
+    this.highScore = this.score;
+    this._saveHighScore(this.highScore);
+    this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
+  }
+
+}
+
+eightball.Game.prototype._saveHighScore = function (highScore) {
+  goog.net.cookies.set(eightball.Game.s_CookieGameHighScore, highScore, 7776000);
 };
 
 eightball.Game.prototype._loadHighScore = function () {
