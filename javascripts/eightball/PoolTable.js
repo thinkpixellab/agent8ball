@@ -60,6 +60,16 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
    */
   this.m_balls = [];
 
+  /**
+   @type {number}
+   */
+  this.startTick = -1;
+
+  /**
+   @type {number}
+   */
+  this.stepCount = 0;
+
   // get a local reference to this
   var _this = this;
 
@@ -454,16 +464,19 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
  */
 eightball.PoolTable.prototype._step = function() {
   if (this.m_lastStep > 0) {
+    if (this.startTick < 0) {
+      this.startTick = goog.now();
+    }
     var delta = eightball.PoolTable._floatSeconds() - this.m_lastStep;
     var pairs = this.m_world.Step(delta, 1);
     this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
     this._drawWorld();
     this._processPairs(pairs);
+    this.stepCount++;
   }
 
-  goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable.s_millisecondsPerFrame);
-
   this.m_lastStep = eightball.PoolTable._floatSeconds();
+  goog.global.setTimeout(goog.bind(this._step, this), 1 /*eightball.PoolTable.s_millisecondsPerFrame*/);
 };
 
 /**
@@ -567,6 +580,13 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   ctx.fill();
 
   ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
+};
+
+/**
+ @returns {number}
+ */
+eightball.PoolTable.prototype.stepsPerSecond = function() {
+  return 1000 * this.stepCount / (goog.now() - this.startTick);
 };
 
 /**

@@ -3,6 +3,7 @@
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.debug.LogManager');
+goog.require('goog.i18n.NumberFormat');
 
 goog.require('pixelLab.ImagePreloader');
 goog.require('pixelLab.DebugDiv');
@@ -78,6 +79,9 @@ var loadApp = function () {
 
     pixelLab.DebugDiv.clear();
     goog.debug.LogManager.getRoot().info("0" + min + ":" + (sec < 10 ? "0" + sec : sec));
+    var fmt = new goog.i18n.NumberFormat('#,###.##');
+    var str = fmt.format(poolTable.stepsPerSecond());
+    goog.debug.LogManager.getRoot().info("FPS: " + str);
   };
 
   var _highScoreAction = function () {
