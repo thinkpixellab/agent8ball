@@ -517,13 +517,27 @@ eightball.PoolTable.prototype._drawWorld = function() {
     if (userData) {
       switch (userData[0]) {
       case eightball.PoolTable.s_bodyTypes.BALL:
-        {
-          this._drawBall(body);
-          break;
-        }
+        this._drawBall(body);
+        break;
+      case eightball.PoolTable.s_bodyTypes.POCKET:
+        // this._drawPocket(body);
+        break;
       }
     }
   }
+};
+
+/**
+ @private
+ @param {!b2Body} pocketBody
+ */
+eightball.PoolTable.prototype._drawPocket = function(pocketBody) {
+  var shape = pocketBody.GetShapeList();
+  var ctx = this.m_canvasContext;
+  ctx.fillStyle = 'rgba(255,255,255,.5)';
+  ctx.beginPath();
+  ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
+  ctx.fill();
 };
 
 /**
