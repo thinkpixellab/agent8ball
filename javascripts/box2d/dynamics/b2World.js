@@ -29,6 +29,9 @@ goog.require('b2WorldListener');
 
 /**
  @constructor
+ @param {!b2AABB} worldAABB
+ @param {!b2Vec2} gravity
+ @param {boolean} doSleep
  */
 b2World = function(worldAABB, gravity, doSleep) {
   // initialize instance variables for references
@@ -479,7 +482,6 @@ b2World.prototype.m_jointCount = 0;
 // These bodies will be destroyed at the next time this.m_step.
 b2World.prototype.m_bodyDestroyList = null;
 
-b2World.prototype.m_gravity = null;
 b2World.prototype.m_allowSleep = null;
 
 b2World.prototype.m_groundBody = null;
