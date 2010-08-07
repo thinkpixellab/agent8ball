@@ -552,31 +552,38 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   switch (ballNumber) {
   case 1:
   case 9:
-    ctx.fillStyle = 'rgb(250,233,0)';
+  	//yellow
+    ctx.fillStyle = 'rgb(250,164,25)';
     break;
   case 2:
   case 10:
-    ctx.fillStyle = 'rgb(0,32,168)';
+  	//blue
+    ctx.fillStyle = 'rgb(35,45,101)';
     break;
   case 3:
   case 11:
-    ctx.fillStyle = 'rgb(252,0,31)';
+  	//light red
+    ctx.fillStyle = 'rgb(192,66,57)';
     break;
   case 4:
   case 12:
-    ctx.fillStyle = 'rgb(52,31,134)';
+  	//plum
+    ctx.fillStyle = 'rgb(80,46,67)';
     break;
   case 5:
   case 13:
-    ctx.fillStyle = 'rgb(250,149,67)';
+  	//orange
+    ctx.fillStyle = 'rgb(236,89,37)';
     break;
   case 6:
   case 14:
-    ctx.fillStyle = 'rgb(9,123,74)';
+  	//dark green
+    ctx.fillStyle = 'rgb(48,65,37)';
     break;
   case 7:
   case 15:
-    ctx.fillStyle = 'rgb(127,10,19)';
+  	//dark red
+    ctx.fillStyle = 'rgb(117,36,32)';
     break;
   case 8:
     ctx.fillStyle = 'rgb(34,34,34)';
