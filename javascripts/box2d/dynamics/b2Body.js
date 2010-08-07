@@ -431,7 +431,7 @@ b2Body.prototype.SetLinearVelocity= function(v) {
   this.m_linearVelocity.SetV(v);
 };
 /**
-  @returns {!b2Vec2}
+  @return {!b2Vec2}
 */
 b2Body.prototype.GetLinearVelocity= function() {
   return this.m_linearVelocity;

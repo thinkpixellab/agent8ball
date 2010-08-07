@@ -667,7 +667,7 @@ b2BroadPhase.prototype = {
 };
 
 /**
-  @returns {!Array.<b2Pair>}
+  @return {!Array.<b2Pair>}
 */
 b2BroadPhase.prototype.Commit= function() {
   return this.m_pairManager.Commit();
@@ -677,7 +677,7 @@ b2BroadPhase.prototype.Commit= function() {
   // Create and destroy proxies. These call Flush first.
   @param {!b2AABB} aabb
   @param {!b2Shape} userData
-  @returns {number}
+  @return {number}
 */
 b2BroadPhase.prototype.CreateProxy = function(aabb, userData) {
   var index = 0;

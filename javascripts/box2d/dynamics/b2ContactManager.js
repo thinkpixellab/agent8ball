@@ -49,7 +49,7 @@ goog.inherits(b2ContactManager, b2PairCallback);
   // to overlap. We create a b2Contact to manage the narrow phase.
   @param {!b2Shape} proxyUserData1
   @param {!b2Shape} proxyUserData2
-  @returns {!b2Contact}
+  @return {!b2Contact}
 */
 b2ContactManager.prototype.PairAdded = function(proxyUserData1, proxyUserData2) {
   var shape1 = proxyUserData1;

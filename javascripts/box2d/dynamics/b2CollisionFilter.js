@@ -28,7 +28,7 @@ b2CollisionFilter = function() {};
   Return true if contact calculations should be performed between these two shapes.
   @param {!b2Shape} shape1
   @param {!b2Shape} shape2
-  @returns {boolean}
+  @return {boolean}
 */
 b2CollisionFilter.prototype.ShouldCollide = function(shape1, shape2) {
   if (shape1.m_groupIndex == shape2.m_groupIndex && shape1.m_groupIndex != 0) {

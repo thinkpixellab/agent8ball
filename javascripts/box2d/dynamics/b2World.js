@@ -95,7 +95,7 @@ b2World.prototype.SetFilter = function(filter) {
 // while you iterate through the contact list.
 /**
  @param {!b2BodyDef} def
- @returns {!b2Body}
+ @return {!b2Body}
  */
 b2World.prototype.CreateBody = function(def) {
   //void* mem = this.m_blockAllocator.Allocate(sizeof(b2Body));
@@ -294,7 +294,7 @@ b2World.prototype.GetGroundBody = function() {
 };
 
 /**
- @returns {!Array.<b2Pair>}
+ @return {!Array.<b2Pair>}
  */
 b2World.prototype.Step = function(dt, iterations) {
 

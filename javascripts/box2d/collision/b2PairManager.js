@@ -255,7 +255,7 @@ b2PairManager.prototype = {
  @private
  @param {number} proxyId1
  @param {number} proxyId2
- @returns b2Pair
+ @return b2Pair
  */
 b2PairManager.prototype._find = function(proxyId1, proxyId2) {
 
@@ -276,7 +276,7 @@ b2PairManager.prototype._find = function(proxyId1, proxyId2) {
  @param {number} proxyId1
  @param {number} proxyId2
  @param {number} hash
- @returns b2Pair
+ @return b2Pair
  */
 b2PairManager.prototype._findHash = function(proxyId1, proxyId2, hash) {
   var index = this.m_hashTable[hash];
@@ -294,7 +294,7 @@ b2PairManager.prototype._findHash = function(proxyId1, proxyId2, hash) {
 };
 
 /**
-  @returns {!Array.<b2Pair>}
+  @return {!Array.<b2Pair>}
 */
 b2PairManager.prototype.Commit = function() {
   var i = 0;
