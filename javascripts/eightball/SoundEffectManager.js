@@ -5,61 +5,57 @@ goog.require('eightball.SoundEffect');
 goog.require('goog.net.cookies');
 
 /**
-@constructor
-*/
-eightball.SoundEffectManager = function () {
+ @constructor
+ */
+eightball.SoundEffectManager = function() {
 
   /**
-  @private
-  */
+   @private
+   */
   this.m_sounds = new Array();
 
   /**
-  @private
-  */
+   @private
+   */
   var cookieValue = goog.net.cookies.get(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.ON) == eightball.SoundEffectManager.s_CookieOnOffEnum.ON;
   this.m_isSoundOn = cookieValue;
-}
+};
 
-eightball.SoundEffectManager.prototype.add = function (name, soundEffect) {
+eightball.SoundEffectManager.prototype.add = function(name, soundEffect) {
   this.m_sounds[name] = soundEffect;
-}
+};
 
-eightball.SoundEffectManager.prototype.play = function (name) {
+eightball.SoundEffectManager.prototype.play = function(name) {
   if (this.m_isSoundOn) {
     this.m_sounds[name].play();
   }
-}
+};
 
-eightball.SoundEffectManager.prototype.isSoundOn = function () {
+eightball.SoundEffectManager.prototype.isSoundOn = function() {
   return this.m_isSoundOn;
 };
 
-eightball.SoundEffectManager.prototype.toggleSound = function () {
+eightball.SoundEffectManager.prototype.toggleSound = function() {
   this.m_isSoundOn = !this.m_isSoundOn;
   if (this.m_isSoundOn) {
     goog.net.cookies.set(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.ON);
-  }
-  else {
+  } else {
     goog.net.cookies.set(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.OFF);
   }
 };
 
 /** 
-@const
-@private
-@type {string}
-*/
+ @const
+ @private
+ @type {string}
+ */
 eightball.SoundEffectManager.s_CookieSoundOn = "eightball.SoundEffectManager.soundOn";
 
 /** 
-@const
-@private
-@enum {string}
-*/
+ @private
+ @enum {string}
+ */
 eightball.SoundEffectManager.s_CookieOnOffEnum = {
   ON: 'on',
   OFF: 'off'
 };
-
-
