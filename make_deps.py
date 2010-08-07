@@ -47,9 +47,9 @@ def get_js_files():
 def print_help():
   return ClosureShared.print_help(jar_path)
 
-def main():
+def run_command(command):
   logging.basicConfig(format='%(message)s', level=logging.INFO)
-  args = compile()
+  args = command
   logging.info('Running the following command: %s', ' '.join(args))
   proc = subprocess.Popen(args, stdout=subprocess.PIPE)
   (stdoutdata, stderrdata) = proc.communicate()
@@ -58,6 +58,9 @@ def main():
     sys.exit(1)
   else:
     sys.stdout.write(stdoutdata)
+
+def main():
+  run_command(compile())
 
 if __name__ == '__main__':
   main()
