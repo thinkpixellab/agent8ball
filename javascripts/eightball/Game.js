@@ -29,6 +29,7 @@ eightball.Game = function(poolTable) {
    @type {!eightball.PoolTable}
    */
   this.m_poolTable = poolTable;
+  goog.events.listen(this.m_poolTable, eightball.PoolTable.EventType.POCKET_DROP, this._pooltable_pocketDrop);
 
   this.reset();
 };
@@ -53,7 +54,7 @@ eightball.Game.prototype.reset = function() {
   this.highScore = this._loadHighScore();
   this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
 
-  this.gameState = eightball.Music.GameState.READY;
+  this.gameState = eightball.Game.States.READY;
   this._dispatchGameEvent(eightball.Game.EventType.READY);
 
 };
@@ -74,17 +75,17 @@ eightball.Game.prototype.start = function() {
   goog.events.listen(this.m_timer, goog.Timer.TICK, this._tickAction, undefined, this);
 
   // set the game state
-  this.gameState = eightball.Music.GameState.STARTED;
+  this.gameState = eightball.Game.States.STARTED;
 
 };
 
 eightball.Game.prototype.togglePaused = function() {
 
-  if (this.gameState == eightball.Music.GameState.STARTED) {
-    this.gameState = eightball.Music.GameState.PAUSED;
+  if (this.gameState == eightball.Game.States.STARTED) {
+    this.gameState = eightball.Game.States.PAUSED;
     this._dispatchGameEvent(eightball.Game.EventType.PAUSE);
-  } else if (this.gameState == eightball.Music.GameState.PAUSED) {
-    this.gameState = eightball.Music.GameState.STARTED;
+  } else if (this.gameState == eightball.Game.States.PAUSED) {
+    this.gameState = eightball.Game.States.STARTED;
     this._dispatchGameEvent(eightball.Game.EventType.RESUME);
   }
   // TODO: else?
@@ -113,13 +114,13 @@ eightball.Game.prototype._loadHighScore = function() {
 };
 
 eightball.Game.prototype._tickAction = function() {
-  if (this.gameState == eightball.Music.GameState.STARTED) {
+  if (this.gameState == eightball.Game.States.STARTED) {
 
     this.secondsLeft--;
 
     if (this.secondsLeft <= 0) {
       this.m_timer.stop();
-      this.gameState = eightball.Music.GameState.ENDED;
+      this.gameState = eightball.Game.States.ENDED;
       this._dispatchGameEvent(eightball.Game.EventType.END);
     } else {
       this._dispatchGameEvent(eightball.Game.EventType.TICK);
@@ -130,15 +131,23 @@ eightball.Game.prototype._tickAction = function() {
 
 /**
  @private
- */
+ @param {!eightball.Game.EventType} type
+*/
 eightball.Game.prototype._dispatchGameEvent = function(type) {
   this.dispatchEvent(new goog.events.Event(type, this));
 };
 
 /**
+  @private
+*/
+eightball.Game.prototype._pooltable_pocketDrop = function(e){
+  // We have a pocket!
+};
+
+/**
  @private
  @param {number} seconds
- @returns {number}
+ @return {number}
  */
 eightball.Game._inMs = function(seconds) {
   return seconds * 1000;
@@ -148,7 +157,7 @@ eightball.Game._inMs = function(seconds) {
  * Possible game states
  * @enum {string}
  */
-eightball.Music.GameState = {
+eightball.Game.States = {
   /**
    * The game is ready to be played.
    */

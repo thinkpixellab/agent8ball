@@ -5,6 +5,7 @@ goog.require('goog.math.Matrix');
 goog.require('goog.math.Line');
 goog.require('goog.math.Vec2');
 goog.require('goog.debug.LogManager');
+goog.require('goog.events.EventTarget');
 
 goog.require('pixelLab.DebugDiv');
 goog.require('pixelLab.fpsLogger');
@@ -18,6 +19,9 @@ goog.require('b2CircleDef');
 
 /**
  @constructor
+ @param {!HTMLCanvasElement} canvasElement
+ @param {!HTMLCanvasElement} cueCanvasElement
+ @extends {goog.events.EventTarget}
  */
 eightball.PoolTable = function(canvasElement, cueCanvasElement) {
 
@@ -156,6 +160,8 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
 
   this._step();
 };
+
+goog.inherits(eightball.PoolTable, goog.events.EventTarget);
 
 eightball.PoolTable.prototype.updateLayout = function(width, height) {
   // resize the cue canvas
@@ -438,7 +444,7 @@ eightball.PoolTable._createPocket = function(world, x, y) {
  @param {number} index
  @param {number} x
  @param {number} y
- @returns {!b2Body}
+ @return {!b2Body}
  */
 eightball.PoolTable.prototype._createBall = function(index, x, y) {
   var ballSd = new b2CircleDef();
@@ -505,7 +511,7 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
  */
 eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
   this.m_world.DestroyBody(ballBody);
-  // TODO: RAISE an event!!
+  this._dispatchPoolTableEvent(eightball.PoolTable.EventType.POCKET_DROP);
 };
 
 /**
@@ -599,7 +605,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 };
 
 /**
- @returns {number}
+ @return {number}
  */
 eightball.PoolTable.prototype.stepsPerSecond = function() {
   return this.m_fpsLogger.fps;
@@ -607,14 +613,22 @@ eightball.PoolTable.prototype.stepsPerSecond = function() {
 
 /**
  @private
- @returns {number}
+ @return {number}
  */
 eightball.PoolTable._floatSeconds = function() {
   return goog.now() / 1000.0;
 };
 
 /**
- @const
+ @private
+ @param {!eightball.PoolTable.EventType} type
+*/
+eightball.PoolTable.prototype._dispatchPoolTableEvent = function(type) {
+  this.dispatchEvent(new goog.events.Event(type, this));
+};
+
+
+/**
  @private
  @enum {string}
  */
@@ -622,6 +636,15 @@ eightball.PoolTable.s_bodyTypes = {
   TABLE: 'table',
   POCKET: 'pocket',
   BALL: 'ball'
+};
+
+/** 
+ * @enum {string}
+ */
+eightball.PoolTable.EventType = {
+  POCKET_DROP: 'pocketDrop'
+  //WALLHIT: 'wallHit'
+  //BALLHIT: 'ballHit'
 };
 
 /**
