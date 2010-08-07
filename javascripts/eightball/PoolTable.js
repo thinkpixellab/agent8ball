@@ -601,7 +601,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     ctx.fillStyle = 'rgb(34,34,34)';
     break;
   default:
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = 'rgb(232,208,176)';
   }
   ctx.beginPath();
   ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
