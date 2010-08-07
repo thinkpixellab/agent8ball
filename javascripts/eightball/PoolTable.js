@@ -17,6 +17,8 @@ goog.require('b2BodyDef');
 goog.require('b2PolyDef');
 goog.require('b2CircleDef');
 
+goog.require('eightball.PocketDropEvent');
+
 /**
  @constructor
  @param {!HTMLCanvasElement} canvasElement
@@ -71,8 +73,11 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
    */
   this.m_fpsLogger = new pixelLab.fpsLogger();
 
-  // get a local reference to this
+  // get a local reference to 'this' for events
   var _this = this;
+
+  // a local reference to the root log manager
+  var logger = goog.debug.LogManager.getRoot();
 
   // load our cuestick image (we'll need this for rendering in the updateCue function)
   this.m_cueImage = new Image();
@@ -141,9 +146,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
       _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.s_maxStrikeDistance;
 
       pixelLab.DebugDiv.clear();
-      goog.debug.LogManager.getRoot().info("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
-      goog.debug.LogManager.getRoot().info("Strike Angle: " + Math.round(strikeAngle));
-      goog.debug.LogManager.getRoot().info("Strike Power: " + _this.m_strikePower);
+      logger.info("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
+      logger.info("Strike Angle: " + Math.round(strikeAngle));
+      logger.info("Strike Power: " + _this.m_strikePower);
 
       _this._updateCue(_this.m_lastMouseDown, strikeOffset);
     } else {
@@ -511,7 +516,8 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
  */
 eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
   this.m_world.DestroyBody(ballBody);
-  this._dispatchPoolTableEvent(eightball.PoolTable.EventType.POCKET_DROP);
+  // ballBody.GetUserData() == ['ball', ball #]
+  this._dispatchPocketDropEvent(ballBody.GetUserData()[1]);
 };
 
 /**
@@ -558,37 +564,37 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   switch (ballNumber) {
   case 1:
   case 9:
-  	//yellow
+    //yellow
     ctx.fillStyle = 'rgb(250,164,25)';
     break;
   case 2:
   case 10:
-  	//blue
+    //blue
     ctx.fillStyle = 'rgb(35,45,101)';
     break;
   case 3:
   case 11:
-  	//light red
+    //light red
     ctx.fillStyle = 'rgb(192,66,57)';
     break;
   case 4:
   case 12:
-  	//plum
+    //plum
     ctx.fillStyle = 'rgb(80,46,67)';
     break;
   case 5:
   case 13:
-  	//orange
+    //orange
     ctx.fillStyle = 'rgb(236,89,37)';
     break;
   case 6:
   case 14:
-  	//dark green
+    //dark green
     ctx.fillStyle = 'rgb(48,65,37)';
     break;
   case 7:
   case 15:
-  	//dark red
+    //dark red
     ctx.fillStyle = 'rgb(117,36,32)';
     break;
   case 8:
@@ -621,12 +627,11 @@ eightball.PoolTable._floatSeconds = function() {
 
 /**
  @private
- @param {!eightball.PoolTable.EventType} type
-*/
-eightball.PoolTable.prototype._dispatchPoolTableEvent = function(type) {
-  this.dispatchEvent(new goog.events.Event(type, this));
+ @param {number} ballNumber
+ */
+eightball.PoolTable.prototype._dispatchPocketDropEvent = function(ballNumber) {
+  this.dispatchEvent(new eightball.PocketDropEvent(ballNumber, this));
 };
-
 
 /**
  @private
@@ -642,7 +647,6 @@ eightball.PoolTable.s_bodyTypes = {
  * @enum {string}
  */
 eightball.PoolTable.EventType = {
-  POCKET_DROP: 'pocketDrop'
   //WALLHIT: 'wallHit'
   //BALLHIT: 'ballHit'
 };

@@ -5,6 +5,7 @@ goog.provide('eightball.Game.GameState');
 
 goog.require('eightball.PoolTable');
 
+goog.require('goog.debug.LogManager');
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.events.Event');
@@ -29,7 +30,7 @@ eightball.Game = function(poolTable) {
    @type {!eightball.PoolTable}
    */
   this.m_poolTable = poolTable;
-  goog.events.listen(this.m_poolTable, eightball.PoolTable.EventType.POCKET_DROP, this._pooltable_pocketDrop);
+  goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop);
 
   this.reset();
 };
@@ -141,7 +142,7 @@ eightball.Game.prototype._dispatchGameEvent = function(type) {
   @private
 */
 eightball.Game.prototype._pooltable_pocketDrop = function(e){
-  // We have a pocket!
+  goog.debug.LogManager.getRoot().info("Pocket drop: " + e.ballNumber);
 };
 
 /**
