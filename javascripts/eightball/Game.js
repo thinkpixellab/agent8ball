@@ -3,6 +3,8 @@ goog.provide('eightball.Game');
 goog.provide('eightball.Game.EventType');
 goog.provide('eightball.Game.GameState');
 
+goog.require('eightball.PoolTable');
+
 goog.require('goog.Timer');
 goog.require('goog.array');
 goog.require('goog.events.Event');
@@ -13,19 +15,26 @@ goog.require('goog.net.cookies');
 /**
  @constructor
  @extends {goog.events.EventTarget}
+ @param {!eightball.PoolTable} poolTable
  */
-eightball.Game = function () {
+eightball.Game = function(poolTable) {
 
   /**
-  @private
-  */
+   @private
+   */
   this.m_timer = null;
-  this.reset();
 
+  /**
+   @private
+   @type {!eightball.PoolTable}
+   */
+  this.m_poolTable = poolTable;
+
+  this.reset();
 };
 goog.inherits(eightball.Game, goog.events.EventTarget);
 
-eightball.Game.prototype.reset = function () {
+eightball.Game.prototype.reset = function() {
 
   // reset the timer and our clock
   if (this.m_timer) {
@@ -34,6 +43,9 @@ eightball.Game.prototype.reset = function () {
   }
 
   this.secondsLeft = eightball.Game.s_gameSeconds;
+  this._dispatchGameEvent(eightball.Game.EventType.TICK);
+
+  this.m_poolTable.rackEm();
 
   this.score = 0;
   this._dispatchGameEvent(eightball.Game.EventType.SCORE);
@@ -78,7 +90,7 @@ eightball.Game.prototype.togglePaused = function() {
   // TODO: else?
 };
 
-eightball.Game.prototype.addPoints = function (points) {
+eightball.Game.prototype.addPoints = function(points) {
 
   this.score += points;
   this._dispatchGameEvent(eightball.Game.EventType.SCORE);
@@ -89,13 +101,13 @@ eightball.Game.prototype.addPoints = function (points) {
     this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
   }
 
-}
+};
 
-eightball.Game.prototype._saveHighScore = function (highScore) {
+eightball.Game.prototype._saveHighScore = function(highScore) {
   goog.net.cookies.set(eightball.Game.s_CookieGameHighScore, highScore, 7776000);
 };
 
-eightball.Game.prototype._loadHighScore = function () {
+eightball.Game.prototype._loadHighScore = function() {
   var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, '1000');
   return highScoreValue;
 };
@@ -117,17 +129,17 @@ eightball.Game.prototype._tickAction = function() {
 };
 
 /**
-  @private
-*/
+ @private
+ */
 eightball.Game.prototype._dispatchGameEvent = function(type) {
   this.dispatchEvent(new goog.events.Event(type, this));
 };
 
 /**
-  @private
-  @param {number} seconds
-  @returns {number}
-*/
+ @private
+ @param {number} seconds
+ @returns {number}
+ */
 eightball.Game._inMs = function(seconds) {
   return seconds * 1000;
 };
@@ -165,8 +177,8 @@ eightball.Music.GameState = {
  */
 eightball.Game.EventType = {
   /**
-  * Dispatched when the game is ready to be started.
-  */
+   * Dispatched when the game is ready to be started.
+   */
   READY: 'ready',
 
   /**

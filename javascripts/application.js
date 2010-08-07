@@ -16,10 +16,7 @@ goog.require('eightball.Game');
 goog.require('eightball.Game.EventType');
 goog.require('eightball.Game.GameState');
 
-var poolTable;
-var musicManager;
-var game;
-var soundManager;
+var _game;
 
 // displays loading information and preloads all other content then
 // calls loadApp
@@ -29,7 +26,7 @@ var loadContent = function() {
   goog.global.setTimeout(loadApp, 500);
 };
 
-var loadApp = function () {
+var loadApp = function() {
 
   // show the content, hide the loading element
   $('#loading').fadeOut(400);
@@ -37,10 +34,10 @@ var loadApp = function () {
   $('#gamecontrolsouter').fadeIn(1000);
 
   // music
-  musicManager = new eightball.Music("sounds/theme.mp4");
+  var musicManager = new eightball.Music("sounds/theme.mp4");
 
   // sound
-  soundManager = new eightball.SoundEffectManager();
+  var soundManager = new eightball.SoundEffectManager();
   soundManager.add("tick", new eightball.SoundEffect("sounds/tick.mp3", 1));
 
   // global elements
@@ -51,13 +48,14 @@ var loadApp = function () {
   var overlay = $('#overlay');
   var start = $('#start');
   var pause = $('#pause');
+  var canvasElement = $('canvas#demo_canvas')[0];
+  var cueCanvasElement = $('canvas#cue_canvas')[0];
 
   // other globals 
   var lastBars = 29;
 
   // event handlers
-  var _tickAction = function () {
-
+  var _tickAction = function() {
     var min = Math.floor(game.secondsLeft / 60);
     var sec = game.secondsLeft % 60;
     var sectens = Math.floor(sec / 10);
@@ -81,32 +79,36 @@ var loadApp = function () {
     goog.debug.LogManager.getRoot().info("FPS: " + str);
   };
 
-  var _highScoreAction = function () {
+  var _highScoreAction = function() {
     $('#bestscore').html(game.highScore);
   };
 
-  var _scoreAction = function () {
+  var _scoreAction = function() {
     var s = game.score;
     if (s == 0) s = "00";
     $('#score').html(s);
   };
 
-  var _readyAction = function () {
+  var _readyAction = function() {
     start.delay(800).fadeIn(400);
   };
 
-  start.click(function () {
+  start.click(function() {
     start.fadeOut(100, start.hide());
     overlay.fadeOut(400);
     game.start();
   });
 
-  pause.click(function () {
+  pause.click(function() {
     game.addPoints(100);
   });
 
+  var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement);
+
   // create a game object
-  game = new eightball.Game();
+  var game = new eightball.Game(poolTable);
+  // *DEBUG*
+  _game = game;
 
   // register for game events
   goog.events.listen(game, eightball.Game.EventType.TICK, _tickAction);
@@ -118,17 +120,23 @@ var loadApp = function () {
   // need to initialize everything for game play
   game.reset();
 
-  var canvasElement = $('canvas#demo_canvas')[0];
-  var cueCanvasElement = $('canvas#cue_canvas')[0];
-  if (canvasElement) {
-    poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement);
-
+  var updatePoolTableLayout = function() {
     var width = window.innerWidth;
     var height = window.innerHeight;
     poolTable.updateLayout(width, height);
-  }
+  };
 
-  var updateMusicButton = function () {
+  $(window).resize(updatePoolTableLayout);
+  updatePoolTableLayout();
+
+  $(window).keypress(function(e) {
+    // 114 -> 'r'
+    if (e.which == 114) {
+      game.reset();
+    }
+  });
+
+  var updateMusicButton = function() {
     if (musicManager.isMusicOn()) {
       $("#musicbuttonon").fadeIn("fast");
     } else {
@@ -136,7 +144,7 @@ var loadApp = function () {
     }
   };
 
-  var updateSoundButton = function () {
+  var updateSoundButton = function() {
     if (soundManager.isSoundOn()) {
       $("#soundsbuttonon").fadeIn("fast");
     } else {
@@ -145,13 +153,13 @@ var loadApp = function () {
   };
 
   // music on/off
-  $("#musicbutton").click(function () {
+  $("#musicbutton").click(function() {
     musicManager.toggleMusic();
     updateMusicButton();
   });
 
   // sound effects on/off
-  $("#soundsbutton").click(function () {
+  $("#soundsbutton").click(function() {
     soundManager.toggleSound();
     updateSoundButton();
   });
@@ -160,22 +168,9 @@ var loadApp = function () {
   updateSoundButton();
 
   // sound effects test code
-  $(".soundtest").click(function () {
+  $(".soundtest").click(function() {
     soundManager.play(this.id);
   });
 };
 
 $(window).load(loadContent);
-
-$(window).resize(function(e) {
-  var width = window.innerWidth;
-  var height = window.innerHeight;
-  poolTable.updateLayout(width, height);
-});
-
-$(window).keypress(function(e) {
-  // 114 -> 'r'
-  if (e.which == 114) {
-    poolTable.rackEm();
-  }
-});
