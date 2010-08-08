@@ -30,7 +30,7 @@ eightball.Game = function(poolTable) {
    @type {!eightball.PoolTable}
    */
   this.m_poolTable = poolTable;
-  goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop);
+  goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop, undefined, this);
 
   this.reset();
 };
@@ -141,8 +141,9 @@ eightball.Game.prototype._dispatchGameEvent = function(type) {
 /**
   @private
 */
-eightball.Game.prototype._pooltable_pocketDrop = function(e){
+eightball.Game.prototype._pooltable_pocketDrop = function (e) {
   goog.debug.LogManager.getRoot().info("Pocket drop: " + e.ballNumber);
+  this.addPoints(100);
 };
 
 /**

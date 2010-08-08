@@ -152,6 +152,13 @@ var loadApp = function() {
     }
   };
 
+  $("#instructions").click(function () {
+    game.togglePaused();
+    $("#howtoplay").fadeIn(200);
+    $("#cue_canvas").fadeOut(200);
+    
+  });
+
   // music on/off
   $("#musicbutton").click(function() {
     musicManager.toggleMusic();
