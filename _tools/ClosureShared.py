@@ -4,7 +4,7 @@ import sys
 import os
 import fnmatch
 
-def make_deps(calcdeps_py_path, deps_js_path, closure_path, application_js_path, js_dirs):
+def make_deps(calcdeps_py_path, deps_js_path, closure_path, js_dirs):
   
   command = ['python']
   command += [calcdeps_py_path]
@@ -12,8 +12,6 @@ def make_deps(calcdeps_py_path, deps_js_path, closure_path, application_js_path,
   command += ["--output_file", deps_js_path]
   command += ["--d", closure_path]
   command += ["-o", "deps"]
-  
-  command += ["-i", application_js_path]
   
   for js_dir in js_dirs:
     command += ["-p", js_dir]
