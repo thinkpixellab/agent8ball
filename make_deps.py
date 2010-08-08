@@ -11,6 +11,7 @@ js_path = "javascripts"
 closure_path = os.path.join(js_path, 'closure-library','closure')
 application_js_path = os.path.join(js_path, 'application.js')
 js_dirs = map(lambda dir: os.path.join(js_path, dir), ['box2d','eightball','helpers'])
+closure_dependencies = js_dirs + [application_js_path]
 
 # deps
 calcdeps_py_path = os.path.join(closure_path, "bin", "calcdeps.py")
@@ -22,7 +23,7 @@ jar_path = os.path.join('_tools', 'closure_compiler', 'compiler.jar')
 extern_dir = os.path.join(js_path, 'externs')
 
 def make_deps():
-  return ClosureShared.make_deps(calcdeps_py_path, deps_js_path, closure_path, js_dirs)
+  return ClosureShared.make_deps(calcdeps_py_path, deps_js_path, closure_path, closure_dependencies)
 
 def compile(debug=False):
   js_files = get_js_files()
