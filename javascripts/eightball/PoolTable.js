@@ -5,6 +5,8 @@ goog.require('goog.math.Matrix');
 goog.require('goog.math.Line');
 goog.require('goog.math.Vec2');
 goog.require('goog.debug.LogManager');
+goog.require('goog.events');
+goog.require('goog.Timer');
 goog.require('goog.events.EventTarget');
 
 goog.require('pixelLab.DebugDiv');
@@ -188,7 +190,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
     _this.m_isMouseDown = false;
   });
 
-  this._step();
+  var timer = new goog.Timer(eightball.PoolTable.s_millisecondsPerFrame);
+  goog.events.listen(timer, goog.Timer.TICK, this._step, undefined, this);
+  timer.start();
 };
 
 goog.inherits(eightball.PoolTable, goog.events.EventTarget);
@@ -501,8 +505,6 @@ eightball.PoolTable.prototype._step = function() {
   this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
   this._drawWorld();
   this._processPairs(pairs);
-
-  goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable.s_millisecondsPerFrame);
 };
 
 /**
