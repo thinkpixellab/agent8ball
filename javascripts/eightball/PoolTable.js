@@ -8,6 +8,7 @@ goog.require('goog.debug.LogManager');
 goog.require('goog.events');
 goog.require('goog.Timer');
 goog.require('goog.events.EventTarget');
+goog.require('goog.style');
 
 goog.require('pixelLab.DebugDiv');
 goog.require('pixelLab.fpsLogger');
@@ -27,46 +28,46 @@ goog.require('eightball.PocketDropEvent');
  @param {!HTMLCanvasElement} cueCanvasElement
  @extends {goog.events.EventTarget}
  */
-eightball.PoolTable = function(canvasElement, cueCanvasElement) {
+eightball.PoolTable = function (canvasElement, cueCanvasElement) {
 
   // variables
   /**
-   @private
-   @type {goog.math.Vec2}
-   */
+  @private
+  @type {goog.math.Vec2}
+  */
   this.m_lastMouse = null;
   /**
-   @private
-   @type {goog.math.Vec2}
-   */
+  @private
+  @type {goog.math.Vec2}
+  */
   this.m_lastMouseDown = null;
   /**
-   @private
-   @type {goog.math.Line}
-   */
+  @private
+  @type {goog.math.Line}
+  */
   this.m_cueLine = null;
   /**
-   @private
-   @type {number}
-   */
+  @private
+  @type {number}
+  */
   this.m_strikePower = 0;
   /**
-   will be a number from 0 to 1 indicating strike power
-   @private
-   @type {boolean}
-   */
+  will be a number from 0 to 1 indicating strike power
+  @private
+  @type {boolean}
+  */
   this.m_isCueVisible = true;
 
   /**
-   @private
-   @type {!Array.<b2Body>}
-   */
+  @private
+  @type {!Array.<b2Body>}
+  */
   this.m_balls = [];
 
   /**
-   @private
-   @type {!pixelLab.fpsLogger}
-   */
+  @private
+  @type {!pixelLab.fpsLogger}
+  */
   this.m_fpsLogger = new pixelLab.fpsLogger();
 
   // get a local reference to 'this' for events
@@ -77,7 +78,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
 
   // load our cuestick image (we'll need this for rendering in the updateCue function)
   this.m_cueImage = new Image();
-  this.m_cueImage.onload = function() {
+  this.m_cueImage.onload = function () {
     _this._updateCue();
   };
   this.m_cueImage.src = "images/cue.png";
@@ -113,55 +114,59 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   this.m_isMouseDown = false;
 
   // mouse down
-  $(this.m_cueCanvasElement).mousedown(function(e) {
+  $(this.m_cueCanvasElement).mousedown(function (e) {
     _this.m_isMouseDown = true;
     _this.m_lastMouseDown = _this.m_lastMouse;
     _this.m_cueLine = new goog.math.Line(_this.m_lastMouseDown.x, _this.m_lastMouseDown.y, _this.m_theCueBall.GetCenterPosition().x, _this.m_theCueBall.GetCenterPosition().y);
   });
 
   // mouse up
-  $(this.m_cueCanvasElement).mouseup(function(e) {
+  $(this.m_cueCanvasElement).mouseup(function (e) {
     _this.m_isMouseDown = false;
-    _this.m_isCueVisible = false;
-    _this._strikeCue();
-    _this._updateCue();
+    if (_this.m_isCueVisible && _this.m_strikePower > 0.01) {
+      _this._hideCue();
+      _this._strikeCue();
+      _this._updateCue();
+    }
   });
 
   // mouse move
-  $(this.m_cueCanvasElement).mousemove(function(e) {
-    var cursorPageOffset = new goog.math.Vec2(e.pageX, e.pageY);
-    var elementOffset = new goog.math.Vec2($(_this.m_canvasElement).offset().left, $(_this.m_canvasElement).offset().top);
-    var elementLocation = cursorPageOffset.subtract(elementOffset);
-    _this.m_lastMouse = elementLocation.subtract(_this.m_centerOffset);
+  $(this.m_cueCanvasElement).mousemove(function (e) {
+    if (_this.m_isCueVisible) {
+      var cursorPageOffset = new goog.math.Vec2(e.pageX, e.pageY);
+      var elementOffset = new goog.math.Vec2($(_this.m_canvasElement).offset().left, $(_this.m_canvasElement).offset().top);
+      var elementLocation = cursorPageOffset.subtract(elementOffset);
+      _this.m_lastMouse = elementLocation.subtract(_this.m_centerOffset);
 
-    if (_this.m_isMouseDown) {
-      // if the mouse is down we prepare to strike the ball
-      var strikeLine = new goog.math.Line(_this.m_lastMouse.x, _this.m_lastMouse.y, _this.m_lastMouseDown.x, _this.m_lastMouseDown.y);
-      var strikeOffset = Math.min(strikeLine.getSegmentLength(), eightball.PoolTable.s_maxStrikeDistance);
+      if (_this.m_isMouseDown) {
+        // if the mouse is down we prepare to strike the ball
+        var strikeLine = new goog.math.Line(_this.m_lastMouse.x, _this.m_lastMouse.y, _this.m_lastMouseDown.x, _this.m_lastMouseDown.y);
+        var strikeOffset = Math.min(strikeLine.getSegmentLength(), eightball.PoolTable.s_maxStrikeDistance);
 
-      // calculate the angle range that we'll allow (to prevent backtracking)
-      // TODO: there is an obvious bug with the math here related to wrap-around angles
-      var cueAngle = _this._getLineAngleDegrees(_this.m_cueLine);
-      var strikeAngle = _this._getLineAngleDegrees(strikeLine);
-      if (strikeAngle < cueAngle - 90 || strikeAngle > cueAngle + 90) strikeOffset = 0;
+        // calculate the angle range that we'll allow (to prevent backtracking)
+        // TODO: there is an obvious bug with the math here related to wrap-around angles
+        var cueAngle = _this._getLineAngleDegrees(_this.m_cueLine);
+        var strikeAngle = _this._getLineAngleDegrees(strikeLine);
+        if (strikeAngle < cueAngle - 90 || strikeAngle > cueAngle + 90) strikeOffset = 0;
 
-      // calculate strike power
-      _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.s_maxStrikeDistance;
+        // calculate strike power
+        _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.s_maxStrikeDistance;
 
-      pixelLab.DebugDiv.clear();
-      logger.info("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
-      logger.info("Strike Angle: " + Math.round(strikeAngle));
-      logger.info("Strike Power: " + _this.m_strikePower);
+        pixelLab.DebugDiv.clear();
+        logger.info("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
+        logger.info("Strike Angle: " + Math.round(strikeAngle));
+        logger.info("Strike Power: " + _this.m_strikePower);
 
-      _this._updateCue(_this.m_lastMouseDown, strikeOffset);
-    } else {
-      // otherwise we update the cue position (by rotating it around the cue ball)
-      _this._updateCue(_this.m_lastMouse, 0);
+        _this._updateCue(_this.m_lastMouseDown, strikeOffset);
+      } else {
+        // otherwise we update the cue position (by rotating it around the cue ball)
+        _this._updateCue(_this.m_lastMouse, 0);
+      }
     }
   });
 
   // mouse leave
-  $(this.m_cueCanvasElement).mouseleave(function(e) {
+  $(this.m_cueCanvasElement).mouseleave(function (e) {
     _this.m_lastMouse = null;
     _this.m_isMouseDown = false;
   });
@@ -180,7 +185,18 @@ eightball.PoolTable.prototype.updateLayout = function(width, height) {
   this._updateCue();
 };
 
-eightball.PoolTable.prototype._strikeCue = function() {
+eightball.PoolTable.prototype._hideCue = function () {
+  //goog.style.setStyle(this.m_cueCanvasElement, "display", "none")
+  this.m_isCueVisible = false;
+};
+
+eightball.PoolTable.prototype._showCue = function () {
+  //goog.style.setStyle(this.m_cueCanvasElement, "display", "block")
+  this.m_isCueVisible = true;
+  this._updateCue(this.m_lastMouse, 0);
+};
+
+eightball.PoolTable.prototype._strikeCue = function () {
   if (this.m_cueLine) {
     var velocity = new b2Vec2(this.m_cueLine.x1 - this.m_cueLine.x0, this.m_cueLine.y1 - this.m_cueLine.y0);
     velocity.Normalize();
@@ -210,7 +226,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
       // get the angle between the current mouse point and cue ball
       var dX = mousePoint.x - this.m_theCueBall.GetCenterPosition().x;
       var dY = this.m_theCueBall.GetCenterPosition().y - mousePoint.y;
-      var r = Math.atan2(dY, dX) * -1;
+      var r = (Math.atan2(dY, dX) * -1);
       //angle in radians
       // translate and rotate the canvas
       this.m_cueCanvasContext.translate(x, y);
@@ -349,13 +365,13 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballSd.density = 4.0;
   ballSd.radius = eightball.PoolTable.s_ballDiameter * 2;
   ballSd.restitution = 0.95;
-  ballSd.friction = 0.05;
+  ballSd.friction = 0.1;
 
   var ballBd = new b2BodyDef();
   ballBd.AddShape(ballSd);
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.005;
-  ballBd.angularDamping = 0.015;
+  ballBd.angularDamping = 0.08;
   ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index];
   return this.m_world.CreateBody(ballBd);
 };
@@ -559,16 +575,24 @@ eightball.PoolTable.prototype._dispatchBallHitEvent = function() {
 /**
  @private
  */
-eightball.PoolTable.prototype._processBalls = function() {
-  var ballVelocities = goog.array.map(this.m_balls, function(e, i, a) {
+eightball.PoolTable.prototype._processBalls = function () {
+  var ballVelocities = goog.array.map(this.m_balls, function (e, i, a) {
     return e.GetLinearVelocity().Length();
   });
+  var stoppedBalls = 0;
   for (var i = 0; i < ballVelocities.length; i++) {
-    if (ballVelocities[i] != 0 && ballVelocities[i] < 10) {
+    if (ballVelocities[i] == 0) {
+      stoppedBalls++;
+    }
+    else if (ballVelocities[i] < 10) {
       this.m_balls[i].SetLinearVelocity(new b2Vec2());
-      if (i == 0) {
-        this._dispatchCueStopEvent();
-      }
+      stoppedBalls++;
+    }
+  }
+  if (!this.m_isCueVisible) {
+    if (stoppedBalls == ballVelocities.length) {
+      this._dispatchCueStopEvent();
+      this._showCue();
     }
   }
 };

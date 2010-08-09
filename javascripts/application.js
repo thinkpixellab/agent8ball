@@ -38,7 +38,12 @@ var loadApp = function() {
 
   // sound
   var soundManager = new eightball.SoundEffectManager();
-  soundManager.add("tick", new eightball.SoundEffect("sounds/tick.mp3", 1));
+  soundManager.add("ball0", new eightball.SoundEffect("sounds/shot00.mp3", 3));
+  soundManager.add("ball1", new eightball.SoundEffect("sounds/shot01.mp3", 3));
+  soundManager.add("ball2", new eightball.SoundEffect("sounds/shot02.mp3", 3));
+  soundManager.add("ball3", new eightball.SoundEffect("sounds/shot03.mp3", 3));
+  soundManager.add("ball4", new eightball.SoundEffect("sounds/shot04.mp3", 3));
+  soundManager.add("ball5", new eightball.SoundEffect("sounds/shot05.mp3", 3));
 
   // global elements
   var minutesremaining = $('#minutesremaining');
@@ -116,6 +121,21 @@ var loadApp = function() {
   goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, _highScoreAction);
   goog.events.listen(game, eightball.Game.EventType.READY, _readyAction);
 
+
+  // register for collision events (for sounds)
+  goog.events.listen(poolTable, eightball.PoolTable.EventType.WALL_HIT, function () {
+    //goog.debug.LogManager.getRoot().info("Wall hit!");
+    //soundManager.play("wall" + Math.floor(Math.random() * 2));
+  },
+  undefined, this);
+
+  goog.events.listen(poolTable, eightball.PoolTable.EventType.BALL_HIT, function () {
+    //goog.debug.LogManager.getRoot().info("Ball hit!");
+    soundManager.play("ball" + Math.floor(Math.random() * 6));
+  },
+  undefined, this);
+    
+  
   // calling reset after the game has been loaded fires the events we 
   // need to initialize everything for game play
   game.reset();
