@@ -173,9 +173,9 @@ var loadApp = function() {
   };
 
   $("#instructions").click(function () {
-    game.togglePaused();
-    $("#howtoplay").fadeIn(200);
-    $("#cue_canvas").fadeOut(200);
+    //game.togglePaused();
+    //$("#howtoplay").fadeIn(200);
+    //$("#cue_canvas").fadeOut(200);
     
   });
 

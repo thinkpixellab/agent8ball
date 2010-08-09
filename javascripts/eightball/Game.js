@@ -111,7 +111,7 @@ eightball.Game.prototype._saveHighScore = function(highScore) {
 };
 
 eightball.Game.prototype._loadHighScore = function() {
-  var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, '1000');
+  var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, '500');
   return highScoreValue;
 };
 
