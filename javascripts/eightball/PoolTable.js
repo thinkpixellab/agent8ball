@@ -363,118 +363,6 @@ eightball.PoolTable.prototype._clearTable = function() {
 
 /**
  @private
- @param {!b2World} world
- @param {!b2Vec2} centerOffset
- */
-eightball.PoolTable._createTable = function(world, centerOffset) {
-  var table = new b2BodyDef();
-  table.restitution = 1;
-  table.friction = 1.0;
-
-  var side;
-  var points;
-
-  // Left
-  side = new b2PolyDef();
-  points = [
-    [-centerOffset.x, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2.5],
-    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 4.5],
-    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2, centerOffset.y - eightball.PoolTable.s_bumperThickness * 4.5],
-    [-centerOffset.x, centerOffset.y - eightball.PoolTable.s_bumperThickness * 2.5]];
-  side.SetVertices(points);
-  table.AddShape(side);
-
-  // Right
-  side = new b2PolyDef();
-  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
-  side.SetVertices(points);
-  table.AddShape(side);
-
-  // top left
-  points = [
-    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2.3, -centerOffset.y],
-    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 4.5, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2],
-    [-eightball.PoolTable.s_bumperThickness * 2.3, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2],
-    [-eightball.PoolTable.s_bumperThickness * 1.5, -centerOffset.y]].reverse();
-
-  side = new b2PolyDef();
-  side.SetVertices(points);
-  table.AddShape(side);
-
-  // top right
-  side = new b2PolyDef();
-  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
-  side.SetVertices(points);
-  table.AddShape(side);
-
-  // bottom right
-  side = new b2PolyDef();
-  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
-  side.SetVertices(points);
-  table.AddShape(side);
-
-  // bottom left
-  side = new b2PolyDef();
-  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
-  side.SetVertices(points);
-  table.AddShape(side);
-
-  table.userData = [eightball.PoolTable.s_bodyTypes.TABLE];
-  return world.CreateBody(table);
-};
-
-/**
- @private
- @param {!b2World} world
- @param {!b2Vec2} centerOffset
- */
-eightball.PoolTable._createPockets = function(world, centerOffset) {
-  var pockets = new Array(6);
-
-  var pocketCoords = [
-    [centerOffset.x - 21, centerOffset.y - 21]];
-  pockets[0] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
-
-  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray();
-  pockets[1] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
-
-  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
-  pockets[2] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
-
-  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray();
-  pockets[3] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
-
-  pocketCoords[0][0] = 0;
-  pocketCoords[0][1] = centerOffset.y - 12;
-  pockets[4] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
-
-  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
-  pockets[5] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
-
-  return pockets;
-};
-
-/**
- @private
- @param {!b2World} world
- @param {number} x
- @param {number} y
- */
-eightball.PoolTable._createPocket = function(world, x, y) {
-  var pocketSd = new b2CircleDef();
-  pocketSd.radius = 7;
-
-  var pocketBd = new b2BodyDef();
-  pocketBd.AddShape(pocketSd);
-  pocketBd.position.Set(x, y);
-  pocketBd.userData = [eightball.PoolTable.s_bodyTypes.POCKET];
-
-  var body = world.CreateBody(pocketBd);
-  return body;
-};
-
-/**
- @private
  @param {number} index
  @param {number} x
  @param {number} y
@@ -705,18 +593,136 @@ eightball.PoolTable.prototype.stepsPerSecond = function() {
 
 /**
  @private
- @return {number}
- */
-eightball.PoolTable._floatSeconds = function() {
-  return goog.now() / 1000.0;
-};
-
-/**
- @private
  @param {number} ballNumber
  */
 eightball.PoolTable.prototype._dispatchPocketDropEvent = function(ballNumber) {
   this.dispatchEvent(new eightball.PocketDropEvent(ballNumber, this));
+};
+
+//
+//
+// CLass (static) members
+//
+//
+
+/**
+ @private
+ @param {!b2World} world
+ @param {!b2Vec2} centerOffset
+ */
+eightball.PoolTable._createTable = function(world, centerOffset) {
+  var table = new b2BodyDef();
+  table.restitution = 1;
+  table.friction = 1.0;
+
+  var side;
+  var points;
+
+  // Left
+  side = new b2PolyDef();
+  points = [
+    [-centerOffset.x, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2.5],
+    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 4.5],
+    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2, centerOffset.y - eightball.PoolTable.s_bumperThickness * 4.5],
+    [-centerOffset.x, centerOffset.y - eightball.PoolTable.s_bumperThickness * 2.5]];
+  side.SetVertices(points);
+  table.AddShape(side);
+
+  // Right
+  side = new b2PolyDef();
+  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
+  side.SetVertices(points);
+  table.AddShape(side);
+
+  // top left
+  points = [
+    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2.3, -centerOffset.y],
+    [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 4.5, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2],
+    [-eightball.PoolTable.s_bumperThickness * 2.3, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2],
+    [-eightball.PoolTable.s_bumperThickness * 1.5, -centerOffset.y]].reverse();
+
+  side = new b2PolyDef();
+  side.SetVertices(points);
+  table.AddShape(side);
+
+  // top right
+  side = new b2PolyDef();
+  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
+  side.SetVertices(points);
+  table.AddShape(side);
+
+  // bottom right
+  side = new b2PolyDef();
+  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
+  side.SetVertices(points);
+  table.AddShape(side);
+
+  // bottom left
+  side = new b2PolyDef();
+  points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
+  side.SetVertices(points);
+  table.AddShape(side);
+
+  table.userData = [eightball.PoolTable.s_bodyTypes.TABLE];
+  return world.CreateBody(table);
+};
+
+/**
+ @private
+ @param {!b2World} world
+ @param {!b2Vec2} centerOffset
+ */
+eightball.PoolTable._createPockets = function(world, centerOffset) {
+  var pockets = new Array(6);
+
+  var pocketCoords = [
+    [centerOffset.x - 21, centerOffset.y - 21]];
+  pockets[0] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray();
+  pockets[1] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
+  pockets[2] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray();
+  pockets[3] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords[0][0] = 0;
+  pocketCoords[0][1] = centerOffset.y - 12;
+  pockets[4] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  pocketCoords = new goog.math.Matrix(pocketCoords).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
+  pockets[5] = eightball.PoolTable._createPocket(world, pocketCoords[0][0], pocketCoords[0][1]);
+
+  return pockets;
+};
+
+/**
+ @private
+ @param {!b2World} world
+ @param {number} x
+ @param {number} y
+ */
+eightball.PoolTable._createPocket = function(world, x, y) {
+  var pocketSd = new b2CircleDef();
+  pocketSd.radius = 7;
+
+  var pocketBd = new b2BodyDef();
+  pocketBd.AddShape(pocketSd);
+  pocketBd.position.Set(x, y);
+  pocketBd.userData = [eightball.PoolTable.s_bodyTypes.POCKET];
+
+  var body = world.CreateBody(pocketBd);
+  return body;
+};
+
+/**
+ @private
+ @return {number}
+ */
+eightball.PoolTable._floatSeconds = function() {
+  return goog.now() / 1000.0;
 };
 
 /**
