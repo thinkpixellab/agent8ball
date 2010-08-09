@@ -509,7 +509,6 @@ eightball.PoolTable.prototype._step = function() {
     this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
     this._drawWorld();
     this._processPairs(pairs);
-    this.stepCount++;
   }
 
   this.m_lastStep = eightball.PoolTable._floatSeconds();
