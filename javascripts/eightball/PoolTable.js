@@ -515,13 +515,23 @@ eightball.PoolTable.prototype._dispatchPocketDropEvent = function(ballNumber) {
 /**
  @private
  */
+eightball.PoolTable.prototype._dispatchCueStopEvent = function() {
+  this.dispatchEvent(new goog.events.Event(eightball.PoolTable.EventType.CUE_STOPPED, this));
+};
+
+/**
+ @private
+ */
 eightball.PoolTable.prototype._processBalls = function() {
   var ballVelocities = goog.array.map(this.m_balls, function(e, i, a) {
     return e.GetLinearVelocity().Length();
   });
   for (var i = 0; i < ballVelocities.length; i++) {
-    if (ballVelocities[i] < 10) {
+    if (ballVelocities[i] != 0 && ballVelocities[i] < 10) {
       this.m_balls[i].SetLinearVelocity(new b2Vec2());
+      if (i == 0) {
+        this._dispatchCueStopEvent();
+      }
     }
   }
 };
@@ -657,6 +667,7 @@ eightball.PoolTable.s_bodyTypes = {
  * @enum {string}
  */
 eightball.PoolTable.EventType = {
+  CUE_STOPPED: 'cueStopped'
   //WALLHIT: 'wallHit'
   //BALLHIT: 'ballHit'
 };

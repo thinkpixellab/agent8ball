@@ -30,7 +30,12 @@ eightball.Game = function(poolTable) {
    @type {!eightball.PoolTable}
    */
   this.m_poolTable = poolTable;
+
   goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop, undefined, this);
+  goog.events.listen(this.m_poolTable, eightball.PoolTable.EventType.CUE_STOPPED, function() {
+    goog.debug.LogManager.getRoot().info("Cue stopped!");
+  },
+  undefined, this);
 
   this.reset();
 };
@@ -133,15 +138,15 @@ eightball.Game.prototype._tickAction = function() {
 /**
  @private
  @param {!eightball.Game.EventType} type
-*/
+ */
 eightball.Game.prototype._dispatchGameEvent = function(type) {
   this.dispatchEvent(new goog.events.Event(type, this));
 };
 
 /**
-  @private
-*/
-eightball.Game.prototype._pooltable_pocketDrop = function (e) {
+ @private
+ */
+eightball.Game.prototype._pooltable_pocketDrop = function(e) {
   goog.debug.LogManager.getRoot().info("Pocket drop: " + e.ballNumber);
   this.addPoints(100);
 };
