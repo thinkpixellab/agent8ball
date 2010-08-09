@@ -57,12 +57,6 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
 
   /**
    @private
-   @type {number}
-   */
-  this.m_lastStep = 0;
-
-  /**
-   @private
    @type {!Array.<b2Body>}
    */
   this.m_balls = [];
@@ -502,16 +496,12 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
  @private
  */
 eightball.PoolTable.prototype._step = function() {
-  if (this.m_lastStep > 0) {
-    var delta = eightball.PoolTable._floatSeconds() - this.m_lastStep;
-    this.m_fpsLogger.AddInterval(delta);
-    var pairs = this.m_world.Step(delta, 1);
-    this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
-    this._drawWorld();
-    this._processPairs(pairs);
-  }
+  this.m_fpsLogger.AddInterval();
+  var pairs = this.m_world.Step(1.0 / 30.0, 1);
+  this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
+  this._drawWorld();
+  this._processPairs(pairs);
 
-  this.m_lastStep = eightball.PoolTable._floatSeconds();
   goog.global.setTimeout(goog.bind(this._step, this), eightball.PoolTable.s_millisecondsPerFrame);
 };
 
