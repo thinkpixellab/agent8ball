@@ -426,6 +426,11 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
  */
 eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
   this.m_world.DestroyBody(ballBody);
+
+  // remove ball from collection
+  var index = goog.array.indexOf(this.m_balls, ballBody);
+  goog.array.removeAt(this.m_balls, index);
+
   // ballBody.GetUserData() == ['ball', ball #]
   this._dispatchPocketDropEvent(ballBody.GetUserData()[1]);
 };
@@ -715,14 +720,6 @@ eightball.PoolTable._createPocket = function(world, x, y) {
 
   var body = world.CreateBody(pocketBd);
   return body;
-};
-
-/**
- @private
- @return {number}
- */
-eightball.PoolTable._floatSeconds = function() {
-  return goog.now() / 1000.0;
 };
 
 /**
