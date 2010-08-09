@@ -36,6 +36,14 @@ eightball.Game = function(poolTable) {
     goog.debug.LogManager.getRoot().info("Cue stopped!");
   },
   undefined, this);
+  goog.events.listen(this.m_poolTable, eightball.PoolTable.EventType.WALL_HIT, function() {
+    goog.debug.LogManager.getRoot().info("Ball hit!");
+  },
+  undefined, this);
+  goog.events.listen(this.m_poolTable, eightball.PoolTable.EventType.BALL_HIT, function() {
+    goog.debug.LogManager.getRoot().info("Wall hit!");
+  },
+  undefined, this);
 
   this.reset();
 };

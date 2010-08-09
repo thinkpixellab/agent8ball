@@ -377,8 +377,13 @@ eightball.PoolTable.prototype._step = function() {
  @param {!Array.<b2Pair>} pairs
  */
 eightball.PoolTable.prototype._processPairs = function(pairs) {
-  var _this = this;
+  var _this = this,
+    wallHit = false,
+    ballHit = false;
   goog.array.forEach(pairs, function(pair, index, array) {
+    //
+    // First, look for pocket hits
+    //
     var pocket = null,
       ball = null;
     if (pair.m_shape1.m_body.GetUserData() == eightball.PoolTable.s_bodyTypes.POCKET) {
@@ -393,7 +398,25 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
       _this._processPocket(pocket, ball);
     }
 
+    //
+    // Look for other collisions
+    //
+    var bodyTypes = [pair.m_shape1.m_body.GetUserData()[0], pair.m_shape2.m_body.GetUserData()[0]];
+    goog.array.sort(bodyTypes);
+    if (bodyTypes[0] == eightball.PoolTable.s_bodyTypes.BALL) {
+      if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.BALL) {
+        ballHit = true;
+      } else if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.TABLE) {
+        wallHit = true;
+      }
+    }
   });
+  if (ballHit) {
+    this._dispatchBallHitEvent();
+  }
+  if (wallHit) {
+    this._dispatchWallHitEvent();
+  }
 };
 
 /**
@@ -517,6 +540,20 @@ eightball.PoolTable.prototype._dispatchPocketDropEvent = function(ballNumber) {
  */
 eightball.PoolTable.prototype._dispatchCueStopEvent = function() {
   this.dispatchEvent(new goog.events.Event(eightball.PoolTable.EventType.CUE_STOPPED, this));
+};
+
+/**
+ @private
+ */
+eightball.PoolTable.prototype._dispatchWallHitEvent = function() {
+  this.dispatchEvent(new goog.events.Event(eightball.PoolTable.EventType.WALL_HIT, this));
+};
+
+/**
+ @private
+ */
+eightball.PoolTable.prototype._dispatchBallHitEvent = function() {
+  this.dispatchEvent(new goog.events.Event(eightball.PoolTable.EventType.BALL_HIT, this));
 };
 
 /**
@@ -667,9 +704,9 @@ eightball.PoolTable.s_bodyTypes = {
  * @enum {string}
  */
 eightball.PoolTable.EventType = {
-  CUE_STOPPED: 'cueStopped'
-  //WALLHIT: 'wallHit'
-  //BALLHIT: 'ballHit'
+  CUE_STOPPED: 'cueStopped',
+  WALL_HIT: 'wallHit',
+  BALL_HIT: 'ballHit'
 };
 
 /**
