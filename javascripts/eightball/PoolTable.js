@@ -88,6 +88,37 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
 
   this.m_ballVignetteImage = new Image();
   this.m_ballVignetteImage.src = "images/ballvignette.png";
+  
+  this.m_num1Image = new Image();
+  this.m_num1Image.src = "images/num1.png";
+  this.m_num2Image = new Image();
+  this.m_num2Image.src = "images/num2.png";
+  this.m_num3Image = new Image();
+  this.m_num3Image.src = "images/num3.png";
+  this.m_num4Image = new Image();
+  this.m_num4Image.src = "images/num4.png";
+  this.m_num5Image = new Image();
+  this.m_num5Image.src = "images/num5.png";
+  this.m_num6Image = new Image();
+  this.m_num6Image.src = "images/num6.png";
+  this.m_num7Image = new Image();
+  this.m_num7Image.src = "images/num7.png";
+  this.m_num8Image = new Image();
+  this.m_num8Image.src = "images/num8.png";
+  this.m_num9Image = new Image();
+  this.m_num9Image.src = "images/num9.png";
+  this.m_num10Image = new Image();
+  this.m_num10Image.src = "images/num10.png";
+  this.m_num11Image = new Image();
+  this.m_num11Image.src = "images/num11.png";
+  this.m_num12Image = new Image();
+  this.m_num12Image.src = "images/num12.png";
+  this.m_num13Image = new Image();
+  this.m_num13Image.src = "images/num13.png";
+  this.m_num14Image = new Image();
+  this.m_num14Image.src = "images/num14.png";
+  this.m_num15Image = new Image();
+  this.m_num15Image.src = "images/num15.png";  
 
   // get local references for our canvas elements
   this.m_canvasElement = canvasElement;
@@ -560,53 +591,117 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   var ballNumber = ballBody.GetUserData()[1];
   var shape = ballBody.GetShapeList();
   var ctx = this.m_canvasContext;
+  var stampImage;
 
   switch (ballNumber) {
-  case 1:
-  case 9:
-    //yellow
-    ctx.fillStyle = 'rgb(250,164,25)';
-    break;
-  case 2:
-  case 10:
-    //blue
-    ctx.fillStyle = 'rgb(35,45,101)';
-    break;
-  case 3:
-  case 11:
-    //light red
-    ctx.fillStyle = 'rgb(192,66,57)';
-    break;
-  case 4:
-  case 12:
-    //plum
-    ctx.fillStyle = 'rgb(80,46,67)';
-    break;
-  case 5:
-  case 13:
+	//yellow	  
+    case 1:
+		stampImage = this.m_num1Image;
+	   	ctx.fillStyle = 'rgb(250,164,25)';
+       	break;
+    case 9:
+       	stampImage = this.m_num9Image;
+       	ctx.fillStyle = 'rgb(250,164,25)';
+       	break;
+	//blue
+    case 2:
+       	stampImage = this.m_num2Image;
+       	ctx.fillStyle = 'rgb(35,45,101)';
+	   	break;
+    case 10:
+       	stampImage = this.m_num10Image;
+       	ctx.fillStyle = 'rgb(35,45,101)';
+       	break;
+	//light red
+    case 3:
+		stampImage = this.m_num3Image;
+		ctx.fillStyle = 'rgb(192,66,57)';
+		break;
+    case 11:
+		stampImage = this.m_num11Image;
+		ctx.fillStyle = 'rgb(192,66,57)';
+		break;    
+	//plum
+	case 4:
+		stampImage = this.m_num4Image;
+	    ctx.fillStyle = 'rgb(80,46,67)';
+		break;
+	case 12:
+    	stampImage = this.m_num12Image;
+	    ctx.fillStyle = 'rgb(80,46,67)';
+		break;
     //orange
-    ctx.fillStyle = 'rgb(236,89,37)';
-    break;
-  case 6:
-  case 14:
+	case 5:
+    	stampImage = this.m_num5Image;
+	    ctx.fillStyle = 'rgb(236,89,37)';
+		break;
+	case 13:
+    	stampImage = this.m_num13Image;
+	    ctx.fillStyle = 'rgb(236,89,37)';
+		break;
     //dark green
-    ctx.fillStyle = 'rgb(48,65,37)';
-    break;
-  case 7:
-  case 15:
-    //dark red
-    ctx.fillStyle = 'rgb(117,36,32)';
-    break;
-  case 8:
-    ctx.fillStyle = 'rgb(34,34,34)';
-    break;
-  default:
-    ctx.fillStyle = 'rgb(232,208,176)';
+	case 6:
+    	stampImage = this.m_num6Image;
+		ctx.fillStyle = 'rgb(48,65,37)';
+		break;	
+	case 14:
+    	stampImage = this.m_num14Image;
+		ctx.fillStyle = 'rgb(48,65,37)';
+		break;	
+	//dark red
+	case 7:
+    	stampImage = this.m_num7Image;
+	    ctx.fillStyle = 'rgb(117,36,32)';
+    	break;
+	case 15:
+	    stampImage = this.m_num15Image;
+	    ctx.fillStyle = 'rgb(117,36,32)';
+    	break;
+	case 8:
+		stampImage = this.m_num8Image;
+		ctx.fillStyle = 'rgb(34,34,34)';
+	    break;
+	default:
+    	ctx.fillStyle = 'rgb(232,208,176)';
   }
   ctx.beginPath();
   ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
   ctx.fill();
 
+  if(ballNumber > 0) {
+	  ctx.save(); 
+	  
+	  //draw clip
+/*	  ctx.beginPath();
+	  ctx.arc(this.x,this.y,Globals.BallRadius,0,Math.PI*2,true);
+	  ctx.clip();*/
+
+	  //draw rotated assets	  
+	  ctx.translate(shape.m_position.x,shape.m_position.y)
+	  ctx.rotate(ballBody.GetRotation()* (180/Math.PI));					
+	  ctx.translate(-shape.m_position.x,-shape.m_position.y)					
+	  
+	  if(ballNumber > 8) {
+		  //draw stripes
+		  ctx.fillStyle = 'rgb(232,208,176)';
+          ctx.beginPath();
+		  ctx.moveTo(shape.m_position.x-12, shape.m_position.y-8);
+		  ctx.bezierCurveTo(shape.m_position.x-8, shape.m_position.y-16, shape.m_position.x+8, shape.m_position.y-16, shape.m_position.x+12, shape.m_position.y-8)
+          ctx.fill();
+		  
+		  ctx.beginPath();
+		  ctx.moveTo(shape.m_position.x-12, shape.m_position.y+8);
+		  ctx.bezierCurveTo(shape.m_position.x-8, shape.m_position.y+16, shape.m_position.x+8, shape.m_position.y+16, shape.m_position.x+12, shape.m_position.y+8)
+          ctx.fill();
+	  }
+	  //draw number
+	  ctx.drawImage(stampImage, shape.m_position.x - 4, shape.m_position.y - 4);
+	  
+	  //end rotated assets
+	  ctx.restore();
+  }
+
+  //draw shading and reflections
   ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
 };
 
