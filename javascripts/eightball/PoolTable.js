@@ -393,6 +393,7 @@ eightball.PoolTable.prototype._step = function() {
   this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
   this._drawWorld();
   this._processPairs(pairs);
+  this._processBalls();
 };
 
 /**
@@ -604,12 +605,25 @@ eightball.PoolTable.prototype._dispatchPocketDropEvent = function(ballNumber) {
   this.dispatchEvent(new eightball.PocketDropEvent(ballNumber, this));
 };
 
+/**
+ @private
+ */
+eightball.PoolTable.prototype._processBalls = function() {
+  var ballVelocities = goog.array.map(this.m_balls, function(e, i, a) {
+    return e.GetLinearVelocity().Length();
+  });
+  for(var i=0;i<ballVelocities.length;i++){
+    if(ballVelocities[i] < 10){
+      this.m_balls[i].SetLinearVelocity(new b2Vec2());
+    }
+  }
+};
+
 //
 //
 // CLass (static) members
 //
 //
-
 /**
  @private
  @param {!b2World} world
