@@ -85,36 +85,12 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
   this.m_ballVignetteImage = new Image();
   this.m_ballVignetteImage.src = "images/ballvignette.png";
 
-  this.m_num1Image = new Image();
-  this.m_num1Image.src = "images/num1.png";
-  this.m_num2Image = new Image();
-  this.m_num2Image.src = "images/num2.png";
-  this.m_num3Image = new Image();
-  this.m_num3Image.src = "images/num3.png";
-  this.m_num4Image = new Image();
-  this.m_num4Image.src = "images/num4.png";
-  this.m_num5Image = new Image();
-  this.m_num5Image.src = "images/num5.png";
-  this.m_num6Image = new Image();
-  this.m_num6Image.src = "images/num6.png";
-  this.m_num7Image = new Image();
-  this.m_num7Image.src = "images/num7.png";
-  this.m_num8Image = new Image();
-  this.m_num8Image.src = "images/num8.png";
-  this.m_num9Image = new Image();
-  this.m_num9Image.src = "images/num9.png";
-  this.m_num10Image = new Image();
-  this.m_num10Image.src = "images/num10.png";
-  this.m_num11Image = new Image();
-  this.m_num11Image.src = "images/num11.png";
-  this.m_num12Image = new Image();
-  this.m_num12Image.src = "images/num12.png";
-  this.m_num13Image = new Image();
-  this.m_num13Image.src = "images/num13.png";
-  this.m_num14Image = new Image();
-  this.m_num14Image.src = "images/num14.png";
-  this.m_num15Image = new Image();
-  this.m_num15Image.src = "images/num15.png";
+  this.m_ballImages = {};
+  for (var i = 1; i <= 15; i++) {
+    var image = new Image();
+    image.src = "images/num" + i + ".png";
+    this.m_ballImages[i] = image;
+  }
 
   // get local references for our canvas elements
   this.m_canvasElement = canvasElement;
@@ -476,79 +452,9 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   var ballNumber = ballBody.GetUserData()[1];
   var shape = ballBody.GetShapeList();
   var ctx = this.m_canvasContext;
-  var stampImage;
 
-  switch (ballNumber) {
-    //yellow
-  case 1:
-    stampImage = this.m_num1Image;
-    ctx.fillStyle = 'rgb(250,164,25)';
-    break;
-  case 9:
-    stampImage = this.m_num9Image;
-    ctx.fillStyle = 'rgb(250,164,25)';
-    break;
-    //blue
-  case 2:
-    stampImage = this.m_num2Image;
-    ctx.fillStyle = 'rgb(35,45,101)';
-    break;
-  case 10:
-    stampImage = this.m_num10Image;
-    ctx.fillStyle = 'rgb(35,45,101)';
-    break;
-    //light red
-  case 3:
-    stampImage = this.m_num3Image;
-    ctx.fillStyle = 'rgb(192,66,57)';
-    break;
-  case 11:
-    stampImage = this.m_num11Image;
-    ctx.fillStyle = 'rgb(192,66,57)';
-    break;
-    //plum
-  case 4:
-    stampImage = this.m_num4Image;
-    ctx.fillStyle = 'rgb(80,46,67)';
-    break;
-  case 12:
-    stampImage = this.m_num12Image;
-    ctx.fillStyle = 'rgb(80,46,67)';
-    break;
-    //orange
-  case 5:
-    stampImage = this.m_num5Image;
-    ctx.fillStyle = 'rgb(236,89,37)';
-    break;
-  case 13:
-    stampImage = this.m_num13Image;
-    ctx.fillStyle = 'rgb(236,89,37)';
-    break;
-    //dark green
-  case 6:
-    stampImage = this.m_num6Image;
-    ctx.fillStyle = 'rgb(48,65,37)';
-    break;
-  case 14:
-    stampImage = this.m_num14Image;
-    ctx.fillStyle = 'rgb(48,65,37)';
-    break;
-    //dark red
-  case 7:
-    stampImage = this.m_num7Image;
-    ctx.fillStyle = 'rgb(117,36,32)';
-    break;
-  case 15:
-    stampImage = this.m_num15Image;
-    ctx.fillStyle = 'rgb(117,36,32)';
-    break;
-  case 8:
-    stampImage = this.m_num8Image;
-    ctx.fillStyle = 'rgb(34,34,34)';
-    break;
-  default:
-    ctx.fillStyle = 'rgb(232,208,176)';
-  }
+  ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
+
   ctx.beginPath();
   ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
   ctx.fill();
@@ -580,6 +486,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       ctx.fill();
     }
     //draw number
+    var stampImage = this.m_ballImages[ballNumber];
     ctx.drawImage(stampImage, shape.m_position.x - 4, shape.m_position.y - 4);
 
     //end rotated assets
@@ -752,6 +659,47 @@ eightball.PoolTable.s_bodyTypes = {
 eightball.PoolTable.EventType = {
   //WALLHIT: 'wallHit'
   //BALLHIT: 'ballHit'
+};
+
+/**
+ @const
+ @enum {string}
+ @private
+ */
+eightball.PoolTable.s_colors = {
+  YELLOW: 'rgb(250,164,25)',
+  BLUE: 'rgb(35,45,101)',
+  RED: 'rgb(192,66,57)',
+  PLUM: 'rgb(80,46,67)',
+  ORANGE: 'rgb(236,89,37)',
+  DARK_GREEN: 'rgb(48,65,37)',
+  DARK_RED: 'rgb(117,36,32)',
+  BLACK: 'rgb(34,34,34)',
+  WHITE: 'rgb(232,208,176)'
+};
+
+/**
+ @const
+ @type {Object.<number,string>}
+ @private
+ */
+eightball.PoolTable.s_ballColors = {
+  1: eightball.PoolTable.s_colors.YELLOW,
+  9: eightball.PoolTable.s_colors.YELLOW,
+  2: eightball.PoolTable.s_colors.BLUE,
+  10: eightball.PoolTable.s_colors.BLUE,
+  3: eightball.PoolTable.s_colors.RED,
+  11: eightball.PoolTable.s_colors.RED,
+  4: eightball.PoolTable.s_colors.PLUM,
+  12: eightball.PoolTable.s_colors.PLUM,
+  5: eightball.PoolTable.s_colors.ORANGE,
+  13: eightball.PoolTable.s_colors.ORANGE,
+  6: eightball.PoolTable.s_colors.DARK_GREEN,
+  14: eightball.PoolTable.s_colors.DARK_GREEN,
+  7: eightball.PoolTable.s_colors.DARK_RED,
+  15: eightball.PoolTable.s_colors.DARK_RED,
+  8: eightball.PoolTable.s_colors.BLACK,
+  0: eightball.PoolTable.s_colors.WHITE
 };
 
 /**
