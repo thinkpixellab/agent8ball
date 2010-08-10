@@ -198,7 +198,7 @@ eightball.PoolTable.prototype._hideCue = function () {
 };
 
 eightball.PoolTable.prototype._showCue = function () {
-  goog.style.setStyle(this.m_cueCanvasElement, "display", "block")
+  goog.style.setStyle(this.m_cueCanvasElement, "display", "block");
   this.m_isCueVisible = true;
   this._updateCue(this.m_lastMouse, 0);
 };
