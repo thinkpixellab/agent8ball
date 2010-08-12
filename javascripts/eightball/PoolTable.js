@@ -116,9 +116,11 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
 
   // mouse down
   $(this.m_cueCanvasElement).mousedown(function(e) {
-    _this.m_isMouseDown = true;
-    _this.m_lastMouseDown = _this.m_lastMouse;
-    _this.m_cueLine = new goog.math.Line(_this.m_lastMouseDown.x, _this.m_lastMouseDown.y, _this._getCueBall().GetCenterPosition().x, _this._getCueBall().GetCenterPosition().y);
+    if (_this.m_lastMouse && _this._getCueBall()) {
+      _this.m_isMouseDown = true;
+      _this.m_lastMouseDown = _this.m_lastMouse;
+      _this.m_cueLine = new goog.math.Line(_this.m_lastMouseDown.x, _this.m_lastMouseDown.y, _this._getCueBall().GetCenterPosition().x, _this._getCueBall().GetCenterPosition().y);
+    }
   });
 
   // mouse up
@@ -206,7 +208,7 @@ eightball.PoolTable.prototype._showCue = function() {
 };
 
 eightball.PoolTable.prototype._strikeCue = function() {
-  if (this.m_cueLine) {
+  if (this.m_cueLine && this._getCueBall()) {
     var velocity = new b2Vec2(this.m_cueLine.x1 - this.m_cueLine.x0, this.m_cueLine.y1 - this.m_cueLine.y0);
     velocity.Normalize();
     velocity.Multiply(500);
@@ -226,7 +228,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
     // clear the cue canvas
     this._clearCueCanvas();
 
-    if (this.m_isCueVisible && mousePoint) {
+    if (this.m_isCueVisible && mousePoint && this._getCueBall()) {
       // find the location of the cue ball in page coordinates
       var absCue = this._gameCoordinatesToAbsolute(this._getCueBall().GetCenterPosition().x, this._getCueBall().GetCenterPosition().y);
       var x = Math.round(absCue.x);
