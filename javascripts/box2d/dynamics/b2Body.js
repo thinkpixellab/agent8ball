@@ -32,25 +32,40 @@ goog.require('b2ShapeFactory');
  @param {!b2World} world
  */
 b2Body = function(bd, world) {
-  // initialize instance variables for references
+  /**
+   @private
+   @type {!b2Mat22}
+   */
   this.sMat0 = new b2Mat22();
+  /**
+   @private
+   @type {!b2Vec2}
+   */
   this.m_position = new b2Vec2();
-  this.m_R = new b2Mat22(0);
+  this.m_position.SetV(bd.position);
+  /**
+   @private
+   @type {!b2Vec2}
+   */
   this.m_position0 = new b2Vec2();
-  //
+  this.m_position0.SetV(this.m_position);
+
   var i = 0;
   var sd;
   var massData;
 
+  /**
+   @private
+   @type {number}
+   */
   this.m_flags = 0;
-  this.m_position.SetV(bd.position);
   /**
    @private
    @type {number}
    */
   this.m_rotation = bd.rotation;
+  this.m_R = new b2Mat22(0);
   this.m_R.Set(this.m_rotation);
-  this.m_position0.SetV(this.m_position);
   this.m_rotation0 = this.m_rotation;
   this.m_world = world;
 
@@ -151,295 +166,279 @@ b2Body = function(bd, world) {
   this.m_userData = bd.userData;
 };
 
-b2Body.prototype = {
-  // Set the position of the body's origin and rotation (radians).
-  // This breaks any contacts and wakes the other bodies.
-  SetOriginPosition: function(position, rotation) {
-    if (this.IsFrozen()) {
-      return;
-    }
+// Set the position of the body's origin and rotation (radians).
+// This breaks any contacts and wakes the other bodies.
+b2Body.prototype.SetOriginPosition = function(position, rotation) {
+  if (this.IsFrozen()) {
+    return;
+  }
 
-    this.m_rotation = rotation;
-    this.m_R.Set(this.m_rotation);
-    this.m_position = b2Math.AddVV(position, b2Math.b2MulMV(this.m_R, this.m_center));
+  this.m_rotation = rotation;
+  this.m_R.Set(this.m_rotation);
+  this.m_position = b2Math.AddVV(position, b2Math.b2MulMV(this.m_R, this.m_center));
 
-    this.m_position0.SetV(this.m_position);
-    this.m_rotation0 = this.m_rotation;
+  this.m_position0.SetV(this.m_position);
+  this.m_rotation0 = this.m_rotation;
 
-    for (var s = this.m_shapeList; s != null; s = s.m_next) {
-      s.Synchronize(this.m_position, this.m_R, this.m_position, this.m_R);
-    }
+  for (var s = this.m_shapeList; s != null; s = s.m_next) {
+    s.Synchronize(this.m_position, this.m_R, this.m_position, this.m_R);
+  }
 
-    this.m_world.m_broadPhase.Commit();
-  },
+  this.m_world.m_broadPhase.Commit();
+};
 
-  // Get the position of the body's origin. The body's origin does not
-  // necessarily coincide with the center of mass. It depends on how the
-  // shapes are created.
-  GetOriginPosition: function() {
-    return b2Math.SubtractVV(this.m_position, b2Math.b2MulMV(this.m_R, this.m_center));
-  },
+// Get the position of the body's origin. The body's origin does not
+// necessarily coincide with the center of mass. It depends on how the
+// shapes are created.
+b2Body.prototype.GetOriginPosition = function() {
+  return b2Math.SubtractVV(this.m_position, b2Math.b2MulMV(this.m_R, this.m_center));
+};
 
-  // Set the position of the body's center of mass and rotation (radians).
-  // This breaks any contacts and wakes the other bodies.
-  SetCenterPosition: function(position, rotation) {
-    if (this.IsFrozen()) {
-      return;
-    }
+// Set the position of the body's center of mass and rotation (radians).
+// This breaks any contacts and wakes the other bodies.
+b2Body.prototype.SetCenterPosition = function(position, rotation) {
+  if (this.IsFrozen()) {
+    return;
+  }
 
-    this.m_rotation = rotation;
-    this.m_R.Set(this.m_rotation);
-    this.m_position.SetV(position);
+  this.m_rotation = rotation;
+  this.m_R.Set(this.m_rotation);
+  this.m_position.SetV(position);
 
-    this.m_position0.SetV(this.m_position);
-    this.m_rotation0 = this.m_rotation;
+  this.m_position0.SetV(this.m_position);
+  this.m_rotation0 = this.m_rotation;
 
-    for (var s = this.m_shapeList; s != null; s = s.m_next) {
-      s.Synchronize(this.m_position, this.m_R, this.m_position, this.m_R);
-    }
+  for (var s = this.m_shapeList; s != null; s = s.m_next) {
+    s.Synchronize(this.m_position, this.m_R, this.m_position, this.m_R);
+  }
 
-    this.m_world.m_broadPhase.Commit();
-  },
+  this.m_world.m_broadPhase.Commit();
+};
 
-  // Get the position of the body's center of mass. The body's center of mass
-  // does not necessarily coincide with the body's origin. It depends on how the
-  // shapes are created.
-  GetCenterPosition: function() {
-    return this.m_position;
-  },
+// Get the position of the body's center of mass. The body's center of mass
+// does not necessarily coincide with the body's origin. It depends on how the
+// shapes are created.
+b2Body.prototype.GetCenterPosition = function() {
+  return this.m_position;
+};
 
-  // Get the rotation in radians.
-  GetRotation: function() {
-    return this.m_rotation;
-  },
+// Get the rotation in radians.
+b2Body.prototype.GetRotation = function() {
+  return this.m_rotation;
+};
 
-  GetRotationMatrix: function() {
-    return this.m_R;
-  },
+b2Body.prototype.GetRotationMatrix = function() {
+  return this.m_R;
+};
 
-  // Set/Get the angular velocity.
-  SetAngularVelocity: function(w) {
-    this.m_angularVelocity = w;
-  },
-  GetAngularVelocity: function() {
-    return this.m_angularVelocity;
-  },
+// Set/Get the angular velocity.
+b2Body.prototype.SetAngularVelocity = function(w) {
+  this.m_angularVelocity = w;
+};
+b2Body.prototype.GetAngularVelocity = function() {
+  return this.m_angularVelocity;
+};
 
-  // Apply a force at a world point. Additive.
-  ApplyForce: function(force, point) {
-    if (this.IsSleeping() == false) {
-      this.m_force.Add(force);
-      this.m_torque += b2Math.b2CrossVV(b2Math.SubtractVV(point, this.m_position), force);
-    }
-  },
+// Apply a force at a world point. Additive.
+b2Body.prototype.ApplyForce = function(force, point) {
+  if (this.IsSleeping() == false) {
+    this.m_force.Add(force);
+    this.m_torque += b2Math.b2CrossVV(b2Math.SubtractVV(point, this.m_position), force);
+  }
+};
 
-  // Apply a torque. Additive.
-  ApplyTorque: function(torque) {
-    if (this.IsSleeping() == false) {
-      this.m_torque += torque;
-    }
-  },
+// Apply a torque. Additive.
+b2Body.prototype.ApplyTorque = function(torque) {
+  if (this.IsSleeping() == false) {
+    this.m_torque += torque;
+  }
+};
 
-  // Apply an impulse at a point. This immediately modifies the velocity.
-  ApplyImpulse: function(impulse, point) {
-    if (this.IsSleeping() == false) {
-      this.m_linearVelocity.Add(b2Math.MulFV(this.m_invMass, impulse));
-      this.m_angularVelocity += (this.m_invI * b2Math.b2CrossVV(b2Math.SubtractVV(point, this.m_position), impulse));
-    }
-  },
+// Apply an impulse at a point. This immediately modifies the velocity.
+b2Body.prototype.ApplyImpulse = function(impulse, point) {
+  if (this.IsSleeping() == false) {
+    this.m_linearVelocity.Add(b2Math.MulFV(this.m_invMass, impulse));
+    this.m_angularVelocity += (this.m_invI * b2Math.b2CrossVV(b2Math.SubtractVV(point, this.m_position), impulse));
+  }
+};
 
-  GetMass: function() {
-    return this.m_mass;
-  },
+b2Body.prototype.GetMass = function() {
+  return this.m_mass;
+};
 
-  GetInertia: function() {
-    return this.m_I;
-  },
+b2Body.prototype.GetInertia = function() {
+  return this.m_I;
+};
 
-  // Get the world coordinates of a point give the local coordinates
-  // relative to the body's center of mass.
-  GetWorldPoint: function(localPoint) {
-    return b2Math.AddVV(this.m_position, b2Math.b2MulMV(this.m_R, localPoint));
-  },
+// Get the world coordinates of a point give the local coordinates
+// relative to the body's center of mass.
+b2Body.prototype.GetWorldPoint = function(localPoint) {
+  return b2Math.AddVV(this.m_position, b2Math.b2MulMV(this.m_R, localPoint));
+};
 
-  // Get the world coordinates of a vector given the local coordinates.
-  GetWorldVector: function(localVector) {
-    return b2Math.b2MulMV(this.m_R, localVector);
-  },
+// Get the world coordinates of a vector given the local coordinates.
+b2Body.prototype.GetWorldVector = function(localVector) {
+  return b2Math.b2MulMV(this.m_R, localVector);
+};
 
-  // Returns a local point relative to the center of mass given a world point.
-  GetLocalPoint: function(worldPoint) {
-    return b2Math.b2MulTMV(this.m_R, b2Math.SubtractVV(worldPoint, this.m_position));
-  },
+// Returns a local point relative to the center of mass given a world point.
+b2Body.prototype.GetLocalPoint = function(worldPoint) {
+  return b2Math.b2MulTMV(this.m_R, b2Math.SubtractVV(worldPoint, this.m_position));
+};
 
-  // Returns a local vector given a world vector.
-  GetLocalVector: function(worldVector) {
-    return b2Math.b2MulTMV(this.m_R, worldVector);
-  },
+// Returns a local vector given a world vector.
+b2Body.prototype.GetLocalVector = function(worldVector) {
+  return b2Math.b2MulTMV(this.m_R, worldVector);
+};
 
-  // Is this body static (immovable)?
-  IsStatic: function() {
-    return (this.m_flags & b2Body.e_staticFlag) == b2Body.e_staticFlag;
-  },
+// Is this body static (immovable)?
+b2Body.prototype.IsStatic = function() {
+  return (this.m_flags & b2Body.e_staticFlag) == b2Body.e_staticFlag;
+};
 
-  IsFrozen: function() {
-    return (this.m_flags & b2Body.e_frozenFlag) == b2Body.e_frozenFlag;
-  },
+b2Body.prototype.IsFrozen = function() {
+  return (this.m_flags & b2Body.e_frozenFlag) == b2Body.e_frozenFlag;
+};
 
-  // Is this body sleeping (not simulating).
-  IsSleeping: function() {
-    return (this.m_flags & b2Body.e_sleepFlag) == b2Body.e_sleepFlag;
-  },
+// Is this body sleeping (not simulating).
+b2Body.prototype.IsSleeping = function() {
+  return (this.m_flags & b2Body.e_sleepFlag) == b2Body.e_sleepFlag;
+};
 
-  // You can disable sleeping on this particular body.
-  AllowSleeping: function(flag) {
-    if (flag) {
-      this.m_flags |= b2Body.e_allowSleepFlag;
-    } else {
-      this.m_flags &= ~b2Body.e_allowSleepFlag;
-      this.WakeUp();
-    }
-  },
+// You can disable sleeping on this particular body.
+b2Body.prototype.AllowSleeping = function(flag) {
+  if (flag) {
+    this.m_flags |= b2Body.e_allowSleepFlag;
+  } else {
+    this.m_flags &= ~b2Body.e_allowSleepFlag;
+    this.WakeUp();
+  }
+};
 
-  // Wake up this body so it will begin simulating.
-  WakeUp: function() {
-    this.m_flags &= ~b2Body.e_sleepFlag;
-    this.m_sleepTime = 0.0;
-  },
+// Wake up this body so it will begin simulating.
+b2Body.prototype.WakeUp = function() {
+  this.m_flags &= ~b2Body.e_sleepFlag;
+  this.m_sleepTime = 0.0;
+};
 
-  // Get the list of all shapes attached to this body.
-  GetShapeList: function() {
-    return this.m_shapeList;
-  },
+// Get the list of all shapes attached to this body.
+b2Body.prototype.GetShapeList = function() {
+  return this.m_shapeList;
+};
 
-  GetContactList: function() {
-    return this.m_contactList;
-  },
+b2Body.prototype.GetContactList = function() {
+  return this.m_contactList;
+};
 
-  GetJointList: function() {
-    return this.m_jointList;
-  },
+b2Body.prototype.GetJointList = function() {
+  return this.m_jointList;
+};
 
-  // Get the next body in the world's body list.
-  GetNext: function() {
-    return this.m_next;
-  },
+// Get the next body in the world's body list.
+b2Body.prototype.GetNext = function() {
+  return this.m_next;
+};
 
-  GetUserData: function() {
-    return this.m_userData;
-  },
+b2Body.prototype.GetUserData = function() {
+  return this.m_userData;
+};
 
-  // does not support destructors
-  /*~b2Body(){
-    b2Shape* s = this.m_shapeList;
-    while (s)
-    {
-      b2Shape* s0 = s;
-      s = s->this.m_next;
+// does not support destructors
+/*~b2Body(){
+  b2Shape* s = this.m_shapeList;
+  while (s)
+  {
+    b2Shape* s0 = s;
+    s = s->this.m_next;
 
-      b2Shape::this.Destroy(s0);
-    }
-  }*/
+    b2Shape::this.Destroy(s0);
+  }
+}*/
 
-  Destroy: function() {
-    var s = this.m_shapeList;
-    while (s) {
-      var s0 = s;
-      s = s.m_next;
+b2Body.prototype.Destroy = function() {
+  var s = this.m_shapeList;
+  while (s) {
+    var s0 = s;
+    s = s.m_next;
 
-      b2Shape.Destroy(s0);
-    }
-  },
+    b2Shape.Destroy(s0);
+  }
+};
 
-  // Temp mat
-  sMat0: new b2Mat22(),
-  SynchronizeShapes: function() {
-    //b2Mat22 R0(this.m_rotation0);
-    this.sMat0.Set(this.m_rotation0);
-    for (var s = this.m_shapeList; s != null; s = s.m_next) {
-      s.Synchronize(this.m_position0, this.sMat0, this.m_position, this.m_R);
-    }
-  },
+b2Body.prototype.SynchronizeShapes = function() {
+  //b2Mat22 R0(this.m_rotation0);
+  this.sMat0.Set(this.m_rotation0);
+  for (var s = this.m_shapeList; s != null; s = s.m_next) {
+    s.Synchronize(this.m_position0, this.sMat0, this.m_position, this.m_R);
+  }
+};
 
-  QuickSyncShapes: function() {
-    for (var s = this.m_shapeList; s != null; s = s.m_next) {
-      s.QuickSync(this.m_position, this.m_R);
-    }
-  },
+b2Body.prototype.QuickSyncShapes = function() {
+  for (var s = this.m_shapeList; s != null; s = s.m_next) {
+    s.QuickSync(this.m_position, this.m_R);
+  }
+};
 
-  // This is used to prevent connected bodies from colliding.
-  // It may lie, depending on the collideConnected flag.
-  IsConnected: function(other) {
-    for (var jn = this.m_jointList; jn != null; jn = jn.next) {
-      if (jn.other == other) return jn.joint.m_collideConnected == false;
-    }
+// This is used to prevent connected bodies from colliding.
+// It may lie, depending on the collideConnected flag.
+b2Body.prototype.IsConnected = function(other) {
+  for (var jn = this.m_jointList; jn != null; jn = jn.next) {
+    if (jn.other == other) return jn.joint.m_collideConnected == false;
+  }
 
-    return false;
-  },
+  return false;
+};
 
-  Freeze: function() {
-    this.m_flags |= b2Body.e_frozenFlag;
-    this.m_linearVelocity.SetZero();
-    this.m_angularVelocity = 0.0;
+b2Body.prototype.Freeze = function() {
+  this.m_flags |= b2Body.e_frozenFlag;
+  this.m_linearVelocity.SetZero();
+  this.m_angularVelocity = 0.0;
 
-    for (var s = this.m_shapeList; s != null; s = s.m_next) {
-      s.DestroyProxy();
-    }
-  },
-
-  m_flags: 0,
-
-  m_position: new b2Vec2(),
-  m_R: new b2Mat22(0),
-
-  // Conservative advancement data.
-  m_position0: new b2Vec2(),
-  m_rotation0: null,
-
-  m_angularVelocity: null,
-
-  m_force: null,
-  m_torque: null,
-
-  m_center: null,
-
-  m_world: null,
-  m_prev: null,
-  m_next: null,
-
-  m_shapeList: null,
-  m_shapeCount: 0,
-
-  m_jointList: null,
-  m_contactList: null,
-
-  m_mass: null,
-  m_invMass: null,
-  m_I: null,
-  m_invI: null,
-
-  m_linearDamping: null,
-  m_angularDamping: null,
-
-  m_sleepTime: null
+  for (var s = this.m_shapeList; s != null; s = s.m_next) {
+    s.DestroyProxy();
+  }
 };
 
 /**
-  @param {!b2Vec2} v
-*/
-b2Body.prototype.SetLinearVelocity= function(v) {
+ @param {!b2Vec2} v
+ */
+b2Body.prototype.SetLinearVelocity = function(v) {
   this.m_linearVelocity.SetV(v);
 };
 /**
-  @return {!b2Vec2}
-*/
-b2Body.prototype.GetLinearVelocity= function() {
+ @return {!b2Vec2}
+ */
+b2Body.prototype.GetLinearVelocity = function() {
   return this.m_linearVelocity;
 };
 
+/**
+ @const
+ @type {number}
+ */
 b2Body.e_staticFlag = 0x0001;
+/**
+ @const
+ @type {number}
+ */
 b2Body.e_frozenFlag = 0x0002;
+/**
+ @const
+ @type {number}
+ */
 b2Body.e_islandFlag = 0x0004;
+/**
+ @const
+ @type {number}
+ */
 b2Body.e_sleepFlag = 0x0008;
+/**
+ @const
+ @type {number}
+ */
 b2Body.e_allowSleepFlag = 0x0010;
+/**
+ @const
+ @type {number}
+ */
 b2Body.e_destroyFlag = 0x0020;

@@ -20,49 +20,67 @@ goog.provide('b2BodyDef');
 
 goog.require('b2Settings');
 
-/** @constructor */
+/**
+ @constructor
+ */
 var b2BodyDef = function() {
-  // initialize instance variables for references
+  /**
+   @type {!Array.<b2ShapeDef>}
+   */
   this.shapes = new Array();
-  //
+  /**
+   @type {Object}
+   */
   this.userData = null;
   for (var i = 0; i < b2Settings.b2_maxShapesPerBody; i++) {
     this.shapes[i] = null;
   }
+  /**
+   @type {!b2Vec2}
+   */
   this.position = new b2Vec2(0.0, 0.0);
   /**
-    @type {number}
-  */
+   @type {number}
+   */
   this.rotation = 0.0;
+  /**
+   @type {!b2Vec2}
+   */
   this.linearVelocity = new b2Vec2(0.0, 0.0);
   /**
-    @type {number}
-  */
+   @type {number}
+   */
   this.angularVelocity = 0.0;
+  /**
+   @type {number}
+   */
   this.linearDamping = 0.0;
+  /**
+   @type {number}
+   */
   this.angularDamping = 0.0;
+  /**
+   @type {boolean}
+   */
   this.allowSleep = true;
+  /**
+   @type {boolean}
+   */
   this.isSleeping = false;
+  /**
+   @type {boolean}
+   */
   this.preventRotation = false;
 };
 
-b2BodyDef.prototype = {
-  userData: null,
-  shapes: new Array(),
-  position: null,
-  linearVelocity: null,
-  linearDamping: null,
-  angularDamping: null,
-  allowSleep: null,
-  isSleeping: null,
-  preventRotation: null,
-
-  AddShape: function(shape) {
-    for (var i = 0; i < b2Settings.b2_maxShapesPerBody; ++i) {
-      if (this.shapes[i] == null) {
-        this.shapes[i] = shape;
-        break;
-      }
+/**
+ @param {!b2ShapeDef} shape
+ */
+b2BodyDef.prototype.AddShape = function(shape) {
+  for (var i = 0; i < b2Settings.b2_maxShapesPerBody; ++i) {
+    if (this.shapes[i] == null) {
+      this.shapes[i] = shape;
+      break;
     }
   }
 };
