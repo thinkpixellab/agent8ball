@@ -517,7 +517,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 
     //draw rotated assets
     ctx.translate(shape.m_position.x, shape.m_position.y);
-    ctx.rotate(ballBody.GetRotation() * (180 / Math.PI));
+    ctx.rotate(ballBody.GetRotation());
     ctx.translate(-shape.m_position.x, -shape.m_position.y);
 
     if (ballNumber > 8) {
