@@ -482,7 +482,9 @@ eightball.PoolTable.prototype._drawWorld = function() {
   goog.array.forEach(this.m_droppingBalls, this._drawDroppingBall, this);
   while (goog.array.removeIf(this.m_droppingBalls, function(element) {
     return element.GetIsDropped();
-  }));
+  })) {
+    // no body needed ;-)
+  }
 
   for (var body = this.m_world.m_bodyList; body; body = body.m_next) {
     var userData = body.GetUserData();
@@ -623,7 +625,7 @@ eightball.PoolTable.prototype._processBalls = function() {
   var slowBalls = 0;
   var stoppedBalls = 0;
   var count = goog.object.getCount(this.m_balls);
-  var processBall = function(ball, key, theThis){
+  var processBall = function(ball, key, theThis) {
     var velocity = ball.GetLinearVelocity().Length();
     if (velocity == 0) {
       stoppedBalls++;
