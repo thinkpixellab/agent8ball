@@ -480,6 +480,9 @@ eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
 eightball.PoolTable.prototype._drawWorld = function() {
 
   goog.array.forEach(this.m_droppingBalls, this._drawDroppingBall, this);
+  while (goog.array.removeIf(this.m_droppingBalls, function(element) {
+    return element.GetIsDropped();
+  }));
 
   for (var body = this.m_world.m_bodyList; body; body = body.m_next) {
     var userData = body.GetUserData();
