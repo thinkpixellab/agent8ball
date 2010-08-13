@@ -10,6 +10,7 @@ goog.require('goog.events');
 goog.require('goog.Timer');
 goog.require('goog.events.EventTarget');
 goog.require('goog.style');
+goog.require('goog.color');
 
 goog.require('pixelLab.DebugDiv');
 goog.require('pixelLab.fpsLogger');
@@ -22,6 +23,7 @@ goog.require('b2PolyDef');
 goog.require('b2CircleDef');
 
 goog.require('eightball.PocketDropEvent');
+goog.require('eightball.DroppingBall');
 
 /**
  @constructor
@@ -70,6 +72,12 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
    @type {!pixelLab.fpsLogger}
    */
   this.m_fpsLogger = new pixelLab.fpsLogger();
+
+  /**
+   @private
+   @type {!Array}
+   */
+  this.m_droppingBalls = [];
 
   // get a local reference to 'this' for events
   var _this = this;
@@ -330,7 +338,7 @@ eightball.PoolTable.prototype._testRack = function() {
   this.m_balls[index] = this._createBall(index, -0.5 * eightball.PoolTable.s_width, 0);
   index++;
 
-  this._getCueBall().SetLinearVelocity(new b2Vec2(150, 150));
+  this._getCueBall().SetLinearVelocity(new b2Vec2(150, -150));
 };
 
 eightball.PoolTable.prototype._rackEm = function() {
@@ -361,6 +369,7 @@ eightball.PoolTable.prototype._clearTable = function() {
   },
   this);
   goog.object.clear(this.m_balls);
+  goog.array.clear(this.m_droppingBalls);
   this.m_world.CleanBodyList();
 };
 
@@ -454,11 +463,14 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
 eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
   this.m_world.DestroyBody(ballBody);
 
+  // ballBody.GetUserData() == ['ball', ball #]
   var ballNumber = ballBody.GetUserData()[1];
   // remove ball from collection
   delete this.m_balls[ballNumber];
 
-  // ballBody.GetUserData() == ['ball', ball #]
+  var droppingBall = new eightball.DroppingBall(ballNumber, ballBody.GetCenterPosition(), pocketBody.GetCenterPosition());
+  this.m_droppingBalls.push(droppingBall);
+
   this._dispatchPocketDropEvent(ballNumber);
 };
 
@@ -466,6 +478,9 @@ eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
  @private
  */
 eightball.PoolTable.prototype._drawWorld = function() {
+
+  goog.array.forEach(this.m_droppingBalls, this._drawDroppingBall, this);
+
   for (var body = this.m_world.m_bodyList; body; body = body.m_next) {
     var userData = body.GetUserData();
     if (userData) {
@@ -478,6 +493,21 @@ eightball.PoolTable.prototype._drawWorld = function() {
         break;
       }
     }
+  }
+};
+
+eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index, array) {
+  droppingBall.step();
+  if (!droppingBall.GetIsDropped()) {
+    var location = droppingBall.GetCurrentLocation();
+    var number = droppingBall.number;
+    var color = eightball.PoolTable.s_ballColors[number];
+    var colorVal = goog.color.parseRgb(color);
+    colorVal = goog.color.darken(colorVal, droppingBall.GetPercentDropped());
+    this.m_canvasContext.fillStyle = goog.color.rgbArrayToHex(colorVal);
+    this.m_canvasContext.beginPath();
+    this.m_canvasContext.arc(location.x, location.y, 15, 0, 2 * Math.PI, false);
+    this.m_canvasContext.fill();
   }
 };
 
