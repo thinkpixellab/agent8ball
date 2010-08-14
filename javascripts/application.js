@@ -63,12 +63,12 @@ var loadApp = function() {
   var _tickAction = function() {
     var min = Math.floor(game.secondsLeft / 60);
     var sec = game.secondsLeft % 60;
-    var sectens = Math.floor(sec / 10);
-    var secones = sec % 10;
+    var sec_tens = Math.floor(sec / 10);
+    var sec_ones = sec % 10;
 
     minutesremaining.html(min);
-    secondsremainingtens.html(sectens);
-    secondsremainingones.html(secones);
+    secondsremainingtens.html(sec_tens);
+    secondsremainingones.html(sec_ones);
 
     var bars = Math.floor((game.secondsLeft - 1) / 4);
 
