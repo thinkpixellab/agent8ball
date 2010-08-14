@@ -334,7 +334,7 @@ eightball.PoolTable.prototype.rackEm = function() {
 
 eightball.PoolTable.prototype._testRack = function() {
   var index = 0;
-  var ballRadius = eightball.PoolTable.s_ballDiameter * 2;
+  var ballRadius = eightball.PoolTable.c_ballRadius;
   this.m_balls[index] = this._createBall(index, -0.5 * eightball.PoolTable.s_width, 0);
   index++;
 
@@ -343,7 +343,7 @@ eightball.PoolTable.prototype._testRack = function() {
 
 eightball.PoolTable.prototype._rackEm = function() {
   var index = 0;
-  var ballRadius = eightball.PoolTable.s_ballDiameter * 2;
+  var ballRadius = eightball.PoolTable.c_ballRadius;
   this.m_balls[index] = this._createBall(index, -0.5 * eightball.PoolTable.s_width, 0);
   index++;
 
@@ -383,7 +383,7 @@ eightball.PoolTable.prototype._clearTable = function() {
 eightball.PoolTable.prototype._createBall = function(index, x, y) {
   var ballSd = new b2CircleDef();
   ballSd.density = 4.0;
-  ballSd.radius = eightball.PoolTable.s_ballDiameter * 2;
+  ballSd.radius = eightball.PoolTable.c_ballRadius;
   ballSd.restitution = 0.95;
   ballSd.friction = 0.8;
 
@@ -511,7 +511,7 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index, 
     colorVal = goog.color.darken(colorVal, droppingBall.GetPercentDropped());
     this.m_canvasContext.fillStyle = goog.color.rgbArrayToHex(colorVal);
     this.m_canvasContext.beginPath();
-    this.m_canvasContext.arc(location.x, location.y, 15, 0, 2 * Math.PI, false);
+    this.m_canvasContext.arc(location.x, location.y, eightball.PoolTable.c_ballRadius, 0, 2 * Math.PI, false);
     this.m_canvasContext.fill();
   }
 };
@@ -903,7 +903,7 @@ eightball.PoolTable.s_width = 396;
  @type {number}
  cm, regulation
  */
-eightball.PoolTable.s_ballDiameter = 7;
+eightball.PoolTable.c_ballRadius = 14;
 
 /**
  @private
