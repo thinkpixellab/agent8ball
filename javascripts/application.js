@@ -141,8 +141,8 @@ var loadApp = function() {
   game.reset();
 
   var updatePoolTableLayout = function() {
-    var width = window.innerWidth;
-    var height = window.innerHeight;
+    var width = $(window).width();
+    var height = $(window).height();
     poolTable.updateLayout(width, height);
   };
 
