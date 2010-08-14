@@ -508,10 +508,12 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index, 
     var number = droppingBall.number;
     var color = eightball.PoolTable.s_ballColors[number];
     var colorVal = goog.color.parseRgb(color);
-    colorVal = goog.color.darken(colorVal, droppingBall.GetPercentDropped());
+    var percentDropped = droppingBall.GetPercentDropped();
+    colorVal = goog.color.darken(colorVal, percentDropped);
     this.m_canvasContext.fillStyle = goog.color.rgbArrayToHex(colorVal);
     this.m_canvasContext.beginPath();
-    this.m_canvasContext.arc(location.x, location.y, eightball.PoolTable.c_ballRadius, 0, 2 * Math.PI, false);
+    var droppingRadius = eightball.PoolTable.c_ballRadius * (1 - 0.5 * percentDropped);
+    this.m_canvasContext.arc(location.x, location.y, droppingRadius, 0, 2 * Math.PI, false);
     this.m_canvasContext.fill();
   }
 };
