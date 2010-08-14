@@ -6,20 +6,28 @@ import fnmatch
 import string
 import logging
 import subprocess
+import datetime
+
+def get_tmp_file_name(source_file_name):
+  name = source_file_name
+  name += "_tmp_"
+  name += datetime.datetime.utcnow().isoformat().replace(':','_')
+  return name
 
 def make_deps(calcdeps_py_path, deps_js_path, closure_path, js_dirs):
   
   command = ['python']
   command += [calcdeps_py_path]
   
-  command += ["--output_file", deps_js_path]
   command += ["--d", closure_path]
   command += ["-o", "deps"]
   
   for js_dir in js_dirs:
     command += ["-p", js_dir]
   
-  return command
+  tmp_file_path = get_tmp_file_name(deps_js_path)
+  command += ["--output_file", tmp_file_path]
+  return command, tmp_file_path, deps_js_path
 
 def get_closure_base(jar_path):
   return ["java", "-jar", jar_path]
@@ -78,7 +86,6 @@ def compile(jar_path, closure_path, js_files, extern_files, compiled_js_path, de
   command += ["--warning_level", "VERBOSE"]
   # make sure everything is in a good order
   command += ["--jscomp_dev_mode", "EVERY_PASS"]
-  command += ["--js_output_file", compiled_js_path]
   
   if(debug):
     # debug makes var names readable, but was causing weirdness..
@@ -86,7 +93,9 @@ def compile(jar_path, closure_path, js_files, extern_files, compiled_js_path, de
     command += ["--formatting", "PRETTY_PRINT"]
     command += ["--formatting", "PRINT_INPUT_DELIMITER"]
   
-  return command
+  tmp_file_path = get_tmp_file_name(compiled_js_path)
+  command += ["--js_output_file", tmp_file_path]
+  return command, tmp_file_path, compiled_js_path
 
 def find_files(directory, pattern):
     for root, dirs, files in os.walk(directory):
@@ -138,7 +147,15 @@ def print_help(jar_path):
   command.append("--help")
   return command
 
-def run_command(command):
+def print_tree(jar_path, closure_path, js_files, extern_files):
+  command = get_command_with_inputs(jar_path, closure_path, js_files, extern_files)
+  command.append("--print_tree")
+  command.append("true")
+  return command
+
+def run_command(command_func):
+  command, tmp_file, out_file = command_func()
+  
   logging.basicConfig(format='%(message)s', level=logging.INFO)
   args = command
   logging.info('Running the following command: %s', ' '.join(args))
@@ -149,3 +166,6 @@ def run_command(command):
     sys.exit(1)
   else:
     sys.stdout.write(stdoutdata)
+    logging.info('Success!')
+    logging.info("Moving temp file to '%s'", out_file)
+    os.rename(tmp_file, out_file)
