@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import sys
 import os
 import fnmatch
@@ -8,26 +6,84 @@ import logging
 import subprocess
 import datetime
 
+current_file_path = os.path.abspath( __file__ )
+current_file_dir = os.path.dirname(current_file_path)
+jar_path = os.path.join(current_file_dir, 'closure_compiler', 'compiler.jar')
+
+def make_deps_core(calcdeps_py_path, deps_js_path, closure_path, js_dirs):
+
+  command = ['python']
+  command += [calcdeps_py_path]
+
+  command += ["--d", closure_path]
+  command += ["-o", "deps"]
+
+  for js_dir in js_dirs:
+    command += ["-p", js_dir]
+
+  tmp_file_path = get_tmp_file_name(deps_js_path)
+  command += ["--output_file", tmp_file_path]
+  return command, tmp_file_path, deps_js_path
+
+class Closure:
+  def __init__(self, closure_path, application_js_path, closure_dependencies, calcdeps_py_path, deps_js_path, compiled_js_path, extern_dir, debug = False):
+    self.calcdeps_py_path = calcdeps_py_path
+    self.deps_js_path = deps_js_path
+    self.closure_path = closure_path
+    self.closure_dependencies = closure_dependencies
+    self.application_js_path = application_js_path
+    self.extern_dir = extern_dir
+    self.compiled_js_path = compiled_js_path
+    self.debug = debug
+
+  def build(self):
+    self.run_command(self.make_deps)
+    self.run_command(self.compile)
+
+  def run_command(self, command_func):
+    logging.basicConfig(format='%(message)s', level=logging.INFO)
+    args, tmp_file, out_file = command_func()
+    logging.info('Running the following command: %s', ' '.join(args))
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+    (stdoutdata, stderrdata) = proc.communicate()
+    if proc.returncode != 0:
+      logging.error('JavaScript compilation failed.')
+      sys.exit(1)
+    else:
+      sys.stdout.write(stdoutdata)
+      logging.info('Success!')
+      logging.info("Moving temp file to '%s'", out_file)
+      os.rename(tmp_file, out_file)
+
+  def make_deps(self):
+    return make_deps_core(self.calcdeps_py_path, self.deps_js_path, self.closure_path, self.closure_dependencies)
+
+  def get_compile_files(self):
+    js_files = get_js_files_for_compile(self.application_js_path, self.deps_js_path, self.closure_path)
+  
+    extern_files = []
+    for file in find_files(self.extern_dir, '*.js'):
+      extern_files.append(file)
+  
+    return js_files, extern_files
+
+  def compile(self):
+    js_files, extern_files = self.get_compile_files()
+    debug = False
+    return compile_core(jar_path, self.closure_path, js_files, extern_files, self.compiled_js_path, self.debug)
+
+def print_tree():
+  js_files, extern_files = get_compile_files()
+  return ClosureShared.print_tree(jar_path, closure_path, js_files, extern_files)
+
+def print_help():
+  return ClosureShared.print_help(jar_path)
+
 def get_tmp_file_name(source_file_name):
   name = source_file_name
   name += "_tmp_"
   name += datetime.datetime.utcnow().isoformat().replace(':','_')
   return name
-
-def make_deps(calcdeps_py_path, deps_js_path, closure_path, js_dirs):
-  
-  command = ['python']
-  command += [calcdeps_py_path]
-  
-  command += ["--d", closure_path]
-  command += ["-o", "deps"]
-  
-  for js_dir in js_dirs:
-    command += ["-p", js_dir]
-  
-  tmp_file_path = get_tmp_file_name(deps_js_path)
-  command += ["--output_file", tmp_file_path]
-  return command, tmp_file_path, deps_js_path
 
 def get_closure_base(jar_path):
   return ["java", "-jar", jar_path]
@@ -78,7 +134,7 @@ def get_goog_js_files(closure_path):
 def get_command_with_inputs(jar_path, closure_path, js_files, extern_files):
   return get_closure_base(jar_path) + get_closure_inputs(closure_path, js_files, extern_files)
 
-def compile(jar_path, closure_path, js_files, extern_files, compiled_js_path, debug=False):
+def compile_core(jar_path, closure_path, js_files, extern_files, compiled_js_path, debug=False):
   command = get_command_with_inputs(jar_path, closure_path, js_files, extern_files)
   
   command += ["--compilation_level", "ADVANCED_OPTIMIZATIONS"] # SIMPLE_OPTIMIZATIONS
@@ -142,30 +198,13 @@ def populate_files(js_file, files_array, provide_to_file_hash, file_to_require_h
       next_file = provide_to_file_hash[symbol]
       populate_files(next_file, files_array, provide_to_file_hash, file_to_require_hash)
 
-def print_help(jar_path):
+def print_help_core(jar_path):
   command = get_closure_base(jar_path)
   command.append("--help")
   return command
 
-def print_tree(jar_path, closure_path, js_files, extern_files):
+def print_tree_core(jar_path, closure_path, js_files, extern_files):
   command = get_command_with_inputs(jar_path, closure_path, js_files, extern_files)
   command.append("--print_tree")
   command.append("true")
   return command
-
-def run_command(command_func):
-  command, tmp_file, out_file = command_func()
-  
-  logging.basicConfig(format='%(message)s', level=logging.INFO)
-  args = command
-  logging.info('Running the following command: %s', ' '.join(args))
-  proc = subprocess.Popen(args, stdout=subprocess.PIPE)
-  (stdoutdata, stderrdata) = proc.communicate()
-  if proc.returncode != 0:
-    logging.error('JavaScript compilation failed.')
-    sys.exit(1)
-  else:
-    sys.stdout.write(stdoutdata)
-    logging.info('Success!')
-    logging.info("Moving temp file to '%s'", out_file)
-    os.rename(tmp_file, out_file)
