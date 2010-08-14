@@ -73,7 +73,6 @@ body {
 #timeremaining {
     background-image: url("../images/timeremaining.png");
     background-repeat: no-repeat;
-    text-align: left;
     font: 30px 'RadiolandRegular', Arial, sans-serif;
     color: #cb512c;
     color: #b23711;
@@ -81,28 +80,24 @@ body {
     width: 110px;
     height: 67px;
     position: absolute;
-    top: 20px;
     left: 10px;
+    top: 20px;
 }
 
+#timeremaining .digit{
+  text-align: right;
+  position: absolute;
+  bottom: 2px;
+}
 #minutesremaining {
-    text-align: right;
-    position: absolute;
-    top: 19px;
     left: 28px;
 }
 
 #secondsremainingtens {
-    text-align: right;
-    position: absolute;
-    top: 19px;
     left: 58px;
 }
 
 #secondsremainingones {
-    text-align: right;
-    position: absolute;
-    top: 19px;
     left: 78px;
 }
 
