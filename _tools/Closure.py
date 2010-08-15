@@ -1,10 +1,6 @@
-import sys
 import os
-import fnmatch
 import string
-import logging
-import subprocess
-import datetime
+from Shared import *
 
 current_file_dir = os.path.relpath(os.path.dirname(__file__))
 jar_path = os.path.join(current_file_dir, 'compiler.jar')
@@ -36,23 +32,8 @@ class Closure:
     self.debug = debug
 
   def build(self):
-    self.run_command(self.make_deps)
-    self.run_command(self.compile)
-
-  def run_command(self, command_func):
-    logging.basicConfig(format='%(message)s', level=logging.INFO)
-    args, tmp_file, out_file = command_func()
-    logging.info('Running the following command: %s', ' '.join(args))
-    proc = subprocess.Popen(args, stdout=subprocess.PIPE)
-    (stdoutdata, stderrdata) = proc.communicate()
-    if proc.returncode != 0:
-      logging.error('JavaScript compilation failed.')
-      sys.exit(1)
-    else:
-      sys.stdout.write(stdoutdata)
-      logging.info('Success!')
-      logging.info("Moving temp file to '%s'", out_file)
-      os.rename(tmp_file, out_file)
+    run_command(self.make_deps)
+    run_command(self.compile)
 
   def make_deps(self):
     return make_deps_core(self.deps_js_path, self.closure_dependencies)
@@ -73,12 +54,6 @@ class Closure:
   # def print_tree(self):
   #   js_files, extern_files = self.get_compile_files()
   #   return print_tree_core(js_files, extern_files)
-
-def get_tmp_file_name(source_file_name):
-  name = source_file_name
-  name += "_tmp_"
-  name += datetime.datetime.utcnow().isoformat().replace(':','_')
-  return name
 
 def get_closure_base():
   return ["java", "-jar", jar_path]
@@ -147,13 +122,6 @@ def compile_core(js_files, extern_files, compiled_js_path, debug=False):
   tmp_file_path = get_tmp_file_name(compiled_js_path)
   command += ["--js_output_file", tmp_file_path]
   return command, tmp_file_path, compiled_js_path
-
-def find_files(directory, pattern):
-    for root, dirs, files in os.walk(directory):
-        for basename in files:
-            if fnmatch.fnmatch(basename, pattern):
-                filename = os.path.join(root, basename)
-                yield filename
 
 def run_addDependency(file_path, provided, required, provide_to_file_hash, file_to_require_hash):
   file_path = os.path.join(closure_path, 'goog', file_path)
