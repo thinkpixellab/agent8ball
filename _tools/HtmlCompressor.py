@@ -13,6 +13,7 @@ class HtmlCompressor:
 
   def get_compress_args(self):
     args = get_compressor_base_argrs()
+    args += ['--remove-intertag-spaces']
 
     tmp_file_path = get_tmp_file_name(self.target)
     args += ["-o", tmp_file_path]
