@@ -3,7 +3,7 @@
 import os
 from _tools.ClosureShared import Closure
 from _tools import HtmlPost
-from _tools.HtmlCompressor import HtmlCompressor
+from _tools.HtmlCompressor import HtmlCompressor, CssCompressor
 
 js_path = "javascripts"
 closure_path = os.path.join(js_path, 'closure-library','closure')
@@ -28,3 +28,6 @@ HtmlPost.postProcess('index.html', 'index_compiled.html', source_js_files, compi
 
 compressor = HtmlCompressor('index_compiled.html', 'index_compressed.html')
 compressor.compress()
+
+css_compressor = CssCompressor(['stylesheets/reset.css','stylesheets/style.css'], 'stylesheets/css.css')
+css_compressor.compress()
