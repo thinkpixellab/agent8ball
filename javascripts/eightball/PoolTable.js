@@ -127,7 +127,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
     if (_this.m_lastMouse && _this._getCueBall()) {
       _this.m_isMouseDown = true;
       _this.m_lastMouseDown = _this.m_lastMouse;
-      _this.m_cueLine = new goog.math.Line(_this.m_lastMouseDown.x, _this.m_lastMouseDown.y, _this._getCueBall().GetCenterPosition().x, _this._getCueBall().GetCenterPosition().y);
+      _this.m_cueLine = new goog.math.Line(_this._getCueBall().GetCenterPosition().x, _this._getCueBall().GetCenterPosition().y, _this.m_lastMouseDown.x, _this.m_lastMouseDown.y);
     }
   });
 
@@ -151,14 +151,14 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
 
       if (_this.m_isMouseDown) {
         // if the mouse is down we prepare to strike the ball
-        var strikeLine = new goog.math.Line(_this.m_lastMouse.x, _this.m_lastMouse.y, _this.m_lastMouseDown.x, _this.m_lastMouseDown.y);
+        var strikeLine = new goog.math.Line(_this.m_lastMouseDown.x, _this.m_lastMouseDown.y, _this.m_lastMouse.x, _this.m_lastMouse.y);
         var strikeOffset = Math.min(strikeLine.getSegmentLength(), eightball.PoolTable.s_maxStrikeDistance);
 
         // calculate the angle range that we'll allow (to prevent backtracking)
         // TODO: there is an obvious bug with the math here related to wrap-around angles
         var cueAngle = _this._getLineAngleDegrees(_this.m_cueLine);
         var strikeAngle = _this._getLineAngleDegrees(strikeLine);
-        if (strikeAngle < cueAngle - 90 || strikeAngle > cueAngle + 90) strikeOffset = 0;
+        //if (strikeAngle < cueAngle - 90 || strikeAngle > cueAngle + 90) strikeOffset = 0;
 
         // calculate strike power
         _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.s_maxStrikeDistance;
@@ -245,7 +245,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
       // get the angle between the current mouse point and cue ball
       var dX = mousePoint.x - this._getCueBall().GetCenterPosition().x;
       var dY = this._getCueBall().GetCenterPosition().y - mousePoint.y;
-      var r = (Math.atan2(dY, dX) * -1);
+      var r = (Math.atan2(dY, dX) * -1) + Math.PI;
       //angle in radians
       // translate and rotate the canvas
       this.m_cueCanvasContext.translate(x, y);
