@@ -392,7 +392,7 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.005;
   ballBd.angularDamping = 0.08;
-  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index];
+  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(14,14)];
   return this.m_world.CreateBody(ballBd);
 };
 
@@ -539,6 +539,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   var ballNumber = ballBody.GetUserData()[1];
   var shape = ballBody.GetShapeList();
   var ctx = this.m_canvasContext;
+  var regX, regY;
 
   ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
 
@@ -550,31 +551,72 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     ctx.save();
 
     //draw clip
-    /*    ctx.beginPath();
-    ctx.arc(this.x,this.y,Globals.BallRadius,0,Math.PI*2,true);
-    ctx.clip();*/
+	ctx.beginPath();
+    ctx.arc(shape.m_position.x,shape.m_position.y,shape.m_radius,0,Math.PI*2,true);
+    ctx.clip();
 
     //draw rotated assets
     ctx.translate(shape.m_position.x, shape.m_position.y);
     ctx.rotate(ballBody.GetRotation());
     ctx.translate(-shape.m_position.x, -shape.m_position.y);
+	
+	ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * .1;
+	ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * .1;	
+	if(ballBody.GetUserData()[2].x < 0){
+		ballBody.GetUserData()[2].x = 28;
+	}else if(ballBody.GetUserData()[2].x > 28){
+		ballBody.GetUserData()[2].x = 0;
+	}
+	if(ballBody.GetUserData()[2].y < 0){
+		ballBody.GetUserData()[2].y = 28;
+	}else if(ballBody.GetUserData()[2].y > 28){
+		ballBody.GetUserData()[2].y = 0;
+	}
+	
+	regX = ballBody.GetCenterPosition().x + ballBody.GetUserData()[2].x-shape.m_radius;
+	regY = ballBody.GetCenterPosition().y + ballBody.GetUserData()[2].y-shape.m_radius;
 
     if (ballNumber > 8) {
-      //draw stripes
-      ctx.fillStyle = 'rgb(232,208,176)';
-      ctx.beginPath();
-      ctx.moveTo(shape.m_position.x - 12, shape.m_position.y - 8);
-      ctx.bezierCurveTo(shape.m_position.x - 8, shape.m_position.y - 16, shape.m_position.x + 8, shape.m_position.y - 16, shape.m_position.x + 12, shape.m_position.y - 8);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(shape.m_position.x - 12, shape.m_position.y + 8);
-      ctx.bezierCurveTo(shape.m_position.x - 8, shape.m_position.y + 16, shape.m_position.x + 8, shape.m_position.y + 16, shape.m_position.x + 12, shape.m_position.y + 8);
-      ctx.fill();
+/*		var mod = (Math.abs(ballBody.GetCenterPosition().y-regY)*.2);
+		var tpt1 = new goog.math.Vec2(regX,regY-9+mod);
+		var tpt2 = new goog.math.Vec2(tpt1.x,tpt1.y-16);
+		var tpt3 = new goog.math.Vec2(tpt1.x-20,regY-11-mod);
+		var tpt4 = new goog.math.Vec2(tpt1.x+20,tpt3.y);
+				  
+		var bpt1 = new goog.math.Vec2(regX,regY+9-mod);
+		var bpt2 = new goog.math.Vec2(bpt1.x,bpt1.y+16);
+		var bpt3 = new goog.math.Vec2(bpt1.x+20,regY+11+mod);
+		var bpt4 = new goog.math.Vec2(bpt1.x-20,bpt3.y);
+				  
+		ctx.fillStyle = eightball.PoolTable.s_ballColors[0];
+		ctx.beginPath();				 	  
+		ctx.moveTo(tpt1.x, tpt1.y);
+		ctx.quadraticCurveTo(tpt3.x+1,tpt1.y,tpt3.x,tpt3.y);
+		ctx.quadraticCurveTo(tpt3.x+1,tpt2.y,tpt2.x,tpt2.y);
+		ctx.quadraticCurveTo(tpt4.x-1,tpt2.y,tpt4.x,tpt4.y);
+  		ctx.quadraticCurveTo(tpt4.x-1,tpt1.y,tpt1.x,tpt1.y);
+		ctx.fill();
+				  
+		ctx.beginPath();				 	  
+		ctx.moveTo(bpt1.x, bpt1.y);
+		ctx.quadraticCurveTo(bpt3.x-1,bpt1.y,bpt3.x,bpt3.y);
+		ctx.quadraticCurveTo(bpt3.x-1,bpt2.y,bpt2.x,bpt2.y);
+		ctx.quadraticCurveTo(bpt4.x+1,bpt2.y,bpt4.x,bpt4.y);
+  		ctx.quadraticCurveTo(bpt4.x+1,bpt1.y,bpt1.x,bpt1.y);
+		ctx.fill();*/
     }
-    //draw number
-    var stampImage = this.m_ballImages[ballNumber];
-    ctx.drawImage(stampImage, shape.m_position.x - 4, shape.m_position.y - 4);
+    //velocity values
+/*	ctx.fillText(Math.round(ballBody.GetLinearVelocity().x), shape.m_position.x +16, shape.m_position.y - 4);
+	ctx.fillText(Math.round(ballBody.GetLinearVelocity().y), shape.m_position.x +16, shape.m_position.y + 6);*/
+
+	//debug dot
+/*	ctx.fillStyle = "rgb(0,255,255)";
+	ctx.beginPath();				 	 
+	ctx.arc(regX,regY,1,0,Math.PI*2,true);
+	ctx.fill();*/
+
+    ctx.drawImage(this.m_ballImages[ballNumber], regX - 4, regY - 4);
+//	ctx.drawImage(this.m_ballImages[ballNumber], shape.m_position.x - 4, shape.m_position.y - 4);
 
     //end rotated assets
     ctx.restore();
