@@ -562,15 +562,11 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 	
 	ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * .1;
 	ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * .1;	
-	if(ballBody.GetUserData()[2].x < 0){
-		ballBody.GetUserData()[2].x = 28;
-	}else if(ballBody.GetUserData()[2].x > 28){
-		ballBody.GetUserData()[2].x = 0;
-	}
-	if(ballBody.GetUserData()[2].y < 0){
-		ballBody.GetUserData()[2].y = 28;
-	}else if(ballBody.GetUserData()[2].y > 28){
-		ballBody.GetUserData()[2].y = 0;
+	
+	var d = Math.sqrt(Math.pow(shape.m_radius - ballBody.GetUserData()[2].x, 2) + Math.pow(shape.m_radius - ballBody.GetUserData()[2].y, 2))
+	if(d > shape.m_radius+4){
+		ballBody.GetUserData()[2].x = goog.math.clamp(28-ballBody.GetUserData()[2].x, 0, 28);
+		ballBody.GetUserData()[2].y = goog.math.clamp(28-ballBody.GetUserData()[2].y, 0, 28);
 	}
 	
 	regX = ballBody.GetCenterPosition().x + ballBody.GetUserData()[2].x-shape.m_radius;
@@ -606,17 +602,17 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 		ctx.fill();*/
     }
     //velocity values
-/*	ctx.fillText(Math.round(ballBody.GetLinearVelocity().x), shape.m_position.x +16, shape.m_position.y - 4);
-	ctx.fillText(Math.round(ballBody.GetLinearVelocity().y), shape.m_position.x +16, shape.m_position.y + 6);*/
+/*	ctx.fillText(Math.round(ballBody.GetUserData()[2].x*10)/10, shape.m_position.x +16, shape.m_position.y - 4);
+	ctx.fillText(Math.round(ballBody.GetUserData()[2].y*10)/10, shape.m_position.x +16, shape.m_position.y + 6);
+	ctx.fillText(Math.round(d*10)/10, shape.m_position.x +16, shape.m_position.y +16);*/
+
+    ctx.drawImage(this.m_ballImages[ballNumber], regX-4, regY-4);
 
 	//debug dot
 /*	ctx.fillStyle = "rgb(0,255,255)";
 	ctx.beginPath();				 	 
 	ctx.arc(regX,regY,1,0,Math.PI*2,true);
 	ctx.fill();*/
-
-    ctx.drawImage(this.m_ballImages[ballNumber], regX - 4, regY - 4);
-//	ctx.drawImage(this.m_ballImages[ballNumber], shape.m_position.x - 4, shape.m_position.y - 4);
 
     //end rotated assets
     ctx.restore();
