@@ -391,7 +391,7 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.005;
   ballBd.angularDamping = 0.08;
-  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(14, 14)];
+  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius)];
   return this.m_world.CreateBody(ballBd);
 };
 
