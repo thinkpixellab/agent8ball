@@ -14,7 +14,7 @@
 
 /**
  * @fileoverview This file contains functions for using the Gears database.
-*
+ *
  */
 
 goog.provide('goog.gears.Database');
@@ -442,9 +442,9 @@ goog.gears.Database.prototype.queryObjectArray = function(sql, var_args) {
  */
 goog.gears.Database.prototype.queryValueArray = function(sql, var_args) {
   return /** @type {Array} */ (this.queryObject_(sql,
-    goog.gears.Database.resultSetToValueArray,
-    arguments,
-    1));
+      goog.gears.Database.resultSetToValueArray,
+      arguments,
+      1));
 };
 
 

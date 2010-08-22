@@ -17,15 +17,15 @@
  *
  * Based on the Dojo code which in turn is based on the MochiKit code.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.async.Deferred');
 goog.provide('goog.async.Deferred.AlreadyCalledError');
 goog.provide('goog.async.Deferred.CancelledError');
 
-goog.require('goog.Timer');
+goog.require('goog.array');
 goog.require('goog.asserts');
 goog.require('goog.debug.Error');
 
@@ -319,7 +319,7 @@ goog.async.Deferred.prototype.fire_ = function() {
     // It is possible to add errbacks after the Deferred has fired. If a new
     // errback is added immediately after the Deferred encountered an unhandled
     // error, but before that error is rethrown, cancel the rethrow.
-    goog.Timer.clear(this.unhandledExceptionTimeoutId_);
+    window.clearTimeout(this.unhandledExceptionTimeoutId_);
     delete this.unhandledExceptionTimeoutId_;
   }
 
@@ -348,7 +348,12 @@ goog.async.Deferred.prototype.fire_ = function() {
         fired = 1;
         res = ex;
 
-        if (!chain.length) {
+        var errbackExists = goog.array.some(chain, function(chainRow) {
+          // The errback is the second element in the array.
+          return goog.isFunction(chainRow[1]);
+        });
+
+        if (!errbackExists) {
           // If an error is thrown with no additional errbacks in the queue,
           // prepare to rethrow the error.
           unhandledException = true;
@@ -367,9 +372,9 @@ goog.async.Deferred.prototype.fire_ = function() {
     // Rethrow the unhandled error after a timeout. Execution will continue, but
     // the error will be seen by global handlers and the user. The rethrow will
     // be canceled if another errback is appended before the timeout executes.
-    this.unhandledExceptionTimeoutId_ = goog.Timer.callOnce(function() {
+    this.unhandledExceptionTimeoutId_ = window.setTimeout(function() {
       throw res;
-    });
+    }, 0);
   }
 };
 

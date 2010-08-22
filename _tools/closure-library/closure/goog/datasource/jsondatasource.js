@@ -15,7 +15,7 @@
 /**
  * @fileoverview Implementation of DataNode for wrapping JSON data.
  *
-*
+ *
  */
 
 
@@ -108,7 +108,7 @@ goog.ds.JsonDataSource.prototype.load = function() {
         'JsonReceive.' + this.dataName_);
 
     goog.global['JsonReceive'][this.dataName_] =
-       goog.bind(this.receiveData, this);
+        goog.bind(this.receiveData, this);
 
     var scriptEl = goog.dom.createElement('script');
     scriptEl.src = uriToCall;

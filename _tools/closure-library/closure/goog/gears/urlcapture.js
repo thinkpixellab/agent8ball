@@ -16,7 +16,7 @@
  * @fileoverview Interface for capturing URLs to a ResourceStore on the
  * LocalServer.
  *
-*
+ *
  */
 
 
@@ -170,6 +170,16 @@ goog.gears.UrlCapture.prototype.removeStore = function() {
  */
 goog.gears.UrlCapture.prototype.rename = function(srcUri, dstUri) {
   this.getResourceStore_()['rename'](srcUri.toString(), dstUri.toString());
+};
+
+
+/**
+ * Copies a Url that's been captured.
+ * @param {string|goog.Uri} srcUri The source Uri.
+ * @param {string|goog.Uri} dstUri The destination Uri.
+ */
+goog.gears.UrlCapture.prototype.copy = function(srcUri, dstUri) {
+  this.getResourceStore_()['copy'](srcUri.toString(), dstUri.toString());
 };
 
 

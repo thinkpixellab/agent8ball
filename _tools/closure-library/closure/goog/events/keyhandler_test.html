@@ -12,6 +12,7 @@ See the COPYING file for details.
 <script>
   goog.require('goog.dom')
   goog.require('goog.events.KeyEvent');
+  goog.require('goog.testing.events');
   goog.require('goog.testing.jsunit');
 </script>
 </head>
@@ -316,8 +317,18 @@ See the COPYING file for details.
                  keyEvent.charCode);
 
     fireKeyDown(keyHandler, goog.events.KeyCodes.CTRL);
-    fireKeyDown(keyHandler, goog.events.KeyCodes.A);
+    fireKeyDown(keyHandler, goog.events.KeyCodes.A, null, null, true /*ctrl*/);
     assertEquals('A with control down should fire a key event',
+                 goog.events.KeyCodes.A,
+                 keyEvent.keyCode);
+
+    // Test that Alt-Tab outside the window doesn't break things.
+    fireKeyDown(keyHandler, goog.events.KeyCodes.ALT);
+    keyEvent.keyCode = -1;  // Reset the event.
+    fireKeyDown(keyHandler, goog.events.KeyCodes.A);
+    assertEquals('Should not have dispatched an Alt-A', -1, keyEvent.keyCode);
+    fireKeyPress(keyHandler, 65, 65);
+    assertEquals('Alt should be ignored since it isn\'t currently depressed',
                  goog.events.KeyCodes.A,
                  keyEvent.keyCode);
 
@@ -538,6 +549,28 @@ See the COPYING file for details.
     assertEquals('keycode should be -1', -1, keyHandler.keyCode_);
   }
 
+  function testCapturePhase() {
+    var gotInCapturePhase;
+    var gotInBubblePhase;
+
+    var target = goog.dom.createDom('div');
+    goog.events.listen(
+        new goog.events.KeyHandler(target, false /* bubble */),
+        goog.events.KeyHandler.EventType.KEY,
+        function() {
+          gotInBubblePhase = true;
+          assertTrue(gotInCapturePhase);
+        });
+    goog.events.listen(
+        new goog.events.KeyHandler(target, true /* capture */),
+        goog.events.KeyHandler.EventType.KEY,
+        function() {
+          gotInCapturePhase = true;
+        });
+
+    goog.testing.events.fireKeySequence(target, goog.events.KeyCodes.ESC);
+    assertTrue(gotInBubblePhase);
+  }
 
   function fireKeyDown(keyHandler, keyCode, opt_charCode, opt_keyIdentifier,
       opt_ctrlKey, opt_altKey, opt_shiftKey) {

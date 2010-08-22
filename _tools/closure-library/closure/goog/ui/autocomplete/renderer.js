@@ -16,7 +16,7 @@
  * @fileoverview Class for rendering the results of an auto complete and
  * allow the user to select an row.
  *
-*
+ *
  */
 
 goog.provide('goog.ui.AutoComplete.Renderer');
@@ -270,7 +270,7 @@ goog.ui.AutoComplete.Renderer.prototype.renderRows = function(rows, token,
     opt_target) {
   this.token_ = token;
   this.rows_ = rows;
-  this.hilitedRow_ = 0;
+  this.hilitedRow_ = -1;
   this.startRenderingRows_ = goog.now();
   this.target_ = opt_target;
   this.rowDivs_ = [];

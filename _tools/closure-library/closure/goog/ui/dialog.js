@@ -19,7 +19,7 @@
  *   * Standardize CSS class names with other components
  *   * Add functionality to "host" other components in content area
  *   * Abstract out ButtonSet and make it more general
-*
+ *
  * @see ../demos/dialog.html
  */
 
@@ -268,7 +268,7 @@ goog.ui.Dialog.prototype.buttonEl_ = null;
 
 /**
  * Sets the title.
- * @param {string} title Title HTML (escaped).
+ * @param {string} title The title text.
  */
 goog.ui.Dialog.prototype.setTitle = function(title) {
   this.title_ = title;
@@ -970,9 +970,9 @@ goog.ui.Dialog.prototype.resizeBackground_ = function() {
   var win = goog.dom.getWindow(doc) || window;
 
   // Take the max of scroll height and view height for cases in which document
-  // does not fill screen.  Don't worry about width.
+  // does not fill screen.
   var viewSize = goog.dom.getViewportSize(win);
-  var w = doc.body.scrollWidth;
+  var w = Math.max(doc.body.scrollWidth, viewSize.width);
   var h = Math.max(doc.body.scrollHeight, viewSize.height);
 
   if (this.bgIframeEl_) {

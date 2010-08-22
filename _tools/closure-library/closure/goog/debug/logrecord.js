@@ -17,7 +17,7 @@
  * dependencies this file has on other closure classes as any dependency it
  * takes won't be able to use the logging infrastructure.
  *
-*
+ *
  */
 
 goog.provide('goog.debug.LogRecord');
@@ -35,7 +35,7 @@ goog.provide('goog.debug.LogRecord');
  *     should only be passed in when restoring a log record from persistence.
  */
 goog.debug.LogRecord = function(level, msg, loggerName,
-      opt_time, opt_sequenceNumber) {
+    opt_time, opt_sequenceNumber) {
   this.reset(level, msg, loggerName, opt_time, opt_sequenceNumber);
 };
 
@@ -124,7 +124,7 @@ goog.debug.LogRecord.nextSequenceNumber_ = 0;
  *     should only be passed in when restoring a log record from persistence.
  */
 goog.debug.LogRecord.prototype.reset = function(level, msg, loggerName,
-      opt_time, opt_sequenceNumber) {
+    opt_time, opt_sequenceNumber) {
   if (goog.debug.LogRecord.ENABLE_SEQUENCE_NUMBERS) {
     this.sequenceNumber_ = typeof opt_sequenceNumber == 'number' ?
         opt_sequenceNumber : goog.debug.LogRecord.nextSequenceNumber_++;

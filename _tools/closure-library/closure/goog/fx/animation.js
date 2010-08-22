@@ -15,10 +15,10 @@
 /**
  * @fileoverview Classes for doing animations and visual effects.
  *
-*
+ *
  * (Based loosly on my animation code for 13thparallel.org, with extra
  * inspiration from the DojoToolkit's modifications to my code)
-*
+ *
  */
 
 goog.provide('goog.fx.Animation');
@@ -197,9 +197,9 @@ goog.fx.Animation.cycleAnimations_ = function() {
 
   goog.fx.Animation.globalTimer_ =
       goog.object.isEmpty(goog.fx.Animation.activeAnimations_) ?
-        null :
-        goog.Timer.defaultTimerObject.setTimeout(
-            goog.fx.Animation.cycleAnimations_, goog.fx.Animation.TIMEOUT);
+          null :
+          goog.Timer.defaultTimerObject.setTimeout(
+              goog.fx.Animation.cycleAnimations_, goog.fx.Animation.TIMEOUT);
 };
 
 

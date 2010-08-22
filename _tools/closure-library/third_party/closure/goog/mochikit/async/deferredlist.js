@@ -17,7 +17,7 @@
  *
  * See: http://twistedmatrix.com/projects/core/documentation/howto/defer.html
  *
-*
+ *
  */
 
 goog.provide('goog.async.DeferredList');
@@ -164,6 +164,16 @@ goog.async.DeferredList.prototype.handleCallback_ = function(index,
   }
 
   return result;
+};
+
+
+/** @inheritDoc */
+goog.async.DeferredList.prototype.errback = function(res) {
+  goog.async.DeferredList.superClass_.errback.call(this, res);
+  // On error, cancel any pending requests.
+  goog.array.forEach(this.list_, function(item) {
+    item.cancel();
+  });
 };
 
 

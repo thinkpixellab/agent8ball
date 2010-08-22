@@ -21,7 +21,7 @@
  * This file does not compile correctly with --collapse_properties. Use
  * --property_renaming=ALL_UNQUOTED instead.
  *
-*
+ *
  */
 
 goog.provide('goog.testing.TestCase');
@@ -586,6 +586,24 @@ goog.testing.TestCase.prototype.tearDown = function() {};
  */
 goog.testing.TestCase.prototype.getAutoDiscoveryPrefix = function() {
   return 'test';
+};
+
+
+/**
+ * @return {number} Time since the last batch of tests was started.
+ * @protected
+ */
+goog.testing.TestCase.prototype.getBatchTime = function() {
+  return this.batchTime_;
+};
+
+
+/**
+ * @param {number} batchTime Time since the last batch of tests was started.
+ * @protected
+ */
+goog.testing.TestCase.prototype.setBatchTime = function(batchTime) {
+  this.batchTime_ = batchTime;
 };
 
 

@@ -20,7 +20,7 @@
  * for type-inference. For example, <code>goog.asserts.assert(foo)</code>
  * will restrict <code>foo</code> to a truthy value.
  *
-*
+ *
  * @author agrieve@google.com (Andrew Grieve)
  */
 
@@ -151,7 +151,7 @@ goog.asserts.fail = function(opt_message, var_args) {
 goog.asserts.assertNumber = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isNumber(value)) {
     goog.asserts.doAssertFailure_('Expected number but got %s.', [value],
-         opt_message, Array.prototype.slice.call(arguments, 2));
+        opt_message, Array.prototype.slice.call(arguments, 2));
   }
   return /** @type {number} */ (value);
 };
@@ -168,7 +168,7 @@ goog.asserts.assertNumber = function(value, opt_message, var_args) {
 goog.asserts.assertString = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isString(value)) {
     goog.asserts.doAssertFailure_('Expected string but got %s.', [value],
-         opt_message, Array.prototype.slice.call(arguments, 2));
+        opt_message, Array.prototype.slice.call(arguments, 2));
   }
   return /** @type {string} */ (value);
 };
@@ -186,7 +186,7 @@ goog.asserts.assertString = function(value, opt_message, var_args) {
 goog.asserts.assertFunction = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isFunction(value)) {
     goog.asserts.doAssertFailure_('Expected function but got %s.', [value],
-         opt_message, Array.prototype.slice.call(arguments, 2));
+        opt_message, Array.prototype.slice.call(arguments, 2));
   }
   return /** @type {!Function} */ (value);
 };
@@ -203,7 +203,7 @@ goog.asserts.assertFunction = function(value, opt_message, var_args) {
 goog.asserts.assertObject = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isObject(value)) {
     goog.asserts.doAssertFailure_('Expected object but got %s.', [value],
-         opt_message, Array.prototype.slice.call(arguments, 2));
+        opt_message, Array.prototype.slice.call(arguments, 2));
   }
   return /** @type {!Object} */ (value);
 };
@@ -220,9 +220,27 @@ goog.asserts.assertObject = function(value, opt_message, var_args) {
 goog.asserts.assertArray = function(value, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !goog.isArray(value)) {
     goog.asserts.doAssertFailure_('Expected array but got %s.', [value],
-         opt_message, Array.prototype.slice.call(arguments, 2));
+        opt_message, Array.prototype.slice.call(arguments, 2));
   }
   return /** @type {!Array} */ (value);
+};
+
+
+/**
+ * Checks if the value is a boolean if goog.asserts.ENABLE_ASSERTS is true.
+ * @param {*} value The value to check.
+ * @param {string=} opt_message Error message in case of failure.
+ * @param {...*} var_args The items to substitute into the failure message.
+ * @return {boolean} The value, guaranteed to be a boolean when asserts are
+ *     enabled.
+ * @throws {goog.asserts.AssertionError} When the value is not a boolean.
+ */
+goog.asserts.assertBoolean = function(value, opt_message, var_args) {
+  if (goog.asserts.ENABLE_ASSERTS && !goog.isBoolean(value)) {
+    goog.asserts.doAssertFailure_('Expected boolean but got %s.', [value],
+        opt_message, Array.prototype.slice.call(arguments, 2));
+  }
+  return /** @type {boolean} */ (value);
 };
 
 
@@ -239,7 +257,7 @@ goog.asserts.assertArray = function(value, opt_message, var_args) {
 goog.asserts.assertInstanceof = function(value, type, opt_message, var_args) {
   if (goog.asserts.ENABLE_ASSERTS && !(value instanceof type)) {
     goog.asserts.doAssertFailure_('instanceof check failed.', null,
-         opt_message, Array.prototype.slice.call(arguments, 3));
+        opt_message, Array.prototype.slice.call(arguments, 3));
   }
 };
 

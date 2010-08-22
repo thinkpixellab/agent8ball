@@ -18,9 +18,9 @@
  * iframe to contain the editable area, never inherits the style of the
  * surrounding page, and is always a fixed height.
  *
-*
+ *
  * @author nicksantos@google.com (Nick Santos)
-*
+ *
  * @see ../demos/editor/editor.html
  * @see ../demos/editor/field_basic.html
  */
@@ -923,7 +923,7 @@ goog.editor.Field.MUTATION_EVENTS_GECKO = [
 goog.editor.Field.prototype.setupMutationEventHandlersGecko = function() {
   if (goog.editor.BrowserFeature.HAS_DOM_SUBTREE_MODIFIED_EVENT) {
     this.eventRegister.listen(this.getElement(), 'DOMSubtreeModified',
-    this.handleMutationEventGecko_);
+        this.handleMutationEventGecko_);
   } else {
     var doc = this.getEditableDomHelper().getDocument();
     this.eventRegister.listen(doc, goog.editor.Field.MUTATION_EVENTS_GECKO,
@@ -1249,7 +1249,7 @@ goog.editor.Field.prototype.handleKeyboardShortcut_ = function(e) {
 
     var stringKey = String.fromCharCode(key).toLowerCase();
     if (this.invokeShortCircuitingOp_(goog.editor.Plugin.Op.SHORTCUT,
-            e, stringKey, isModifierPressed)) {
+                                      e, stringKey, isModifierPressed)) {
       e.preventDefault();
       // We don't call stopPropagation as some other handler outside of
       // trogedit might need it.

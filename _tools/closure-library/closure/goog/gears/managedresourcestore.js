@@ -15,8 +15,8 @@
 /**
  * @fileoverview Simple wrapper around a Gears ManagedResourceStore.
  *
-*
-*
+ *
+ *
  */
 
 goog.provide('goog.gears.ManagedResourceStore');
@@ -100,7 +100,7 @@ goog.gears.ManagedResourceStore.UpdateStatus = {
  * @private
  */
 goog.gears.ManagedResourceStore.prototype.logger_ =
-  goog.debug.Logger.getLogger('goog.gears.ManagedResourceStore');
+    goog.debug.Logger.getLogger('goog.gears.ManagedResourceStore');
 
 
 /**

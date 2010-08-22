@@ -15,7 +15,7 @@
 /**
  * @fileoverview Behavior for combining two controls.
  *
-*
+ *
  * @see ../demos/split.html
  */
 
@@ -296,6 +296,7 @@ goog.ui.SplitBehavior.prototype.disposeInternal = function() {
   if (this.disposeSecond_) {
     goog.dispose(this.second_);
   }
+  goog.ui.SplitBehavior.superClass_.disposeInternal.call(this);
 };
 
 

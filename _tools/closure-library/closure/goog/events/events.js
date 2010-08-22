@@ -34,10 +34,10 @@
  * goog.events.removeAll();
  * </pre>
  *
-*
-*
+ *
+ *
  *                                            in IE and event object patching]
-*
+ *
  *
  * @supported IE6+, FF1.5+, WebKit, Opera.
  * @see ../demos/events.html
@@ -694,6 +694,7 @@ goog.events.EventType = {
   SELECT: 'select',
   SUBMIT: 'submit',
   INPUT: 'input',
+  PROPERTYCHANGE: 'propertychange', // IE only
 
   // Drag and drop
   DRAGSTART: 'dragstart',
@@ -1155,10 +1156,11 @@ goog.events.synthesizeEventPropagation_ = function() {
 // it can be monitored for exception handling, etc.
 goog.debug.entryPointRegistry.register(
     /**
-     * @param {goog.debug.EntryPointMonitor} monitor The monitor.
+     * @param {function(!Function): !Function} transformer The transforming
+     *     function.
      */
-    function(monitor) {
-      goog.events.handleBrowserEvent_ = monitor.wrap(
+    function(transformer) {
+      goog.events.handleBrowserEvent_ = transformer(
           goog.events.handleBrowserEvent_);
       goog.events.pools.setProxyCallbackFunction(
           goog.events.handleBrowserEvent_);

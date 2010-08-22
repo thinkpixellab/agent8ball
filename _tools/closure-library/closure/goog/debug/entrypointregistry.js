@@ -41,8 +41,27 @@ goog.debug.EntryPointMonitor.prototype.wrap;
 
 
 /**
+ * Try to remove an instrumentation wrapper created by this monitor.
+ * If the function passed to unwrap is not a wrapper created by this
+ * monitor, then we will do nothing.
+ *
+ * Notice that some wrappers may not be unwrappable. For example, if other
+ * monitors have applied their own wrappers, then it will be impossible to
+ * unwrap them because their wrappers will have captured our wrapper.
+ *
+ * So it is important that entry points are unwrapped in the reverse
+ * order that they were wrapped.
+ *
+ * @param {!Function} fn A function to unwrap.
+ * @return {!Function} The unwrapped function, or {@code fn} if it was not
+ *     a wrapped function created by this monitor.
+ */
+goog.debug.EntryPointMonitor.prototype.unwrap;
+
+
+/**
  * An array of entry point callbacks.
- * @type {!Array.<function(goog.debug.EntryPointMonitor)>}
+ * @type {!Array.<function(!Function)>}
  * @private
  */
 goog.debug.entryPointRegistry.refList_ = [];
@@ -50,10 +69,10 @@ goog.debug.entryPointRegistry.refList_ = [];
 
 /**
  * Register an entry point with this module.
- * @param {function(goog.debug.EntryPointMonitor)} callback A callback function.
+ * @param {function(!Function)} callback A callback function.
  *     When a client requests instrumentation, this callback will be called
- *     with an EntryPointMonitor. The callback is responsible for wrapping
- *     the relevant entry point.
+ *     with a trnasforming function. The callback is responsible for wrapping
+ *     the relevant entry point with the transforming function.
  */
 goog.debug.entryPointRegistry.register = function(callback) {
   // Don't use push(), so that this can be compiled out.
@@ -67,7 +86,26 @@ goog.debug.entryPointRegistry.register = function(callback) {
  * @param {goog.debug.EntryPointMonitor} monitor An entry point monitor.
  */
 goog.debug.entryPointRegistry.monitorAll = function(monitor) {
+  var transformer = goog.bind(monitor.wrap, monitor);
   for (var i = 0; i < goog.debug.entryPointRegistry.refList_.length; i++) {
-    goog.debug.entryPointRegistry.refList_[i](monitor);
+    goog.debug.entryPointRegistry.refList_[i](transformer);
+  }
+};
+
+
+/**
+ * Try to unmonitor all the registered entry points.
+ *
+ * Note that this may fail if the entry points have additional wrapping.
+ * See the comment on {@code EntryPointMonitor}'s {@code setInvertedMode}
+ * method.
+ *
+ * @param {goog.debug.EntryPointMonitor} monitor The last monitor to wrap
+ *     the entry points.
+ */
+goog.debug.entryPointRegistry.unmonitorAllIfPossible = function(monitor) {
+  var transformer = goog.bind(monitor.unwrap, monitor);
+  for (var i = 0; i < goog.debug.entryPointRegistry.refList_.length; i++) {
+    goog.debug.entryPointRegistry.refList_[i](transformer);
   }
 };
