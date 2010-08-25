@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-from _tools.ClosureShared import Closure
+from _tools.Closure import Closure
 from _tools import HtmlPost
 from _tools.HtmlCompressor import HtmlCompressor, CssCompressor
 
