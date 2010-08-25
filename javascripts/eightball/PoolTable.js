@@ -553,39 +553,26 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     ctx.beginPath();
     ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, Math.PI * 2, true);
     ctx.clip();
+	
+	ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * .03;
+	ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * .03;
 
-    //draw rotated assets
-    ctx.translate(shape.m_position.x, shape.m_position.y);
-    ctx.rotate(ballBody.GetRotation());
-    ctx.translate(-shape.m_position.x, -shape.m_position.y);
-	
-	if(Math.abs(ballBody.GetLinearVelocity().x) > 0 || Math.abs(ballBody.GetLinearVelocity().y)){
-		ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * .07;
-		ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * .07;
-	
-		//TODO: add check for change between frames
-		var dx = shape.m_radius - ballBody.GetUserData()[2].x;
-		var dy = shape.m_radius - ballBody.GetUserData()[2].y;
-		var d = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))
-		var angle = Math.atan2(dy, dx);
-		if(d > shape.m_radius+8){
-			//wrap regpoint
-			ballBody.GetUserData()[2].x = shape.m_radius + Math.sin(Math.PI*2.5-angle) * shape.m_radius;			
-			ballBody.GetUserData()[2].y = shape.m_radius + Math.cos(Math.PI*2.5-angle) * shape.m_radius;
-		}
-		//draw reflecting reg2point
-		ballBody.GetUserData()[3].x = shape.m_radius + Math.sin(Math.PI*2.5-angle) * shape.m_radius;
-		ballBody.GetUserData()[3].y = shape.m_radius + Math.cos(Math.PI*2.5-angle) * shape.m_radius;
-		
-		//ctx.fillText("rolling", ballBody.GetCenterPosition().x + 20, ballBody.GetCenterPosition().y + 20);		
+	//TODO: add check for change between frames
+	var dx = shape.m_radius - ballBody.GetUserData()[2].x;
+	var dy = shape.m_radius - ballBody.GetUserData()[2].y;
+	var d = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))
+	var angle = Math.atan2(dy, dx);
+	if(d > shape.m_radius*3){
+		//wrap regpoint
+		ballBody.GetUserData()[2].x = ballBody.GetUserData()[3].x;
+		ballBody.GetUserData()[2].y = ballBody.GetUserData()[3].y;
 	}
-	
+	//draw reflecting reg2point
+	ballBody.GetUserData()[3].x = ballBody.GetUserData()[2].x + Math.sin(Math.PI*2.5-angle) * shape.m_radius*2.7;
+	ballBody.GetUserData()[3].y = ballBody.GetUserData()[2].y + Math.cos(Math.PI*2.5-angle) * shape.m_radius*2.7;	
 	regX = ballBody.GetCenterPosition().x + ballBody.GetUserData()[2].x-shape.m_radius;
 	regY = ballBody.GetCenterPosition().y + ballBody.GetUserData()[2].y-shape.m_radius;
 	
-	regX2 = ballBody.GetCenterPosition().x + ballBody.GetUserData()[3].x-shape.m_radius;
-	regY2 = ballBody.GetCenterPosition().y + ballBody.GetUserData()[3].y-shape.m_radius;
-
 	//center dot
 /*	ctx.fillStyle = "rgb(0,0,0)";	
 	ctx.beginPath();				 	 
@@ -608,8 +595,10 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 	ctx.fill();*/
 
 	ctx.drawImage(this.m_ballImages[ballNumber], regX-4, regY-4);
-	if(d > shape.m_radius+4)
+	if(d > shape.m_radius)
 	{
+		regX2 = ballBody.GetCenterPosition().x + ballBody.GetUserData()[3].x-shape.m_radius;
+		regY2 = ballBody.GetCenterPosition().y + ballBody.GetUserData()[3].y-shape.m_radius;
 		ctx.drawImage(this.m_ballImages[ballNumber], regX2-4, regY2-4);
 	}
 
