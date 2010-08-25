@@ -391,7 +391,7 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.005;
   ballBd.angularDamping = 0.08;
-  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28-eightball.PoolTable.c_ballRadius, 28-eightball.PoolTable.c_ballRadius)];
+  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28 - eightball.PoolTable.c_ballRadius, 28 - eightball.PoolTable.c_ballRadius)];
   return this.m_world.CreateBody(ballBd);
 };
 
@@ -538,7 +538,8 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   var ballNumber = ballBody.GetUserData()[1];
   var shape = ballBody.GetShapeList();
   var ctx = this.m_canvasContext;
-  var regX, regY, regX2=-5, regY2=-5;
+  var regX, regY, regX2 = -5,
+    regY2 = -5;
 
   ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
 
@@ -553,54 +554,53 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     ctx.beginPath();
     ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, Math.PI * 2, true);
     ctx.clip();
-	
-	ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * .03;
-	ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * .03;
 
-	//TODO: add check for change between frames
-	var dx = shape.m_radius - ballBody.GetUserData()[2].x;
-	var dy = shape.m_radius - ballBody.GetUserData()[2].y;
-	var d = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))
-	var angle = Math.atan2(dy, dx);
-	if(d > shape.m_radius*3){
-		//wrap regpoint
-		ballBody.GetUserData()[2].x = ballBody.GetUserData()[3].x;
-		ballBody.GetUserData()[2].y = ballBody.GetUserData()[3].y;
-	}
-	//draw reflecting reg2point
-	ballBody.GetUserData()[3].x = ballBody.GetUserData()[2].x + Math.sin(Math.PI*2.5-angle) * shape.m_radius*2.7;
-	ballBody.GetUserData()[3].y = ballBody.GetUserData()[2].y + Math.cos(Math.PI*2.5-angle) * shape.m_radius*2.7;	
-	regX = ballBody.GetCenterPosition().x + ballBody.GetUserData()[2].x-shape.m_radius;
-	regY = ballBody.GetCenterPosition().y + ballBody.GetUserData()[2].y-shape.m_radius;
-	
-	//center dot
-/*	ctx.fillStyle = "rgb(0,0,0)";	
-	ctx.beginPath();				 	 
-	ctx.arc(ballBody.GetCenterPosition().x,ballBody.GetCenterPosition().y,2,0,Math.PI*2,true);
-	ctx.fill();
-	
-	ctx.strokeStyle = "rgb(0,255,255)";
-	ctx.moveTo(regX, regY);
-	ctx.lineTo(regX2, regY2);
-	ctx.stroke();
-	
-	ctx.fillStyle = "rgb(0,255,0)";	
-	ctx.beginPath();				 	 
-	ctx.arc(regX,regY,2,0,Math.PI*2,true);
-	ctx.fill();
-	
-	ctx.fillStyle = "rgb(255,0,0)";	
-	ctx.beginPath();				 	 
-	ctx.arc(regX2,regY2,2,0,Math.PI*2,true);
-	ctx.fill();*/
+    ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * 0.03;
+    ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * 0.03;
 
-	ctx.drawImage(this.m_ballImages[ballNumber], regX-4, regY-4);
-	if(d > shape.m_radius)
-	{
-		regX2 = ballBody.GetCenterPosition().x + ballBody.GetUserData()[3].x-shape.m_radius;
-		regY2 = ballBody.GetCenterPosition().y + ballBody.GetUserData()[3].y-shape.m_radius;
-		ctx.drawImage(this.m_ballImages[ballNumber], regX2-4, regY2-4);
-	}
+    //TODO: add check for change between frames
+    var dx = shape.m_radius - ballBody.GetUserData()[2].x;
+    var dy = shape.m_radius - ballBody.GetUserData()[2].y;
+    var d = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    var angle = Math.atan2(dy, dx);
+    if (d > shape.m_radius * 3) {
+      //wrap regpoint
+      ballBody.GetUserData()[2].x = ballBody.GetUserData()[3].x;
+      ballBody.GetUserData()[2].y = ballBody.GetUserData()[3].y;
+    }
+    //draw reflecting reg2point
+    ballBody.GetUserData()[3].x = ballBody.GetUserData()[2].x + Math.sin(Math.PI * 2.5 - angle) * shape.m_radius * 2.7;
+    ballBody.GetUserData()[3].y = ballBody.GetUserData()[2].y + Math.cos(Math.PI * 2.5 - angle) * shape.m_radius * 2.7;
+    regX = ballBody.GetCenterPosition().x + ballBody.GetUserData()[2].x - shape.m_radius;
+    regY = ballBody.GetCenterPosition().y + ballBody.GetUserData()[2].y - shape.m_radius;
+
+    //center dot
+    /*  ctx.fillStyle = "rgb(0,0,0)";
+  ctx.beginPath();
+  ctx.arc(ballBody.GetCenterPosition().x,ballBody.GetCenterPosition().y,2,0,Math.PI*2,true);
+  ctx.fill();
+
+  ctx.strokeStyle = "rgb(0,255,255)";
+  ctx.moveTo(regX, regY);
+  ctx.lineTo(regX2, regY2);
+  ctx.stroke();
+
+  ctx.fillStyle = "rgb(0,255,0)";
+  ctx.beginPath();
+  ctx.arc(regX,regY,2,0,Math.PI*2,true);
+  ctx.fill();
+
+  ctx.fillStyle = "rgb(255,0,0)";
+  ctx.beginPath();
+  ctx.arc(regX2,regY2,2,0,Math.PI*2,true);
+  ctx.fill();*/
+
+    ctx.drawImage(this.m_ballImages[ballNumber], regX - 4, regY - 4);
+    if (d > shape.m_radius) {
+      regX2 = ballBody.GetCenterPosition().x + ballBody.GetUserData()[3].x - shape.m_radius;
+      regY2 = ballBody.GetCenterPosition().y + ballBody.GetUserData()[3].y - shape.m_radius;
+      ctx.drawImage(this.m_ballImages[ballNumber], regX2 - 4, regY2 - 4);
+    }
 
     //end rotated assets
     ctx.restore();
