@@ -391,7 +391,7 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.005;
   ballBd.angularDamping = 0.08;
-  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius)];
+  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28-eightball.PoolTable.c_ballRadius, 28-eightball.PoolTable.c_ballRadius)];
   return this.m_world.CreateBody(ballBd);
 };
 
@@ -538,7 +538,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   var ballNumber = ballBody.GetUserData()[1];
   var shape = ballBody.GetShapeList();
   var ctx = this.m_canvasContext;
-  var regX, regY;
+  var regX, regY, regX2=-5, regY2=-5;
 
   ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
 
@@ -558,62 +558,60 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     ctx.translate(shape.m_position.x, shape.m_position.y);
     ctx.rotate(ballBody.GetRotation());
     ctx.translate(-shape.m_position.x, -shape.m_position.y);
+	
+	if(Math.abs(ballBody.GetLinearVelocity().x) > 0 || Math.abs(ballBody.GetLinearVelocity().y)){
+		ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * .07;
+		ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * .07;
+	
+		//TODO: add check for change between frames
+		var dx = shape.m_radius - ballBody.GetUserData()[2].x;
+		var dy = shape.m_radius - ballBody.GetUserData()[2].y;
+		var d = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))
+		var angle = Math.atan2(dy, dx);
+		if(d > shape.m_radius+8){
+			//wrap regpoint
+			ballBody.GetUserData()[2].x = shape.m_radius + Math.sin(Math.PI*2.5-angle) * shape.m_radius;			
+			ballBody.GetUserData()[2].y = shape.m_radius + Math.cos(Math.PI*2.5-angle) * shape.m_radius;
+		}
+		//draw reflecting reg2point
+		ballBody.GetUserData()[3].x = shape.m_radius + Math.sin(Math.PI*2.5-angle) * shape.m_radius;
+		ballBody.GetUserData()[3].y = shape.m_radius + Math.cos(Math.PI*2.5-angle) * shape.m_radius;
+		
+		//ctx.fillText("rolling", ballBody.GetCenterPosition().x + 20, ballBody.GetCenterPosition().y + 20);		
+	}
+	
+	regX = ballBody.GetCenterPosition().x + ballBody.GetUserData()[2].x-shape.m_radius;
+	regY = ballBody.GetCenterPosition().y + ballBody.GetUserData()[2].y-shape.m_radius;
+	
+	regX2 = ballBody.GetCenterPosition().x + ballBody.GetUserData()[3].x-shape.m_radius;
+	regY2 = ballBody.GetCenterPosition().y + ballBody.GetUserData()[3].y-shape.m_radius;
 
-    ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * 0.1;
-    ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * 0.1;
+	//center dot
+/*	ctx.fillStyle = "rgb(0,0,0)";	
+	ctx.beginPath();				 	 
+	ctx.arc(ballBody.GetCenterPosition().x,ballBody.GetCenterPosition().y,2,0,Math.PI*2,true);
+	ctx.fill();
+	
+	ctx.strokeStyle = "rgb(0,255,255)";
+	ctx.moveTo(regX, regY);
+	ctx.lineTo(regX2, regY2);
+	ctx.stroke();
+	
+	ctx.fillStyle = "rgb(0,255,0)";	
+	ctx.beginPath();				 	 
+	ctx.arc(regX,regY,2,0,Math.PI*2,true);
+	ctx.fill();
+	
+	ctx.fillStyle = "rgb(255,0,0)";	
+	ctx.beginPath();				 	 
+	ctx.arc(regX2,regY2,2,0,Math.PI*2,true);
+	ctx.fill();*/
 
-    var d = Math.sqrt(Math.pow(shape.m_radius - ballBody.GetUserData()[2].x, 2) + Math.pow(shape.m_radius - ballBody.GetUserData()[2].y, 2));
-    if (d > shape.m_radius + 4) {
-      ballBody.GetUserData()[2].x = goog.math.clamp(28 - ballBody.GetUserData()[2].x, 0, 28);
-      ballBody.GetUserData()[2].y = goog.math.clamp(28 - ballBody.GetUserData()[2].y, 0, 28);
-    }
-
-    regX = ballBody.GetCenterPosition().x + ballBody.GetUserData()[2].x - shape.m_radius;
-    regY = ballBody.GetCenterPosition().y + ballBody.GetUserData()[2].y - shape.m_radius;
-
-    /*
-    if (ballNumber > 8) {
-    var mod = (Math.abs(ballBody.GetCenterPosition().y-regY)*.2);
-    var tpt1 = new goog.math.Vec2(regX,regY-9+mod);
-    var tpt2 = new goog.math.Vec2(tpt1.x,tpt1.y-16);
-    var tpt3 = new goog.math.Vec2(tpt1.x-20,regY-11-mod);
-    var tpt4 = new goog.math.Vec2(tpt1.x+20,tpt3.y);
-
-    var bpt1 = new goog.math.Vec2(regX,regY+9-mod);
-    var bpt2 = new goog.math.Vec2(bpt1.x,bpt1.y+16);
-    var bpt3 = new goog.math.Vec2(bpt1.x+20,regY+11+mod);
-    var bpt4 = new goog.math.Vec2(bpt1.x-20,bpt3.y);
-
-    ctx.fillStyle = eightball.PoolTable.s_ballColors[0];
-    ctx.beginPath();
-    ctx.moveTo(tpt1.x, tpt1.y);
-    ctx.quadraticCurveTo(tpt3.x+1,tpt1.y,tpt3.x,tpt3.y);
-    ctx.quadraticCurveTo(tpt3.x+1,tpt2.y,tpt2.x,tpt2.y);
-    ctx.quadraticCurveTo(tpt4.x-1,tpt2.y,tpt4.x,tpt4.y);
-      ctx.quadraticCurveTo(tpt4.x-1,tpt1.y,tpt1.x,tpt1.y);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(bpt1.x, bpt1.y);
-    ctx.quadraticCurveTo(bpt3.x-1,bpt1.y,bpt3.x,bpt3.y);
-    ctx.quadraticCurveTo(bpt3.x-1,bpt2.y,bpt2.x,bpt2.y);
-    ctx.quadraticCurveTo(bpt4.x+1,bpt2.y,bpt4.x,bpt4.y);
-      ctx.quadraticCurveTo(bpt4.x+1,bpt1.y,bpt1.x,bpt1.y);
-    ctx.fill();
-    }
-    //velocity values
-  ctx.fillText(Math.round(ballBody.GetUserData()[2].x*10)/10, shape.m_position.x +16, shape.m_position.y - 4);
-  ctx.fillText(Math.round(ballBody.GetUserData()[2].y*10)/10, shape.m_position.x +16, shape.m_position.y + 6);
-  ctx.fillText(Math.round(d*10)/10, shape.m_position.x +16, shape.m_position.y +16);
-  */
-
-    ctx.drawImage(this.m_ballImages[ballNumber], regX - 4, regY - 4);
-
-    //debug dot
-    /*  ctx.fillStyle = "rgb(0,255,255)";
-  ctx.beginPath();
-  ctx.arc(regX,regY,1,0,Math.PI*2,true);
-  ctx.fill();*/
+	ctx.drawImage(this.m_ballImages[ballNumber], regX-4, regY-4);
+	if(d > shape.m_radius+4)
+	{
+		ctx.drawImage(this.m_ballImages[ballNumber], regX2-4, regY2-4);
+	}
 
     //end rotated assets
     ctx.restore();
