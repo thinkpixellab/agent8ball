@@ -72,25 +72,19 @@ b2CircleContact = function(s1, s2) {
 };
 
 goog.object.extend(b2CircleContact.prototype, b2Contact.prototype);
-goog.object.extend(b2CircleContact.prototype, {
+b2CircleContact.prototype.Evaluate = function() {
+  b2Collision.b2CollideCircle(this.m_manifold[0], this.m_shape1, this.m_shape2, false);
 
-  //~b2CircleContact() {}
-  Evaluate: function() {
-    b2Collision.b2CollideCircle(this.m_manifold[0], this.m_shape1, this.m_shape2, false);
+  if (this.m_manifold[0].pointCount > 0) {
+    this.m_manifoldCount = 1;
+  } else {
+    this.m_manifoldCount = 0;
+  }
+};
 
-    if (this.m_manifold[0].pointCount > 0) {
-      this.m_manifoldCount = 1;
-    } else {
-      this.m_manifoldCount = 0;
-    }
-  },
-
-  GetManifolds: function() {
-    return this.m_manifold;
-  },
-
-  m_manifold: [new b2Manifold()]
-});
+b2CircleContact.prototype.GetManifolds = function() {
+  return this.m_manifold;
+};
 
 b2CircleContact.Create = function(shape1, shape2, allocator) {
   return new b2CircleContact(shape1, shape2);

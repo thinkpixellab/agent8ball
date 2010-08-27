@@ -81,148 +81,128 @@ b2MouseJoint = function(def) {
 };
 
 goog.object.extend(b2MouseJoint.prototype, b2Joint.prototype);
-goog.object.extend(b2MouseJoint.prototype, {
-  GetAnchor1: function() {
-    return this.m_target;
-  },
-  GetAnchor2: function() {
-    var tVec = b2Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor);
-    tVec.Add(this.m_body2.m_position);
-    return tVec;
-  },
+b2MouseJoint.prototype.GetAnchor1 = function() {
+  return this.m_target;
+};
+b2MouseJoint.prototype.GetAnchor2 = function() {
+  var tVec = b2Math.b2MulMV(this.m_body2.m_R, this.m_localAnchor);
+  tVec.Add(this.m_body2.m_position);
+  return tVec;
+};
+b2MouseJoint.prototype.GetReactionForce = function(invTimeStep) {
+  //b2Vec2 F = invTimeStep * this.m_impulse;
+  var F = new b2Vec2();
+  F.SetV(this.m_impulse);
+  F.Multiply(invTimeStep);
+  return F;
+};
+b2MouseJoint.prototype.GetReactionTorque = function(invTimeStep) {
+  //NOT_USED(invTimeStep);
+  return 0.0;
+};
+b2MouseJoint.prototype.SetTarget = function(target) {
+  this.m_body2.WakeUp();
+  this.m_target = target;
+};
+b2MouseJoint.prototype. //--------------- Internals Below -------------------
+// Presolve vars
+PrepareVelocitySolver = function() {
+  var b = this.m_body2;
 
-  GetReactionForce: function(invTimeStep) {
-    //b2Vec2 F = invTimeStep * this.m_impulse;
-    var F = new b2Vec2();
-    F.SetV(this.m_impulse);
-    F.Multiply(invTimeStep);
-    return F;
-  },
+  var tMat;
 
-  GetReactionTorque: function(invTimeStep) {
-    //NOT_USED(invTimeStep);
-    return 0.0;
-  },
+  // Compute the effective mass matrix.
+  //b2Vec2 r = b2Mul(b.m_R, this.m_localAnchor);
+  tMat = b.m_R;
+  var rX = tMat.col1.x * this.m_localAnchor.x + tMat.col2.x * this.m_localAnchor.y;
+  var rY = tMat.col1.y * this.m_localAnchor.x + tMat.col2.y * this.m_localAnchor.y;
 
-  SetTarget: function(target) {
-    this.m_body2.WakeUp();
-    this.m_target = target;
-  },
+  // this.K    = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) * invI2 * skew(r2)]
+  //      = [1/m1+1/m2     0    ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y -r1.x*r1.y]
+  //        [    0     1/m1+1/m2]           [-r1.x*r1.y r1.x*r1.x]           [-r1.x*r1.y r1.x*r1.x]
+  var invMass = b.m_invMass;
+  var invI = b.m_invI;
 
-  //--------------- Internals Below -------------------
-  // Presolve vars
-  K: new b2Mat22(),
-  K1: new b2Mat22(),
-  K2: new b2Mat22(),
-  PrepareVelocitySolver: function() {
-    var b = this.m_body2;
+  //b2Mat22 this.K1;
+  this.K1.col1.x = invMass;
+  this.K1.col2.x = 0.0;
+  this.K1.col1.y = 0.0;
+  this.K1.col2.y = invMass;
 
-    var tMat;
+  //b2Mat22 this.K2;
+  this.K2.col1.x = invI * rY * rY;
+  this.K2.col2.x = -invI * rX * rY;
+  this.K2.col1.y = -invI * rX * rY;
+  this.K2.col2.y = invI * rX * rX;
 
-    // Compute the effective mass matrix.
-    //b2Vec2 r = b2Mul(b.m_R, this.m_localAnchor);
-    tMat = b.m_R;
-    var rX = tMat.col1.x * this.m_localAnchor.x + tMat.col2.x * this.m_localAnchor.y;
-    var rY = tMat.col1.y * this.m_localAnchor.x + tMat.col2.y * this.m_localAnchor.y;
+  //b2Mat22 this.K = this.K1 + this.K2;
+  this.K.SetM(this.K1);
+  this.K.AddM(this.K2);
+  this.K.col1.x += this.m_gamma;
+  this.K.col2.y += this.m_gamma;
 
-    // this.K    = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) * invI2 * skew(r2)]
-    //      = [1/m1+1/m2     0    ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y -r1.x*r1.y]
-    //        [    0     1/m1+1/m2]           [-r1.x*r1.y r1.x*r1.x]           [-r1.x*r1.y r1.x*r1.x]
-    var invMass = b.m_invMass;
-    var invI = b.m_invI;
+  //this.m_ptpMass = this.K.Invert();
+  this.K.Invert(this.m_ptpMass);
 
-    //b2Mat22 this.K1;
-    this.K1.col1.x = invMass;
-    this.K1.col2.x = 0.0;
-    this.K1.col1.y = 0.0;
-    this.K1.col2.y = invMass;
+  //this.m_C = b.m_position + r - this.m_target;
+  this.m_C.x = b.m_position.x + rX - this.m_target.x;
+  this.m_C.y = b.m_position.y + rY - this.m_target.y;
 
-    //b2Mat22 this.K2;
-    this.K2.col1.x = invI * rY * rY;
-    this.K2.col2.x = -invI * rX * rY;
-    this.K2.col1.y = -invI * rX * rY;
-    this.K2.col2.y = invI * rX * rX;
+  // Cheat with some damping
+  b.m_angularVelocity *= 0.98;
 
-    //b2Mat22 this.K = this.K1 + this.K2;
-    this.K.SetM(this.K1);
-    this.K.AddM(this.K2);
-    this.K.col1.x += this.m_gamma;
-    this.K.col2.y += this.m_gamma;
+  // Warm starting.
+  //b2Vec2 P = this.m_impulse;
+  var PX = this.m_impulse.x;
+  var PY = this.m_impulse.y;
+  //b.m_linearVelocity += invMass * P;
+  b.m_linearVelocity.x += invMass * PX;
+  b.m_linearVelocity.y += invMass * PY;
+  //b.m_angularVelocity += invI * b2Cross(r, P);
+  b.m_angularVelocity += invI * (rX * PY - rY * PX);
+};
+b2MouseJoint.prototype.SolveVelocityConstraints = function(step) {
+  var body = this.m_body2;
 
-    //this.m_ptpMass = this.K.Invert();
-    this.K.Invert(this.m_ptpMass);
+  var tMat;
 
-    //this.m_C = b.m_position + r - this.m_target;
-    this.m_C.x = b.m_position.x + rX - this.m_target.x;
-    this.m_C.y = b.m_position.y + rY - this.m_target.y;
+  // Compute the effective mass matrix.
+  //b2Vec2 r = b2Mul(body.m_R, this.m_localAnchor);
+  tMat = body.m_R;
+  var rX = tMat.col1.x * this.m_localAnchor.x + tMat.col2.x * this.m_localAnchor.y;
+  var rY = tMat.col1.y * this.m_localAnchor.x + tMat.col2.y * this.m_localAnchor.y;
 
-    // Cheat with some damping
-    b.m_angularVelocity *= 0.98;
+  // Cdot = v + cross(w, r)
+  //b2Vec2 Cdot = body->m_linearVelocity + b2Cross(body->m_angularVelocity, r);
+  var CdotX = body.m_linearVelocity.x + (-body.m_angularVelocity * rY);
+  var CdotY = body.m_linearVelocity.y + (body.m_angularVelocity * rX);
+  //b2Vec2 impulse = -b2Mul(this.m_ptpMass, Cdot + (this.m_beta * step->inv_dt) * this.m_C + this.m_gamma * this.m_impulse);
+  tMat = this.m_ptpMass;
+  var tX = CdotX + (this.m_beta * step.inv_dt) * this.m_C.x + this.m_gamma * this.m_impulse.x;
+  var tY = CdotY + (this.m_beta * step.inv_dt) * this.m_C.y + this.m_gamma * this.m_impulse.y;
+  var impulseX = -(tMat.col1.x * tX + tMat.col2.x * tY);
+  var impulseY = -(tMat.col1.y * tX + tMat.col2.y * tY);
 
-    // Warm starting.
-    //b2Vec2 P = this.m_impulse;
-    var PX = this.m_impulse.x;
-    var PY = this.m_impulse.y;
-    //b.m_linearVelocity += invMass * P;
-    b.m_linearVelocity.x += invMass * PX;
-    b.m_linearVelocity.y += invMass * PY;
-    //b.m_angularVelocity += invI * b2Cross(r, P);
-    b.m_angularVelocity += invI * (rX * PY - rY * PX);
-  },
+  var oldImpulseX = this.m_impulse.x;
+  var oldImpulseY = this.m_impulse.y;
+  //this.m_impulse += impulse;
+  this.m_impulse.x += impulseX;
+  this.m_impulse.y += impulseY;
+  var length = this.m_impulse.Length();
+  if (length > step.dt * this.m_maxForce) {
+    //this.m_impulse *= step.dt * this.m_maxForce / length;
+    this.m_impulse.Multiply(step.dt * this.m_maxForce / length);
+  }
+  //impulse = this.m_impulse - oldImpulse;
+  impulseX = this.m_impulse.x - oldImpulseX;
+  impulseY = this.m_impulse.y - oldImpulseY;
 
-  SolveVelocityConstraints: function(step) {
-    var body = this.m_body2;
-
-    var tMat;
-
-    // Compute the effective mass matrix.
-    //b2Vec2 r = b2Mul(body.m_R, this.m_localAnchor);
-    tMat = body.m_R;
-    var rX = tMat.col1.x * this.m_localAnchor.x + tMat.col2.x * this.m_localAnchor.y;
-    var rY = tMat.col1.y * this.m_localAnchor.x + tMat.col2.y * this.m_localAnchor.y;
-
-    // Cdot = v + cross(w, r)
-    //b2Vec2 Cdot = body->m_linearVelocity + b2Cross(body->m_angularVelocity, r);
-    var CdotX = body.m_linearVelocity.x + (-body.m_angularVelocity * rY);
-    var CdotY = body.m_linearVelocity.y + (body.m_angularVelocity * rX);
-    //b2Vec2 impulse = -b2Mul(this.m_ptpMass, Cdot + (this.m_beta * step->inv_dt) * this.m_C + this.m_gamma * this.m_impulse);
-    tMat = this.m_ptpMass;
-    var tX = CdotX + (this.m_beta * step.inv_dt) * this.m_C.x + this.m_gamma * this.m_impulse.x;
-    var tY = CdotY + (this.m_beta * step.inv_dt) * this.m_C.y + this.m_gamma * this.m_impulse.y;
-    var impulseX = -(tMat.col1.x * tX + tMat.col2.x * tY);
-    var impulseY = -(tMat.col1.y * tX + tMat.col2.y * tY);
-
-    var oldImpulseX = this.m_impulse.x;
-    var oldImpulseY = this.m_impulse.y;
-    //this.m_impulse += impulse;
-    this.m_impulse.x += impulseX;
-    this.m_impulse.y += impulseY;
-    var length = this.m_impulse.Length();
-    if (length > step.dt * this.m_maxForce) {
-      //this.m_impulse *= step.dt * this.m_maxForce / length;
-      this.m_impulse.Multiply(step.dt * this.m_maxForce / length);
-    }
-    //impulse = this.m_impulse - oldImpulse;
-    impulseX = this.m_impulse.x - oldImpulseX;
-    impulseY = this.m_impulse.y - oldImpulseY;
-
-    //body.m_linearVelocity += body->m_invMass * impulse;
-    body.m_linearVelocity.x += body.m_invMass * impulseX;
-    body.m_linearVelocity.y += body.m_invMass * impulseY;
-    //body.m_angularVelocity += body->m_invI * b2Cross(r, impulse);
-    body.m_angularVelocity += body.m_invI * (rX * impulseY - rY * impulseX);
-  },
-  SolvePositionConstraints: function() {
-    return true;
-  },
-
-  m_localAnchor: new b2Vec2(),
-  m_target: new b2Vec2(),
-  m_impulse: new b2Vec2(),
-
-  m_ptpMass: new b2Mat22(),
-  m_C: new b2Vec2(),
-  m_maxForce: null,
-  m_beta: null,
-  m_gamma: null
-});
+  //body.m_linearVelocity += body->m_invMass * impulse;
+  body.m_linearVelocity.x += body.m_invMass * impulseX;
+  body.m_linearVelocity.y += body.m_invMass * impulseY;
+  //body.m_angularVelocity += body->m_invI * b2Cross(r, impulse);
+  body.m_angularVelocity += body.m_invI * (rX * impulseY - rY * impulseX);
+};
+b2MouseJoint.prototype.SolvePositionConstraints = function() {
+  return true;
+};

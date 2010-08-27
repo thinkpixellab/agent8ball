@@ -25,72 +25,65 @@ goog.require('b2Manifold');
 /** 
  @constructor 
  */
-b2PolyAndCircleContact =  function(s1, s2) {
-   // The constructor for b2Contact
-   // initialize instance variables for references
-   this.m_node1 = new b2ContactNode();
-   this.m_node2 = new b2ContactNode();
-   //
-   this.m_flags = 0;
+b2PolyAndCircleContact = function(s1, s2) {
+  // The constructor for b2Contact
+  // initialize instance variables for references
+  this.m_node1 = new b2ContactNode();
+  this.m_node2 = new b2ContactNode();
+  //
+  this.m_flags = 0;
 
-   if (!s1 || !s2) {
-     this.m_shape1 = null;
-     this.m_shape2 = null;
-     return;
-   }
+  if (!s1 || !s2) {
+    this.m_shape1 = null;
+    this.m_shape2 = null;
+    return;
+  }
 
-   this.m_shape1 = s1;
-   this.m_shape2 = s2;
+  this.m_shape1 = s1;
+  this.m_shape2 = s2;
 
-   this.m_manifoldCount = 0;
+  this.m_manifoldCount = 0;
 
-   this.m_friction = Math.sqrt(this.m_shape1.m_friction * this.m_shape2.m_friction);
-   this.m_restitution = b2Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
+  this.m_friction = Math.sqrt(this.m_shape1.m_friction * this.m_shape2.m_friction);
+  this.m_restitution = b2Math.b2Max(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
 
-   this.m_prev = null;
-   this.m_next = null;
+  this.m_prev = null;
+  this.m_next = null;
 
-   this.m_node1.contact = null;
-   this.m_node1.prev = null;
-   this.m_node1.next = null;
-   this.m_node1.other = null;
+  this.m_node1.contact = null;
+  this.m_node1.prev = null;
+  this.m_node1.next = null;
+  this.m_node1.other = null;
 
-   this.m_node2.contact = null;
-   this.m_node2.prev = null;
-   this.m_node2.next = null;
-   this.m_node2.other = null;
-   //
-   // initialize instance variables for references
-   this.m_manifold = [new b2Manifold()];
-   //
-   //super(shape1, shape2);
-   b2Settings.b2Assert(this.m_shape1.m_type == b2Shape.e_polyShape);
-   b2Settings.b2Assert(this.m_shape2.m_type == b2Shape.e_circleShape);
-   this.m_manifold[0].pointCount = 0;
-   this.m_manifold[0].points[0].normalImpulse = 0.0;
-   this.m_manifold[0].points[0].tangentImpulse = 0.0;
- };
+  this.m_node2.contact = null;
+  this.m_node2.prev = null;
+  this.m_node2.next = null;
+  this.m_node2.other = null;
+  //
+  // initialize instance variables for references
+  this.m_manifold = [new b2Manifold()];
+  //
+  //super(shape1, shape2);
+  b2Settings.b2Assert(this.m_shape1.m_type == b2Shape.e_polyShape);
+  b2Settings.b2Assert(this.m_shape2.m_type == b2Shape.e_circleShape);
+  this.m_manifold[0].pointCount = 0;
+  this.m_manifold[0].points[0].normalImpulse = 0.0;
+  this.m_manifold[0].points[0].tangentImpulse = 0.0;
+};
 
 goog.object.extend(b2PolyAndCircleContact.prototype, b2Contact.prototype);
-goog.object.extend(b2PolyAndCircleContact.prototype, {
+b2PolyAndCircleContact.prototype.Evaluate = function() {
+  b2Collision.b2CollidePolyAndCircle(this.m_manifold[0], this.m_shape1, this.m_shape2, false);
 
-  //~b2PolyAndCircleContact() {}
-  Evaluate: function() {
-    b2Collision.b2CollidePolyAndCircle(this.m_manifold[0], this.m_shape1, this.m_shape2, false);
-
-    if (this.m_manifold[0].pointCount > 0) {
-      this.m_manifoldCount = 1;
-    } else {
-      this.m_manifoldCount = 0;
-    }
-  },
-
-  GetManifolds: function() {
-    return this.m_manifold;
-  },
-
-  m_manifold: [new b2Manifold()]
-});
+  if (this.m_manifold[0].pointCount > 0) {
+    this.m_manifoldCount = 1;
+  } else {
+    this.m_manifoldCount = 0;
+  }
+};
+b2PolyAndCircleContact.prototype.GetManifolds = function() {
+  return this.m_manifold;
+};
 
 b2PolyAndCircleContact.Create = function(shape1, shape2, allocator) {
   return new b2PolyAndCircleContact(shape1, shape2);
