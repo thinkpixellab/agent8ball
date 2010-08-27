@@ -78,14 +78,6 @@ b2ShapeDef.prototype.ComputeMass = function(massData) {
   }
 };
 
-b2ShapeDef.prototype.type = 0;
-b2ShapeDef.prototype.userData = null;
-b2ShapeDef.prototype.localPosition = null;
-b2ShapeDef.prototype.localRotation = null;
-b2ShapeDef.prototype.friction = null;
-b2ShapeDef.prototype.restitution = null;
-b2ShapeDef.prototype.density = null;
-
 // The collision category bits. Normally you would just set one bit.
 b2ShapeDef.prototype.categoryBits = 0;
 
