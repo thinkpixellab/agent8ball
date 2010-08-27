@@ -20,14 +20,7 @@ closure = Closure(
   extern_dir = os.path.join(js_path, 'externs')
 )
 
-closure.build()
+closure.build_and_process('index.html', 'index_compiled.html')
 
-source_js_files = ['_tools/closure-library/closure/goog/base.js', deps_js_path, application_js_path]
-
-HtmlPost.postProcess('index.html', 'index_compiled.html', source_js_files, compiled_js_path)
-
-compressor = HtmlCompressor('index_compiled.html', 'index_compressed.html')
+compressor = HtmlCompressor('index_compiled.html', 'javascripts/compressed.js', 'index_compressed.html')
 compressor.compress()
-
-css_compressor = CssCompressor(['stylesheets/reset.css','stylesheets/style.css'], 'stylesheets/css.css')
-css_compressor.compress()

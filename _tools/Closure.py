@@ -1,6 +1,7 @@
 import os
 import string
 from Shared import *
+import HtmlPost
 
 current_file_dir = os.path.relpath(os.path.dirname(__file__))
 jar_path = os.path.join(current_file_dir, 'compiler.jar')
@@ -8,16 +9,16 @@ closure_path = calcdeps_py_path = os.path.join(current_file_dir, 'closure-librar
 calcdeps_py_path = os.path.join(closure_path, 'bin', 'calcdeps.py')
 
 def make_deps_core(deps_js_path, js_dirs):
-
+  
   command = ['python']
   command += [calcdeps_py_path]
-
+  
   command += ["--d", closure_path]
   command += ["-o", "deps"]
-
+  
   for js_dir in js_dirs:
     command += ["-p", js_dir]
-
+  
   tmp_file_path = get_tmp_file_name(deps_js_path)
   command += ["--output_file", tmp_file_path]
   return command, tmp_file_path, deps_js_path
@@ -30,27 +31,34 @@ class Closure:
     self.extern_dir = extern_dir
     self.compiled_js_path = compiled_js_path
     self.debug = debug
-
+  
   def build(self):
     run_command(self.make_deps)
     run_command(self.compile)
-
+  
+  def build_and_process(self, source_html, target_html):
+    self.build()
+    
+    source_js_files = [os.path.join(closure_path, 'goog', 'base.js')]
+    source_js_files += [self.application_js_path, self.deps_js_path]
+    HtmlPost.replaceJsFiles(source_html, target_html, self.compiled_js_path, source_js_files)
+  
   def make_deps(self):
     return make_deps_core(self.deps_js_path, self.closure_dependencies)
-
+  
   def get_compile_files(self):
     js_files = get_js_files_for_compile(self.application_js_path, self.deps_js_path)
-  
+    
     extern_files = []
     for file in find_files(self.extern_dir, '*.js'):
       extern_files.append(file)
-  
+    
     return js_files, extern_files
-
+  
   def compile(self):
     js_files, extern_files = self.get_compile_files()
     return compile_core(js_files, extern_files, self.compiled_js_path, self.debug)
-
+  
   # def print_tree(self):
   #   js_files, extern_files = self.get_compile_files()
   #   return print_tree_core(js_files, extern_files)
@@ -165,7 +173,7 @@ def populate_files(js_file, files_array, provide_to_file_hash, file_to_require_h
 #   command = get_closure_base()
 #   command.append("--help")
 #   return command, None, None
-# 
+#
 # def print_tree_core(js_files, extern_files):
 #   command = get_command_with_inputs(js_files, extern_files)
 #   command.append("--print_tree")
