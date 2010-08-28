@@ -145,9 +145,12 @@ eightball.Game.prototype._dispatchGameEvent = function(type) {
 /**
  @private
  */
-eightball.Game.prototype._pooltable_pocketDrop = function(e) {
-  goog.debug.LogManager.getRoot().info("Pocket drop: " + e.ballNumber);
-  this.addPoints(100);
+eightball.Game.prototype._pooltable_pocketDrop = function (e) {
+
+  if (e.ballNumber != 0) {
+    goog.debug.LogManager.getRoot().info("Pocket drop: " + e.ballNumber);
+    this.addPoints(100);
+  }
 };
 
 /**

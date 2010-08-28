@@ -78,6 +78,7 @@ var loadApp = function () {
   var pause = $('#pause');
   var resume = $('#resume');
   var gameover = $('#gameover');
+  var startover = $('#startover');
   var canvasElement = $('canvas#demo_canvas')[0];
   var cueCanvasElement = $('canvas#cue_canvas')[0];
 
@@ -134,6 +135,11 @@ var loadApp = function () {
     start.fadeIn(500);
   });
 
+  startover.click(function() {
+    poolTable.resetCueBall();
+  });
+
+  
   start.click(function() {
     start.fadeOut(100, start.hide());
     overlay.fadeOut(400);
