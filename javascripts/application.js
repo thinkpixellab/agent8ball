@@ -77,6 +77,7 @@ var loadApp = function () {
   var start = $('#start');
   var pause = $('#pause');
   var resume = $('#resume');
+  var gameover = $('#gameover');
   var canvasElement = $('canvas#demo_canvas')[0];
   var cueCanvasElement = $('canvas#cue_canvas')[0];
 
@@ -123,6 +124,16 @@ var loadApp = function () {
     start.delay(800).fadeIn(400);
   };
 
+  var _endAction = function() {
+    overlay.fadeIn(500 );
+    gameover.fadeIn(400);
+  };
+
+  gameover.click(function() {
+    gameover.fadeOut(400);
+    start.fadeIn(500);
+  });
+
   start.click(function() {
     start.fadeOut(100, start.hide());
     overlay.fadeOut(400);
@@ -136,7 +147,6 @@ var loadApp = function () {
   });
 
   resume.click(function() {
-    
     overlay.fadeOut(400);
     resume.fadeOut(400, game.togglePaused());
   });
@@ -153,6 +163,7 @@ var loadApp = function () {
   goog.events.listen(game, eightball.Game.EventType.SCORE, _scoreAction);
   goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, _highScoreAction);
   goog.events.listen(game, eightball.Game.EventType.READY, _readyAction);
+  goog.events.listen(game, eightball.Game.EventType.END, _endAction);
 
   // register for collision events (for sounds)
   goog.events.listen(poolTable, eightball.PoolTable.EventType.WALL_HIT, function () {

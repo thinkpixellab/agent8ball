@@ -301,6 +301,10 @@ body {
     display: none;
 }
 
+#gameover {
+    z-index: 500;
+    display: none;
+}
 
 #loadingbg {
     position: absolute;

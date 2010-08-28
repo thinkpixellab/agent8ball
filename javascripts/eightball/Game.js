@@ -67,6 +67,7 @@ eightball.Game.prototype.start = function() {
   if (this.m_timer) {
     this.m_timer.dispose();
     this.secondsLeft = eightball.Game.s_gameSeconds;
+    this._dispatchGameEvent(eightball.Game.EventType.TICK);
   }
 
   // create a new timer
@@ -115,12 +116,14 @@ eightball.Game.prototype._loadHighScore = function() {
   return highScoreValue;
 };
 
-eightball.Game.prototype._tickAction = function() {
+eightball.Game.prototype._tickAction = function () {
   if (this.gameState == eightball.Game.States.STARTED) {
 
     this.secondsLeft--;
 
     if (this.secondsLeft <= 0) {
+      this.secondsLeft = 0;
+      this._dispatchGameEvent(eightball.Game.EventType.TICK);
       this.m_timer.stop();
       this.gameState = eightball.Game.States.ENDED;
       this._dispatchGameEvent(eightball.Game.EventType.END);
