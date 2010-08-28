@@ -17,8 +17,12 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	vertical-align: baseline;
 	background: transparent;
 }
+html {
+    background: black;
+}
 body {
 	line-height: 1;
+    background: black;
 }
 ol, ul {
 	list-style: none;
