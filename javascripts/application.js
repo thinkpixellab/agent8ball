@@ -76,6 +76,7 @@ var loadApp = function () {
   var overlay = $('#overlay');
   var start = $('#start');
   var pause = $('#pause');
+  var resume = $('#resume');
   var canvasElement = $('canvas#demo_canvas')[0];
   var cueCanvasElement = $('canvas#cue_canvas')[0];
 
@@ -129,7 +130,15 @@ var loadApp = function () {
   });
 
   pause.click(function() {
-    game.addPoints(100);
+    game.togglePaused();
+    overlay.fadeIn(400);
+    resume.fadeIn(400);
+  });
+
+  resume.click(function() {
+    
+    overlay.fadeOut(400);
+    resume.fadeOut(400, game.togglePaused());
   });
 
   var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement);
