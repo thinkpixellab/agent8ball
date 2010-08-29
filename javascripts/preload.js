@@ -1,4 +1,4 @@
-﻿$.ajaxSetup({ cache: true, async: true, timeout: 1200000, type: "GET",  });
+﻿$.ajaxSetup({ cache: true, async: true, timeout: 1200000, type: "GET"  });
 
 // globals for tracking progress
 var itemsTotal = 0;
@@ -19,7 +19,7 @@ var preload = function (urls, progressCallback, completedCallback) {
 // download an individual file
 var downloadFile = function (url) {
   var g = function() {
-     $.get(url, function (data) { incrementDownloadCount() })
+     $.get(url, function (data) { incrementDownloadCount(); });
   };
   $.async.add(g);
 };
@@ -54,7 +54,7 @@ $.async = {
                     setTimer(time);
                 }
             }, time || 2);
-        }
+        };
 
         if (fn) {
             $.async._queue.push([fn, context, time]);
@@ -67,7 +67,7 @@ $.async = {
         var next = $.async._queue.shift();
         if (!next) {
             return 0;
-        }
+        };
         next[0].call(next[1] || window);
         return next[2];
     },
