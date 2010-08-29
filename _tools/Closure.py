@@ -24,11 +24,11 @@ def make_deps_core(deps_js_path, js_dirs):
   return command, tmp_file_path, deps_js_path
 
 class Closure:
-  def __init__(self, application_js_path, closure_dependencies, deps_js_path, compiled_js_path, extern_dir, debug = False):
+  def __init__(self, application_js_path, closure_dependencies, deps_js_path, compiled_js_path, extern_files, debug = False):
     self.deps_js_path = deps_js_path
     self.closure_dependencies = closure_dependencies
     self.application_js_path = application_js_path
-    self.extern_dir = extern_dir
+    self.extern_files = extern_files
     self.compiled_js_path = compiled_js_path
     self.debug = debug
   
@@ -49,15 +49,11 @@ class Closure:
   def get_compile_files(self):
     js_files = get_js_files_for_compile(self.application_js_path, self.deps_js_path)
     
-    extern_files = []
-    for file in find_files(self.extern_dir, '*.js'):
-      extern_files.append(file)
-    
-    return js_files, extern_files
+    return js_files
   
   def compile(self):
-    js_files, extern_files = self.get_compile_files()
-    return compile_core(js_files, extern_files, self.compiled_js_path, self.debug)
+    js_files = self.get_compile_files()
+    return compile_core(js_files, self.extern_files, self.compiled_js_path, self.debug)
   
   # def print_tree(self):
   #   js_files, extern_files = self.get_compile_files()
