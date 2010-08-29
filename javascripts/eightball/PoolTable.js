@@ -375,8 +375,7 @@ eightball.PoolTable.prototype._createCueBall = function () {
   // create the cuee ball
   var ballRadius = eightball.PoolTable.c_ballRadius;
   this.m_balls[0] = this._createBall(0, -0.5 * eightball.PoolTable.s_width, 0);
-
-}
+};
 
 
 /**
@@ -505,7 +504,7 @@ eightball.PoolTable.prototype._processCollision = function (avgVelocity, ballHit
       var avgVelocity = _velocity / (_wallHits + _ballHits);
 
       // dispatch the event
-      eightball.PoolTable.prototype._dispatchCollisionEvent(avgVelocity, _ballHits, _wallHits);
+      this._dispatchCollisionEvent(avgVelocity, _ballHits, _wallHits);
     }
 
     // reset our counters
