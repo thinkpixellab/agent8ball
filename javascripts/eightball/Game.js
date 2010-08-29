@@ -32,6 +32,7 @@ eightball.Game = function(poolTable) {
   this.m_poolTable = poolTable;
 
   goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop, undefined, this);
+  goog.events.listen(this.m_poolTable, eightball.CollisionEvent.TYPE, this._pooltable_collision, undefined, this);
 
   this.reset();
 };
@@ -154,10 +155,20 @@ eightball.Game.prototype._pooltable_pocketDrop = function (e) {
 };
 
 /**
- @private
- @param {number} seconds
- @return {number}
- */
+@private
+*/
+eightball.Game.prototype._pooltable_collision = function (e) {
+
+  //goog.debug.LogManager.getRoot().info("velocity: " + e.avgVelocity);
+  alert("here");
+
+};
+
+/**
+@private
+@param {number} seconds
+@return {number}
+*/
 eightball.Game._inMs = function(seconds) {
   return seconds * 1000;
 };

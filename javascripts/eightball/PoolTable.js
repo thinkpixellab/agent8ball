@@ -22,6 +22,7 @@ goog.require('b2BodyDef');
 goog.require('b2PolyDef');
 goog.require('b2CircleDef');
 
+goog.require('eightball.CollisionEvent');
 goog.require('eightball.PocketDropEvent');
 goog.require('eightball.DroppingBall');
 
@@ -430,11 +431,13 @@ eightball.PoolTable.prototype._step = function() {
  @private
  @param {!Array.<b2Pair>} pairs
  */
-eightball.PoolTable.prototype._processPairs = function(pairs) {
+eightball.PoolTable.prototype._processPairs = function (pairs) {
   var _this = this,
-    wallHit = false,
-    ballHit = false;
-  goog.array.forEach(pairs, function(pair, index, array) {
+    wallHit = 0,
+    ballHit = 0,
+    totalVelocity = 0;
+
+  goog.array.forEach(pairs, function (pair, index, array) {
     //
     // First, look for pocket hits
     //
@@ -459,19 +462,70 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
     goog.array.sort(bodyTypes);
     if (bodyTypes[0] == eightball.PoolTable.s_bodyTypes.BALL) {
       if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.BALL) {
-        ballHit = true;
+        ballHit++;
+        totalVelocity += pair.m_shape1.m_body.GetLinearVelocity().Length();
+        totalVelocity += pair.m_shape2.m_body.GetLinearVelocity().Length();
       } else if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.TABLE) {
-        wallHit = true;
+        wallHit++;
+        totalVelocity += pair.m_shape1.m_body.GetLinearVelocity().Length();
+        totalVelocity += pair.m_shape2.m_body.GetLinearVelocity().Length();
       }
     }
   });
-  if (ballHit) {
+  if (ballHit > 0) {
     this._dispatchBallHitEvent();
   }
-  if (wallHit) {
+  if (wallHit > 0) {
     this._dispatchWallHitEvent();
   }
+
+  var avgVelocity = (wallHit > 0 || ballHit > 0) ? totalVelocity / (2 * (ballHit + wallHit)) : 0;
+  this._processCollision(avgVelocity, ballHit, wallHit);
 };
+
+
+/**
+@private
+@param {!b2Body} pocketBody
+@param {!b2Body} ballBody
+*/
+eightball.PoolTable.prototype._processCollision = function (avgVelocity, ballHits, wallHits) {
+  // this function could be called once per step, even if there are no collisions
+  // because we throttle based on the assumption that we get called at a consistent
+  // interval (and relatively often)
+
+  _collisionSteps++;
+
+  //goog.debug.LogManager.getRoot().info(_collisionSteps);
+  if (_collisionSteps >= 20) {
+
+    if (_ballHits > 0 || _wallHits > 0) {
+
+      // calculate the avgVelocity
+      var avgVelocity = _velocity / (_wallHits + _ballHits);
+
+      // dispatch the event
+      eightball.PoolTable.prototype._dispatchCollisionEvent(avgVelocity, _ballHits, _wallHits);
+    }
+
+    // reset our counters
+    _collisionSteps = 0;
+    _avgVelocity = 0;
+    _wallHits = 0;
+    _ballHits = 0;
+  }
+
+  _ballHits += ballHits;
+  _wallHits += wallHits;
+  _velocity += avgVelocity;
+
+};
+
+var _collisionSteps = 0;
+var _velocity = 0;
+var _wallHits = 0;
+var _ballHits = 0;
+
 
 /**
  @private
@@ -692,8 +746,18 @@ eightball.PoolTable.prototype._dispatchBallHitEvent = function() {
 };
 
 /**
- @private
- */
+@private
+@param {number} avgVelocity
+@param {number} ballCount
+@param {number} wallCount
+*/
+eightball.PoolTable.prototype._dispatchCollisionEvent = function (avgVelocity, ballCount, wallCount) {
+  this.dispatchEvent(new eightball.CollisionEvent(avgVelocity, ballCount, wallCount, this));
+};
+
+/**
+@private
+*/
 eightball.PoolTable.prototype._processBalls = function () {
   var slowBalls = 0;
   var stoppedBalls = 0;
