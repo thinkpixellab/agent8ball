@@ -45,6 +45,7 @@ var loadApp = function () {
   soundManager.add("quietwall", new eightball.SoundEffect("sounds/wallquiet.mp3", 5));
   soundManager.add("cuehit", new eightball.SoundEffect("sounds/cuehit.mp3", 1));
   soundManager.add("pocket", new eightball.SoundEffect("sounds/pocket.mp3", 3));
+  soundManager.add("typing", new eightball.SoundEffect("sounds/typing.mp3", 3));
 
   // global elements
   var minutesremaining = $('#minutesremaining');
@@ -53,6 +54,7 @@ var loadApp = function () {
   var progress = $('#progress');
   var overlay = $('#overlay');
   var start = $('#start');
+  var startmessage = $('#startmessage');
   var pause = $('#pause');
   var resume = $('#resume');
   var gameover = $('#gameover');
@@ -100,8 +102,26 @@ var loadApp = function () {
 
   var _readyAction = function () {
     overlay.fadeIn(1000);
-    start.delay(800).fadeIn(400);
+
+    var msg = "Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.";
+    var index = 0
+
+    start.delay(800).fadeIn(400, function () {
+
+      var typing = soundManager.play("typing");
+      interval = setInterval(function () {
+
+        startmessage.html(msg.substr(0, index));
+        index++;
+
+        if (index > msg.length) {
+          clearInterval(interval);
+          typing.pause();
+        }
+      }, 15);
+    });
   };
+
 
   var _endAction = function () {
     overlay.fadeIn(500);
@@ -132,6 +152,14 @@ var loadApp = function () {
   resume.click(function () {
     overlay.fadeOut(400);
     resume.fadeOut(400, game.togglePaused());
+  });
+
+  $('#gameoverfacebook').click(function () {
+    alert("do something facebooky");
+  });
+
+  $('#gameovertwitter').click(function () {
+    alert("do something twitterish");
   });
 
   var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement);
@@ -182,7 +210,7 @@ var loadApp = function () {
     }
     else if (e.velocity > 40) {
       soundManager.play("quietwall");
-    } 
+    }
   },
   undefined, this);
 

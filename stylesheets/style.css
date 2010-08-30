@@ -292,8 +292,29 @@ body {
 }
 
 #start {
-    z-index: 300;
+    z-index: 500;
     display: none;
+    background-image: url("../images/letter.png");
+    background-repeat: no-repeat;
+    width: 424px;
+    height: 546px;
+    margin-top: 60px;
+    left: 240px;
+    text-align:center;
+}
+
+#startmessage {
+    background-image: url("../images/startoverlay.png");
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 120px;
+    left:55px;
+    font: 13px/16px 'CPMono_v07Bold', Arial, sans-serif;
+    text-align: left;
+    width: 258px;
+    height: 311px;
+    color: #322c25;
+    padding-top:15px;
 }
 
 #resume {
@@ -304,6 +325,50 @@ body {
 #gameover {
     z-index: 500;
     display: none;
+    background-image: url("../images/gameover.png");
+    background-repeat: no-repeat;
+    width: 402px;
+    height: 339px;
+    margin-top: 120px;
+    left: 240px;
+    text-align:center;
+}
+
+#gameoverscore {
+    position: absolute;
+    top: 130px;
+    width: 402px;
+    text-align:center;
+    font: 96px 'MolotRegular' , Arial, sans-serif;
+    color: #352716;
+}
+
+#gameovertwitter {
+    position: absolute;
+    top: 275px;
+    left: 127px;
+    background-image: url("../images/twitter.png");
+    background-repeat: no-repeat;
+    width: 31px;
+    height: 31px;
+}
+
+#gameovertwitter:hover {
+    background-image: url("../images/twitterover.png");
+}
+
+#gameoverfacebook {
+    position: absolute;
+    top: 278px;
+    left: 163px;
+    background-image: url("../images/facebook.png");
+    background-repeat: no-repeat;
+    width: 29px;
+    height: 29px;
+}
+
+#gameoverfacebook:hover {
+    background-image: url("../images/facebookover.png");
 }
 
 #loadingbg {
@@ -328,6 +393,7 @@ body {
     margin-right: auto;
     margin-top: 200px;
 }
+
 #loadingpg {
     width: 0px;
     height: 10px;

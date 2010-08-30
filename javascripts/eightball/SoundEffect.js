@@ -64,4 +64,6 @@ eightball.SoundEffect.prototype.play = function () {
   // make sure we're at the start and then play
   audio.play();
 
+  return audio;
+
 };

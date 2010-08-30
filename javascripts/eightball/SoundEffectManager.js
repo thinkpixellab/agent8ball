@@ -27,11 +27,11 @@ eightball.SoundEffectManager.prototype.add = function(name, soundEffect) {
 
 eightball.SoundEffectManager.prototype.play = function(name) {
   if (this.m_isSoundOn) {
-    this.m_sounds[name].play();
+    return this.m_sounds[name].play();
   }
 };
 
-eightball.SoundEffectManager.prototype.isSoundOn = function() {
+eightball.SoundEffectManager.prototype.isSoundOn = function () {
   return this.m_isSoundOn;
 };
 
