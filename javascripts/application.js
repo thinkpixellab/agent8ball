@@ -104,12 +104,12 @@ var loadApp = function () {
     overlay.fadeIn(1000);
 
     var msg = "Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.";
-    var index = 0
+    var index = 0;
 
     start.delay(800).fadeIn(400, function () {
 
       var typing = soundManager.play("typing");
-      interval = setInterval(function () {
+      var interval = setInterval(function() {
 
         startmessage.html(msg.substr(0, index));
         index++;
