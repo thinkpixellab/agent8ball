@@ -53,6 +53,7 @@ eightball.SoundEffect.prototype.play = function () {
   }
   var audio = this.m_audios[this.m_currSimul];
 
+
   // if this is a webkit browser, we need to reload the audio every time we
   // play it (otherwise webkit has a hard time with short (<1s) sounds)
   if (this.m_isWebKit) {

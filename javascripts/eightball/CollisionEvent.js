@@ -8,37 +8,54 @@ goog.require('goog.events.Event');
 *
 * @extends {goog.events.Event}
 * @constructor
-* @param {number} avgVelocity
-* @param {number} ballCount
+* @param {number} velocity
+* @param {string} collisionType
 * @param {number} wallCount
 * @param {Object=} opt_target Reference to the object that is the target of
 *     this event. It has to implement the {@code EventTarget} interface
 *     declared at {@link http://developer.mozilla.org/en/DOM/EventTarget}.
 */
-eightball.CollisionEvent = function (avgVelocity, ballCount, wallCount, opt_target) {
+eightball.CollisionEvent = function (velocity, eventType, opt_target) {
 
-  goog.events.Event.call(this, eightball.CollisionEvent.TYPE, opt_target);
-
-  /**
-  @type {number}
-  */
-  this.avgVelocity = avgVelocity;
+  //goog.events.Event.call(this, eightball.CollisionEvent.TYPE, opt_target);
+  goog.events.Event.call(this, eventType, opt_target);
 
   /**
   @type {number}
   */
-  this.ballCount = ballCount;
-
-  /**
-  @type {number}
-  */
-  this.wallCount = wallCount;
+  this.velocity = velocity;
 
 };
 goog.inherits(eightball.CollisionEvent, goog.events.Event);
 
 /**
-@const
-@type {string}
+* Events fired by the game.
+* @enum {string}
 */
-eightball.CollisionEvent.TYPE = 'eightball.CollisionEvent.TYPE';
+eightball.CollisionEvent.EventType = {
+  /**
+  * Dispatched when the cue hits the cue ball
+  */
+  CUESTICK: 'CUESTICK',
+
+  /**
+  * Dispatched when the cue ball first hits another ball after the ball has been put in play in a turn
+  */
+  CUEBALL: 'CUEBALL',
+
+  /**
+  * Dispatched on the first "break" of a game
+  */
+  BREAK: 'BREAK',
+
+  /**
+  * Dispatched when two balls collide 
+  */
+  BALL: 'BALL',
+
+  /**
+  * Dispatched when a ball collides with a wall
+  */
+  WALL: 'WALL',
+};
+

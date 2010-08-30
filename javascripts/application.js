@@ -24,7 +24,7 @@ var _game;
 var loadApp = function () {
 
   // show debug
-  pixelLab.DebugDiv.enable();
+  //pixelLab.DebugDiv.enable();
 
   // show the content, hide the loading element
   $('#vignette').delay(500).fadeIn(1000);
@@ -37,12 +37,14 @@ var loadApp = function () {
 
   // sound
   var soundManager = new eightball.SoundEffectManager();
-  soundManager.add("ball0", new eightball.SoundEffect("sounds/shot00.mp3", 3));
-  soundManager.add("ball1", new eightball.SoundEffect("sounds/shot01.mp3", 3));
-  soundManager.add("ball2", new eightball.SoundEffect("sounds/shot02.mp3", 3));
-  soundManager.add("ball3", new eightball.SoundEffect("sounds/shot03.mp3", 3));
-  soundManager.add("ball4", new eightball.SoundEffect("sounds/shot04.mp3", 3));
-  soundManager.add("ball5", new eightball.SoundEffect("sounds/shot05.mp3", 3));
+  soundManager.add("break", new eightball.SoundEffect("sounds/break.mp3", 1));
+  soundManager.add("cuestick", new eightball.SoundEffect("sounds/cuestick.mp3", 1));
+  soundManager.add("ball", new eightball.SoundEffect("sounds/clack.mp3", 10));
+  soundManager.add("quietball", new eightball.SoundEffect("sounds/clackquiet.mp3", 10));
+  soundManager.add("wall", new eightball.SoundEffect("sounds/wall.mp3", 5));
+  soundManager.add("quietwall", new eightball.SoundEffect("sounds/wallquiet.mp3", 5));
+  soundManager.add("cuehit", new eightball.SoundEffect("sounds/cuehit.mp3", 1));
+  soundManager.add("pocket", new eightball.SoundEffect("sounds/pocket.mp3", 3));
 
   // global elements
   var minutesremaining = $('#minutesremaining');
@@ -79,7 +81,7 @@ var loadApp = function () {
       progress.width(15 * bars);
     }
 
-    pixelLab.DebugDiv.clear();
+    //pixelLab.DebugDiv.clear();
     goog.debug.LogManager.getRoot().info("0" + min + ":" + (sec < 10 ? "0" + sec : sec));
     var fmt = new goog.i18n.NumberFormat('#,###.##');
     var str = fmt.format(poolTable.stepsPerSecond());
@@ -115,7 +117,6 @@ var loadApp = function () {
     poolTable.resetCueBall();
   });
 
-
   start.click(function () {
     start.fadeOut(100, start.hide());
     overlay.fadeOut(400);
@@ -147,18 +148,50 @@ var loadApp = function () {
   goog.events.listen(game, eightball.Game.EventType.READY, _readyAction);
   goog.events.listen(game, eightball.Game.EventType.END, _endAction);
 
-  // register for collision events (for sounds)
-  goog.events.listen(poolTable, eightball.PoolTable.EventType.WALL_HIT, function () {
-    //goog.debug.LogManager.getRoot().info("Wall hit!");
-    //soundManager.play("wall" + Math.floor(Math.random() * 2));
+  // sound events
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function (e) {
+    soundManager.play("cuestick");
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.PoolTable.EventType.BALL_HIT, function () {
-    //goog.debug.LogManager.getRoot().info("Ball hit!");
-    soundManager.play("ball" + Math.floor(Math.random() * 6));
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, function (e) {
+    soundManager.play("break");
   },
   undefined, this);
+
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, function (e) {
+    soundManager.play("cuehit");
+  },
+  undefined, this);
+
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, function (e) {
+    goog.debug.LogManager.getRoot().info("velocity: " + e.velocity);
+
+    if (e.velocity > 80) {
+      soundManager.play("ball");
+    }
+    else if (e.velocity > 20) {
+      soundManager.play("quietball");
+    }
+  },
+  undefined, this);
+
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.WALL, function (e) {
+    if (e.velocity > 120) {
+      soundManager.play("wall");
+    }
+    else if (e.velocity > 40) {
+      soundManager.play("quietwall");
+    } 
+  },
+  undefined, this);
+
+  goog.events.listen(poolTable, eightball.PocketDropEvent.TYPE, function (e) {
+    soundManager.play("pocket");
+  },
+  undefined, this);
+
+
 
   // calling reset after the game has been loaded fires the events we 
   // need to initialize everything for game play
@@ -197,6 +230,8 @@ var loadApp = function () {
   };
 
   $("#instructions").click(function () {
+    soundManager.play("quick");
+
     //game.togglePaused();
     //$("#howtoplay").fadeIn(200);
     //$("#cue_canvas").fadeOut(200);

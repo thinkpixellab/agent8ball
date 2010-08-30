@@ -220,11 +220,16 @@ eightball.PoolTable.prototype._showCue = function () {
   this._updateCue(this.m_lastMouse, 0);
 };
 
-eightball.PoolTable.prototype._strikeCue = function() {
+eightball.PoolTable.prototype._strikeCue = function () {
   if (this.m_cueLine && this._getCueBall()) {
+
     var velocity = new b2Vec2(this.m_cueLine.x1 - this.m_cueLine.x0, this.m_cueLine.y1 - this.m_cueLine.y0);
     velocity.Normalize();
     velocity.Multiply(500);
+
+    this._dispatchCollisionEvent(velocity.Length(), eightball.CollisionEvent.EventType.CUESTICK);
+    _isCueHit = true;
+
     this._getCueBall().SetLinearVelocity(velocity);
     this._getCueBall().WakeUp();
   }
@@ -330,9 +335,9 @@ eightball.PoolTable.prototype._createWorld = function() {
   this.rackEm();
 };
 
-eightball.PoolTable.prototype.rackEm = function() {
+eightball.PoolTable.prototype.rackEm = function () {
+  _isBreak = true;
   this._clearTable();
-
   this._rackEm();
   //this._testRack();
 };
@@ -471,60 +476,36 @@ eightball.PoolTable.prototype._processPairs = function (pairs) {
       }
     }
   });
-  if (ballHit > 0) {
-    this._dispatchBallHitEvent();
-  }
-  if (wallHit > 0) {
-    this._dispatchWallHitEvent();
-  }
 
+  // compute the velocity (TODO)
   var avgVelocity = (wallHit > 0 || ballHit > 0) ? totalVelocity / (2 * (ballHit + wallHit)) : 0;
-  this._processCollision(avgVelocity, ballHit, wallHit);
-};
 
+  // raise ball collision event
+  if (ballHit > 0) {
 
-/**
-@private
-@param {!b2Body} pocketBody
-@param {!b2Body} ballBody
-*/
-eightball.PoolTable.prototype._processCollision = function (avgVelocity, ballHits, wallHits) {
-  // this function could be called once per step, even if there are no collisions
-  // because we throttle based on the assumption that we get called at a consistent
-  // interval (and relatively often)
+    var type = eightball.CollisionEvent.EventType.BALL;
 
-  _collisionSteps++;
-
-  //goog.debug.LogManager.getRoot().info(_collisionSteps);
-  if (_collisionSteps >= 20) {
-
-    if (_ballHits > 0 || _wallHits > 0) {
-
-      // calculate the avgVelocity
-      var avgVelocity = _velocity / (_wallHits + _ballHits);
-
-      // dispatch the event
-      this._dispatchCollisionEvent(avgVelocity, _ballHits, _wallHits);
+    if (_isBreak) {
+      type = eightball.CollisionEvent.EventType.BREAK;
+      _isBreak = false;
+    }
+    else if (_isCueHit) {
+      type = eightball.CollisionEvent.EventType.CUEBALL;
+      _isCueHit = false;
     }
 
-    // reset our counters
-    _collisionSteps = 0;
-    _avgVelocity = 0;
-    _wallHits = 0;
-    _ballHits = 0;
+    this._dispatchCollisionEvent(avgVelocity, type);
   }
 
-  _ballHits += ballHits;
-  _wallHits += wallHits;
-  _velocity += avgVelocity;
+  // raise wall collision event
+  if (wallHit > 0) {
+    this._dispatchCollisionEvent(avgVelocity, eightball.CollisionEvent.EventType.WALL);
+  }
 
 };
 
-var _collisionSteps = 0;
-var _velocity = 0;
-var _wallHits = 0;
-var _ballHits = 0;
-
+var _isBreak = false;
+var _isCueHit = false;
 
 /**
  @private
@@ -750,8 +731,8 @@ eightball.PoolTable.prototype._dispatchBallHitEvent = function() {
 @param {number} ballCount
 @param {number} wallCount
 */
-eightball.PoolTable.prototype._dispatchCollisionEvent = function (avgVelocity, ballCount, wallCount) {
-  this.dispatchEvent(new eightball.CollisionEvent(avgVelocity, ballCount, wallCount, this));
+eightball.PoolTable.prototype._dispatchCollisionEvent = function (velocity, type) {
+  this.dispatchEvent(new eightball.CollisionEvent(velocity, type, this));
 };
 
 /**
