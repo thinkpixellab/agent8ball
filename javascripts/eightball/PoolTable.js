@@ -51,12 +51,12 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
    */
   this.m_cueLine = null;
   /**
+   will be a number from 0 to 1 indicating strike power
    @private
    @type {number}
    */
   this.m_strikePower = 0;
   /**
-   will be a number from 0 to 1 indicating strike power
    @private
    @type {boolean}
    */
@@ -85,6 +85,18 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
 
   // a local reference to the root log manager
   var logger = goog.debug.LogManager.getRoot();
+
+  /**
+   @private
+   @type {boolean}
+   */
+  this._isBreak = false;
+
+  /**
+   @private
+   @type {boolean}
+   */
+  this._isCueHit = false;
 
   // load our cuestick image (we'll need this for rendering in the updateCue function)
   this.m_cueImage = new Image();
@@ -227,7 +239,7 @@ eightball.PoolTable.prototype._strikeCue = function() {
     velocity.Multiply(500);
 
     this._dispatchCollisionEvent(velocity.Length(), eightball.CollisionEvent.EventType.CUESTICK);
-    _isCueHit = true;
+    this._isCueHit = true;
 
     this._getCueBall().SetLinearVelocity(velocity);
     this._getCueBall().WakeUp();
@@ -335,7 +347,7 @@ eightball.PoolTable.prototype._createWorld = function() {
 };
 
 eightball.PoolTable.prototype.rackEm = function() {
-  _isBreak = true;
+  this._isBreak = true;
   this._clearTable();
   this._rackEm();
   //this._testRack();
@@ -482,12 +494,12 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
 
     var type = eightball.CollisionEvent.EventType.BALL;
 
-    if (_isBreak) {
+    if (this._isBreak) {
       type = eightball.CollisionEvent.EventType.BREAK;
-      _isBreak = false;
-    } else if (_isCueHit) {
+      this._isBreak = false;
+    } else if (this._isCueHit) {
       type = eightball.CollisionEvent.EventType.CUEBALL;
-      _isCueHit = false;
+      this._isCueHit = false;
     }
 
     this._dispatchCollisionEvent(avgVelocity, type);
@@ -499,9 +511,6 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
   }
 
 };
-
-var _isBreak = false;
-var _isCueHit = false;
 
 /**
  @private
