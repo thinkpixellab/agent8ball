@@ -77,3 +77,14 @@ jQueryObject.prototype.hide = function(opt_speed, opt_fn) {};
  * @return {string|jQueryObject}
  */
 jQueryObject.prototype.html = function(opt_val) {};
+
+/**
+ * @param {Function} fn
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.ready = function(fn) {};
+/**
+ * @param {Object} settings
+ * @return {Object}
+ */
+jQueryObject.prototype.ajax = function(settings) {};

@@ -20,12 +20,13 @@ var _game;
 // *******************************************************************************
 // APP LOGIC
 // *******************************************************************************
-
-var loadApp = function () {
+/*
+ @param {boolean=} skip_graphics
+*/
+var loadApp = function(skip_graphics) {
 
   // show debug
   //pixelLab.DebugDiv.enable();
-
   // show the content, hide the loading element
   $('#vignette').delay(500).fadeIn(1000);
   $('#game').delay(500).fadeIn(1000);
@@ -66,7 +67,7 @@ var loadApp = function () {
   var lastBars = 29;
 
   // event handlers
-  var _tickAction = function () {
+  var _tickAction = function() {
     var min = Math.floor(game.secondsLeft / 60);
     var sec = game.secondsLeft % 60;
     var sec_tens = Math.floor(sec / 10);
@@ -90,23 +91,23 @@ var loadApp = function () {
     goog.debug.LogManager.getRoot().info("FPS: " + str);
   };
 
-  var _highScoreAction = function () {
+  var _highScoreAction = function() {
     $('#bestscore').html(game.highScore);
   };
 
-  var _scoreAction = function () {
+  var _scoreAction = function() {
     var s = game.score;
     if (s == 0) s = "00";
     $('#score').html(s);
   };
 
-  var _readyAction = function () {
+  var _readyAction = function() {
     overlay.fadeIn(1000);
 
     var msg = "Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.";
     var index = 0;
 
-    start.delay(800).fadeIn(400, function () {
+    start.delay(800).fadeIn(400, function() {
 
       var typing = soundManager.play("typing");
       var interval = setInterval(function() {
@@ -118,47 +119,53 @@ var loadApp = function () {
           clearInterval(interval);
           typing.pause();
         }
-      }, 15);
+      },
+      15);
     });
   };
 
+  if (skip_graphics) {
+    _readyAction = function() {
+      game.start();
+    };
+  }
 
-  var _endAction = function () {
+  var _endAction = function() {
     overlay.fadeIn(500);
     gameover.fadeIn(400);
   };
 
-  gameover.click(function () {
+  gameover.click(function() {
     gameover.fadeOut(400);
     start.fadeIn(500);
   });
 
-  startover.click(function () {
+  startover.click(function() {
     poolTable.resetCueBall();
   });
 
-  start.click(function () {
+  start.click(function() {
     start.fadeOut(100, start.hide());
     overlay.fadeOut(400);
     game.start();
   });
 
-  pause.click(function () {
+  pause.click(function() {
     game.togglePaused();
     overlay.fadeIn(400);
     resume.fadeIn(400);
   });
 
-  resume.click(function () {
+  resume.click(function() {
     overlay.fadeOut(400);
     resume.fadeOut(400, game.togglePaused());
   });
 
-  $('#gameoverfacebook').click(function () {
+  $('#gameoverfacebook').click(function() {
     alert("do something facebooky");
   });
 
-  $('#gameovertwitter').click(function () {
+  $('#gameovertwitter').click(function() {
     alert("do something twitterish");
   });
 
@@ -177,55 +184,51 @@ var loadApp = function () {
   goog.events.listen(game, eightball.Game.EventType.END, _endAction);
 
   // sound events
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function(e) {
     soundManager.play("cuestick");
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, function(e) {
     soundManager.play("break");
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, function(e) {
     soundManager.play("cuehit");
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, function(e) {
     goog.debug.LogManager.getRoot().info("velocity: " + e.velocity);
 
     if (e.velocity > 80) {
       soundManager.play("ball");
-    }
-    else if (e.velocity > 20) {
+    } else if (e.velocity > 20) {
       soundManager.play("quietball");
     }
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.WALL, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.WALL, function(e) {
     if (e.velocity > 120) {
       soundManager.play("wall");
-    }
-    else if (e.velocity > 40) {
+    } else if (e.velocity > 40) {
       soundManager.play("quietwall");
     }
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.PocketDropEvent.TYPE, function (e) {
+  goog.events.listen(poolTable, eightball.PocketDropEvent.TYPE, function(e) {
     soundManager.play("pocket");
   },
   undefined, this);
-
-
 
   // calling reset after the game has been loaded fires the events we 
   // need to initialize everything for game play
   game.reset();
 
-  var updatePoolTableLayout = function () {
+  var updatePoolTableLayout = function() {
     var width = $(window).width();
     var height = $(window).height();
     poolTable.updateLayout(width, height);
@@ -234,14 +237,14 @@ var loadApp = function () {
   $(window).resize(updatePoolTableLayout);
   updatePoolTableLayout();
 
-  $(window).keypress(function (e) {
+  $(window).keypress(function(e) {
     // 114 -> 'r'
     if (e.which == 114) {
       game.reset();
     }
   });
 
-  var updateMusicButton = function () {
+  var updateMusicButton = function() {
     if (musicManager.isMusicOn()) {
       $("#musicbuttonon").fadeIn("fast");
     } else {
@@ -249,7 +252,7 @@ var loadApp = function () {
     }
   };
 
-  var updateSoundButton = function () {
+  var updateSoundButton = function() {
     if (soundManager.isSoundOn()) {
       $("#soundsbuttonon").fadeIn("fast");
     } else {
@@ -257,23 +260,22 @@ var loadApp = function () {
     }
   };
 
-  $("#instructions").click(function () {
+  $("#instructions").click(function() {
     soundManager.play("quick");
 
     //game.togglePaused();
     //$("#howtoplay").fadeIn(200);
     //$("#cue_canvas").fadeOut(200);
-
   });
 
   // music on/off
-  $("#musicbutton").click(function () {
+  $("#musicbutton").click(function() {
     musicManager.toggleMusic();
     updateMusicButton();
   });
 
   // sound effects on/off
-  $("#soundsbutton").click(function () {
+  $("#soundsbutton").click(function() {
     soundManager.toggleSound();
     updateSoundButton();
   });
@@ -282,7 +284,9 @@ var loadApp = function () {
   updateSoundButton();
 
   // sound effects test code
-  $(".soundtest").click(function () {
+  $(".soundtest").click(function() {
     soundManager.play(this.id);
   });
 };
+
+goog.exportSymbol('loadApp', loadApp);
