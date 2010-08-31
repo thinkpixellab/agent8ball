@@ -11,12 +11,12 @@ pixelLab.Preload = function(urls, progressCallback, completedCallback) {
     // cache: true, -> default
     // async: true, -> default
     // type: "GET", -> default
-    timeout: 1200000,
-    error: function(event, request, settings) {
+    'timeout': 1200000,
+    'error': function(event, request, settings) {
       // even though there was an error, we want to update our count
       _this._incrementDownloadCount();
     },
-    success: function(data, textStatus, XMLHttpRequest) {
+    'success': function(data, textStatus, XMLHttpRequest) {
       _this._incrementDownloadCount();
     }
   };
@@ -26,7 +26,7 @@ pixelLab.Preload = function(urls, progressCallback, completedCallback) {
   this._complete = completedCallback;
   this._progress = progressCallback;
 
-  this._timer = null;
+  this._queued = false;
   this._queue = [];
 
   for (var i = 0; i < urls.length; i++) {
@@ -56,39 +56,29 @@ pixelLab.Preload.prototype._incrementDownloadCount = function() {
 };
 
 /**
-  @param {function()=} fn
-  @param {Object=} context
-  @param {Object=} time
-*/
-pixelLab.Preload.prototype._add = function(fn, context, time) {
-  var _this = this;
-  var setTimer = function(time) {
-    _this._timer = setTimeout(function() {
-      time = _this._add();
-      if (_this._queue.length) {
-        setTimer(time);
-      }
-    },
-    time || 2);
-  };
-
-  if (fn) {
-    _this._queue.push([fn, context, time]);
-    if (_this._queue.length == 1) {
-      setTimer(time);
-    }
-    return;
-  }
-
-  var next = this._queue.shift();
-  if (!next) {
-    return 0;
-  };
-  next[0].call(next[1] || window);
-  return next[2];
+ @param {function()} fn
+ */
+pixelLab.Preload.prototype._add = function(fn) {
+  this._queue.push(fn);
+  this._processQueue();
 };
 
-pixelLab.Preload.prototype._clear = function() {
-  clearTimeout(this._timer);
-  this._queue = [];
+pixelLab.Preload.prototype._processQueue = function() {
+  var _this = this;
+  if (this._queue.length && !this._queued) {
+    setTimeout(function() {
+      _this._doQueue();
+    },
+    0);
+    this._queued = true;
+  }
+};
+
+pixelLab.Preload.prototype._doQueue = function() {
+  var fn = this._queue.pop();
+  if (fn) {
+    fn();
+  }
+  this._queued = false;
+  this._processQueue();
 };
