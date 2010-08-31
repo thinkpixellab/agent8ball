@@ -262,19 +262,61 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
       var absCue = this._gameCoordinatesToAbsolute(this._getCueBall().GetCenterPosition().x, this._getCueBall().GetCenterPosition().y);
       var x = Math.round(absCue.x);
       var y = Math.round(absCue.y);
-
+	  
       // get the angle between the current mouse point and cue ball
       var dX = mousePoint.x - this._getCueBall().GetCenterPosition().x;
       var dY = this._getCueBall().GetCenterPosition().y - mousePoint.y;
       var r = (Math.atan2(dY, dX) * -1) + Math.PI;
       //angle in radians
+	  
+/*		var spacing = 5;
+		var yDifference = mousePoint.y - this._getCueBall().GetCenterPosition().y;
+		var absoluteXdifference = Math.abs(this._getCueBall().GetCenterPosition().x - mousePoint.x);
+
+		var lineLength = Math.sqrt((Math.pow(absoluteXdifference, 2) + Math.pow(dY, 2)));
+		var steps = lineLength / spacing;
+		var xStep = dX / steps;
+		var yStep = yDifference / steps;
+
+		var points = new Array(Math.round(steps));
+		this.m_cueCanvasContext.lineWidth = 2;
+		this.m_cueCanvasContext.strokeStyle = eightball.PoolTable.s_ballColors[0];
+
+		var ballCoordinates, d, hitTest;			
+
+		for (var i = 0; i < steps; i++) {
+			var x2 = x + (xStep * i);
+			var y2 = y + (yStep * i);
+			if(i % 2 == 0){				
+				for (var j = 1; j < 15; j++) {
+					if(j in this.m_balls){
+						ballCoordinates = this._gameCoordinatesToAbsolute(this.m_balls[j].m_position.x,this.m_balls[j].m_position.y)
+						d = Math.sqrt(Math.pow(ballCoordinates.x - x2, 2) + Math.pow(ballCoordinates.y - y2, 2));
+						if(d <= eightball.PoolTable.c_ballRadius){
+							hitTest = true;
+							break;
+						}							
+					}
+				}
+				if(hitTest){
+					break;
+				}else{
+					this.m_cueCanvasContext.beginPath();
+					this.m_cueCanvasContext.moveTo(x2, y2);
+				}			
+			}else{
+				this.m_cueCanvasContext.lineTo(x2,y2);
+				this.m_cueCanvasContext.stroke();	
+			}
+		}	*/  	  
+	  
       // translate and rotate the canvas
-      this.m_cueCanvasContext.translate(x, y);
+      this.m_cueCanvasContext.translate(x, y);	  
       this.m_cueCanvasContext.rotate(r);
 
       // draw the cue stick
-      this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width, this.m_cueCanvasElement.height);
-      this.m_cueCanvasContext.drawImage(this.m_cueImage, eightball.PoolTable.s_horizontalCueOffset + cueOffset, eightball.PoolTable.s_verticalCueOffset);
+      //this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width, this.m_cueCanvasElement.height);
+      this.m_cueCanvasContext.drawImage(this.m_cueImage, eightball.PoolTable.s_horizontalCueOffset + cueOffset, eightball.PoolTable.s_verticalCueOffset);	  
     }
   }
 };
