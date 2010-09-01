@@ -30,6 +30,7 @@ preload_closure = Closure(
 )
 
 # preload_closure.build()
+preload_closure.build_and_process('index.html', 'index_compiled_pre.html')
 
 app_closure = Closure(
   application_js_path = application_js_path,
@@ -39,8 +40,8 @@ app_closure = Closure(
   extern_files = [jquery_extern]
 )
 
-app_closure.build()
-#app_closure.build_and_process('index_compiled_pre.html', 'index_compiled.html')
+#app_closure.build()
+app_closure.build_and_process('index_compiled_pre.html', 'index_compiled.html')
 
 compressor = HtmlCompressor('index_compiled.html', 'javascripts/compressed.js', 'index_compressed.html')
-#compressor.compress()
+compressor.compress()
