@@ -163,11 +163,12 @@ var loadApp = function(skip_graphics) {
   });
 
   $('#gameoverfacebook').click(function() {
-    alert("do something facebooky");
+		//http://www.facebook.com/sharer.php?u=<url to share>&t=<title of content>
+		window.open('http://www.facebook.com/sharer.php?u=http://agent8ball.com&t=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball!');		
   });
 
   $('#gameovertwitter').click(function() {
-    alert("do something twitterish");
+    window.open('http://twitter.com/home?status=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball! http://agent8ball.com #html5');
   });
 
   var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement, shadowCanvasElement);
