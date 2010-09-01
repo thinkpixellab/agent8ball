@@ -242,7 +242,7 @@ eightball.PoolTable.prototype._strikeCue = function() {
 
     var velocity = new b2Vec2(this.m_cueLine.x1 - this.m_cueLine.x0, this.m_cueLine.y1 - this.m_cueLine.y0);
     velocity.Normalize();
-    velocity.Multiply(500);
+    velocity.Multiply(800);
 
     this._dispatchCollisionEvent(velocity.Length(), eightball.CollisionEvent.EventType.CUESTICK);
     this._isCueHit = true;
@@ -464,16 +464,16 @@ eightball.PoolTable.prototype._clearTable = function() {
  */
 eightball.PoolTable.prototype._createBall = function(index, x, y) {
   var ballSd = new b2CircleDef();
-  ballSd.density = 4.0;
+  ballSd.density = 5.0;
   ballSd.radius = eightball.PoolTable.c_ballRadius;
   ballSd.restitution = 0.95;
-  ballSd.friction = 0.8;
+  ballSd.friction = 0.20;
 
   var ballBd = new b2BodyDef();
   ballBd.AddShape(ballSd);
   ballBd.position.Set(x, y);
-  ballBd.linearDamping = 0.005;
-  ballBd.angularDamping = 0.08;
+  ballBd.linearDamping = 0.018;
+  ballBd.angularDamping = 0.12;
   ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28 - eightball.PoolTable.c_ballRadius, 28 - eightball.PoolTable.c_ballRadius)];
   return this.m_world.CreateBody(ballBd);
 };
