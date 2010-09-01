@@ -813,7 +813,7 @@ eightball.PoolTable.prototype._processBalls = function() {
 
   goog.object.forEach(this.m_balls, processBall, this);
   if (!this.m_isCueVisible) {
-    if (stoppedBalls == count || (slowBalls == count && this._getCueBall().GetLinearVelocity().Length() == 0)) {
+    if (stoppedBalls == count || (slowBalls == count && (this._getCueBall() && this._getCueBall().GetLinearVelocity().Length() == 0))) {
       this._dispatchCueStopEvent();
       this._showCue();
     }

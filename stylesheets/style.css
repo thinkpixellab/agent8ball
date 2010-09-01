@@ -404,130 +404,26 @@ body {
     margin-left: 36px;
 }
 
-#createdby {
-    display:block;
-    left: 280px;
-    top: 670px;
-    position: absolute;
-    background-image: url("../images/createdby.png");
-    background-repeat: no-repeat;
-    background-position: center top;
-    width: 129px;
-    padding-top: 15px;
-        
-}
-
-#tellfriends {
-    display:block;
-    left: 453px;
-    top: 670px;
-    position: absolute;
-    background-image: url("../images/tellyourfirends.png");
-    background-repeat: no-repeat;
-    background-position: center top;
-    width: 136px;
-    padding-top: 20px;
-        
-}
-
 #pixellab {
+    display:block;
+    left: 320px;
+    top: 660px;
+    position: absolute;
     background-image: url("../images/pixellab.png");
     background-repeat: no-repeat;
-    width: 129px;
-    height: 33px;
+    background-position: center top;
+    width: 193px;
+    height: 28px;
 }
 
 #pixellab:hover {
     background-image: url("../images/pixellabover.png");
 }
 
-
 #pixellab a {
     display:block;
-    width: 129px;
-    height: 33px;
-}
-
-
-#mail {
-    background-image: url("../images/mail.png");
-    background-repeat: no-repeat;
-    position: absolute;
-    left: 0px;
-    top: 23px;
-    width: 30px;
-    height: 24px;
-}
-
-#mail:hover {
-    background-image: url("../images/mailover.png");
-}
-
-
-#mail a {
-    display:block;
-    width: 30px;
-    height: 24px;
-}
-
-#connect {
-    background-image: url("../images/liveconnect.png");
-    background-repeat: no-repeat;
-    position: absolute;
-    left: 38px;
-    top: 21px;
-    width: 31px;
-    height: 29px;
-}
-
-#connect:hover {
-    background-image: url("../images/liveconnectover.png");
-}
-
-#connect a {
-    display:block;
-    width: 31px;
-    height: 29px;
-}
-
-#twitter {
-    background-image: url("../images/twitter.png");
-    background-repeat: no-repeat;
-    position: absolute;
-    left: 78px;
-    top: 19px;
-    width: 25px;
-    height: 31px;
-}
-
-#twitter:hover {
-    background-image: url("../images/twitterover.png");
-}
-
-#twitter a {
-    display:block;
-    width: 25px;
-    height: 31px;
-}
-
-#facebook {
-    background-image: url("../images/facebook.png");
-    background-repeat: no-repeat;
-    position: absolute;
-    left: 112px;
-    top: 21px;
-    width: 29px;
-    height: 29px;
-}
-
-#facebook:hover {
-    background-image: url("../images/facebookover.png");
-}
-
-#facebook a {
-    display:block;
-    width: 29px;
-    height: 29px;
+    width: 193px;
+    height: 28px;
 }
 
 .hidden {
