@@ -61,6 +61,12 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
    @type {boolean}
    */
   this.m_isCueVisible = true;
+  
+  /**
+   @private
+   @type {goog.math.Vec2}
+   */
+  this.gameTableOffset = null;
 
   /**
    @private
@@ -269,7 +275,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
       var r = (Math.atan2(dY, dX) * -1) + Math.PI;
       //angle in radians
 	  
-/*		var spacing = 5;
+		var spacing = 5;
 		var yDifference = mousePoint.y - this._getCueBall().GetCenterPosition().y;
 		var absoluteXdifference = Math.abs(this._getCueBall().GetCenterPosition().x - mousePoint.x);
 
@@ -292,10 +298,10 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
 					if(j in this.m_balls){
 						ballCoordinates = this._gameCoordinatesToAbsolute(this.m_balls[j].m_position.x,this.m_balls[j].m_position.y)
 						d = Math.sqrt(Math.pow(ballCoordinates.x - x2, 2) + Math.pow(ballCoordinates.y - y2, 2));
-						if(d <= eightball.PoolTable.c_ballRadius){
+						if(d <= eightball.PoolTable.c_ballRadius + 10){
 							hitTest = true;
 							break;
-						}							
+						}						
 					}
 				}
 				if(hitTest){
@@ -308,7 +314,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
 				this.m_cueCanvasContext.lineTo(x2,y2);
 				this.m_cueCanvasContext.stroke();	
 			}
-		}	*/  	  
+		}
 	  
       // translate and rotate the canvas
       this.m_cueCanvasContext.translate(x, y);	  
@@ -337,12 +343,14 @@ eightball.PoolTable.prototype._gameCoordinatesToAbsolute = function(x, y) {
 
   // translate our game coordinates (where 0,0 is in the center of
   // the table) to absolute coordinates for the page
-  var gameTableOffset = new goog.math.Vec2($(this.m_canvasElement).offset().left, $(this.m_canvasElement).offset().top);
-  gameTableOffset.x += this.m_canvasElement.width / 2;
-  gameTableOffset.y += this.m_canvasElement.height / 2;
+  if(this.gameTableOffset == null){
+	  this.gameTableOffset = new goog.math.Vec2($(this.m_canvasElement).offset().left, $(this.m_canvasElement).offset().top);
+	  this.gameTableOffset.x += this.m_canvasElement.width / 2;
+	  this.gameTableOffset.y += this.m_canvasElement.height / 2;
+  }
 
-  var newX = gameTableOffset.x + x;
-  var newY = gameTableOffset.y + y;
+  var newX = this.gameTableOffset.x + x;
+  var newY = this.gameTableOffset.y + y;
 
   return {
     x: newX,
