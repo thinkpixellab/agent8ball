@@ -61,15 +61,15 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
    @type {boolean}
    */
   this.m_isCueVisible = true;
-  
+
   /**
    @private
    @type {goog.math.Vec2}
    */
   this.gameTableOffset = null;
-    /**
+  /**
    @private
-   @type {goog.math.box}
+   @type {goog.math.Box}
    */
   this.gameTableBounds = null;
 
@@ -273,71 +273,69 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
       var absCue = this._gameCoordinatesToAbsolute(this._getCueBall().GetCenterPosition().x, this._getCueBall().GetCenterPosition().y);
       var x = Math.round(absCue.x);
       var y = Math.round(absCue.y);
-	  
+
       // get the angle between the current mouse point and cue ball
       var dX = mousePoint.x - this._getCueBall().GetCenterPosition().x;
       var dY = this._getCueBall().GetCenterPosition().y - mousePoint.y;
       var r = (Math.atan2(dY, dX) * -1) + Math.PI;
       //angle in radians
-	  
-		var spacing = 5;
-		var yDifference = mousePoint.y - this._getCueBall().GetCenterPosition().y;
-		var absoluteXdifference = Math.abs(this._getCueBall().GetCenterPosition().x - mousePoint.x);
-	
-		var lineLength = Math.sqrt((Math.pow(absoluteXdifference, 2) + Math.pow(dY, 2)));
-		var steps = lineLength / spacing;
-		var xStep = dX / steps;
-		var yStep = yDifference / steps;
-	
-		var points = new Array(Math.round(steps));
-		this.m_cueCanvasContext.lineWidth = 2;
-		this.m_cueCanvasContext.strokeStyle = eightball.PoolTable.s_ballColors[0];
-	
-		var ballCoordinates, d, hitTest;
-		
-		if(this.gameTableBounds == null){
-			//t,r,b,l
-			var q = this._gameCoordinatesToAbsolute(0,0);
-			this.gameTableBounds = new goog.math.Box(q.y-180, q.x+380, q.y+180, q.x-380);
-		}
-		
-		for (var i = 0; i < steps; i++) {
-			var x2 = x + (xStep * i);
-			var y2 = y + (yStep * i);
-			if(i % 2 == 0){			
-				//check non dropped balls
-				for (var j = 1; j < 15; j++) {
-					if(j in this.m_balls){
-						ballCoordinates = this._gameCoordinatesToAbsolute(this.m_balls[j].m_position.x,this.m_balls[j].m_position.y)
-						d = Math.sqrt(Math.pow(ballCoordinates.x - x2, 2) + Math.pow(ballCoordinates.y - y2, 2));
-						if(d <= eightball.PoolTable.c_ballRadius + 10){
-							hitTest = true;
-							break;
-						}						
-					}
-				}
-				//check table bounds
-				if(x2 < this.gameTableBounds.left || x2 > this.gameTableBounds.right || y2 < this.gameTableBounds.top || y2 > this.gameTableBounds.bottom)
-					hitTest = true;				
-				if(hitTest){
-					break;
-				}else{
-					this.m_cueCanvasContext.beginPath();
-					this.m_cueCanvasContext.moveTo(x2, y2);
-				}			
-			}else{
-				this.m_cueCanvasContext.lineTo(x2,y2);
-				this.m_cueCanvasContext.stroke();	
-			}
-		}
-		  
+      var spacing = 5;
+      var yDifference = mousePoint.y - this._getCueBall().GetCenterPosition().y;
+      var absoluteXdifference = Math.abs(this._getCueBall().GetCenterPosition().x - mousePoint.x);
+
+      var lineLength = Math.sqrt((Math.pow(absoluteXdifference, 2) + Math.pow(dY, 2)));
+      var steps = lineLength / spacing;
+      var xStep = dX / steps;
+      var yStep = yDifference / steps;
+
+      var points = new Array(Math.round(steps));
+      this.m_cueCanvasContext.lineWidth = 2;
+      this.m_cueCanvasContext.strokeStyle = eightball.PoolTable.s_ballColors[0];
+
+      var ballCoordinates, d, hitTest;
+
+      if (this.gameTableBounds == null) {
+        //t,r,b,l
+        var q = this._gameCoordinatesToAbsolute(0, 0);
+        this.gameTableBounds = new goog.math.Box(q.y - 180, q.x + 380, q.y + 180, q.x - 380);
+      }
+
+      for (var i = 0; i < steps; i++) {
+        var x2 = x + (xStep * i);
+        var y2 = y + (yStep * i);
+        if (i % 2 == 0) {
+          //check non dropped balls
+          for (var j = 1; j < 15; j++) {
+            if (j in this.m_balls) {
+              ballCoordinates = this._gameCoordinatesToAbsolute(this.m_balls[j].m_position.x, this.m_balls[j].m_position.y);
+              d = Math.sqrt(Math.pow(ballCoordinates.x - x2, 2) + Math.pow(ballCoordinates.y - y2, 2));
+              if (d <= eightball.PoolTable.c_ballRadius + 10) {
+                hitTest = true;
+                break;
+              }
+            }
+          }
+          //check table bounds
+          if (x2 < this.gameTableBounds.left || x2 > this.gameTableBounds.right || y2 < this.gameTableBounds.top || y2 > this.gameTableBounds.bottom) hitTest = true;
+          if (hitTest) {
+            break;
+          } else {
+            this.m_cueCanvasContext.beginPath();
+            this.m_cueCanvasContext.moveTo(x2, y2);
+          }
+        } else {
+          this.m_cueCanvasContext.lineTo(x2, y2);
+          this.m_cueCanvasContext.stroke();
+        }
+      }
+
       // translate and rotate the canvas
-      this.m_cueCanvasContext.translate(x, y);	  
+      this.m_cueCanvasContext.translate(x, y);
       this.m_cueCanvasContext.rotate(r);
 
       // draw the cue stick
       //this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width, this.m_cueCanvasElement.height);
-      this.m_cueCanvasContext.drawImage(this.m_cueImage, eightball.PoolTable.s_horizontalCueOffset + cueOffset, eightball.PoolTable.s_verticalCueOffset);	  
+      this.m_cueCanvasContext.drawImage(this.m_cueImage, eightball.PoolTable.s_horizontalCueOffset + cueOffset, eightball.PoolTable.s_verticalCueOffset);
     }
   }
 };
@@ -358,10 +356,10 @@ eightball.PoolTable.prototype._gameCoordinatesToAbsolute = function(x, y) {
 
   // translate our game coordinates (where 0,0 is in the center of
   // the table) to absolute coordinates for the page
-  if(this.gameTableOffset == null){
-	  this.gameTableOffset = new goog.math.Vec2($(this.m_canvasElement).offset().left, $(this.m_canvasElement).offset().top);
-	  this.gameTableOffset.x += this.m_canvasElement.width / 2;
-	  this.gameTableOffset.y += this.m_canvasElement.height / 2;
+  if (this.gameTableOffset == null) {
+    this.gameTableOffset = new goog.math.Vec2($(this.m_canvasElement).offset().left, $(this.m_canvasElement).offset().top);
+    this.gameTableOffset.x += this.m_canvasElement.width / 2;
+    this.gameTableOffset.y += this.m_canvasElement.height / 2;
   }
 
   var newX = this.gameTableOffset.x + x;
