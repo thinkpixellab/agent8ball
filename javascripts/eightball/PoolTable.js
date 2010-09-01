@@ -32,7 +32,7 @@ goog.require('eightball.DroppingBall');
  @param {!HTMLCanvasElement} cueCanvasElement
  @extends {goog.events.EventTarget}
  */
-eightball.PoolTable = function(canvasElement, cueCanvasElement) {
+eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElement) {
 
   // variables
   /**
@@ -72,6 +72,12 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
    @type {goog.math.Box}
    */
   this.gameTableBounds = null;
+	
+	/**
+   @private
+   @type {number}
+   */
+  this.m_bombPulseAngle = 0;
 
   /**
    @private
@@ -125,18 +131,25 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
     image.src = "images/num" + i + ".png";
     this.m_ballImages[i] = image;
   }
+	
+	this.m_bombStampImage = new Image();
+  this.m_bombStampImage.src = "images/bombstamp.png";
 
   // get local references for our canvas elements
   this.m_canvasElement = canvasElement;
   this.m_cueCanvasElement = cueCanvasElement;
+  this.m_shadowCanvasElement = shadowCanvasElement;
 
   // get local references for our canvas drawing contexts
   this.m_canvasContext = this.m_canvasElement.getContext('2d');
   this.m_cueCanvasContext = this.m_cueCanvasElement.getContext('2d');
+  this.m_shadowCanvasContext = this.m_shadowCanvasElement.getContext('2d');
 
   // set the width and height of the table
   this.m_canvasElement.setAttribute('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.s_bumperThickness * 4);
   this.m_canvasElement.setAttribute('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
+	this.m_shadowCanvasElement.setAttribute('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.s_bumperThickness * 4);
+  this.m_shadowCanvasElement.setAttribute('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
   this.m_centerOffset = new b2Vec2(eightball.PoolTable.s_width + eightball.PoolTable.s_bumperThickness * 2, eightball.PoolTable.s_height + eightball.PoolTable.s_bumperThickness * 2);
 
   // setup our physics world
@@ -279,30 +292,33 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
       var dY = this._getCueBall().GetCenterPosition().y - mousePoint.y;
       var r = (Math.atan2(dY, dX) * -1) + Math.PI;
       //angle in radians
-      var spacing = 5;
-      var yDifference = mousePoint.y - this._getCueBall().GetCenterPosition().y;
-      var absoluteXdifference = Math.abs(this._getCueBall().GetCenterPosition().x - mousePoint.x);
 
-      var lineLength = Math.sqrt((Math.pow(absoluteXdifference, 2) + Math.pow(dY, 2)));
+      var spacing = 5;
+      var yDiff = mousePoint.y - this._getCueBall().GetCenterPosition().y;
+      var xDiff = Math.abs(this._getCueBall().GetCenterPosition().x - mousePoint.x);
+
+      var lineLength = Math.sqrt((Math.pow(xDiff, 2) + Math.pow(dY, 2)));
       var steps = lineLength / spacing;
       var xStep = dX / steps;
-      var yStep = yDifference / steps;
+      var yStep = yDiff / steps;
 
-      var points = new Array(Math.round(steps));
       this.m_cueCanvasContext.lineWidth = 2;
-      this.m_cueCanvasContext.strokeStyle = eightball.PoolTable.s_ballColors[0];
+			if (this.m_isMouseDown){
+	      this.m_cueCanvasContext.fillStyle = this.m_cueCanvasContext.strokeStyle = eightball.PoolTable.s_colors.TIMER;
+			}else{
+	      this.m_cueCanvasContext.fillStyle = this.m_cueCanvasContext.strokeStyle = eightball.PoolTable.s_colors.WHITE;
+			}
 
-      var ballCoordinates, d, hitTest;
+      var ballCoordinates, d, hitTest, x2, y2;
 
       if (this.gameTableBounds == null) {
-        //t,r,b,l
         var q = this._gameCoordinatesToAbsolute(0, 0);
         this.gameTableBounds = new goog.math.Box(q.y - 180, q.x + 380, q.y + 180, q.x - 380);
       }
 
-      for (var i = 0; i < steps; i++) {
-        var x2 = x + (xStep * i);
-        var y2 = y + (yStep * i);
+      for (var i = 4; i < steps; i++) {
+        x2 = x + (xStep * i);
+        y2 = y + (yStep * i);
         if (i % 2 == 0) {
           //check non dropped balls
           for (var j = 1; j < 15; j++) {
@@ -316,8 +332,8 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
             }
           }
           //check table bounds
-          if (x2 < this.gameTableBounds.left || x2 > this.gameTableBounds.right || y2 < this.gameTableBounds.top || y2 > this.gameTableBounds.bottom) hitTest = true;
-          if (hitTest) {
+          if (!hitTest && (x2 < this.gameTableBounds.left || x2 > this.gameTableBounds.right || y2 < this.gameTableBounds.top || y2 > this.gameTableBounds.bottom)) hitTest = true;
+          if (hitTest) {						
             break;
           } else {
             this.m_cueCanvasContext.beginPath();
@@ -328,13 +344,17 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
           this.m_cueCanvasContext.stroke();
         }
       }
+			if(steps > 4){
+				this.m_cueCanvasContext.beginPath();
+				this.m_cueCanvasContext.arc(x2, y2, 4, 0, 2 * Math.PI, false);
+				this.m_cueCanvasContext.fill();
+			}
 
       // translate and rotate the canvas
       this.m_cueCanvasContext.translate(x, y);
       this.m_cueCanvasContext.rotate(r);
 
       // draw the cue stick
-      //this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width, this.m_cueCanvasElement.height);
       this.m_cueCanvasContext.drawImage(this.m_cueImage, eightball.PoolTable.s_horizontalCueOffset + cueOffset, eightball.PoolTable.s_verticalCueOffset);
     }
   }
@@ -431,6 +451,7 @@ eightball.PoolTable.prototype._rackEm = function() {
 
   var ballRadius = eightball.PoolTable.c_ballRadius;
   var index = 1;
+	var bombIndex =	goog.math.randomInt(15) + 1;
 
   for (var col = 0; col < 5; col++) {
 
@@ -439,7 +460,7 @@ eightball.PoolTable.prototype._rackEm = function() {
     var yStart = -col * ballRadius;
 
     for (var row = 0; row < ballCount; row++) {
-      this.m_balls[index] = this._createBall(index, x, yStart + row * ballRadius * 2);
+      this.m_balls[index] = this._createBall(index, x, yStart + row * ballRadius * 2, index == bombIndex);
       index++;
     }
   }
@@ -475,7 +496,7 @@ eightball.PoolTable.prototype._clearTable = function() {
  @param {number} y
  @return {!b2Body}
  */
-eightball.PoolTable.prototype._createBall = function(index, x, y) {
+eightball.PoolTable.prototype._createBall = function(index, x, y, isBomb) {
   var ballSd = new b2CircleDef();
   ballSd.density = 5.0;
   ballSd.radius = eightball.PoolTable.c_ballRadius;
@@ -487,7 +508,7 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.018;
   ballBd.angularDamping = 0.12;
-  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28 - eightball.PoolTable.c_ballRadius, 28 - eightball.PoolTable.c_ballRadius)];
+  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28 - eightball.PoolTable.c_ballRadius, 28 - eightball.PoolTable.c_ballRadius), isBomb];
   return this.m_world.CreateBody(ballBd);
 };
 
@@ -659,8 +680,14 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   var shape = ballBody.GetShapeList();
   var ctx = this.m_canvasContext;
   var ballNumber = ballBody.GetUserData()[1];
+	var isBomb = ballBody.GetUserData()[4];
 
-  ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
+	if(!isBomb){
+	  ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
+	}else{
+		ctx.fillStyle = eightball.PoolTable.s_colors.BOMBSHELL;
+	}
+	
   ctx.beginPath();
   ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
   ctx.fill();
@@ -700,7 +727,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     pt2.y = ballBody.GetCenterPosition().y + ballBody.GetUserData()[3].y - shape.m_radius;
 
     //add stripes
-    if (ballNumber > 8) {
+    if (!isBomb && ballNumber > 8) {
       ctx.fillStyle = eightball.PoolTable.s_ballColors[0];
       var pt3 = new goog.math.Vec2(0, 0);
       var pt4 = new goog.math.Vec2(0, 0);
@@ -740,20 +767,35 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       ctx.fill();
     }
 
+		//this.m_bombStampImage
     //draw first number stamp
-    ctx.drawImage(this.m_ballImages[ballNumber], pt1.x - 4, pt1.y - 4);
-
-    //draw second number stamp
-    if (d > shape.m_radius) {
-      ctx.drawImage(this.m_ballImages[ballNumber], pt2.x - 4, pt2.y - 4);
-    }
-
-    //end rotated assets
+		if (!isBomb){
+			ctx.drawImage(this.m_ballImages[ballNumber], pt1.x - 4, pt1.y - 4);
+			//draw second number stamp
+			if (d > shape.m_radius) {
+				ctx.drawImage(this.m_ballImages[ballNumber], pt2.x - 4, pt2.y - 4);
+			}
+		}else{
+			ctx.drawImage(this.m_bombStampImage, pt1.x - 6, pt1.y - 6);
+			//draw second number stamp
+			if (d > shape.m_radius) {
+				ctx.drawImage(this.m_bombStampImage, pt2.x - 6, pt2.y - 6);
+			}
+		}
     ctx.restore();
   }
 
   //draw shading and reflections
   ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
+	if(isBomb){
+		this.m_bombPulseAngle -= (Math.PI/180*2) * 2.44;
+		var glowBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 24);
+		glowBrush.addColorStop(0.2, 'rgba(255,134,136,' + goog.math.clamp(Math.abs(Math.sin(this.m_bombPulseAngle)), 0, 1) + ')');
+		glowBrush.addColorStop(1, 'rgba(255,234,136,0.1)');
+		this.m_shadowCanvasContext.fillStyle = glowBrush;
+		this.m_shadowCanvasContext.arc(shape.m_position.x, shape.m_position.y, 24, 0, 2 * Math.PI, false);
+		this.m_shadowCanvasContext.fill();
+	}
 };
 
 /**
@@ -991,7 +1033,9 @@ eightball.PoolTable.s_colors = {
   DARK_GREEN: 'rgb(48,65,37)',
   DARK_RED: 'rgb(117,36,32)',
   BLACK: 'rgb(34,34,34)',
-  WHITE: 'rgb(232,208,176)'
+  WHITE: 'rgb(232,208,176)',
+	BOMBSHELL: 'rgb(40,37,29)',
+	TIMER: 'rgb(178,55,17)'
 };
 
 /**

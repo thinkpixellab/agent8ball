@@ -62,6 +62,7 @@ var loadApp = function(skip_graphics) {
   var startover = $('#startover');
   var canvasElement = $('canvas#demo_canvas')[0];
   var cueCanvasElement = $('canvas#cue_canvas')[0];
+  var shadowCanvasElement = $('canvas#demo_canvas')[0];
 
   // other globals 
   var lastBars = 29;
@@ -169,7 +170,7 @@ var loadApp = function(skip_graphics) {
     alert("do something twitterish");
   });
 
-  var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement);
+  var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement, shadowCanvasElement);
 
   // create a game object
   var game = new eightball.Game(poolTable);
