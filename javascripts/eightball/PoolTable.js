@@ -494,6 +494,7 @@ eightball.PoolTable.prototype._clearTable = function() {
  @param {number} index
  @param {number} x
  @param {number} y
+ @param {boolean=} isBomb
  @return {!b2Body}
  */
 eightball.PoolTable.prototype._createBall = function(index, x, y, isBomb) {
