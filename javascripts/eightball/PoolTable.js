@@ -67,6 +67,11 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement) {
    @type {goog.math.Vec2}
    */
   this.gameTableOffset = null;
+    /**
+   @private
+   @type {goog.math.box}
+   */
+  this.gameTableBounds = null;
 
   /**
    @private
@@ -278,22 +283,29 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
 		var spacing = 5;
 		var yDifference = mousePoint.y - this._getCueBall().GetCenterPosition().y;
 		var absoluteXdifference = Math.abs(this._getCueBall().GetCenterPosition().x - mousePoint.x);
-
+	
 		var lineLength = Math.sqrt((Math.pow(absoluteXdifference, 2) + Math.pow(dY, 2)));
 		var steps = lineLength / spacing;
 		var xStep = dX / steps;
 		var yStep = yDifference / steps;
-
+	
 		var points = new Array(Math.round(steps));
 		this.m_cueCanvasContext.lineWidth = 2;
 		this.m_cueCanvasContext.strokeStyle = eightball.PoolTable.s_ballColors[0];
-
-		var ballCoordinates, d, hitTest;			
-
+	
+		var ballCoordinates, d, hitTest;
+		
+		if(this.gameTableBounds == null){
+			//t,r,b,l
+			var q = this._gameCoordinatesToAbsolute(0,0);
+			this.gameTableBounds = new goog.math.Box(q.y-180, q.x+380, q.y+180, q.x-380);
+		}
+		
 		for (var i = 0; i < steps; i++) {
 			var x2 = x + (xStep * i);
 			var y2 = y + (yStep * i);
-			if(i % 2 == 0){				
+			if(i % 2 == 0){			
+				//check non dropped balls
 				for (var j = 1; j < 15; j++) {
 					if(j in this.m_balls){
 						ballCoordinates = this._gameCoordinatesToAbsolute(this.m_balls[j].m_position.x,this.m_balls[j].m_position.y)
@@ -304,6 +316,9 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
 						}						
 					}
 				}
+				//check table bounds
+				if(x2 < this.gameTableBounds.left || x2 > this.gameTableBounds.right || y2 < this.gameTableBounds.top || y2 > this.gameTableBounds.bottom)
+					hitTest = true;				
 				if(hitTest){
 					break;
 				}else{
@@ -315,7 +330,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
 				this.m_cueCanvasContext.stroke();	
 			}
 		}
-	  
+		  
       // translate and rotate the canvas
       this.m_cueCanvasContext.translate(x, y);	  
       this.m_cueCanvasContext.rotate(r);
