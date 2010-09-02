@@ -78,11 +78,11 @@ var loadApp = function(skip_graphics) {
     secondsremainingtens.html(sec_tens);
     secondsremainingones.html(sec_ones);
 
-    var bars = Math.floor((game.secondsLeft - 1) / 4);
+    var bars = 1 + Math.floor((game.secondsLeft - 1) / 4);
 
     if (bars != lastBars) {
       lastBars = bars;
-      progress.width(15 * bars);
+      progress.width(7 * bars);
     }
 
     //pixelLab.DebugDiv.clear();

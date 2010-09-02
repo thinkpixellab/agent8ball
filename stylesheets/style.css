@@ -70,28 +70,39 @@ body {
     left: 137px;
 }
 
-#timeremaining {
-    background-image: url("../images/timeremaining.png");
+#timers {
+    background-image: url("../images/timerbg.png");
     background-repeat: no-repeat;
     font: 30px 'RadiolandRegular' , Arial, sans-serif;
     color: #cb512c;
     color: #b23711;
     letter-spacing: 0;
-    width: 110px;
+    width: 452px;
     height: 67px;
     position: absolute;
-    padding-top: 5px;
     left: 10px;
     top: 20px;
 }
 
-#timeremaining .digit {
+#timers .digit {
     text-align: right;
     position: absolute;
-    bottom: 2px;
+    top: 18px
 }
 #minutesremaining {
     left: 28px;
+}
+
+#bombsecondstens {
+    left: 398px;
+    color: #d8850d;
+    display: none;
+}
+
+#bombsecondsones {
+    left: 418px;
+    color: #d8850d;
+    display: none;
 }
 
 #secondsremainingtens {
@@ -100,6 +111,17 @@ body {
 
 #secondsremainingones {
     left: 78px;
+}
+
+#bombicon {
+    background-image: url("../images/bombicon.png");
+    background-repeat: no-repeat;
+    width: 39px;
+    height: 19px;
+    left: 360px;
+    top: 33px;
+    position: absolute;
+    display: none;
 }
 
 #score {
@@ -118,6 +140,16 @@ body {
     left: 759px;
 }
 
+#progress {
+    background-image: url("../images/progressunit.png");
+    background-repeat: repeat-x;
+    position: absolute;
+    top: 33px;
+    left: 113px;
+    width: 210px;
+    height: 34px;
+}
+
 #bestscore {
     background-image: url("../images/bestscore.png");
     background-repeat: no-repeat;
@@ -134,25 +166,6 @@ body {
     left: 653px;
 }
 
-#progressbg {
-    background-image: url("../images/progressbg.png");
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 45px;
-    left: 130px;
-    width: 446px;
-    height: 36px;
-}
-
-#progress {
-    background-image: url("../images/progressunit.png");
-    background-repeat: repeat-x;
-    position: absolute;
-    top: 6px;
-    left: 6px;
-    width: 435px;
-    height: 34px;
-}
 
 #sounds {
     left: 640px;
