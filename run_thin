@@ -1,2 +1,0 @@
-#!/bin/bash
-thin -R _tools/thin_config.ru start
