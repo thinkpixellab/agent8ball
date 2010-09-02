@@ -248,9 +248,7 @@ eightball.PoolTable.prototype._showCue = function() {
   goog.style.setStyle(this.m_cueCanvasElement, "display", "block");
   this.m_isCueVisible = true;
 
-  if (!this._getCueBall()) {
-    this._createCueBall();
-  }
+  this._ensureCueBall();
 
   this._updateCue(this.m_lastMouse, 0);
 };
@@ -444,7 +442,7 @@ eightball.PoolTable.prototype._testRack = function() {
 
 eightball.PoolTable.prototype._rackEm = function() {
 
-  this._createCueBall();
+  this._ensureCueBall();
 
   var ballRadius = eightball.PoolTable.c_ballRadius;
   var index = 1;
@@ -463,14 +461,14 @@ eightball.PoolTable.prototype._rackEm = function() {
   }
 };
 
-eightball.PoolTable.prototype._createCueBall = function() {
-
+eightball.PoolTable.prototype._ensureCueBall = function() {
   // make sure we don't already have a cue ball on the table
-  if (this._getCueBall()) return;
+  if (!this._getCueBall()) {
 
-  // create the cuee ball
-  var ballRadius = eightball.PoolTable.c_ballRadius;
-  this.m_balls[0] = this._createBall(0, -0.5 * eightball.PoolTable.s_width, 0);
+    // create the cuee ball
+    var ballRadius = eightball.PoolTable.c_ballRadius;
+    this.m_balls[0] = this._createBall(0, -0.5 * eightball.PoolTable.s_width, 0);
+  }
 };
 
 /**
