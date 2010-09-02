@@ -72,9 +72,21 @@ b2Body = function(bd, world) {
   this.m_linearDamping = b2Math.b2Clamp(1.0 - bd.linearDamping, 0.0, 1.0);
   this.m_angularDamping = b2Math.b2Clamp(1.0 - bd.angularDamping, 0.0, 1.0);
 
+  /**
+   @private
+   @type {!b2Vec2}
+   */
   this.m_force = new b2Vec2(0.0, 0.0);
+  /**
+   @private
+   @type {number}
+   */
   this.m_torque = 0.0;
 
+  /**
+   @private
+   @type {number}
+   */
   this.m_mass = 0.0;
 
   var massDatas = new Array(b2Settings.b2_maxShapesPerBody);
