@@ -14,21 +14,21 @@ goog.require('goog.object');
 goog.require('goog.net.cookies');
 
 /**
- @constructor
- @extends {goog.events.EventTarget}
- @param {!eightball.PoolTable} poolTable
- */
-eightball.Game = function(poolTable) {
+@constructor
+@extends {goog.events.EventTarget}
+@param {!eightball.PoolTable} poolTable
+*/
+eightball.Game = function (poolTable) {
 
   /**
-   @private
-   */
+  @private
+  */
   this.m_timer = null;
 
   /**
-   @private
-   @type {!eightball.PoolTable}
-   */
+  @private
+  @type {!eightball.PoolTable}
+  */
   this.m_poolTable = poolTable;
 
   goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop, undefined, this);
@@ -36,8 +36,8 @@ eightball.Game = function(poolTable) {
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, this._pooltable_ballHit, undefined, this);
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, this._pooltable_ballHit, undefined, this);
 
-
   this.reset();
+
 };
 goog.inherits(eightball.Game, goog.events.EventTarget);
 
@@ -49,13 +49,10 @@ eightball.Game.prototype.reset = function () {
     this.secondsLeft = eightball.Game.s_gameSeconds;
   }
 
+  this.resetTable();
+
   this.secondsLeft = eightball.Game.s_gameSeconds;
   this._dispatchGameEvent(eightball.Game.EventType.TICK);
-
-  this.bombNumber = Math.floor((Math.random() * 15) + 1)
-  this.isBombActive = false;
-
-  this.m_poolTable.rackEm();
 
   this.score = 0;
   this._dispatchGameEvent(eightball.Game.EventType.SCORE);
@@ -68,7 +65,15 @@ eightball.Game.prototype.reset = function () {
 
 };
 
-eightball.Game.prototype.start = function() {
+eightball.Game.prototype.resetTable = function () {
+  this.bombSecondsLeft = eightball.Game.s_bombSeconds;
+  //this._bombNumber = Math.floor((Math.random() * 15) + 1)
+  this._bombNumber = 1; // for debug, it's always 1
+  this._isBombActive = false;
+  this.m_poolTable.rackEm();
+}
+
+eightball.Game.prototype.start = function () {
 
   // reset the timer and our clock
   if (this.m_timer) {
@@ -89,7 +94,7 @@ eightball.Game.prototype.start = function() {
 
 };
 
-eightball.Game.prototype.togglePaused = function() {
+eightball.Game.prototype.togglePaused = function () {
 
   if (this.gameState == eightball.Game.States.STARTED) {
     this.gameState = eightball.Game.States.PAUSED;
@@ -101,7 +106,7 @@ eightball.Game.prototype.togglePaused = function() {
   // TODO: else?
 };
 
-eightball.Game.prototype.addPoints = function(points) {
+eightball.Game.prototype.addPoints = function (points) {
 
   this.score += points;
   this._dispatchGameEvent(eightball.Game.EventType.SCORE);
@@ -114,11 +119,11 @@ eightball.Game.prototype.addPoints = function(points) {
 
 };
 
-eightball.Game.prototype._saveHighScore = function(highScore) {
+eightball.Game.prototype._saveHighScore = function (highScore) {
   goog.net.cookies.set(eightball.Game.s_CookieGameHighScore, highScore, 7776000);
 };
 
-eightball.Game.prototype._loadHighScore = function() {
+eightball.Game.prototype._loadHighScore = function () {
   var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, '500');
   return highScoreValue;
 };
@@ -134,24 +139,36 @@ eightball.Game.prototype._tickAction = function () {
       this.m_timer.stop();
       this.gameState = eightball.Game.States.ENDED;
       this._dispatchGameEvent(eightball.Game.EventType.END);
-    } else {
+    }
+    else {
       this._dispatchGameEvent(eightball.Game.EventType.TICK);
+    }
+
+    if (this._isBombActive) {
+
+      this.bombSecondsLeft--;
+      this._dispatchGameEvent(eightball.Game.EventType.BOMBTICK);
+
+      if (this.bombSecondsLeft <= 0) {
+        this._dispatchGameEvent(eightball.Game.EventType.BOMBEXPLODED);
+        this._isBombActive = false;
+      }
     }
 
   }
 };
 
 /**
- @private
- @param {!eightball.Game.EventType} type
- */
-eightball.Game.prototype._dispatchGameEvent = function(type) {
+@private
+@param {!eightball.Game.EventType} type
+*/
+eightball.Game.prototype._dispatchGameEvent = function (type) {
   this.dispatchEvent(new goog.events.Event(type, this));
 };
 
 /**
- @private
- */
+@private
+*/
 eightball.Game.prototype._pooltable_pocketDrop = function (e) {
 
   if (e.ballNumber != 0) {
@@ -165,8 +182,12 @@ eightball.Game.prototype._pooltable_pocketDrop = function (e) {
 */
 eightball.Game.prototype._pooltable_ballHit = function (e) {
 
-  if ((e.ballNumber1 == 0 && e.ballNumber2 == this.bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this.bombNumber)) {
-    alert("you found the bomb");
+  // if the bomb has already been found then we can bail
+  if (this._isBombActive) return;
+
+  if ((e.ballNumber1 == 0 && e.ballNumber2 == this._bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this._bombNumber)) {
+    this._isBombActive = true;
+    this._dispatchGameEvent(eightball.Game.EventType.BOMBACTIVATED);
   }
 
 };
@@ -176,93 +197,121 @@ eightball.Game.prototype._pooltable_ballHit = function (e) {
 @param {number} seconds
 @return {number}
 */
-eightball.Game._inMs = function(seconds) {
+eightball.Game._inMs = function (seconds) {
   return seconds * 1000;
 };
 
 /** 
- * Possible game states
- * @enum {string}
- */
+* Possible game states
+* @enum {string}
+*/
 eightball.Game.States = {
   /**
-   * The game is ready to be played.
-   */
+  * The game is ready to be played.
+  */
   READY: 'ready',
 
   /**
-   * The game has been started and is in play.
-   */
+  * The game has been started and is in play.
+  */
   STARTED: 'started',
 
   /**
-   * The game has been started and is in play.
-   */
+  * The game has been started and is in play.
+  */
   PAUSED: 'paused',
 
   /**
-   * The game has ended.
-   */
+  * The game has ended.
+  */
   ENDED: 'ended'
 
 };
 
 /**
- * Events fired by the game.
- * @enum {string}
- */
+* Events fired by the game.
+* @enum {string}
+*/
 eightball.Game.EventType = {
   /**
-   * Dispatched when the game is ready to be started.
-   */
+  * Dispatched when the game is ready to be started.
+  */
   READY: 'ready',
 
   /**
-   * Dispatched when the game is started.
-   */
+  * Dispatched when the game is started.
+  */
   START: 'start',
 
   /**
-   * Dispatched when the game is paused.
-   */
+  * Dispatched when the game is paused.
+  */
   PAUSE: 'pause',
 
   /**
-   * Dispatched when the game is resumed aftering being paused.
-   */
+  * Dispatched when the game is resumed aftering being paused.
+  */
   RESUME: 'resume',
 
   /**
-   * Dispatched when the game comes to an end (because the timer has reached a value of 0).
-   */
+  * Dispatched when the game comes to an end (because the timer has reached a value of 0).
+  */
   END: 'end',
 
   /**
-   * Dispatched when the game timer is updated. Occurs once per second.
-   */
+  * Dispatched when the game timer is updated. Occurs once per second.
+  */
   TICK: 'tick',
 
   /**
-   * Dispatched when the score changes.
-   */
+  * Dispatched when the score changes.
+  */
   SCORE: 'score',
 
   /**
-   * Dispatched when the score changes.
-   */
-  HIGHSCORE: 'highscore'
+  * Dispatched when the score changes.
+  */
+  HIGHSCORE: 'highscore',
+
+  /**
+  * Dispatched when the bomb has been activated.
+  */
+  BOMBACTIVATED: 'bombactivated',
+
+  /**
+  * Dispatched when the bomb timer ticks.
+  */
+  BOMBTICK: 'bombtick',
+
+  /**
+  * Dispatched when the bomb is deactivated by the user.
+  */
+  BOMBDEACTIVATED: 'bombactivated',
+
+  /**
+  * Dispatched when the bomb explodes.
+  */
+  BOMBEXPLODED: 'bombexploded'
+
 };
 
 /**
- @private
- @const
- @type {number}
- */
+@private
+@const
+@type {number}
+*/
 eightball.Game.s_gameSeconds = 120;
 
+/**
+@private
+@const
+@type {number}
+*/
+eightball.Game.s_bombSeconds = 30;
+
 /** 
- @const
- @private
- @type {string}
- */
+@const
+@private
+@type {string}
+*/
 eightball.Game.s_CookieGameHighScore = "eightball.Game.highScore";
