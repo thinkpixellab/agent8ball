@@ -232,6 +232,8 @@ var loadApp = function (skip_graphics) {
       // get the location of the ball that exploded
       var bombLocation = poolTable.getBallLocation(game.bombNumber);
       if (bombLocation) {
+        poolTable.setBombFlag();
+
         var left = Math.min(Math.max((bombLocation.x + 345), -20), 710);
         var top = Math.min(Math.max((bombLocation.y + 135), -20), 180);
         $('#boom').css({ "left": left + "px", "top": top + "px" });
