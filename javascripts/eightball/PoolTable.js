@@ -232,6 +232,10 @@ eightball.PoolTable.prototype.updateLayout = function(width, height) {
   this._updateCue();
 };
 
+eightball.PoolTable.prototype.ballCount = function () {
+  return this.m_balls.length();
+}
+
 eightball.PoolTable.prototype._hideCue = function() {
   // we need to delay hiding the canvas because otherwise we get weird selection behavior on mouse up
   var timer = new goog.Timer(50);
@@ -260,7 +264,7 @@ eightball.PoolTable.prototype._strikeCue = function() {
     velocity.Normalize();
     velocity.Multiply(800);
 
-    this._dispatchCollisionEvent(velocity.Length(), eightball.CollisionEvent.EventType.CUESTICK);
+    this._dispatchCollisionEvent(velocity.Length(), eightball.CollisionEvent.EventType.CUESTICK, -1, -1);
     this._isCueHit = true;
 
     this._getCueBall().SetLinearVelocity(velocity);
@@ -524,13 +528,15 @@ eightball.PoolTable.prototype._step = function() {
  @private
  @param {!Array.<b2Pair>} pairs
  */
-eightball.PoolTable.prototype._processPairs = function(pairs) {
+eightball.PoolTable.prototype._processPairs = function (pairs) {
   var _this = this,
     wallHit = 0,
     ballHit = 0,
+    ballNum1 = -1,
+    ballNum2 = -1
     totalVelocity = 0;
 
-  goog.array.forEach(pairs, function(pair, index, array) {
+  goog.array.forEach(pairs, function (pair, index, array) {
     //
     // First, look for pocket hits
     //
@@ -554,8 +560,10 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
     var bodyTypes = [pair.m_shape1.m_body.GetUserData()[0], pair.m_shape2.m_body.GetUserData()[0]];
     goog.array.sort(bodyTypes);
     if (bodyTypes[0] == eightball.PoolTable.s_bodyTypes.BALL) {
+      ballNum1 =  pair.m_shape1.m_body.GetUserData()[1];
       if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.BALL) {
         ballHit++;
+        ballNum2 =  pair.m_shape2.m_body.GetUserData()[1];
         totalVelocity += pair.m_shape1.m_body.GetLinearVelocity().Length();
         totalVelocity += pair.m_shape2.m_body.GetLinearVelocity().Length();
       } else if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.TABLE) {
@@ -566,7 +574,7 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
     }
   });
 
-  // compute the velocity (TODO)
+  // compute the velocity
   var avgVelocity = (wallHit > 0 || ballHit > 0) ? totalVelocity / (2 * (ballHit + wallHit)) : 0;
 
   // raise ball collision event
@@ -582,12 +590,13 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
       this._isCueHit = false;
     }
 
-    this._dispatchCollisionEvent(avgVelocity, type);
+    // raise ball collision event
+    this._dispatchCollisionEvent(avgVelocity, type, ballNum1, ballNum2);
   }
 
   // raise wall collision event
   if (wallHit > 0) {
-    this._dispatchCollisionEvent(avgVelocity, eightball.CollisionEvent.EventType.WALL);
+    this._dispatchCollisionEvent(avgVelocity, eightball.CollisionEvent.EventType.WALL, ballNum1, ballNum2);
   }
 
 };
@@ -875,8 +884,8 @@ eightball.PoolTable.prototype._dispatchBallHitEvent = function() {
  @param {number} velocity
  @param {eightball.CollisionEvent.EventType} type
  */
-eightball.PoolTable.prototype._dispatchCollisionEvent = function(velocity, type) {
-  this.dispatchEvent(new eightball.CollisionEvent(velocity, type, this));
+eightball.PoolTable.prototype._dispatchCollisionEvent = function(velocity, type, ballNumber1, ballNumber2) {
+  this.dispatchEvent(new eightball.CollisionEvent(velocity, type, ballNumber1, ballNumber2, this));
 };
 
 /**

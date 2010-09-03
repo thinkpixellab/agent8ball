@@ -10,19 +10,30 @@ goog.require('goog.events.Event');
  * @constructor
  * @param {number} velocity
  * @param {string} eventType
+ * @param {number} ballNumber1
+ * @param {number} ballNumber1
  * @param {Object=} opt_target Reference to the object that is the target of
  *     this event. It has to implement the {@code EventTarget} interface
  *     declared at {@link http://developer.mozilla.org/en/DOM/EventTarget}.
  */
-eightball.CollisionEvent = function(velocity, eventType, opt_target) {
+eightball.CollisionEvent = function(velocity, eventType, ballNumber1, ballNumber2, opt_target) {
 
-  //goog.events.Event.call(this, eightball.CollisionEvent.TYPE, opt_target);
   goog.events.Event.call(this, eventType, opt_target);
 
   /**
    @type {number}
    */
   this.velocity = velocity;
+
+  /**
+  @type {number}
+  */
+  this.ballNumber1 = ballNumber1;
+
+  /**
+  @type {number}
+  */
+  this.ballNumber2 = ballNumber2;
 
 };
 goog.inherits(eightball.CollisionEvent, goog.events.Event);

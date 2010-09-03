@@ -32,12 +32,16 @@ eightball.Game = function(poolTable) {
   this.m_poolTable = poolTable;
 
   goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop, undefined, this);
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, this._pooltable_ballHit, undefined, this);
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, this._pooltable_ballHit, undefined, this);
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, this._pooltable_ballHit, undefined, this);
+
 
   this.reset();
 };
 goog.inherits(eightball.Game, goog.events.EventTarget);
 
-eightball.Game.prototype.reset = function() {
+eightball.Game.prototype.reset = function () {
 
   // reset the timer and our clock
   if (this.m_timer) {
@@ -47,6 +51,9 @@ eightball.Game.prototype.reset = function() {
 
   this.secondsLeft = eightball.Game.s_gameSeconds;
   this._dispatchGameEvent(eightball.Game.EventType.TICK);
+
+  this.bombNumber = Math.floor((Math.random() * 15) + 1)
+  this.isBombActive = false;
 
   this.m_poolTable.rackEm();
 
@@ -151,6 +158,17 @@ eightball.Game.prototype._pooltable_pocketDrop = function (e) {
     goog.debug.LogManager.getRoot().info("Pocket drop: " + e.ballNumber);
     this.addPoints(100);
   }
+};
+
+/**
+@private
+*/
+eightball.Game.prototype._pooltable_ballHit = function (e) {
+
+  if ((e.ballNumber1 == 0 && e.ballNumber2 == this.bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this.bombNumber)) {
+    alert("you found the bomb");
+  }
+
 };
 
 /**
