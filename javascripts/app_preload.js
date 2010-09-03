@@ -2,7 +2,7 @@
 goog.require('pixelLab.Preload');
 
 /** @define {boolean} */
-var SKIP_PRELOAD = false;
+var SKIP_PRELOAD = true;
 
 $(document).ready(function() {
   if (SKIP_PRELOAD) {

@@ -67,8 +67,9 @@ eightball.Game.prototype.reset = function() {
 
 eightball.Game.prototype.resetTable = function() {
   this.bombSecondsLeft = eightball.Game.s_bombSeconds + 2;
-  //this._bombNumber = Math.floor((Math.random() * 15) + 1)
-  this._bombNumber = 1; // for debug, it's always 1
+  //this.bombNumber = Math.floor((Math.random() * 15) + 1)
+  this.bombNumber = 1; // for debug, it's always 1
+  this._isBombFound = false;
   this._isBombActive = false;
   this.m_poolTable.rackEm();
 };
@@ -128,7 +129,7 @@ eightball.Game.prototype._loadHighScore = function() {
   return highScoreValue;
 };
 
-eightball.Game.prototype._tickAction = function() {
+eightball.Game.prototype._tickAction = function () {
   if (this.gameState == eightball.Game.States.STARTED) {
 
     this.secondsLeft--;
@@ -182,9 +183,10 @@ eightball.Game.prototype._pooltable_pocketDrop = function(e) {
 eightball.Game.prototype._pooltable_ballHit = function(e) {
 
   // if the bomb has already been found then we can bail
-  if (this._isBombActive) return;
+  if (this._isBombFound) return;
 
-  if ((e.ballNumber1 == 0 && e.ballNumber2 == this._bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this._bombNumber)) {
+  if ((e.ballNumber1 == 0 && e.ballNumber2 == this.bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this.bombNumber)) {
+    this._isBombFound = true;
     this._isBombActive = true;
     this._dispatchGameEvent(eightball.Game.EventType.BOMBACTIVATED);
   }

@@ -512,6 +512,18 @@ eightball.PoolTable.prototype._createBall = function(index, x, y, isBomb) {
   return this.m_world.CreateBody(ballBd);
 };
 
+eightball.PoolTable.prototype.removeBall = function (ballNumber) {
+  delete this.m_balls[ballNumber];
+};
+
+eightball.PoolTable.prototype.getBallLocation = function (ballNumber) {
+  var ball = this.m_balls[ballNumber];
+  if (ball) {
+    return ball.m_position;
+  }
+  else return null;
+};
+
 /**
  @private
  */
@@ -783,13 +795,13 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   //draw shading and reflections
   ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
   if (isBomb) {
-    this.m_bombPulseAngle -= (Math.PI / 180 * 2) * 2.44;
-    var glowBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 24);
-    glowBrush.addColorStop(0.2, 'rgba(255,134,136,' + goog.math.clamp(Math.abs(Math.sin(this.m_bombPulseAngle)), 0, 1) + ')');
-    glowBrush.addColorStop(1, 'rgba(255,234,136,0.1)');
-    this.m_shadowCanvasContext.fillStyle = glowBrush;
-    this.m_shadowCanvasContext.arc(shape.m_position.x, shape.m_position.y, 24, 0, 2 * Math.PI, false);
-    this.m_shadowCanvasContext.fill();
+//    this.m_bombPulseAngle -= (Math.PI / 180 * 2) * 2.44;
+//    var glowBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 24);
+//    glowBrush.addColorStop(0.2, 'rgba(255,134,136,' + goog.math.clamp(Math.abs(Math.sin(this.m_bombPulseAngle)), 0, 1) + ')');
+//    glowBrush.addColorStop(1, 'rgba(255,234,136,0.1)');
+//    this.m_shadowCanvasContext.fillStyle = glowBrush;
+//    this.m_shadowCanvasContext.arc(shape.m_position.x, shape.m_position.y, 24, 0, 2 * Math.PI, false);
+//    this.m_shadowCanvasContext.fill();
   }
 };
 
