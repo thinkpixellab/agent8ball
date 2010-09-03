@@ -66,7 +66,7 @@ eightball.Game.prototype.reset = function() {
 };
 
 eightball.Game.prototype.resetTable = function() {
-  this.bombSecondsLeft = eightball.Game.s_bombSeconds;
+  this.bombSecondsLeft = eightball.Game.s_bombSeconds + 2;
   //this._bombNumber = Math.floor((Math.random() * 15) + 1)
   this._bombNumber = 1; // for debug, it's always 1
   this._isBombActive = false;

@@ -46,7 +46,11 @@ var loadApp = function(skip_graphics) {
   soundManager.add("quietwall", new eightball.SoundEffect("sounds/wallquiet.mp3", 5));
   soundManager.add("cuehit", new eightball.SoundEffect("sounds/cuehit.mp3", 1));
   soundManager.add("pocket", new eightball.SoundEffect("sounds/pocket.mp3", 3));
-  soundManager.add("typing", new eightball.SoundEffect("sounds/typing.mp3", 3));
+  soundManager.add("typing", new eightball.SoundEffect("sounds/typing.mp3", 1));
+  soundManager.add("activate", new eightball.SoundEffect("sounds/activate.mp3", 1));
+  soundManager.add("bombtickslow", new eightball.SoundEffect("sounds/bombtickslow.mp3", 2));
+  soundManager.add("bombtick", new eightball.SoundEffect("sounds/bombtick.mp3", 2));
+  soundManager.add("bombtickfast", new eightball.SoundEffect("sounds/bombtickfast.mp3", 2));
 
   // global elements
   var minutesremaining = $('#minutesremaining');
@@ -191,6 +195,7 @@ var loadApp = function(skip_graphics) {
     $("#bombicon").fadeIn(200);
     $("#bombsecondstens").fadeIn(200);
     $("#bombsecondsones").fadeIn(200);
+    soundManager.play("activate");
 
   },
   undefined, this);
@@ -198,14 +203,20 @@ var loadApp = function(skip_graphics) {
   goog.events.listen(game, eightball.Game.EventType.BOMBTICK, function(e) {
 
     var sec = game.bombSecondsLeft % 60;
+    if (sec > 30) sec = 30;
     var sec_tens = Math.floor(sec / 10);
     var sec_ones = sec % 10;
 
     $("#bombsecondstens").html(String(sec_tens));
     $("#bombsecondsones").html(String(sec_ones));
 
-  },
-  undefined, this);
+    if (sec > 20) soundManager.play("bombtickslow");
+    else if (sec <= 10) soundManager.play("bombtickfast");
+    else soundManager.play("bombtick");
+
+
+
+  }, undefined, this);
 
   goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function(e) {
     // hide the timer
@@ -213,9 +224,9 @@ var loadApp = function(skip_graphics) {
   undefined, this);
 
   goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function(e) {
-    $("#bombicon").fadeOut(200);
-    $("#bombsecondstens").fadeOut(200);
-    $("#bombsecondsones").fadeOut(200);
+    $("#bombicon").fadeOut(1200);
+    $("#bombsecondstens").fadeOut(1200);
+    $("#bombsecondsones").fadeOut(1200);
     alert("boom");
 
   },

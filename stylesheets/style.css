@@ -292,7 +292,6 @@ body {
     font: 60px 'MolotRegular' , Arial, sans-serif;
     color: #ebd09c;
     letter-spacing: 1px;
-    text-shadow: 7px 7px 6px rgba(0,0,0,0.5);
     cursor: pointer;
     text-align: center;
     position: absolute;
