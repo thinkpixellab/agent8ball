@@ -232,9 +232,9 @@ eightball.PoolTable.prototype.updateLayout = function(width, height) {
   this._updateCue();
 };
 
-eightball.PoolTable.prototype.ballCount = function () {
+eightball.PoolTable.prototype.ballCount = function() {
   return this.m_balls.length();
-}
+};
 
 eightball.PoolTable.prototype._hideCue = function() {
   // we need to delay hiding the canvas because otherwise we get weird selection behavior on mouse up
@@ -528,15 +528,15 @@ eightball.PoolTable.prototype._step = function() {
  @private
  @param {!Array.<b2Pair>} pairs
  */
-eightball.PoolTable.prototype._processPairs = function (pairs) {
+eightball.PoolTable.prototype._processPairs = function(pairs) {
   var _this = this,
     wallHit = 0,
     ballHit = 0,
     ballNum1 = -1,
-    ballNum2 = -1
+    ballNum2 = -1,
     totalVelocity = 0;
 
-  goog.array.forEach(pairs, function (pair, index, array) {
+  goog.array.forEach(pairs, function(pair, index, array) {
     //
     // First, look for pocket hits
     //
@@ -560,10 +560,10 @@ eightball.PoolTable.prototype._processPairs = function (pairs) {
     var bodyTypes = [pair.m_shape1.m_body.GetUserData()[0], pair.m_shape2.m_body.GetUserData()[0]];
     goog.array.sort(bodyTypes);
     if (bodyTypes[0] == eightball.PoolTable.s_bodyTypes.BALL) {
-      ballNum1 =  pair.m_shape1.m_body.GetUserData()[1];
+      ballNum1 = pair.m_shape1.m_body.GetUserData()[1];
       if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.BALL) {
         ballHit++;
-        ballNum2 =  pair.m_shape2.m_body.GetUserData()[1];
+        ballNum2 = pair.m_shape2.m_body.GetUserData()[1];
         totalVelocity += pair.m_shape1.m_body.GetLinearVelocity().Length();
         totalVelocity += pair.m_shape2.m_body.GetLinearVelocity().Length();
       } else if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.TABLE) {

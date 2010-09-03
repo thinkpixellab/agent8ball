@@ -23,7 +23,7 @@ var _game;
 /*
  @param {boolean=} skip_graphics
 */
-var loadApp = function (skip_graphics) {
+var loadApp = function(skip_graphics) {
 
   // show debug
   //pixelLab.DebugDiv.enable();
@@ -68,7 +68,7 @@ var loadApp = function (skip_graphics) {
   var lastBars = 29;
 
   // event handlers
-  var _tickAction = function () {
+  var _tickAction = function() {
     var min = Math.floor(game.secondsLeft / 60);
     var sec = game.secondsLeft % 60;
     var sec_tens = Math.floor(sec / 10);
@@ -92,26 +92,26 @@ var loadApp = function (skip_graphics) {
     goog.debug.LogManager.getRoot().info("FPS: " + str);
   };
 
-  var _highScoreAction = function () {
+  var _highScoreAction = function() {
     $('#bestscore').html(game.highScore);
   };
 
-  var _scoreAction = function () {
+  var _scoreAction = function() {
     var s = game.score;
     if (s == 0) s = "00";
     $('#score').html(s);
   };
 
-  var _readyAction = function () {
+  var _readyAction = function() {
     overlay.fadeIn(1000);
 
     var msg = "Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.";
     var index = 0;
 
-    start.delay(800).fadeIn(400, function () {
+    start.delay(800).fadeIn(400, function() {
 
       var typing = soundManager.play("typing");
-      var interval = setInterval(function () {
+      var interval = setInterval(function() {
 
         startmessage.html(msg.substr(0, index));
         index++;
@@ -126,48 +126,48 @@ var loadApp = function (skip_graphics) {
   };
 
   if (skip_graphics) {
-    _readyAction = function () {
+    _readyAction = function() {
       game.start();
     };
   }
 
-  var _endAction = function () {
+  var _endAction = function() {
     overlay.fadeIn(500);
     gameover.fadeIn(400);
   };
 
-  gameover.click(function () {
+  gameover.click(function() {
     gameover.fadeOut(400);
     start.fadeIn(500);
   });
 
-  startover.click(function () {
+  startover.click(function() {
     poolTable.resetCueBall();
   });
 
-  start.click(function () {
+  start.click(function() {
     start.fadeOut(100, start.hide());
     overlay.fadeOut(400);
     game.start();
   });
 
-  pause.click(function () {
+  pause.click(function() {
     game.togglePaused();
     overlay.fadeIn(400);
     resume.fadeIn(400);
   });
 
-  resume.click(function () {
+  resume.click(function() {
     overlay.fadeOut(400);
     resume.fadeOut(400, game.togglePaused());
   });
 
-  $('#gameoverfacebook').click(function () {
+  $('#gameoverfacebook').click(function() {
     //http://www.facebook.com/sharer.php?u=<url to share>&t=<title of content>
     window.open('http://www.facebook.com/sharer.php?u=http://agent8ball.com&t=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball!');
   });
 
-  $('#gameovertwitter').click(function () {
+  $('#gameovertwitter').click(function() {
     window.open('http://twitter.com/home?status=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball! http://agent8ball.com #html5');
   });
 
@@ -179,7 +179,6 @@ var loadApp = function (skip_graphics) {
   _game = game;
 
   // game events (TODO: make these inline)
-
   goog.events.listen(game, eightball.Game.EventType.TICK, _tickAction);
   goog.events.listen(game, eightball.Game.EventType.SCORE, _scoreAction);
   goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, _highScoreAction);
@@ -187,58 +186,58 @@ var loadApp = function (skip_graphics) {
   goog.events.listen(game, eightball.Game.EventType.END, _endAction);
 
   // timebomb events
-
-  goog.events.listen(game, eightball.Game.EventType.BOMBACTIVATED, function (e) {
+  goog.events.listen(game, eightball.Game.EventType.BOMBACTIVATED, function(e) {
 
     $("#bombicon").fadeIn(200);
     $("#bombsecondstens").fadeIn(200);
     $("#bombsecondsones").fadeIn(200);
 
-  }, undefined, this);
+  },
+  undefined, this);
 
-  goog.events.listen(game, eightball.Game.EventType.BOMBTICK, function (e) {
+  goog.events.listen(game, eightball.Game.EventType.BOMBTICK, function(e) {
 
     var sec = game.bombSecondsLeft % 60;
     var sec_tens = Math.floor(sec / 10);
     var sec_ones = sec % 10;
 
-    $("#bombsecondstens").html(sec_tens);
-    $("#bombsecondsones").html(sec_ones);
+    $("#bombsecondstens").html(String(sec_tens));
+    $("#bombsecondsones").html(String(sec_ones));
 
-  }, undefined, this);
+  },
+  undefined, this);
 
-  goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function (e) {
+  goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function(e) {
     // hide the timer
+  },
+  undefined, this);
 
-  }, undefined, this);
-
-  goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function (e) {
+  goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function(e) {
     $("#bombicon").fadeOut(200);
     $("#bombsecondstens").fadeOut(200);
     $("#bombsecondsones").fadeOut(200);
     alert("boom");
 
-  }, undefined, this);
-
+  },
+  undefined, this);
 
   // sound events
-
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function(e) {
     soundManager.play("cuestick");
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, function(e) {
     soundManager.play("break");
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, function(e) {
     soundManager.play("cuehit");
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, function(e) {
     goog.debug.LogManager.getRoot().info("velocity: " + e.velocity);
 
     if (e.velocity > 80) {
@@ -249,7 +248,7 @@ var loadApp = function (skip_graphics) {
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.WALL, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.WALL, function(e) {
     if (e.velocity > 120) {
       soundManager.play("wall");
     } else if (e.velocity > 40) {
@@ -258,7 +257,7 @@ var loadApp = function (skip_graphics) {
   },
   undefined, this);
 
-  goog.events.listen(poolTable, eightball.PocketDropEvent.TYPE, function (e) {
+  goog.events.listen(poolTable, eightball.PocketDropEvent.TYPE, function(e) {
     soundManager.play("pocket");
   },
   undefined, this);
@@ -267,7 +266,7 @@ var loadApp = function (skip_graphics) {
   // need to initialize everything for game play
   game.reset();
 
-  var updatePoolTableLayout = function () {
+  var updatePoolTableLayout = function() {
     var width = $(window).width();
     var height = $(window).height();
     poolTable.updateLayout(width, height);
@@ -276,14 +275,14 @@ var loadApp = function (skip_graphics) {
   $(window).resize(updatePoolTableLayout);
   updatePoolTableLayout();
 
-  $(window).keypress(function (e) {
+  $(window).keypress(function(e) {
     // 114 -> 'r'
     if (e.which == 114) {
       game.reset();
     }
   });
 
-  var updateMusicButton = function () {
+  var updateMusicButton = function() {
     if (musicManager.isMusicOn()) {
       $("#musicbuttonon").fadeIn("fast");
     } else {
@@ -291,7 +290,7 @@ var loadApp = function (skip_graphics) {
     }
   };
 
-  var updateSoundButton = function () {
+  var updateSoundButton = function() {
     if (soundManager.isSoundOn()) {
       $("#soundsbuttonon").fadeIn("fast");
     } else {
@@ -299,7 +298,7 @@ var loadApp = function (skip_graphics) {
     }
   };
 
-  $("#instructions").click(function () {
+  $("#instructions").click(function() {
     soundManager.play("quick");
 
     //game.togglePaused();
@@ -308,13 +307,13 @@ var loadApp = function (skip_graphics) {
   });
 
   // music on/off
-  $("#musicbutton").click(function () {
+  $("#musicbutton").click(function() {
     musicManager.toggleMusic();
     updateMusicButton();
   });
 
   // sound effects on/off
-  $("#soundsbutton").click(function () {
+  $("#soundsbutton").click(function() {
     soundManager.toggleSound();
     updateSoundButton();
   });
@@ -323,7 +322,7 @@ var loadApp = function (skip_graphics) {
   updateSoundButton();
 
   // sound effects test code
-  $(".soundtest").click(function () {
+  $(".soundtest").click(function() {
     soundManager.play(this.id);
   });
 };
