@@ -78,6 +78,12 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
   @type {number}
   */
   this.m_bombPulseAngle = 0;
+	
+  /**
+  @private
+  @type {number}
+  */
+  this.m_bombNumber = -1;
 
   /**
   @private
@@ -114,12 +120,6 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
   @type {boolean}
   */
   this._isCueHit = false;
-
-  /**
-  @public
-  @type {boolean}
-  */
-  this.bombFlag = false;
 
   // load our cuestick image (we'll need this for rendering in the updateCue function)
   this.m_cueImage = new Image();
@@ -456,7 +456,6 @@ eightball.PoolTable.prototype._rackEm = function() {
 
   var ballRadius = eightball.PoolTable.c_ballRadius;
   var index = 1;
-  var bombIndex = goog.math.randomInt(15) + 1;
 
   for (var col = 0; col < 5; col++) {
 
@@ -465,7 +464,7 @@ eightball.PoolTable.prototype._rackEm = function() {
     var yStart = -col * ballRadius;
 
     for (var row = 0; row < ballCount; row++) {
-      this.m_balls[index] = this._createBall(index, x, yStart + row * ballRadius * 2, index == bombIndex);
+      this.m_balls[index] = this._createBall(index, x, yStart + row * ballRadius * 2);
       index++;
     }
   }
@@ -502,7 +501,7 @@ eightball.PoolTable.prototype._clearTable = function() {
  @param {boolean=} isBomb
  @return {!b2Body}
  */
-eightball.PoolTable.prototype._createBall = function(index, x, y, isBomb) {
+eightball.PoolTable.prototype._createBall = function(index, x, y) {
   var ballSd = new b2CircleDef();
   ballSd.density = 5.0;
   ballSd.radius = eightball.PoolTable.c_ballRadius;
@@ -514,16 +513,12 @@ eightball.PoolTable.prototype._createBall = function(index, x, y, isBomb) {
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.018;
   ballBd.angularDamping = 0.12;
-  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28 - eightball.PoolTable.c_ballRadius, 28 - eightball.PoolTable.c_ballRadius), isBomb];
+  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28 - eightball.PoolTable.c_ballRadius, 28 - eightball.PoolTable.c_ballRadius)];
   return this.m_world.CreateBody(ballBd);
 };
 
 eightball.PoolTable.prototype.removeBomb = function () {
-
-  this.bombFlag = true;
-
-  // ROBBY TODO: fix this so it gets the right bomb
-  var bombBall = this.m_balls[1];
+  var bombBall = this.m_balls[this.m_bombNumber];
 
   goog.object.forEach(this.m_balls, function (ball, key, theThis) {
 
@@ -535,8 +530,8 @@ eightball.PoolTable.prototype.removeBomb = function () {
 
   }, this);
 
-  this.m_world.DestroyBody(this.m_balls[1]);
-  delete this.m_balls[1];
+  this.m_world.DestroyBody(this.m_balls[this.m_bombNumber]);
+  delete this.m_balls[this.m_bombNumber];
 
 };
 
@@ -713,7 +708,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   var shape = ballBody.GetShapeList();
   var ctx = this.m_canvasContext;
   var ballNumber = ballBody.GetUserData()[1];
-  var isBomb = ballBody.GetUserData()[4];
+  var isBomb = this.m_bombNumber == ballNumber;
 
   if (!isBomb) {
     ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
@@ -800,17 +795,14 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       ctx.fill();
     }
 
-    //this.m_bombStampImage
-    //draw first number stamp
+    //draw the number stamps
     if (!isBomb) {
       ctx.drawImage(this.m_ballImages[ballNumber], pt1.x - 4, pt1.y - 4);
-      //draw second number stamp
       if (d > shape.m_radius) {
         ctx.drawImage(this.m_ballImages[ballNumber], pt2.x - 4, pt2.y - 4);
       }
     } else {
       ctx.drawImage(this.m_bombStampImage, pt1.x - 6, pt1.y - 6);
-      //draw second number stamp
       if (d > shape.m_radius) {
         ctx.drawImage(this.m_bombStampImage, pt2.x - 6, pt2.y - 6);
       }
@@ -830,6 +822,9 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 //    this.m_shadowCanvasContext.fill();
   }
 };
+eightball.PoolTable.prototype.setBombNumber = function(number) {
+	this.m_bombNumber = number;
+}
 
 /**
  @private

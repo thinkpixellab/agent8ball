@@ -210,6 +210,8 @@ var loadApp = function (skip_graphics) {
     $("#bombsecondstens").fadeIn(200);
     $("#bombsecondsones").fadeIn(200);
     soundManager.play("activate");
+		
+		poolTable.setBombNumber(game.bombNumber);
 
   },
   undefined, this);
