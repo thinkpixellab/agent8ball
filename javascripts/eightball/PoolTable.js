@@ -387,6 +387,7 @@ eightball.PoolTable.prototype._clearCueCanvas = function() {
   // reset the current transform to the identity and the clear the entire thing
   this.m_cueCanvasContext.setTransform(1, 0, 0, 1, 0, 0);
   this.m_cueCanvasContext.clearRect(0, 0, this.m_cueCanvasElement.width, this.m_cueCanvasElement.height);
+  this.gameTableOffset = null;
 };
 
 /**
