@@ -79,6 +79,12 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
   */
   this.m_bombPulseAngle = 0;
 	
+	/**
+  @private
+  @type {number}
+  */
+	this.m_bombPulseInc = 0.12;
+	
   /**
   @private
   @type {number}
@@ -529,10 +535,11 @@ eightball.PoolTable.prototype.removeBomb = function () {
     ball.WakeUp();
 
   }, this);
-
+	
+	this._hideCue();
+	
   this.m_world.DestroyBody(this.m_balls[this.m_bombNumber]);
-  delete this.m_balls[this.m_bombNumber];
-
+  delete this.m_balls[this.m_bombNumber];	
 };
 
 eightball.PoolTable.prototype.getBallLocation = function (ballNumber) {
@@ -813,17 +820,24 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   //draw shading and reflections
   ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
   if (isBomb) {
-//    this.m_bombPulseAngle -= (Math.PI / 180 * 2) * 2.44;
-//    var glowBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 24);
-//    glowBrush.addColorStop(0.2, 'rgba(255,134,136,' + goog.math.clamp(Math.abs(Math.sin(this.m_bombPulseAngle)), 0, 1) + ')');
-//    glowBrush.addColorStop(1, 'rgba(255,234,136,0.1)');
-//    this.m_shadowCanvasContext.fillStyle = glowBrush;
-//    this.m_shadowCanvasContext.arc(shape.m_position.x, shape.m_position.y, 24, 0, 2 * Math.PI, false);
-//    this.m_shadowCanvasContext.fill();
+    this.m_bombPulseAngle += this.m_bombPulseInc;
+    var glowBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 24);
+    glowBrush.addColorStop(0.2, 'rgba(255,134,136,' + Math.abs(Math.sin(this.m_bombPulseAngle)) + ')');
+    glowBrush.addColorStop(1, 'rgba(255,234,136,0.1)');
+    this.m_shadowCanvasContext.fillStyle = glowBrush;
+    this.m_shadowCanvasContext.arc(shape.m_position.x, shape.m_position.y, 24, 0, 2 * Math.PI, false);
+    this.m_shadowCanvasContext.fill();
   }
 };
+
 eightball.PoolTable.prototype.setBombNumber = function(number) {
 	this.m_bombNumber = number;
+  this.m_bombPulseAngle = 0;
+	this.m_bombPulseInc = 0.12;
+}
+
+eightball.PoolTable.prototype.increaseBombPulse = function() {
+	this.m_bombPulseInc += 0.12;
 }
 
 /**

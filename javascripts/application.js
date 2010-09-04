@@ -231,8 +231,10 @@ var loadApp = function (skip_graphics) {
     if (sec > 19) soundManager.play("bombtickslow");
     else if (sec <= 10) soundManager.play("bombtickfast");
     else if (sec >= 1) soundManager.play("bombtick");
-
-
+		
+		if(sec == 19 || sec == 10) poolTable.increaseBombPulse();
+		
+		
   }, undefined, this);
 
   goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function (e) {
