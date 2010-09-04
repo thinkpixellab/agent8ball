@@ -90,6 +90,12 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
   @type {number}
   */
   this.m_bombNumber = -1;
+	
+  /**
+  @private
+  @type {boolean}
+  */
+  this._isBombIgnited = false;
 
   /**
   @private
@@ -275,7 +281,7 @@ eightball.PoolTable.prototype._strikeCue = function() {
 
     var velocity = new b2Vec2(this.m_cueLine.x1 - this.m_cueLine.x0, this.m_cueLine.y1 - this.m_cueLine.y0);
     velocity.Normalize();
-    velocity.Multiply(800);
+    velocity.Multiply(700*this.m_strikePower+100);
 
     this._dispatchCollisionEvent(velocity.Length(), eightball.CollisionEvent.EventType.CUESTICK, -1, -1);
     this._isCueHit = true;
@@ -295,7 +301,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
 
     // clear the cue canvas
     this._clearCueCanvas();
-
+    
     if (this.m_isCueVisible && mousePoint && this._getCueBall()) {
       // find the location of the cue ball in page coordinates
       var absCue = this._gameCoordinatesToAbsolute(this._getCueBall().GetCenterPosition().x, this._getCueBall().GetCenterPosition().y);
@@ -523,7 +529,9 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28 - eightball.PoolTable.c_ballRadius, 28 - eightball.PoolTable.c_ballRadius)];
   return this.m_world.CreateBody(ballBd);
 };
-
+eightball.PoolTable.prototype.igniteBomb = function () {
+	this._isBombIgnited = true;
+}
 eightball.PoolTable.prototype.removeBomb = function () {
   var bombBall = this.m_balls[this.m_bombNumber];
 
@@ -537,8 +545,7 @@ eightball.PoolTable.prototype.removeBomb = function () {
 
   }, this);
 	
-	this._hideCue();
-	
+	this._hideCue();	
   this.m_world.DestroyBody(this.m_balls[this.m_bombNumber]);
   delete this.m_balls[this.m_bombNumber];	
 };
@@ -559,7 +566,7 @@ eightball.PoolTable.prototype._step = function() {
   var pairs = this.m_world.Step(1.0 / 30.0, 1);
   this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
   this.m_shadowCanvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y-6, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
-	
+  	
   this._drawWorld();
   this._processPairs(pairs);
   this._processBalls();
@@ -722,9 +729,11 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 
   if (!isBomb) {
     ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
+  } else if(this._isBombIgnited){
+		ctx.fillStyle = 'rgba(255,255,255,0.5)';
   } else {
     ctx.fillStyle = eightball.PoolTable.s_colors.BOMBSHELL;
-  }
+	}
 
 	ctx.beginPath();
   ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
@@ -835,6 +844,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 };
 
 eightball.PoolTable.prototype.setBombNumber = function(number) {
+	this._isBombIgnited = false;
 	this.m_bombNumber = number;
   this.m_bombPulseAngle = 0;
 	this.m_bombPulseInc = 0.12;

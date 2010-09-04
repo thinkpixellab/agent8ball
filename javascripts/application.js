@@ -267,6 +267,7 @@ var loadApp = function (skip_graphics) {
 
   goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function (e) {
     soundManager.play("explode");
+		poolTable.igniteBomb();
     $("#bombicon").fadeOut(1200);
     $("#bombsecondstens").fadeOut(1200);
     $("#bombsecondsones").fadeOut(1200);
@@ -280,11 +281,11 @@ var loadApp = function (skip_graphics) {
         //var top = -60;
         //var left = 660;
         //var top = 250;
+        var left = Math.min(Math.max((bombLocation.x + 300), -60), 660);
+        var top = Math.min(Math.max((bombLocation.y + 88), -60), 250);
 
         poolTable.removeBomb();
 
-        var left = Math.min(Math.max((bombLocation.x + 300), -60), 660);
-        var top = Math.min(Math.max((bombLocation.y + 88), -60), 250);
         $('#boom').css({ "left": left + "px", "top": top + "px" });
         $('#boom').show();
 
