@@ -134,6 +134,27 @@ eightball.Game.prototype._tickAction = function () {
 
     this.secondsLeft--;
 
+    if (this._isBombActive) {
+
+      this.bombSecondsLeft--;
+      this._dispatchGameEvent(eightball.Game.EventType.BOMBTICK);
+
+      if (this.bombSecondsLeft <= 0) {
+
+        // update the game clock by removing 30 seconds but making sure we have at least
+        // 10 seconds left on the clock (even if that theoretically would increase the 
+        // the game time--because we count on this to clean up after the explosion)
+
+        this.secondsLeft -= 30;
+        if (this.secondsLeft < 10) this.secondsLeft = 10;
+
+        this._dispatchGameEvent(eightball.Game.EventType.BOMBEXPLODED);
+        this._isBombActive = false;
+
+
+      }
+    }
+
     if (this.secondsLeft <= 0) {
       this.secondsLeft = 0;
       this._dispatchGameEvent(eightball.Game.EventType.TICK);
@@ -144,16 +165,6 @@ eightball.Game.prototype._tickAction = function () {
       this._dispatchGameEvent(eightball.Game.EventType.TICK);
     }
 
-    if (this._isBombActive) {
-
-      this.bombSecondsLeft--;
-      this._dispatchGameEvent(eightball.Game.EventType.BOMBTICK);
-
-      if (this.bombSecondsLeft <= 0) {
-        this._dispatchGameEvent(eightball.Game.EventType.BOMBEXPLODED);
-        this._isBombActive = false;
-      }
-    }
 
   }
 };
@@ -169,11 +180,17 @@ eightball.Game.prototype._dispatchGameEvent = function(type) {
 /**
  @private
  */
-eightball.Game.prototype._pooltable_pocketDrop = function(e) {
+eightball.Game.prototype._pooltable_pocketDrop = function (e) {
 
   if (e.ballNumber != 0) {
     goog.debug.LogManager.getRoot().info("Pocket drop: " + e.ballNumber);
     this.addPoints(100);
+  }
+
+  if (this._isBombFound && e.ballNumber == this.bombNumber) {
+    this._isBombActive = false;
+    this.secondsLeft += 30;
+    this._dispatchGameEvent(eightball.Game.EventType.BOMBDEACTIVATED);
   }
 };
 
@@ -287,7 +304,7 @@ eightball.Game.EventType = {
   /**
    * Dispatched when the bomb is deactivated by the user.
    */
-  BOMBDEACTIVATED: 'bombactivated',
+  BOMBDEACTIVATED: 'bombdeactivated',
 
   /**
    * Dispatched when the bomb explodes.

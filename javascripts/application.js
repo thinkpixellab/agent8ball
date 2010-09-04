@@ -40,14 +40,15 @@ var loadApp = function (skip_graphics) {
   var soundManager = new eightball.SoundEffectManager();
   soundManager.add("break", new eightball.SoundEffect("sounds/break.mp3", 1));
   soundManager.add("cuestick", new eightball.SoundEffect("sounds/cuestick.mp3", 1));
-  soundManager.add("ball", new eightball.SoundEffect("sounds/clack.mp3", 10));
-  soundManager.add("quietball", new eightball.SoundEffect("sounds/clackquiet.mp3", 10));
+  soundManager.add("ball", new eightball.SoundEffect("sounds/clack.mp3", 8));
+  soundManager.add("quietball", new eightball.SoundEffect("sounds/clackquiet.mp3", 8));
   soundManager.add("wall", new eightball.SoundEffect("sounds/wall.mp3", 5));
   soundManager.add("quietwall", new eightball.SoundEffect("sounds/wallquiet.mp3", 5));
   soundManager.add("cuehit", new eightball.SoundEffect("sounds/cuehit.mp3", 1));
   soundManager.add("pocket", new eightball.SoundEffect("sounds/pocket.mp3", 3));
   soundManager.add("typing", new eightball.SoundEffect("sounds/typing.mp3", 1));
   soundManager.add("activate", new eightball.SoundEffect("sounds/activate.mp3", 1));
+  soundManager.add("deactivate", new eightball.SoundEffect("sounds/deactivate.mp3", 1));
   soundManager.add("bombtickslow", new eightball.SoundEffect("sounds/bombtickslow.mp3", 2));
   soundManager.add("bombtick", new eightball.SoundEffect("sounds/bombtick.mp3", 2));
   soundManager.add("bombtickfast", new eightball.SoundEffect("sounds/bombtickfast.mp3", 2));
@@ -71,11 +72,27 @@ var loadApp = function (skip_graphics) {
 
   // other globals 
   var lastBars = 29;
+  var isExplosionActive = false;
+  var lastTickSeconds = 0;
 
   // event handlers
   var _tickAction = function () {
-    var min = Math.floor(game.secondsLeft / 60);
-    var sec = game.secondsLeft % 60;
+
+    if (isExplosionActive) return;
+    _updateTimerVisuals(game.secondsLeft);
+
+    pixelLab.DebugDiv.clear();
+    var fmt = new goog.i18n.NumberFormat('#,###.##');
+    var str = fmt.format(poolTable.stepsPerSecond());
+    goog.debug.LogManager.getRoot().info("FPS: " + str);
+  };
+
+  var _updateTimerVisuals = function (s) {
+
+    lastTickSeconds = s;
+
+    var min = Math.floor(s / 60);
+    var sec = s % 60;
     var sec_tens = Math.floor(sec / 10);
     var sec_ones = sec % 10;
 
@@ -83,19 +100,15 @@ var loadApp = function (skip_graphics) {
     secondsremainingtens.html(sec_tens);
     secondsremainingones.html(sec_ones);
 
-    var bars = 1 + Math.floor((game.secondsLeft - 1) / 4);
+    var bars = 1 + Math.floor((s - 1) / 4);
 
     if (bars != lastBars) {
       lastBars = bars;
-      progress.width(7 * bars);
+      progress.width(Math.min((7 * bars), (7 * 30)));
     }
 
-    //pixelLab.DebugDiv.clear();
-    goog.debug.LogManager.getRoot().info("0" + min + ":" + (sec < 10 ? "0" + sec : sec));
-    var fmt = new goog.i18n.NumberFormat('#,###.##');
-    var str = fmt.format(poolTable.stepsPerSecond());
-    goog.debug.LogManager.getRoot().info("FPS: " + str);
-  };
+
+  }
 
   var _highScoreAction = function () {
     $('#bestscore').html(game.highScore);
@@ -203,6 +216,8 @@ var loadApp = function (skip_graphics) {
 
   goog.events.listen(game, eightball.Game.EventType.BOMBTICK, function (e) {
 
+
+
     var sec = game.bombSecondsLeft % 60;
     if (sec > 30) sec = 30;
     var sec_tens = Math.floor(sec / 10);
@@ -220,6 +235,29 @@ var loadApp = function (skip_graphics) {
 
   goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function (e) {
     // hide the timer
+    soundManager.play("deactivate");
+
+    $("#bombicon").fadeOut(1200);
+    $("#bombsecondstens").fadeOut(1200);
+    $("#bombsecondsones").fadeOut(1200);
+
+
+    var lastTime = lastTickSeconds;
+
+    // count up the timer
+    timerInterval = setInterval(function () {
+
+      if (lastTime >= game.secondsLeft) {
+        clearInterval(timerInterval);
+        isExplosionActive = false;
+      }
+      else {
+        lastTime++;
+        _updateTimerVisuals(lastTime);
+      }
+
+    }, 50);
+
   },
   undefined, this);
 
@@ -232,14 +270,41 @@ var loadApp = function (skip_graphics) {
       // get the location of the ball that exploded
       var bombLocation = poolTable.getBallLocation(game.bombNumber);
       if (bombLocation) {
-        poolTable.setBombFlag();
 
-        var left = Math.min(Math.max((bombLocation.x + 345), -20), 710);
-        var top = Math.min(Math.max((bombLocation.y + 135), -20), 180);
+        // max/min
+        //var left = -60;
+        //var top = -60;
+        //var left = 660;
+        //var top = 250;
+
+        poolTable.removeBomb();
+
+        var left = Math.min(Math.max((bombLocation.x + 300), -60), 660);
+        var top = Math.min(Math.max((bombLocation.y + 88), -60), 250);
         $('#boom').css({ "left": left + "px", "top": top + "px" });
         $('#boom').show();
+
       }
     }, 1500);
+
+    isExplosionActive = true;
+
+    var lastTime = lastTickSeconds;
+
+    // countdown the timer
+    timerInterval = setInterval(function () {
+
+      if (lastTime < game.secondsLeft) {
+        clearInterval(timerInterval);
+        isExplosionActive = false;
+      }
+      else {
+        lastTime--;
+        _updateTimerVisuals(lastTime);
+      }
+
+    }, 50);
+
 
   },
   undefined, this);

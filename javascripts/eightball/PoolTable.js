@@ -518,40 +518,25 @@ eightball.PoolTable.prototype._createBall = function(index, x, y, isBomb) {
   return this.m_world.CreateBody(ballBd);
 };
 
-eightball.PoolTable.prototype.setBombFlag = function () {
+eightball.PoolTable.prototype.removeBomb = function () {
 
   this.bombFlag = true;
 
   // ROBBY TODO: fix this so it gets the right bomb
   var bombBall = this.m_balls[1];
-  this.m_world.DestroyBody(this.m_balls[1]);
-  delete this.m_balls[1];
-
 
   goog.object.forEach(this.m_balls, function (ball, key, theThis) {
 
-
-
     ball.GetLinearVelocity();
-
     var v = new b2Vec2(ball.m_position.x - bombBall.m_position.x, ball.m_position.y - bombBall.m_position.y);
-    v.Multiply(1.25);
-
+    v.Multiply(1.0);
     ball.GetLinearVelocity().Add(v);
-
-    //ball.SetLinearVelocity(v.Add(f));
-
-    
-
-
-
     ball.WakeUp();
-
-
 
   }, this);
 
-
+  this.m_world.DestroyBody(this.m_balls[1]);
+  delete this.m_balls[1];
 
 };
 

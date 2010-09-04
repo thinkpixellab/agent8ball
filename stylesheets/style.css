@@ -279,10 +279,8 @@ body {
 #boom {
     background-image: url("../images/boom.png");
     position: absolute;
-    width: 188px;
-    height: 201px;
-    top: -30px;
-    left: -30px;
+    width: 277px;
+    height: 226px;
     display:none;
 }
 
