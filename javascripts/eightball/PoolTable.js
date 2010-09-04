@@ -824,12 +824,12 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
   if (isBomb) {
     this.m_bombPulseAngle += this.m_bombPulseInc;
-    var glowBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 24);
-    glowBrush.addColorStop(0.2, 'rgba(255,134,136,' + Math.abs(Math.sin(this.m_bombPulseAngle)) + ')');
-    glowBrush.addColorStop(1, 'rgba(255,234,136,0.1)');
+    var glowBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 32);
+    glowBrush.addColorStop(0.2, 'rgba(255,234,136,' + Math.abs(Math.sin(this.m_bombPulseAngle)) + ')');
+    glowBrush.addColorStop(0.8, 'rgba(255,234,136,0.0)');
     this.m_shadowCanvasContext.fillStyle = glowBrush;
     this.m_shadowCanvasContext.beginPath();
-    this.m_shadowCanvasContext.arc(shape.m_position.x, shape.m_position.y, 24, 0, 2 * Math.PI, false);
+    this.m_shadowCanvasContext.arc(shape.m_position.x, shape.m_position.y, 32, 0, 2 * Math.PI, false);
     this.m_shadowCanvasContext.fill();
   }
 };
