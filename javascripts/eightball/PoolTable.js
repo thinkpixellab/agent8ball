@@ -167,6 +167,7 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
   // setup our physics world
   this._createWorld();
   this.m_canvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y);
+	this.m_shadowCanvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y+6);
 
   // mouse tracking fields
   this.m_isMouseDown = false;
@@ -557,6 +558,8 @@ eightball.PoolTable.prototype._step = function() {
   this.m_fpsLogger.AddInterval();
   var pairs = this.m_world.Step(1.0 / 30.0, 1);
   this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
+  this.m_shadowCanvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y-6, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
+	
   this._drawWorld();
   this._processPairs(pairs);
   this._processBalls();
@@ -723,7 +726,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     ctx.fillStyle = eightball.PoolTable.s_colors.BOMBSHELL;
   }
 
-  ctx.beginPath();
+	ctx.beginPath();
   ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
   ctx.fill();
 
@@ -825,6 +828,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     glowBrush.addColorStop(0.2, 'rgba(255,134,136,' + Math.abs(Math.sin(this.m_bombPulseAngle)) + ')');
     glowBrush.addColorStop(1, 'rgba(255,234,136,0.1)');
     this.m_shadowCanvasContext.fillStyle = glowBrush;
+    this.m_shadowCanvasContext.beginPath();
     this.m_shadowCanvasContext.arc(shape.m_position.x, shape.m_position.y, 24, 0, 2 * Math.PI, false);
     this.m_shadowCanvasContext.fill();
   }

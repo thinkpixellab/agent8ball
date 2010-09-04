@@ -68,7 +68,7 @@ var loadApp = function (skip_graphics) {
   var startover = $('#startover');
   var canvasElement = $('canvas#demo_canvas')[0];
   var cueCanvasElement = $('canvas#cue_canvas')[0];
-  var shadowCanvasElement = $('canvas#demo_canvas')[0];
+  var shadowCanvasElement = $('canvas#shadow_canvas')[0];
 
   // other globals 
   var lastBars = 29;
