@@ -108,9 +108,9 @@ var loadApp = function (skip_graphics) {
     }
 
 
-  }
+  };
 
-  var _highScoreAction = function () {
+  var highScoreAction = function () {
     $('#bestscore').html(game.highScore);
   };
 
@@ -120,7 +120,7 @@ var loadApp = function (skip_graphics) {
     $('#score').html(s);
   };
 
-  var _readyAction = function () {
+  var readyAction = function () {
     overlay.fadeIn(1000);
 
     var msg = "Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.";
@@ -144,12 +144,12 @@ var loadApp = function (skip_graphics) {
   };
 
   if (skip_graphics) {
-    _readyAction = function () {
+    readyAction = function () {
       game.start();
     };
   }
 
-  var _endAction = function () {
+  var endAction = function () {
     overlay.fadeIn(500);
     gameover.fadeIn(400);
   };
@@ -199,9 +199,9 @@ var loadApp = function (skip_graphics) {
   // game events (TODO: make these inline)
   goog.events.listen(game, eightball.Game.EventType.TICK, _tickAction);
   goog.events.listen(game, eightball.Game.EventType.SCORE, _scoreAction);
-  goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, _highScoreAction);
-  goog.events.listen(game, eightball.Game.EventType.READY, _readyAction);
-  goog.events.listen(game, eightball.Game.EventType.END, _endAction);
+  goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, highScoreAction);
+  goog.events.listen(game, eightball.Game.EventType.READY, readyAction);
+  goog.events.listen(game, eightball.Game.EventType.END, endAction);
 
   // timebomb events
   goog.events.listen(game, eightball.Game.EventType.BOMBACTIVATED, function (e) {
@@ -245,7 +245,7 @@ var loadApp = function (skip_graphics) {
     var lastTime = lastTickSeconds;
 
     // count up the timer
-    timerInterval = setInterval(function () {
+    var timerInterval = setInterval(function () {
 
       if (lastTime >= game.secondsLeft) {
         clearInterval(timerInterval);
@@ -292,7 +292,7 @@ var loadApp = function (skip_graphics) {
     var lastTime = lastTickSeconds;
 
     // countdown the timer
-    timerInterval = setInterval(function () {
+    var timerInterval = setInterval(function () {
 
       if (lastTime < game.secondsLeft) {
         clearInterval(timerInterval);
