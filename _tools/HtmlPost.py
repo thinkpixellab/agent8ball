@@ -7,6 +7,9 @@ import subprocess
 import datetime
 from xml.dom import minidom
 
+def fixSlashes(path):
+  return string.replace(path,"\\","/")
+
 def getScriptElementsFromDom(dom):
   # TODO: should really use xpath here, eh?
   html = dom.getElementsByTagName('html')[0]
@@ -14,6 +17,10 @@ def getScriptElementsFromDom(dom):
   return head.getElementsByTagName('script')
 
 def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_js_files = None):
+  compiled_js_file = fixSlashes(compiled_js_file)
+  if source_js_files != None:
+    source_js_files = map(fixSlashes, source_js_files)
+
   dom = minidom.parse(source_html_file)
   script_elements = getScriptElementsFromDom(dom)
   
