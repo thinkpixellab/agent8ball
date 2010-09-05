@@ -25,6 +25,7 @@ def concat(source_files, destination_file):
   destination.close();
   
   # move to destination file
+  os.remove(destination_file)
   os.rename(tmp_file_path, destination_file)
 
 class CssCompressor:
