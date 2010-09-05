@@ -28,6 +28,12 @@ def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_
   
   head = dom.getElementsByTagName('head')[0]
   head.appendChild(compiledElement)
+  
+  # now go through all 'important' tags and ensure they are not empty
+  for element_name in ['canvas', 'script', 'div']:
+    for element in dom.getElementsByTagName(element_name):
+      element.appendChild(dom.createTextNode(''))
+  
   fp = open(target_html_file, "w")
   dom.writexml(fp)
 
@@ -36,8 +42,4 @@ def process_script_element(element, source_js_files = None):
     src_attribute = element.getAttribute('src')
     if(source_js_files == None or source_js_files.count(src_attribute) > 0):
       element.parentNode.removeChild(element)
-    else:
-      # needed to ensure xml output writes both open/close tags
-      blankElement = element.ownerDocument.createTextNode('')
-      element.appendChild(blankElement)
   
