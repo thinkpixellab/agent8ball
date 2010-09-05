@@ -377,28 +377,28 @@ body {
     position: absolute;
     top: 275px;
     left: 127px;
-    background-image: url("../images/twitter.png");
+    background-image: url("../images/gametwitter.png");
     background-repeat: no-repeat;
     width: 31px;
     height: 31px;
 }
 
 #gameovertwitter:hover {
-    background-image: url("../images/twitterover.png");
+    background-image: url("../images/gametwitterover.png");
 }
 
 #gameoverfacebook {
     position: absolute;
     top: 278px;
     left: 163px;
-    background-image: url("../images/facebook.png");
+    background-image: url("../images/gamefacebook.png");
     background-repeat: no-repeat;
     width: 29px;
     height: 29px;
 }
 
 #gameoverfacebook:hover {
-    background-image: url("../images/facebookover.png");
+    background-image: url("../images/gamefacebookover.png");
 }
 
 #loadingbg {

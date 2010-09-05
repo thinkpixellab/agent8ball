@@ -119,6 +119,7 @@ var loadApp = function (skip_graphics) {
     var s = game.score;
     if (s == 0) s = "00";
     $('#score').html(s);
+    $('#gameoverscore').html(s);
   };
 
   var readyAction = function () {
@@ -153,6 +154,7 @@ var loadApp = function (skip_graphics) {
   var endAction = function () {
     overlay.fadeIn(500);
     gameover.fadeIn(400);
+    poolTable.pause();
   };
 
   gameover.click(function () {
@@ -195,12 +197,14 @@ var loadApp = function (skip_graphics) {
 
   });
 
-  $('#gameoverfacebook').click(function () {
+  $('#gameoverfacebook').click(function (e) {
     //http://www.facebook.com/sharer.php?u=<url to share>&t=<title of content>
+    e.stopPropagation();
     window.open('http://www.facebook.com/sharer.php?u=http://agent8ball.com&t=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball!');
   });
 
-  $('#gameovertwitter').click(function () {
+  $('#gameovertwitter').click(function (e) {
+    e.stopPropagation();
     window.open('http://twitter.com/home?status=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball! http://agent8ball.com #html5');
   });
 
@@ -291,11 +295,6 @@ var loadApp = function (skip_graphics) {
       var bombLocation = poolTable.getBallLocation(game.bombNumber);
       if (bombLocation) {
 
-        // max/min
-        //var left = -60;
-        //var top = -60;
-        //var left = 660;
-        //var top = 250;
         var left = Math.min(Math.max((bombLocation.x + 300), -60), 660);
         var top = Math.min(Math.max((bombLocation.y + 88), -60), 250);
 
