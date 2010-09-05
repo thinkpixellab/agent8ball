@@ -299,7 +299,7 @@ eightball.PoolTable.prototype._strikeCue = function() {
 
     var velocity = new b2Vec2(this.m_cueLine.x1 - this.m_cueLine.x0, this.m_cueLine.y1 - this.m_cueLine.y0);
     velocity.Normalize();
-    velocity.Multiply(700*this.m_strikePower+100);
+    velocity.Multiply(800*this.m_strikePower+100);
 
     this._dispatchCollisionEvent(velocity.Length(), eightball.CollisionEvent.EventType.CUESTICK, -1, -1);
     this._isCueHit = true;
@@ -739,7 +739,7 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index, 
  @private
  @param {!b2Body} ballBody
  */
-eightball.PoolTable.prototype._drawBall = function(ballBody) {
+eightball.PoolTable.prototype._drawBall = function (ballBody) {
   var shape = ballBody.GetShapeList();
   var ctx = this.m_canvasContext;
   var ballNumber = ballBody.GetUserData()[1];
@@ -747,13 +747,16 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 
   if (!isBomb) {
     ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
-  } else if(this._isBombIgnited){
-		ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  } else if (this._isBombIgnited) {
+    //    var bombBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 16);
+    //    bombBrush.addColorStop(0.0, 'rgba(255,247,214,1.0)');
+    //    bombBrush.addColorStop(1.0, 'rgba(255,185,101,1.0)');
+    ctx.fillStyle = 'rgba(237,218,193,0.5)'; // bombBrush;
   } else {
     ctx.fillStyle = eightball.PoolTable.s_colors.BOMBSHELL;
-	}
+  }
 
-	ctx.beginPath();
+  ctx.beginPath();
   ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
   ctx.fill();
 
