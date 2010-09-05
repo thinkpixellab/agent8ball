@@ -24,6 +24,7 @@ def run_command(command_func):
     sys.stdout.write(stdoutdata)
     logging.info('Command succeeded')
     logging.info("Moving temp file to '%s'", out_file)
+    os.remove(out_file)
     os.rename(tmp_file, out_file)
 
 def find_files(directory, pattern):
