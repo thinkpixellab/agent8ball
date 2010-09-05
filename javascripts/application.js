@@ -168,7 +168,7 @@ var loadApp = function (skip_graphics) {
 
   gameover.click(function () {
     gameover.fadeOut(400);
-    start.fadeIn(500);
+    game.reset();
   });
 
   startover.click(function () {
