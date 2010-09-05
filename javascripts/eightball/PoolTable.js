@@ -869,6 +869,10 @@ eightball.PoolTable.prototype.setBombNumber = function(number) {
 	this.m_bombNumber = number;
   this.m_bombPulseAngle = 0;
 	this.m_bombPulseInc = 0.12;
+}
+
+eightball.PoolTable.prototype.clearBombNumber = function () {
+  this.setBombNumber(-1);
 }
 
 eightball.PoolTable.prototype.increaseBombPulse = function() {

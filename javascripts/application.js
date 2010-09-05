@@ -75,6 +75,9 @@ var loadApp = function (skip_graphics) {
   var isExplosionActive = false;
   var lastTickSeconds = 0;
   var lastMusicOnPause = false;
+  var skipTyping = false;
+  var missionMessage = "Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.";
+  var typingSound = null;
 
   // event handlers
   var _tickAction = function () {
@@ -125,23 +128,29 @@ var loadApp = function (skip_graphics) {
   var readyAction = function () {
     overlay.fadeIn(1000);
 
-    var msg = "Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.";
+    $("#bombicon").hide();
+    $("#bombsecondstens").hide();
+    $("#bombsecondsones").hide();
+
+    var msg = missionMessage;
     var index = 0;
 
     start.delay(800).fadeIn(400, function () {
 
-      var typing = soundManager.play("typing");
-      var interval = setInterval(function () {
+      if (!skipTyping) {
+        typingSound = soundManager.play("typing");
+        var interval = setInterval(function () {
 
-        startmessage.html(msg.substr(0, index));
-        index++;
+          startmessage.html(msg.substr(0, index));
+          index++;
 
-        if (index > msg.length) {
-          clearInterval(interval);
-          typing.pause();
-        }
-      },
-      15);
+          if (index > msg.length) {
+            clearInterval(interval);
+            if (typingSound) typingSound.pause();
+          }
+        },
+      10);
+      }
     });
   };
 
@@ -163,13 +172,19 @@ var loadApp = function (skip_graphics) {
   });
 
   startover.click(function () {
-    poolTable.resetCueBall();
+    game.reset();
   });
 
   start.click(function () {
-    start.fadeOut(100, start.hide());
+    start.fadeOut(100);
     overlay.fadeOut(400);
     game.start();
+
+    // clean up the typing
+    skipTyping = true;
+    if (typingSound) typingSound.pause();
+    startmessage.html(missionMessage);
+
   });
 
   pause.click(function () {
