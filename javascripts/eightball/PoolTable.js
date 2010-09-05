@@ -237,14 +237,15 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
     _this.m_isMouseDown = false;
   });
 
-  var timer = new goog.Timer(eightball.PoolTable.s_millisecondsPerFrame);
-  goog.events.listen(timer, goog.Timer.TICK, this._step, undefined, this);
-  timer.start();
+  this._timer = new goog.Timer(eightball.PoolTable.s_millisecondsPerFrame);
+  goog.events.listen(this._timer, goog.Timer.TICK, this._step, undefined, this);
+  this._timer.start();
+
 };
 
 goog.inherits(eightball.PoolTable, goog.events.EventTarget);
 
-eightball.PoolTable.prototype.updateLayout = function(width, height) {
+eightball.PoolTable.prototype.updateLayout = function (width, height) {
   // resize the cue canvas
   this.m_cueCanvasContext.canvas.width = width;
   this.m_cueCanvasContext.canvas.height = height;
@@ -253,6 +254,23 @@ eightball.PoolTable.prototype.updateLayout = function(width, height) {
 
 eightball.PoolTable.prototype.ballCount = function() {
   return this.m_balls.length();
+};
+
+
+eightball.PoolTable.prototype.resume = function () {
+  if (this._timer) {
+    if (!this._timer.enabled) {
+      this._timer.start();
+    }
+  }
+};
+
+eightball.PoolTable.prototype.pause = function () {
+  if (this._timer) {
+    if (this._timer.enabled) {
+      this._timer.stop();
+    }
+  }
 };
 
 eightball.PoolTable.prototype._hideCue = function() {

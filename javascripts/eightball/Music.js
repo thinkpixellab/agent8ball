@@ -50,6 +50,7 @@ eightball.Music.prototype.stopMusic = function() {
 eightball.Music.prototype.isMusicOn = function() {
   return (this.m_music != null);
 };
+
 eightball.Music.prototype.toggleMusic = function() {
   if (this.isMusicOn()) {
     this.stopMusic();

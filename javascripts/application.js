@@ -74,6 +74,7 @@ var loadApp = function (skip_graphics) {
   var lastBars = 29;
   var isExplosionActive = false;
   var lastTickSeconds = 0;
+  var lastMusicOnPause = false;
 
   // event handlers
   var _tickAction = function () {
@@ -171,13 +172,27 @@ var loadApp = function (skip_graphics) {
 
   pause.click(function () {
     game.togglePaused();
+    poolTable.pause();
     overlay.fadeIn(400);
     resume.fadeIn(400);
+
+    lastMusicOnPause = musicManager.isMusicOn();
+    if (lastMusicOnPause) {
+      musicManager.stopMusic();
+    }
   });
 
   resume.click(function () {
     overlay.fadeOut(400);
-    resume.fadeOut(400, game.togglePaused());
+    resume.fadeOut(400, function () {
+      game.togglePaused()
+      poolTable.resume();
+    });
+
+    if (lastMusicOnPause) {
+      musicManager.startMusic();
+    }
+
   });
 
   $('#gameoverfacebook').click(function () {
@@ -210,8 +225,8 @@ var loadApp = function (skip_graphics) {
     $("#bombsecondstens").fadeIn(200);
     $("#bombsecondsones").fadeIn(200);
     soundManager.play("activate");
-		
-		poolTable.setBombNumber(game.bombNumber);
+
+    poolTable.setBombNumber(game.bombNumber);
 
   },
   undefined, this);
@@ -231,10 +246,10 @@ var loadApp = function (skip_graphics) {
     if (sec > 19) soundManager.play("bombtickslow");
     else if (sec <= 10) soundManager.play("bombtickfast");
     else if (sec >= 1) soundManager.play("bombtick");
-		
-		if(sec == 19 || sec == 10) poolTable.increaseBombPulse();
-		
-		
+
+    if (sec == 19 || sec == 10) poolTable.increaseBombPulse();
+
+
   }, undefined, this);
 
   goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function (e) {
@@ -267,7 +282,7 @@ var loadApp = function (skip_graphics) {
 
   goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function (e) {
     soundManager.play("explode");
-		poolTable.igniteBomb();
+    poolTable.igniteBomb();
     $("#bombicon").fadeOut(1200);
     $("#bombsecondstens").fadeOut(1200);
     $("#bombsecondsones").fadeOut(1200);

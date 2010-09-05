@@ -340,7 +340,17 @@ body {
 #resume {
     z-index: 500;
     display: none;
+    background-image: url("../images/suspended.png");
+    background-repeat: no-repeat;
+    width: 430px;
+    height: 311px;
+    margin-top: 120px;
+    left: 240px;
+    text-align:center;
 }
+
+
+
 
 #gameover {
     z-index: 500;
