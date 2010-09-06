@@ -557,15 +557,17 @@ eightball.PoolTable.prototype.removeBomb = function () {
 
     ball.GetLinearVelocity();
     var v = new b2Vec2(ball.m_position.x - bombBall.m_position.x, ball.m_position.y - bombBall.m_position.y);
-    v.Multiply(1.0);
+    //v.Multiply(1.0);
     ball.GetLinearVelocity().Add(v);
     ball.WakeUp();
 
   }, this);
-	
-	this._hideCue();	
-  this.m_world.DestroyBody(this.m_balls[this.m_bombNumber]);
-  delete this.m_balls[this.m_bombNumber];	
+
+
+  bombBall.m_position.Set(5000, 5000);
+  this._hideCue();
+  //this.m_world.DestroyBody(this.m_balls[this.m_bombNumber]);
+  delete this.m_balls[this.m_bombNumber];
 };
 
 eightball.PoolTable.prototype.getBallLocation = function (ballNumber) {
@@ -674,7 +676,8 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
  @param {!b2Body} pocketBody
  @param {!b2Body} ballBody
  */
-eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
+eightball.PoolTable.prototype._processPocket = function (pocketBody, ballBody) {
+
   this.m_world.DestroyBody(ballBody);
 
   // ballBody.GetUserData() == ['ball', ball #]
@@ -718,7 +721,7 @@ eightball.PoolTable.prototype._drawWorld = function() {
   }
 };
 
-eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index, array) {
+eightball.PoolTable.prototype._drawDroppingBall = function (droppingBall, index, array) {
   droppingBall.step();
   if (!droppingBall.GetIsDropped()) {
     var location = droppingBall.GetCurrentLocation();
@@ -732,6 +735,9 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index, 
     var droppingRadius = eightball.PoolTable.c_ballRadius * (1 - 0.5 * percentDropped);
     this.m_canvasContext.arc(location.x, location.y, droppingRadius, 0, 2 * Math.PI, false);
     this.m_canvasContext.fill();
+  }
+  else {
+    droppingBall.m_ballLocation.Set(5000, 5000);
   }
 };
 
@@ -869,7 +875,8 @@ eightball.PoolTable.prototype.setBombNumber = function(number) {
 	this.m_bombNumber = number;
   this.m_bombPulseAngle = 0;
 	this.m_bombPulseInc = 0.12;
-}
+
+}
 
 eightball.PoolTable.prototype.clearBombNumber = function () {
   this.setBombNumber(-1);
