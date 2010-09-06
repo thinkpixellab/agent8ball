@@ -30,7 +30,10 @@ var loadApp = function (skip_graphics) {
   // show the content, hide the loading element
   $('#vignette').delay(500).fadeIn(1000);
   $('#game').delay(500).fadeIn(1000);
-  $('#gamecontrolsdisplay').delay(500).fadeIn(1000);
+  $('#gamecontrolsdisplay').delay(500).fadeIn(1000, function () {
+    updateMusicButton();
+    updateSoundButton();
+  });
   $('#gamecontrolsclick').delay(500).fadeIn(1000);
   $('#cue_canvas').delay(500).fadeIn(1000);
 
@@ -111,8 +114,6 @@ var loadApp = function (skip_graphics) {
       lastBars = bars;
       progress.width(Math.min((7 * bars), (7 * 30)));
     }
-
-
   };
 
   var highScoreAction = function () {
@@ -422,17 +423,18 @@ var loadApp = function (skip_graphics) {
 
   var updateMusicButton = function () {
     if (musicManager.isMusicOn()) {
-      $("#musicbuttonon").fadeIn("fast");
+      $("#musicbuttonon").fadeIn(200);
     } else {
-      $("#musicbuttonon").fadeOut("fast");
+      var m = $("#musicbuttonon");
+      m.fadeOut(200);
     }
   };
 
   var updateSoundButton = function () {
     if (soundManager.isSoundOn()) {
-      $("#soundsbuttonon").fadeIn("fast");
+      $("#soundsbuttonon").fadeIn(200);
     } else {
-      $("#soundsbuttonon").fadeOut("fast");
+      $("#soundsbuttonon").fadeOut(200);
     }
   };
 
