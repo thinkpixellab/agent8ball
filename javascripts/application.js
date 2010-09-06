@@ -30,7 +30,8 @@ var loadApp = function (skip_graphics) {
   // show the content, hide the loading element
   $('#vignette').delay(500).fadeIn(1000);
   $('#game').delay(500).fadeIn(1000);
-  $('#gamecontrolsouter').delay(500).fadeIn(1000);
+  $('#gamecontrolsdisplay').delay(500).fadeIn(1000);
+  $('#gamecontrolsclick').delay(500).fadeIn(1000);
   $('#cue_canvas').delay(500).fadeIn(1000);
 
   // music
@@ -131,6 +132,7 @@ var loadApp = function (skip_graphics) {
     $("#bombicon").hide();
     $("#bombsecondstens").hide();
     $("#bombsecondsones").hide();
+    $('#boom').hide();
 
     var msg = missionMessage;
     var index = 0;
@@ -343,6 +345,20 @@ var loadApp = function (skip_graphics) {
   },
   undefined, this);
 
+
+  // cuestick events
+  goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_START, function () {
+    $("#gamecontrolsclick").hide();
+  },
+  undefined, this);
+
+
+  goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_STOP, function () {
+    $("#gamecontrolsclick").show();
+  },
+  undefined, this);
+
+
   // sound events
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function (e) {
     soundManager.play("cuestick");
@@ -429,13 +445,13 @@ var loadApp = function (skip_graphics) {
   });
 
   // music on/off
-  $("#musicbutton").click(function () {
+  $("#musicbuttonclick").click(function () {
     musicManager.toggleMusic();
     updateMusicButton();
   });
 
   // sound effects on/off
-  $("#soundsbutton").click(function () {
+  $("#soundsbuttonclick").click(function () {
     soundManager.toggleSound();
     updateSoundButton();
   });

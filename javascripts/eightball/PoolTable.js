@@ -78,19 +78,19 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
   @type {number}
   */
   this.m_bombPulseAngle = 0;
-	
-	/**
+
+  /**
   @private
   @type {number}
   */
-	this.m_bombPulseInc = 0.12;
-	
+  this.m_bombPulseInc = 0.12;
+
   /**
   @private
   @type {number}
   */
   this.m_bombNumber = -1;
-	
+
   /**
   @private
   @type {boolean}
@@ -173,7 +173,7 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
   // setup our physics world
   this._createWorld();
   this.m_canvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y);
-	this.m_shadowCanvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y+6);
+  this.m_shadowCanvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y + 6);
 
   // mouse tracking fields
   this.m_isMouseDown = false;
@@ -184,6 +184,7 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
       _this.m_isMouseDown = true;
       _this.m_lastMouseDown = _this.m_lastMouse;
       _this.m_cueLine = new goog.math.Line(_this._getCueBall().GetCenterPosition().x, _this._getCueBall().GetCenterPosition().y, _this.m_lastMouseDown.x, _this.m_lastMouseDown.y);
+      _this._dispatchCuestickHitStartEvent();
     }
   });
 
@@ -194,6 +195,7 @@ eightball.PoolTable = function (canvasElement, cueCanvasElement, shadowCanvasEle
       _this._hideCue();
       _this._strikeCue();
       _this._updateCue();
+      _this._dispatchCuestickHitStopEvent();
     }
   });
 
@@ -973,6 +975,23 @@ eightball.PoolTable.prototype._dispatchBallHitEvent = function() {
 };
 
 /**
+@private
+*/
+eightball.PoolTable.prototype._dispatchCuestickHitStartEvent = function () {
+  this.dispatchEvent(new goog.events.Event(eightball.PoolTable.EventType.CUESTICK_HIT_START, this));
+};
+
+/**
+@private
+*/
+eightball.PoolTable.prototype._dispatchCuestickHitStopEvent = function () {
+  this.dispatchEvent(new goog.events.Event(eightball.PoolTable.EventType.CUESTICK_HIT_STOP, this));
+};
+
+
+
+
+/**
  @private
  @param {number} velocity
  @param {eightball.CollisionEvent.EventType} type
@@ -1154,7 +1173,9 @@ eightball.PoolTable.s_bodyTypes = {
 eightball.PoolTable.EventType = {
   CUE_STOPPED: 'cueStopped',
   WALL_HIT: 'wallHit',
-  BALL_HIT: 'ballHit'
+  BALL_HIT: 'ballHit',
+  CUESTICK_HIT_START: 'CUESTICK_HIT_START',
+  CUESTICK_HIT_STOP: 'CUESTICK_HIT_STOP'
 };
 
 /**

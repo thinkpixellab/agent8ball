@@ -5,12 +5,18 @@
 
 html {
     height: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 }
 
 body {
     height: 100%;
     text-align: center;
     overflow:hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 }
 
 #vignette {
@@ -43,8 +49,11 @@ body {
     position: relative;
 }
 
-#gamecontrolsouter {
+#gamecontrolsdisplay {
     display: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 }
 
 #game {
@@ -90,6 +99,7 @@ body {
     position: absolute;
     top: 18px
 }
+
 #minutesremaining {
     left: 28px;
 }
@@ -165,8 +175,37 @@ body {
     position: absolute;
     top: -6px;
     left: 653px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+
 }
 
+#soundclick {
+    left: 640px;
+    top: 583px;
+    position: absolute;
+    width: 210px;
+    height: 58px;
+    background: transparent;
+}
+
+#musicbuttonclick {
+    position: absolute;
+    height: 20px;
+    width: 65px;
+    top: 20px;
+    cursor:pointer;
+}
+
+#soundsbuttonclick {
+    position: absolute;
+    height: 20px;
+    width: 80px;
+    top: 20px;
+    left: 120px;
+    cursor:pointer;
+}
 
 #sounds {
     left: 640px;
@@ -230,6 +269,15 @@ body {
     background-repeat: no-repeat;
     width: 96px;
     height: 30px;
+}
+
+#instructionsclick {
+    left: 274px;
+    top: 598px;
+    position: absolute;
+    background: transparent;
+    width: 96px;
+    height: 30px;
     cursor: pointer;
 }
 
@@ -239,6 +287,15 @@ body {
     position: absolute;
     background-image: url("../images/pause.png");
     background-repeat: no-repeat;
+    width: 89px;
+    height: 71px;
+}
+
+#pauseclick {
+    left: 380px;
+    top: 579px;
+    position: absolute;
+    background: transparent;
     width: 89px;
     height: 71px;
     cursor: pointer;
@@ -254,6 +311,15 @@ body {
     position: absolute;
     background-image: url("../images/startover.png");
     background-repeat: no-repeat;
+    width: 83px;
+    height: 30px;
+}
+
+#startoverclick {
+    left: 492px;
+    top: 598px;
+    position: absolute;
+    background: transparent;
     width: 83px;
     height: 30px;
     cursor: pointer;
@@ -351,9 +417,6 @@ body {
     text-align:center;
 }
 
-
-
-
 #gameover {
     z-index: 500;
     display: none;
@@ -373,6 +436,7 @@ body {
     text-align:center;
     font: 96px 'MolotRegular' , Arial, sans-serif;
     color: #352716;
+    
 }
 
 #gameovertwitter {
@@ -413,6 +477,7 @@ body {
     background-repeat: repeat;
     -webkit-user-select: none;
     -moz-user-select: none;
+    user-select: none;
     display: none;
 }
 
@@ -448,11 +513,21 @@ body {
     height: 28px;
 }
 
-#pixellab:hover {
+#pixellabclick {
+    display:block;
+    left: 320px;
+    top: 660px;
+    position: absolute;
+    background: transparent;
+    width: 193px;
+    height: 28px;
+}
+
+#pixellabclick:hover {
     background-image: url("../images/pixellabover.png");
 }
 
-#pixellab a {
+#pixellabclick a {
     display:block;
     width: 193px;
     height: 28px;
