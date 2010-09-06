@@ -63,10 +63,10 @@ var loadApp = function (skip_graphics) {
   var overlay = $('#overlay');
   var start = $('#start');
   var startmessage = $('#startmessage');
-  var pause = $('#pause');
+  var pause = $('#pauseclick');
   var resume = $('#resume');
   var gameover = $('#gameover');
-  var startover = $('#startover');
+  var startover = $('#startoverclick');
   var canvasElement = $('canvas#demo_canvas')[0];
   var cueCanvasElement = $('canvas#cue_canvas')[0];
   var shadowCanvasElement = $('canvas#shadow_canvas')[0];
@@ -436,12 +436,10 @@ var loadApp = function (skip_graphics) {
     }
   };
 
-  $("#instructions").click(function () {
-    soundManager.play("quick");
-
-    //game.togglePaused();
-    //$("#howtoplay").fadeIn(200);
-    //$("#cue_canvas").fadeOut(200);
+  $("#instructionsclick").click(function () {
+    game.togglePaused();
+    $("#howtoplay").fadeIn(200);
+    $("#cue_canvas").fadeOut(200);
   });
 
   // music on/off
