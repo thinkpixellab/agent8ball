@@ -440,8 +440,16 @@ var loadApp = function (skip_graphics) {
 
   $("#instructionsclick").click(function () {
     game.togglePaused();
+    poolTable.pause();
     $("#howtoplay").fadeIn(200);
     $("#cue_canvas").fadeOut(200);
+  });
+
+  $("#howtoplay").click(function () {
+    game.togglePaused();
+    poolTable.resume();
+    $("#howtoplay").fadeOut(200);
+    $("#cue_canvas").fadeIn(200);
   });
 
   // music on/off
