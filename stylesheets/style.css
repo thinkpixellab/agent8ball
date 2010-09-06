@@ -240,17 +240,6 @@ body {
     cursor: pointer;
 }
 
-#howtoplay {
-    left: 49px;
-    top: 167px;
-    position: absolute;
-    background-image: url("../images/howtoplay.png");
-    background-repeat: no-repeat;
-    width: 757px;
-    height: 347px;
-    display: none;
-}
-
 #smalllogo {
     left: 5px;
     top: 595px;
@@ -416,6 +405,22 @@ body {
     left: 240px;
     text-align:center;
 }
+
+#howtoplay {
+    z-index: 500;
+    left: 49px;
+    margin-top: 137px;
+    text-align: center;
+    
+    
+    background-image: url("../images/howtoplay.png");
+    background-repeat: no-repeat;
+    width: 757px;
+    height: 347px;
+    cursor: pointer;
+    display: none;
+}
+
 
 #gameover {
     z-index: 500;

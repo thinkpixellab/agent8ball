@@ -441,6 +441,7 @@ var loadApp = function (skip_graphics) {
   $("#instructionsclick").click(function () {
     game.togglePaused();
     poolTable.pause();
+    overlay.fadeIn(500);
     $("#howtoplay").fadeIn(200);
     $("#cue_canvas").fadeOut(200);
   });
@@ -448,6 +449,7 @@ var loadApp = function (skip_graphics) {
   $("#howtoplay").click(function () {
     game.togglePaused();
     poolTable.resume();
+    overlay.fadeOut(200);
     $("#howtoplay").fadeOut(200);
     $("#cue_canvas").fadeIn(200);
   });
