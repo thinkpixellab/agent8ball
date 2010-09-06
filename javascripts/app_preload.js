@@ -80,7 +80,7 @@ $(document).ready(function() {
     'sounds/theme.mp4',
     'sounds/typing.mp3',
     'sounds/wall.mp3',
-    'sounds/wallquiet.mp3',
+    'sounds/wallquiet.mp3'
     ];
 
     var prog = function(perc) {
