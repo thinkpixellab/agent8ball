@@ -255,8 +255,6 @@ var loadApp = function (skip_graphics) {
 
   goog.events.listen(game, eightball.Game.EventType.BOMBTICK, function (e) {
 
-
-
     var sec = game.bombSecondsLeft % 60;
     if (sec > 30) sec = 30;
     var sec_tens = Math.floor(sec / 10);
@@ -318,9 +316,11 @@ var loadApp = function (skip_graphics) {
 
         poolTable.removeBomb();
 
-        $('#boom').css({ "left": left + "px", "top": top + "px" });
+        document.getElementById("boom").style.left = left + "px" ;
+        document.getElementById("boom").style.top = top + "px";
+        //boom.css("left", left + "px");
+        //boom.css("top", top + "px");
         $('#boom').show();
-
       }
     }, 1500);
 
