@@ -25,7 +25,7 @@ def concat(source_files, destination_file):
   destination.close();
   
   # move to destination file
-  os.remove(destination_file)
+  remove_if_exists(destination_file)
   os.rename(tmp_file_path, destination_file)
 
 class CssCompressor:
@@ -98,7 +98,7 @@ class HtmlCompressor:
     
     # compress html
     run_command(self.get_compress_args)
-    os.remove(self._tmp)
+    remove_if_exists(self._tmp)
   
   def get_compress_args(self):
     args = html_compressor_args[:]

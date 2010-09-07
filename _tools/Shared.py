@@ -5,6 +5,10 @@ import subprocess
 import datetime
 import fnmatch
 
+def remove_if_exists(path):
+  if os.path.exists(path):
+    os.remove(path)
+
 def get_tmp_file_name(source_file_name, tmp_dir = 'tmp'):
   name = os.path.basename(source_file_name)
   safe_now = datetime.datetime.utcnow().isoformat().replace(':','_')
@@ -24,7 +28,7 @@ def run_command(command_func):
     sys.stdout.write(stdoutdata)
     logging.info('Command succeeded')
     logging.info("Moving temp file to '%s'", out_file)
-    os.remove(out_file)
+    remove_if_exists(out_file)
     os.rename(tmp_file, out_file)
 
 def find_files(directory, pattern):
