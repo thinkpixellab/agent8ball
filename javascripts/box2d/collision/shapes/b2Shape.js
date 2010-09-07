@@ -24,10 +24,10 @@ goog.require('b2Vec2');
 // Shapes are created automatically when a body is created.
 // Client code does not normally interact with shapes.
 /**
-  @constructor
-  @param {b2ShapeDef} def
-  @param {b2Body} body
-  */
+ @constructor
+ @param {b2ShapeDef} def
+ @param {b2Body} body
+ */
 b2Shape = function(def, body) {
   // initialize instance variables for references
   this.m_R = new b2Mat22();
@@ -48,83 +48,54 @@ b2Shape = function(def, body) {
   this.m_groupIndex = def.groupIndex;
 };
 
-b2Shape.prototype = {
-  TestPoint: function(p) {
-    return false;
-  },
+b2Shape.prototype.TestPoint = function(p) {
+  return false;
+};
+b2Shape.prototype.GetUserData = function() {
+  return this.m_userData;
+};
+b2Shape.prototype.GetType = function() {
+  return this.m_type;
+};
+b2Shape.prototype. // Get the parent body of this shape.
+GetBody = function() {
+  return this.m_body;
+};
+b2Shape.prototype.GetPosition = function() {
+  return this.m_position;
+};
+b2Shape.prototype.GetRotationMatrix = function() {
+  return this.m_R;
+};
 
-  GetUserData: function() {
-    return this.m_userData;
-  },
+// Remove and then add proxy from the broad-phase.
+// This is used to refresh the collision filters.
+b2Shape.prototype.ResetProxy = function(broadPhase) {};
 
-  GetType: function() {
-    return this.m_type;
-  },
+// Get the next shape in the parent body's shape list.
+b2Shape.prototype.GetNext = function() {
+  return this.m_next;
+};
 
-  // Get the parent body of this shape.
-  GetBody: function() {
-    return this.m_body;
-  },
+//--------------- Internals Below -------------------
+// Internal use only. Do not call.
+//b2Shape::~b2Shape()
+//{
+//  this.m_body->m_world->m_broadPhase->this.DestroyProxy(this.m_proxyId);
+//}
+b2Shape.prototype.DestroyProxy = function() {
+  if (this.m_proxyId != b2Pair.b2_nullProxy) {
+    this.m_body.m_world.m_broadPhase.DestroyProxy(this.m_proxyId);
+    this.m_proxyId = b2Pair.b2_nullProxy;
+  }
+};
 
-  GetPosition: function() {
-    return this.m_position;
-  },
-  GetRotationMatrix: function() {
-    return this.m_R;
-  },
-
-  // Remove and then add proxy from the broad-phase.
-  // This is used to refresh the collision filters.
-  ResetProxy: function(broadPhase) {},
-
-  // Get the next shape in the parent body's shape list.
-  GetNext: function() {
-    return this.m_next;
-  },
-
-  //--------------- Internals Below -------------------
-  // Internal use only. Do not call.
-  //b2Shape::~b2Shape()
-  //{
-  //  this.m_body->m_world->m_broadPhase->this.DestroyProxy(this.m_proxyId);
-  //}
-  DestroyProxy: function() {
-    if (this.m_proxyId != b2Pair.b2_nullProxy) {
-      this.m_body.m_world.m_broadPhase.DestroyProxy(this.m_proxyId);
-      this.m_proxyId = b2Pair.b2_nullProxy;
-    }
-  },
-
-  // Internal use only. Do not call.
-  Synchronize: function(position1, R1, position2, R2) {},
-  QuickSync: function(position, R) {},
-  Support: function(dX, dY, out) {},
-  GetMaxRadius: function() {
-    return this.m_maxRadius;
-  },
-
-  m_next: null,
-
-  m_R: new b2Mat22(),
-  m_position: new b2Vec2(),
-
-  m_type: 0,
-
-  m_userData: null,
-
-  m_body: null,
-
-  m_friction: null,
-  m_restitution: null,
-
-  m_maxRadius: null,
-
-  m_proxyId: 0,
-  categoryBits: 0,
-  maskBits: 0,
-  m_groupIndex: 0
-
-  // b2ShapeType
+// Internal use only. Do not call.
+b2Shape.prototype.Synchronize = function(position1, R1, position2, R2) {};
+b2Shape.prototype.QuickSync = function(position, R) {};
+b2Shape.prototype.Support = function(dX, dY, out) {};
+b2Shape.prototype.GetMaxRadius = function() {
+  return this.m_maxRadius;
 };
 
 b2Shape.Destroy = function(shape) {
