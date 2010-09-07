@@ -36,17 +36,27 @@ def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_
   head = dom.getElementsByTagName('head')[0]
   head.appendChild(compiledElement)
   
-  # now go through all 'important' tags and ensure they are not empty
-  for element_name in ['canvas', 'script', 'div', 'a']:
-    for element in dom.getElementsByTagName(element_name):
-      element.appendChild(dom.createTextNode(''))
+  ensureHtmlElementsFromDom(dom)
   
-  fp = open(target_html_file, "w")
-  dom.writexml(fp)
+  with open(target_html_file, "w") as fp:
+    dom.writexml(fp)
 
 def process_script_element(element, source_js_files = None):
   if(element.hasAttribute('src')):
     src_attribute = element.getAttribute('src')
     if(source_js_files == None or source_js_files.count(src_attribute) > 0):
       element.parentNode.removeChild(element)
+
+def ensureHtmlElementsFromFile(path):
+  dom = minidom.parse(path)
+  ensureHtmlElementsFromDom(dom)
+  with open(path, "w") as f:
+    dom.writexml(f)
+
+def ensureHtmlElementsFromDom(dom):
+  # now go through all 'important' tags and ensure they are not empty
+  for element_name in ['canvas', 'script', 'div', 'a']:
+    for element in dom.getElementsByTagName(element_name):
+      element.appendChild(dom.createTextNode(''))
+
   

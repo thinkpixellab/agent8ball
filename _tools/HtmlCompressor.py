@@ -98,7 +98,9 @@ class HtmlCompressor:
     
     # compress html
     run_command(self.get_compress_args)
+    HtmlPost.ensureHtmlElementsFromFile(self.target)
     remove_if_exists(self._tmp)
+    
   
   def get_compress_args(self):
     args = html_compressor_args[:]
