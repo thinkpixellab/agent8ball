@@ -5,11 +5,11 @@ import subprocess
 import datetime
 import fnmatch
 
-def get_tmp_file_name(source_file_name):
-  name = source_file_name
-  name += "_tmp_"
-  name += datetime.datetime.utcnow().isoformat().replace(':','_')
-  return name
+def get_tmp_file_name(source_file_name, tmp_dir = 'tmp'):
+  name = os.path.basename(source_file_name)
+  safe_now = datetime.datetime.utcnow().isoformat().replace(':','_')
+  name = "{0}_{1}".format(name, safe_now)
+  return os.path.join(tmp_dir, name)
 
 def run_command(command_func):
   logging.basicConfig(format='%(message)s', level=logging.INFO)
