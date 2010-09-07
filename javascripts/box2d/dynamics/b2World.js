@@ -467,28 +467,5 @@ b2World.prototype.GetContactList = function() {
   return this.m_contactList;
 };
 
-//--------------- Internals Below -------------------
-b2World.prototype.m_blockAllocator = null;
-b2World.prototype.m_stackAllocator = null;
-b2World.prototype.m_broadPhase = null;
-
-b2World.prototype.m_bodyList = null;
-b2World.prototype.m_jointList = null;
-
-b2World.prototype.m_bodyCount = 0;
-b2World.prototype.m_contactCount = 0;
-b2World.prototype.m_jointCount = 0;
-
-// These bodies will be destroyed at the next time this.m_step.
-b2World.prototype.m_bodyDestroyList = null;
-
-b2World.prototype.m_allowSleep = null;
-
-b2World.prototype.m_groundBody = null;
-
-b2World.prototype.m_listener = null;
-
-b2World.prototype.m_positionIterationCount = 0;
-
 b2World.s_enablePositionCorrection = 1;
 b2World.s_enableWarmStarting = 1;
