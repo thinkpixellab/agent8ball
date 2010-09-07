@@ -9,10 +9,13 @@ def remove_if_exists(path):
   if os.path.exists(path):
     os.remove(path)
 
-def get_tmp_file_name(source_file_name, tmp_dir = 'tmp'):
+def get_tmp_file_name(source_file_name):
   name = os.path.basename(source_file_name)
   safe_now = datetime.datetime.utcnow().isoformat().replace(':','_')
-  name = "{0}_{1}".format(name, safe_now)
+  name = "{0}_{1}".format(safe_now, name)
+  tmp_dir = 'tmp'
+  if os.path.exists(tmp_dir) != True:
+    os.mkdir(tmp_dir)
   return os.path.join(tmp_dir, name)
 
 def run_command(command_func):
