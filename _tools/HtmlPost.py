@@ -37,7 +37,7 @@ def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_
   head.appendChild(compiledElement)
   
   # now go through all 'important' tags and ensure they are not empty
-  for element_name in ['canvas', 'script', 'div']:
+  for element_name in ['canvas', 'script', 'div', 'a']:
     for element in dom.getElementsByTagName(element_name):
       element.appendChild(dom.createTextNode(''))
   
