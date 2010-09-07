@@ -549,9 +549,11 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28 - eightball.PoolTable.c_ballRadius, 28 - eightball.PoolTable.c_ballRadius)];
   return this.m_world.CreateBody(ballBd);
 };
+
 eightball.PoolTable.prototype.igniteBomb = function () {
 	this._isBombIgnited = true;
-}
+};
+
 eightball.PoolTable.prototype.removeBomb = function () {
   var bombBall = this.m_balls[this.m_bombNumber];
 
@@ -572,6 +574,10 @@ eightball.PoolTable.prototype.removeBomb = function () {
   delete this.m_balls[this.m_bombNumber];
 };
 
+/**
+  @param {number} ballNumber
+  @return {b2Vec2}
+*/
 eightball.PoolTable.prototype.getBallLocation = function (ballNumber) {
   var ball = this.m_balls[ballNumber];
   if (ball) {
@@ -872,21 +878,23 @@ eightball.PoolTable.prototype._drawBall = function (ballBody) {
   }
 };
 
+/**
+ @param {number} number
+*/
 eightball.PoolTable.prototype.setBombNumber = function(number) {
 	this._isBombIgnited = false;
 	this.m_bombNumber = number;
   this.m_bombPulseAngle = 0;
 	this.m_bombPulseInc = 0.12;
-
-}
+};
 
 eightball.PoolTable.prototype.clearBombNumber = function () {
   this.setBombNumber(-1);
-}
+};
 
 eightball.PoolTable.prototype.increaseBombPulse = function() {
 	this.m_bombPulseInc += 0.12;
-}
+};
 
 /**
  @private

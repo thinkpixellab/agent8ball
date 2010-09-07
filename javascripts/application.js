@@ -205,7 +205,7 @@ var loadApp = function (skip_graphics) {
   resume.click(function () {
     overlay.fadeOut(400);
     resume.fadeOut(400, function () {
-      game.togglePaused()
+      game.togglePaused();
       poolTable.resume();
     });
 
