@@ -10,6 +10,7 @@ See the COPYING file for details.
   Author: pallosp@google.com (Peter Pallos)
 -->
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>Closure Unit Tests - goog.structs.TreeNode</title>
 <script src="../base.js"></script>
 <script>
@@ -92,6 +93,14 @@ function testGetChildAt() {
   assertEquals('first child', node2, node1.getChildAt(0));
   assertNull('index too high', node1.getChildAt(1));
   assertNull('no children', node2.getChildAt(0));
+}
+
+function testGetChildCount() {
+  var node1 = new goog.structs.TreeNode(1, null);
+  var node2 = new goog.structs.TreeNode(2, null);
+  node1.addChild(node2);
+  assertEquals('child count of root node', 1, node1.getChildCount());
+  assertEquals('child count of leaf node', 0, node2.getChildCount());
 }
 
 function testGetDepth() {

@@ -255,9 +255,9 @@ goog.ui.Container.prototype.setKeyEventTarget = function(element) {
       this.enableFocusHandling_(true);
     }
   } else {
-   throw Error('Can\'t set key event target for container ' +
-       'that doesn\'t support keyboard focus!');
- }
+    throw Error('Can\'t set key event target for container ' +
+        'that doesn\'t support keyboard focus!');
+  }
 };
 
 
@@ -526,7 +526,7 @@ goog.ui.Container.prototype.handleUnHighlightItem = function(e) {
     this.highlightedIndex_ = -1;
   }
   goog.dom.a11y.setState(this.getElement(),
-       goog.dom.a11y.State.ACTIVEDESCENDANT, '');
+      goog.dom.a11y.State.ACTIVEDESCENDANT, '');
 };
 
 
@@ -570,7 +570,7 @@ goog.ui.Container.prototype.handleMouseDown = function(e) {
   }
 
   var keyTarget = this.getKeyEventTarget();
-  if (this.renderer_.hasTabIndex(keyTarget)) {
+  if (keyTarget && goog.dom.isFocusableTabIndex(keyTarget)) {
     // The container is configured to receive keyboard focus.
     keyTarget.focus();
   } else {
@@ -632,7 +632,10 @@ goog.ui.Container.prototype.getOwnerControl = function(node) {
   // looking up the owner.
   if (this.childElementIdMap_) {
     var elem = this.getElement();
-    while (node && node.parentNode && node != elem) {
+    // See http://b/2964418 . IE9 appears to evaluate '!=' incorrectly, so
+    // using '!==' instead.
+    // TODO(user): Possibly revert this change if/when IE9 fixes the issue.
+    while (node && node !== elem) {
       var id = node.id;
       if (id in this.childElementIdMap_) {
         return this.childElementIdMap_[id];
@@ -710,6 +713,11 @@ goog.ui.Container.prototype.handleKeyEventInternal = function(e) {
       typeof this.openItem_.handleKeyEvent == 'function' &&
       this.openItem_.handleKeyEvent(e)) {
     return true;
+  }
+
+  // Do not handle the key event if any modifier key is pressed.
+  if (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) {
+    return false;
   }
 
   // Either nothing is highlighted, or the highlighted control didn't handle

@@ -21,9 +21,10 @@
  * ensure no leaks.
  *
  * XhrIo is event based, it dispatches events when a request finishes, fails or
- * succeeds or when the ready-state changes. The ready-state event fires first,
- * followed by a generic completed event, and lastly the error or success event
- * is fired as appropriate.
+ * succeeds or when the ready-state changes. The ready-state or timeout event
+ * fires first, followed by a generic completed event. Then the abort, error,
+ * or success event is fired as appropriate. Lastly, the ready event will fire
+ * to indicate that the object may be used to make another request.
  *
  * The error event may also be called before completed and
  * ready-state-change if the XmlHttpRequest.open() or .send() methods throw.
@@ -165,7 +166,7 @@ goog.net.XhrIo.send = function(url, opt_callback, opt_method, opt_content,
 goog.net.XhrIo.cleanup = function() {
   var instances = goog.net.XhrIo.sendInstances_;
   while (instances.length) {
-     instances.pop().dispose();
+    instances.pop().dispose();
   }
 };
 
@@ -345,8 +346,8 @@ goog.net.XhrIo.prototype.setTimeoutInterval = function(ms) {
  *     request.
  */
 goog.net.XhrIo.prototype.send = function(url, opt_method, opt_content,
-                                           opt_headers) {
-  if (this.active_) {
+                                         opt_headers) {
+  if (this.xhr_) {
     throw Error('[goog.net.XhrIo] Object is active with another request');
   }
 
@@ -683,7 +684,7 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
     var xhr = this.xhr_;
     var clearedOnReadyStateChange =
         this.xhrOptions_[goog.net.XmlHttp.OptionType.USE_NULL_FUNCTION] ?
-              goog.nullFunction : null;
+            goog.nullFunction : null;
     this.xhr_ = null;
     this.xhrOptions_ = null;
 
@@ -723,7 +724,7 @@ goog.net.XhrIo.prototype.cleanUpXhr_ = function(opt_fromDispose) {
  * @return {boolean} Whether there is an active request.
  */
 goog.net.XhrIo.prototype.isActive = function() {
-  return this.active_;
+  return !!this.xhr_;
 };
 
 
@@ -819,21 +820,39 @@ goog.net.XhrIo.prototype.getLastUri = function() {
 
 /**
  * Get the response text from the Xhr object
- * Will only return correct result when called from the context of a callback
- * @return {string} Result from the server.
+ * Will only return correct result when called from the context of a callback.
+ * @return {string} Result from the server, or '' if no result available.
  */
 goog.net.XhrIo.prototype.getResponseText = function() {
-  return this.xhr_ ? this.xhr_.responseText : '';
+  /** @preserveTry */
+  try {
+    return this.xhr_ ? this.xhr_.responseText : '';
+  } catch (e) {
+    // http://www.w3.org/TR/XMLHttpRequest/#the-responsetext-attribute
+    // states that responseText should return '' (and responseXML null)
+    // when the state is not LOADING or DONE. Instead, IE and Gears can
+    // throw unexpected exceptions, eg, when a request is aborted or no
+    // data is available yet.
+    this.logger_.fine('Can not get responseText: ' + e.message);
+    return '';
+  }
 };
 
 
 /**
  * Get the response XML from the Xhr object
- * Will only return correct result when called from the context of a callback
- * @return {Document} The DOM Document representing the XML file.
+ * Will only return correct result when called from the context of a callback.
+ * @return {Document} The DOM Document representing the XML file, or null
+ * if no result available.
  */
 goog.net.XhrIo.prototype.getResponseXml = function() {
-  return this.xhr_ ? this.xhr_.responseXML : null;
+  /** @preserveTry */
+  try {
+    return this.xhr_ ? this.xhr_.responseXML : null;
+  } catch (e) {
+    this.logger_.fine('Can not get responseXML: ' + e.message);
+    return null;
+  }
 };
 
 
@@ -887,7 +906,7 @@ goog.net.XhrIo.prototype.getLastErrorCode = function() {
  */
 goog.net.XhrIo.prototype.getLastError = function() {
   return goog.isString(this.lastError_) ? this.lastError_ :
-    String(this.lastError_);
+      String(this.lastError_);
 };
 
 
