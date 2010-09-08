@@ -37,7 +37,7 @@ class Closure:
     run_command(self.compile)
   
   def build_and_process(self, source_html, target_html, skip_build = False):
-    if(skip_build == True):
+    if(not skip_build):
       self.build()
     
     source_js_files = [os.path.join(closure_path, 'goog', 'base.js')]
