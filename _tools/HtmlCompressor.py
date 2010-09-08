@@ -59,11 +59,11 @@ class HtmlCompressor:
   
   def compress(self):
     dom = minidom.parse(self.source)
-
+    
     # find css
     # remove originals
     # concat, compress
-
+    
     # find js
     script_elements = HtmlPost.getScriptElementsFromDom(dom)
     # remove originals
@@ -79,28 +79,26 @@ class HtmlCompressor:
     
     
     # append compressed css
-
+    
     # append compressed js
     compiledElement = dom.createElement('script')
     compiledElement.setAttribute('src', self.target_js)
     # needed to ensure xml output writes both open/close tags
     compiledElement.appendChild(dom.createTextNode(''))
-
+    
     head = dom.getElementsByTagName('head')[0]
     head.appendChild(compiledElement)
     
     # write changed file to temp file
     
     self._tmp = get_tmp_file_name(self.source)
-    fp = open(self._tmp, "w")
-    dom.writexml(fp)
-    fp.close()
+    writeXmlSansInstructions(dom, self._tmp)
     
     # compress html
     run_command(self.get_compress_args)
     HtmlPost.ensureHtmlElementsFromFile(self.target)
     remove_if_exists(self._tmp)
-    
+  
   
   def get_compress_args(self):
     args = html_compressor_args[:]

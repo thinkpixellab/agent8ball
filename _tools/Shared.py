@@ -5,6 +5,11 @@ import subprocess
 import datetime
 import fnmatch
 
+def writeXmlSansInstructions(dom, file):
+  with open(file, "w") as fp:
+    for node in dom.childNodes:
+      node.writexml(fp)
+  
 def remove_if_exists(path):
   if os.path.exists(path):
     os.remove(path)

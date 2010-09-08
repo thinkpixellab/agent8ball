@@ -6,6 +6,7 @@ import logging
 import subprocess
 import datetime
 from xml.dom import minidom
+from Shared import *
 
 def fixSlashes(path):
   return string.replace(path,"\\","/")
@@ -42,8 +43,7 @@ def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_
   
   ensureHtmlElementsFromDom(dom)
   
-  with open(target_html_file, "w") as fp:
-    dom.writexml(fp)
+  writeXmlSansInstructions(dom,target_html_file)
 
 def process_script_element(element, source_js_files = None):
   if(element.hasAttribute('src')):
@@ -62,8 +62,7 @@ def process_script_element(element, source_js_files = None):
 def ensureHtmlElementsFromFile(path):
   dom = minidom.parse(path)
   ensureHtmlElementsFromDom(dom)
-  with open(path, "w") as f:
-    dom.writexml(f)
+  writeXmlSansInstructions(dom, path)
 
 def ensureHtmlElementsFromDom(dom):
   # now go through all 'important' tags and ensure they are not empty
