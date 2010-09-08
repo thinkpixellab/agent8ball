@@ -24,7 +24,7 @@ def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_
   compiled_js_file = fixSlashes(compiled_js_file)
   if source_js_files != None:
     source_js_files = map(fixSlashes, source_js_files)
-
+  
   dom = minidom.parse(source_html_file)
   script_elements = getScriptElementsFromDom(dom)
   
@@ -49,7 +49,15 @@ def process_script_element(element, source_js_files = None):
   if(element.hasAttribute('src')):
     src_attribute = element.getAttribute('src')
     if(source_js_files == None or source_js_files.count(src_attribute) > 0):
-      element.parentNode.removeChild(element)
+      toRemove = [element]
+      
+      # loop through following elements, removing whitespace
+      element = element.nextSibling
+      while element and element.nodeType == element.TEXT_NODE and len(string.strip(element.data)) == 0:
+        toRemove.append(element)
+        element = element.nextSibling
+      for element in toRemove:
+        element.parentNode.removeChild(element)
 
 def ensureHtmlElementsFromFile(path):
   dom = minidom.parse(path)
@@ -62,5 +70,5 @@ def ensureHtmlElementsFromDom(dom):
   for element_name in ['canvas', 'script', 'div', 'a']:
     for element in dom.getElementsByTagName(element_name):
       element.appendChild(dom.createTextNode(''))
-
+  
   
