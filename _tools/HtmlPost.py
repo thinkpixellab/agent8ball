@@ -10,11 +10,15 @@ from xml.dom import minidom
 def fixSlashes(path):
   return string.replace(path,"\\","/")
 
-def getScriptElementsFromDom(dom):
+def getScriptElementsFromDom(dom, exclude_http = True):
   # TODO: should really use xpath here, eh?
   html = dom.getElementsByTagName('html')[0]
   head = html.getElementsByTagName('head')[0]
-  return head.getElementsByTagName('script')
+  elements = head.getElementsByTagName('script')
+  if(exclude_http):
+    return filter(lambda e: e.hasAttribute('src') and not(e.getAttribute('src').startswith("http://")) , elements)
+  else:
+    return elements
 
 def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_js_files = None):
   compiled_js_file = fixSlashes(compiled_js_file)
