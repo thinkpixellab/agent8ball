@@ -36,8 +36,9 @@ class Closure:
     run_command(self.make_deps)
     run_command(self.compile)
   
-  def build_and_process(self, source_html, target_html):
-    self.build()
+  def build_and_process(self, source_html, target_html, skip_build = False):
+    if(skip_build == True):
+      self.build()
     
     source_js_files = [os.path.join(closure_path, 'goog', 'base.js')]
     source_js_files += [self.application_js_path, self.deps_js_path]
