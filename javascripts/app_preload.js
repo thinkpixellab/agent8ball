@@ -8,7 +8,7 @@ $(document).ready(function() {
   // disable selection
   // from http://aleembawany.com/2009/01/20/disable-selction-on-menu-items-with-this-jquery-extension/
   $('body').each(function() {
-    this.onselectstart = function() {
+    this['onselectstart'] = function() {
       return false;
     };
     this.unselectable = "on";
