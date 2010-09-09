@@ -24,22 +24,23 @@ def make_deps_core(deps_js_path, js_dirs):
   return command, tmp_file_path, deps_js_path
 
 class Closure:
-  def __init__(self, application_js_path, closure_dependencies, deps_js_path, compiled_js_path, extern_files, debug = False):
+  def __init__(self, application_js_path, closure_dependencies, deps_js_path, compiled_js_path, extern_files):
     self.deps_js_path = deps_js_path
     self.closure_dependencies = closure_dependencies
     self.application_js_path = application_js_path
     self.extern_files = extern_files
     self.compiled_js_path = compiled_js_path
-    self.debug = debug
+    self.debug = False
   
   def build(self):
     run_command(self.make_deps)
     run_command(self.compile)
   
-  def build_and_process(self, source_html, target_html, skip_build = False):
+  def build_and_process(self, source_html, target_html, debug = False, skip_build = False):
     if(not skip_build):
       self.build()
     
+    self.debug = debug
     source_js_files = [os.path.join(closure_path, 'goog', 'base.js')]
     source_js_files += [self.application_js_path, self.deps_js_path]
     HtmlPost.replaceJsFiles(source_html, target_html, self.compiled_js_path, source_js_files)
