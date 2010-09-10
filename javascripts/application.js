@@ -216,14 +216,13 @@ var loadApp = function (skip_graphics) {
   });
 
   $('#gameoverfacebook').click(function (e) {
-    //http://www.facebook.com/sharer.php?u=<url to share>&t=<title of content>
     e.stopPropagation();
-    window.open('http://www.facebook.com/sharer.php?u=http://agent8ball.com&t=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball!');
+    window.open('http://www.facebook.com/sharer.php?u=http%3A%2F%2Fagent8ball.com&t=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball!');
   });
 
   $('#gameovertwitter').click(function (e) {
     e.stopPropagation();
-    window.open('http://twitter.com/home?status=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball! http://agent8ball.com #html5');
+    window.open('http://twitter.com/home?status=I%20just%20scored%20' + game.score + '%20points%20on%20Agent008Ball!%20http%3A%2F%2Fagent8ball.com%20%23html5');
   });
 
   var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement, shadowCanvasElement);
