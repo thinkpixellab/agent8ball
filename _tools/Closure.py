@@ -37,10 +37,10 @@ class Closure:
     run_command(self.compile)
   
   def build_and_process(self, source_html, target_html, debug = False, skip_build = False):
+    self.debug = debug
     if(not skip_build):
       self.build()
     
-    self.debug = debug
     source_js_files = [os.path.join(closure_path, 'goog', 'base.js')]
     source_js_files += [self.application_js_path, self.deps_js_path]
     HtmlPost.replaceJsFiles(source_html, target_html, self.compiled_js_path, source_js_files)
