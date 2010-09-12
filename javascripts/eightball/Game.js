@@ -327,7 +327,7 @@ eightball.Game.s_gameSeconds = 120;
  @const
  @type {number}
  */
-eightball.Game.s_bombSeconds = 5;
+eightball.Game.s_bombSeconds = 30;
 
 /** 
  @const
