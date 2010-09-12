@@ -88,7 +88,6 @@ $(document).ready(function() {
     'sounds/explode.mp3',
     'sounds/explodeloud.mp3',
     'sounds/pocket.mp3',
-    'sounds/theme.mp4',
     'sounds/typing.mp3',
     'sounds/wall.mp3',
     'sounds/wallquiet.mp3'

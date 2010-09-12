@@ -77,5 +77,5 @@ goog.addDependency("../../../../javascripts/eightball/SoundEffect.js", ['eightba
 goog.addDependency("../../../../javascripts/eightball/SoundEffectManager.js", ['eightball.SoundEffectManager'], ['eightball.SoundEffect', 'eightball.Cookies']);
 goog.addDependency("../../../../javascripts/helpers/DebugDiv.js", ['pixelLab.DebugDiv'], ['goog.debug.LogManager', 'goog.dom']);
 goog.addDependency("../../../../javascripts/helpers/fpsLogger.js", ['pixelLab.fpsLogger'], []);
-goog.addDependency("../../../../javascripts/helpers/Preload.js", ['pixelLab.Preload'], []);
+goog.addDependency("../../../../javascripts/helpers/Preload.js", ['pixelLab.Preload'], ['goog.string', 'goog.array']);
 goog.addDependency("../../../../javascripts/app_preload.js", [], ['pixelLab.Preload']);

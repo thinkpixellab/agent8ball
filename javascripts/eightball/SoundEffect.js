@@ -53,7 +53,9 @@ eightball.SoundEffect.prototype.play = function () {
     eightball.SoundEffect.loadAudio(audio, this.m_location);
   }
 
-  // make sure we're at the start and then play
+  audio.playbackRate = 1;
+  audio.muted = false;
+
   audio.play();
 
   return audio;

@@ -1,5 +1,8 @@
 goog.provide('pixelLab.Preload');
 
+goog.require('goog.string');
+goog.require('goog.array');
+
 /**
  @constructor
  */
@@ -35,6 +38,47 @@ pixelLab.Preload = function(urls, progressCallback, completedCallback) {
 };
 
 pixelLab.Preload.prototype._downloadFile = function(url) {
+  /*if(pixelLab.Preload._isImage(url)){
+    this._downloadImage(url);
+  }
+  else*/
+  if(pixelLab.Preload._isAudio(url)){
+    this._downloadAudio(url);
+  }
+  else{
+    this._downloadAjax(url);
+  }
+};
+
+pixelLab.Preload.prototype._downloadImage = function(url) {
+  var _this = this;
+  this._add(function() {
+    var cacheImage = document.createElement('img');
+    cacheImage.src = url;
+    $(cacheImage).load(function() {
+      _this._incrementDownloadCount();
+    });
+  });
+};
+
+pixelLab.Preload.prototype._downloadAudio = function(url) {
+  var _this = this;
+  this._add(function() {
+    var audio = document.createElement('audio');
+    audio.setAttribute("src", url);
+    audio.addEventListener('ended', function(){
+      _this._incrementDownloadCount();
+    }, false);
+    audio.muted = true;
+    audio.load();
+    audio.play();
+    audio.playbackRate = 10.0;
+
+    document.body.appendChild(audio);
+  });
+};
+
+pixelLab.Preload.prototype._downloadAjax = function(url) {
   var settings = {
     url: url
   };
@@ -82,3 +126,25 @@ pixelLab.Preload.prototype._doQueue = function() {
   this._queued = false;
   this._processQueue();
 };
+
+pixelLab.Preload._isImage = function(url){
+  return pixelLab.Preload._hasExtension(url, pixelLab.Preload._imageExtensions);
+};
+
+pixelLab.Preload._isAudio = function(url){
+  return pixelLab.Preload._hasExtension(url, pixelLab.Preload._audioExtensions);
+};
+
+pixelLab.Preload._hasExtension = function(url, extensions){
+  var value = false;
+  goog.array.forEach(extensions, function(ext){
+    ext = "." + ext;
+    if(goog.string.endsWith(url, ext)){
+      value = true;
+    }
+  });
+  return value;
+};
+
+pixelLab.Preload._imageExtensions = ['png','jpg'];
+pixelLab.Preload._audioExtensions = ['mp3','mp4'];
