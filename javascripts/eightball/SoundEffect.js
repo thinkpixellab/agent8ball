@@ -35,11 +35,11 @@ eightball.SoundEffect = function (location, simulCount) {
     document.body.appendChild(audio);
     this.m_audios[i] = audio;
     this.m_audios[i].location = location;
-    this.loadAudio(audio, location);
+    eightball.SoundEffect.loadAudio(audio, location);
   }
 };
 
-eightball.SoundEffect.prototype.loadAudio = function (audio, location) {
+eightball.SoundEffect.loadAudio = function (audio, location) {
   audio.setAttribute("src", location);
   audio.load();
 };
@@ -58,7 +58,7 @@ eightball.SoundEffect.prototype.play = function () {
   // play it (otherwise webkit has a hard time with short (<1s) sounds)
   if (this.m_isWebKit) {
     var location = this.m_audios[this.m_currSimul].location;
-    this.loadAudio(audio, location);
+    eightball.SoundEffect.loadAudio(audio, location);
   }
 
   // make sure we're at the start and then play
