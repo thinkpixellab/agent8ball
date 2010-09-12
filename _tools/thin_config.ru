@@ -10,9 +10,8 @@ module Rack
     end
 
     def call(env)
-      puts env['HTTP_RANGE']
       @status, @headers, @body = @app.call env
-      @headers['Expires'] = (Time.now + 60*60*24*365).to_s
+      # @headers['Expires'] = (Time.now + 60*60*24*365).to_s
       [@status, @headers, @body]
     end
   end
