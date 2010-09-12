@@ -1,28 +1,13 @@
 ﻿// a line to make the builder happy
 goog.provide('eightball.SoundEffect');
 
+goog.require('goog.string');
+
 /**
  @constructor
  @param {string} location
- @param {number} simulCount
  */
-eightball.SoundEffect = function (location, simulCount) {
-
-  /**
-  @private
-  */
-  this.m_audios = new Array();
-
-  /**
-  @private
-  */
-  this.m_maxSimul = simulCount;
-
-  /**
-  @private
-  */
-  this.m_currSimul = 0;
-
+eightball.SoundEffect = function (location) {
   /**
   @private
   */
@@ -31,14 +16,7 @@ eightball.SoundEffect = function (location, simulCount) {
   /**
   @private
   */
-  this.m_isWebKit = navigator.userAgent.toLowerCase().indexOf('webkit') > -1;
-
-  // create audio elements for each of the potential simultaneous plays; we add
-  // the audio elements directly to the document for maximum browser compatibility
-  for (var i = 0; i <= simulCount; i++) {
-    var audio = eightball.SoundEffect.createAudio(this.m_location);
-    this.m_audios[i] = audio;
-  }
+  this.m_isWebKit = false; //navigator.userAgent.toLowerCase().indexOf('webkit') > -1;
 };
 
 eightball.SoundEffect.createAudio = function(location){
@@ -54,14 +32,20 @@ eightball.SoundEffect.loadAudio = function (audio, location) {
 };
 
 eightball.SoundEffect.prototype.play = function () {
+  var location = this.m_location;
+  var matches = $('audio').filter(
+    function(index){
+      return goog.string.endsWith(this.src, location) && this.readyState == this.HAVE_ENOUGH_DATA;
+    });
 
-  // get the next audio
-  this.m_currSimul++;
-  if (this.m_currSimul >= this.m_maxSimul) {
-    this.m_currSimul = 0;
+  var audio;
+  if(matches.length){
+    audio = matches[0];
+    eightball.SoundEffect.loadAudio(audio, this.m_location);
   }
-  var audio = this.m_audios[this.m_currSimul];
-
+  else{
+    audio = eightball.SoundEffect.createAudio(this.m_location);
+  }
 
   // if this is a webkit browser, we need to reload the audio every time we
   // play it (otherwise webkit has a hard time with short (<1s) sounds)
@@ -76,6 +60,7 @@ eightball.SoundEffect.prototype.play = function () {
 
 };
 
+/*
 eightball.SoundEffect.watch = function(audioElement){
   if(console && console.log){
     var listener = function(event) {
@@ -91,10 +76,11 @@ eightball.SoundEffect.watch = function(audioElement){
 
 eightball.SoundEffect.inspect = function(audioElement){
   if(console && console.log){
-    var attributes = ['readyState','ended','networkState'];
+    var attributes = ['readyState','ended','networkState','HAVE_ENOUGH_DATA'];
     for(var i in attributes){
       var attr = attributes[i];
       console.log(attr, audioElement[attr]);
     }
   }
 };
+*/
