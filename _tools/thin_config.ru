@@ -5,11 +5,12 @@ puts ">>> Serving: #{root}"
 
 module Rack
   class LongLived
-    def initialize app
+    def initialize(app)
       @app = app
     end
 
-    def call env
+    def call(env)
+      puts env['HTTP_RANGE']
       @status, @headers, @body = @app.call env
       @headers['Expires'] = (Time.now + 60*60*24*365).to_s
       [@status, @headers, @body]
@@ -20,5 +21,7 @@ end
 use Rack::LongLived
 use Rack::CommonLogger
 use Rack::ContentLength
+use Rack::ShowExceptions
+use Rack::Lint
 
-run Rack::ShowExceptions.new(Rack::Lint.new(Rack::Directory.new("#{root}")))
+run Rack::Directory.new("#{root}")
