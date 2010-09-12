@@ -2,7 +2,7 @@
 goog.provide('eightball.SoundEffectManager');
 
 goog.require('eightball.SoundEffect');
-goog.require('goog.net.cookies');
+goog.require('eightball.Cookies');
 
 /**
  @constructor
@@ -38,9 +38,9 @@ eightball.SoundEffectManager.prototype.isSoundOn = function () {
 eightball.SoundEffectManager.prototype.toggleSound = function() {
   this.m_isSoundOn = !this.m_isSoundOn;
   if (this.m_isSoundOn) {
-    goog.net.cookies.set(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.ON);
+    eightball.Cookies.set(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.ON);
   } else {
-    goog.net.cookies.set(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.OFF);
+    eightball.Cookies.set(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.OFF);
   }
 };
 

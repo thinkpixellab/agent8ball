@@ -1,7 +1,7 @@
 ﻿// a line to make the builder happy
 goog.provide('eightball.Music');
 
-goog.require('goog.net.cookies');
+goog.require('eightball.Cookies');
 
 /**
  @constructor
@@ -39,12 +39,12 @@ eightball.Music.prototype.startMusic = function() {
   // add it to the document
   document.body.appendChild(this.m_music);
 
-  goog.net.cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.ON);
+  eightball.Cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.ON);
 };
 
 eightball.Music.prototype.stopMusic = function() {
   this._clearMusic();
-  goog.net.cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.OFF);
+  eightball.Cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.OFF);
 };
 
 eightball.Music.prototype.isMusicOn = function() {
