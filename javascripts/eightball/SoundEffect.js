@@ -67,3 +67,26 @@ eightball.SoundEffect.prototype.play = function () {
   return audio;
 
 };
+
+eightball.SoundEffect.watch = function(audioElement){
+  if(console && console.log){
+    var listener = function(event) {
+      console.log(this.src, event.type);
+      eightball.SoundEffect.inspect(this);
+    };
+    var events = ['loadstart','ended','error','waiting','play','progress','canplaythrough'];
+    for(var i in events){
+      audioElement.addEventListener(events[i], listener, true);
+    }
+  }
+};
+
+eightball.SoundEffect.inspect = function(audioElement){
+  if(console && console.log){
+    var attributes = ['readyState','ended','networkState'];
+    for(var i in attributes){
+      var attr = attributes[i];
+      console.log(attr, audioElement[attr]);
+    }
+  }
+};
