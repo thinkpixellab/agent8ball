@@ -26,17 +26,26 @@ eightball.SoundEffect = function (location, simulCount) {
   /**
   @private
   */
+  this.m_location = location;
+
+  /**
+  @private
+  */
   this.m_isWebKit = navigator.userAgent.toLowerCase().indexOf('webkit') > -1;
 
   // create audio elements for each of the potential simultaneous plays; we add
   // the audio elements directly to the document for maximum browser compatibility
   for (var i = 0; i <= simulCount; i++) {
-    var audio = document.createElement("audio");
-    document.body.appendChild(audio);
+    var audio = eightball.SoundEffect.createAudio(this.m_location);
     this.m_audios[i] = audio;
-    this.m_audios[i].location = location;
-    eightball.SoundEffect.loadAudio(audio, location);
   }
+};
+
+eightball.SoundEffect.createAudio = function(location){
+  var audio = document.createElement("audio");
+  document.body.appendChild(audio);
+  eightball.SoundEffect.loadAudio(audio, location);
+  return audio;
 };
 
 eightball.SoundEffect.loadAudio = function (audio, location) {
@@ -57,8 +66,7 @@ eightball.SoundEffect.prototype.play = function () {
   // if this is a webkit browser, we need to reload the audio every time we
   // play it (otherwise webkit has a hard time with short (<1s) sounds)
   if (this.m_isWebKit) {
-    var location = this.m_audios[this.m_currSimul].location;
-    eightball.SoundEffect.loadAudio(audio, location);
+    eightball.SoundEffect.loadAudio(audio, this.m_location);
   }
 
   // make sure we're at the start and then play
