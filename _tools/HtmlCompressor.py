@@ -36,8 +36,7 @@ class CssCompressor:
   def compress(self):
     
     # concat
-    self.concat_source = "css_all.css"
-    concat(self.sources, "css_all.css")
+    concat(self.sources, self.target)
     
     #compress
     run_command(self.get_compress_args)
@@ -48,7 +47,7 @@ class CssCompressor:
     
     tmp_file_path = get_tmp_file_name(self.target)
     args += ["-o", tmp_file_path]
-    args += [self.concat_source]
+    args += [self.target]
     return args, tmp_file_path, self.target
 
 class HtmlCompressor:
@@ -67,9 +66,11 @@ class HtmlCompressor:
     for element in css_elements:
       # remove originals
       element.parentNode.removeChild(element)
-    # concat, compress
-    concat(css_files, self.target_css)
     
+    # concat, compress
+    CssCompressor(css_files, self.target_css).compress()
+    
+    #add new element back into dom
     css_element = dom.createElement('link')
     css_element.setAttribute('rel', 'stylesheet')
     css_element.setAttribute('type', 'text/css')
