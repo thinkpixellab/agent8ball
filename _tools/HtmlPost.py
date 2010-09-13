@@ -81,4 +81,3 @@ def ensureHtmlElementsFromDom(dom):
     for element in dom.getElementsByTagName(element_name):
       element.appendChild(dom.createTextNode(''))
   
-  

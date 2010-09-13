@@ -12,6 +12,20 @@ html_compressor_args = ['java', '-jar', html_compressor_jar_path]
 yui_compressor_jar_path = os.path.join(current_file_dir, 'yuicompressor-2.4.2.jar')
 yui_compressor_args = ['java', '-jar', yui_compressor_jar_path]
 
+def appendAfterLast(sourceElement, targetElement, afterName = None):
+  if(afterName):
+    last = targetElement.getElementsByTagName(afterName).pop()
+  else:
+    last = None
+  
+  if(last):
+    last = last.nextSibling
+    
+  if(last):
+    targetElement.insertBefore(sourceElement,last)
+  else:
+    targetElement.appendChild(sourceElement)
+  
 def concat(source_files, destination_file):
   # create a tmp file
   tmp_file_path = get_tmp_file_name(destination_file)
@@ -78,7 +92,6 @@ class HtmlCompressor:
     
     # find js
     script_elements = HtmlPost.getScriptElementsFromDom(dom)
-    # remove originals
     # remove all script references that are compiled
     for element in script_elements:
       HtmlPost.process_script_element(element)
@@ -93,7 +106,7 @@ class HtmlCompressor:
     
     head = dom.getElementsByTagName('head')[0]
     # append compressed css
-    head.appendChild(css_element)
+    appendAfterLast(css_element, head, 'link')
     # append compiled js
     head.appendChild(compiledElement)
     
