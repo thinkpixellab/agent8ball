@@ -12,11 +12,6 @@ eightball.SoundEffect = function (location) {
   @private
   */
   this.m_location = location;
-
-  /**
-  @private
-  */
-  this.m_isWebKit = false; //navigator.userAgent.toLowerCase().indexOf('webkit') > -1;
 };
 
 eightball.SoundEffect.createAudio = function(location){
@@ -45,12 +40,6 @@ eightball.SoundEffect.prototype.play = function () {
   }
   else{
     audio = eightball.SoundEffect.createAudio(this.m_location);
-  }
-
-  // if this is a webkit browser, we need to reload the audio every time we
-  // play it (otherwise webkit has a hard time with short (<1s) sounds)
-  if (this.m_isWebKit) {
-    eightball.SoundEffect.loadAudio(audio, this.m_location);
   }
 
   audio.playbackRate = 1;
