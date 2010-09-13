@@ -12,11 +12,8 @@ eightball.SoundEffectManager = function() {
   /**
    @private
    */
-  this.m_sounds = new Array();
+  this.m_sounds = {};
 
-  /**
-   @private
-   */
   var cookieValue = goog.net.cookies.get(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.ON) == eightball.SoundEffectManager.s_CookieOnOffEnum.ON;
   this.m_isSoundOn = cookieValue;
 };
