@@ -21,6 +21,17 @@ def getScriptElementsFromDom(dom, exclude_http = True):
   else:
     return elements
 
+def getCSSElementsFromDom(dom, exclude_http = True):
+  # TODO: should really use xpath here, eh?
+  html = dom.getElementsByTagName('html')[0]
+  head = html.getElementsByTagName('head')[0]
+  elements = head.getElementsByTagName('link')
+  elements = filter(lambda e: e.hasAttribute('rel') and e.getAttribute('rel') == 'stylesheet', elements)
+  if(exclude_http):
+    return filter(lambda e: e.hasAttribute('href') and not(e.getAttribute('href').startswith("http://")) , elements)
+  else:
+    return elements
+
 def replaceJsFiles(source_html_file, target_html_file, compiled_js_file, source_js_files = None):
   compiled_js_file = fixSlashes(compiled_js_file)
   if source_js_files != None:

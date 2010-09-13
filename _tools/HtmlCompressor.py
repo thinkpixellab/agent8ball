@@ -52,17 +52,28 @@ class CssCompressor:
     return args, tmp_file_path, self.target
 
 class HtmlCompressor:
-  def __init__(self, source_html, target_js, target_html):
+  def __init__(self, source_html, target_html, target_js, target_css):
     self.source = source_html
     self.target_js = target_js
+    self.target_css = target_css
     self.target = target_html
   
   def compress(self):
     dom = minidom.parse(self.source)
     
     # find css
-    # remove originals
+    css_elements = HtmlPost.getCSSElementsFromDom(dom)
+    css_files = map(lambda e: e.getAttribute('href'), css_elements)
+    for element in css_elements:
+      # remove originals
+      element.parentNode.removeChild(element)
     # concat, compress
+    concat(css_files, self.target_css)
+    
+    css_element = dom.createElement('link')
+    css_element.setAttribute('rel', 'stylesheet')
+    css_element.setAttribute('type', 'text/css')
+    css_element.setAttribute('href', self.target_css)
     
     # find js
     script_elements = HtmlPost.getScriptElementsFromDom(dom)
@@ -71,14 +82,10 @@ class HtmlCompressor:
     for element in script_elements:
       HtmlPost.process_script_element(element)
     
-    
     # concat, compress
     script_elements_w_src = filter(lambda e: e.hasAttribute('src'), script_elements)
     source_files = map(lambda e: e.getAttribute('src'), script_elements_w_src)
     concat(source_files, self.target_js)
-    
-    
-    # append compressed css
     
     # append compressed js
     compiledElement = dom.createElement('script')
@@ -87,6 +94,7 @@ class HtmlCompressor:
     compiledElement.appendChild(dom.createTextNode(''))
     
     head = dom.getElementsByTagName('head')[0]
+    head.appendChild(css_element)
     head.appendChild(compiledElement)
     
     # write changed file to temp file

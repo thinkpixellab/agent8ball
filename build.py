@@ -22,7 +22,7 @@ app_compiled_path = os.path.join(js_path, "compiled.js")
 js_dirs = map(lambda dir: os.path.join(js_path, dir), ['box2d','eightball','helpers'])
 
 debug = False
-skip_build = False
+skip_build = True
 
 preload_closure = Closure(
   application_js_path = preload_js_path,
@@ -40,4 +40,4 @@ Closure(
   extern_files = [jquery_extern, preload_compiled_path],
 ).build_and_process('tmp/index_compiled_pre.html', 'index_compiled.html', debug, skip_build)
 
-HtmlCompressor('index_compiled.html', 'javascripts/compressed.js', 'index.html').compress()
+HtmlCompressor('index_compiled.html', 'index.html', 'javascripts/compressed.js', 'stylesheets/styles.css').compress()

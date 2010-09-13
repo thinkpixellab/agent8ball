@@ -1,0 +1,19 @@
+@font-face {
+  font-family: 'RadiolandRegular';
+  src: local('☺'), url('../fonts/radioland/RADIOLAND-webfont.woff') format('woff'), url('../fonts/radioland/RADIOLAND-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'MolotRegular';
+  src: local('☺'), url('../fonts/molot/Molot-webfont.woff') format('woff'), url('../fonts/molot/Molot-webfont.ttf') format('truetype'), url('../fonts/molot/Molot-webfont.svg#webfontKlnjAJ1f') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'CPMono_v07Bold';
+  src: url('CPMono_v07_Bold-webfont.eot');
+  src: local('☺'), url('../fonts/cpmono/CPMono_v07_Bold-webfont.woff') format('woff'), url('../fonts/cpmono/CPMono_v07_Bold-webfont.svg#webfont8SZ0NIeo') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
