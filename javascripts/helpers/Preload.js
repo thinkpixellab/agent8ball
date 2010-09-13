@@ -11,9 +11,6 @@ pixelLab.Preload = function(urls, progressCallback, completedCallback) {
   var _this = this;
   // config jquery ajax
   this._ajaxSettings = {
-    // cache: true, -> default
-    // async: true, -> default
-    // type: "GET", -> default
     'timeout': 1200000,
     'error': function(event, request, settings) {
       // even though there was an error, we want to update our count
@@ -38,27 +35,12 @@ pixelLab.Preload = function(urls, progressCallback, completedCallback) {
 };
 
 pixelLab.Preload.prototype._downloadFile = function(url) {
-  /*if(pixelLab.Preload._isImage(url)){
-    this._downloadImage(url);
-  }
-  else*/
   if(pixelLab.Preload._isAudio(url)){
     this._downloadAudio(url);
   }
   else{
     this._downloadAjax(url);
   }
-};
-
-pixelLab.Preload.prototype._downloadImage = function(url) {
-  var _this = this;
-  this._add(function() {
-    var cacheImage = document.createElement('img');
-    cacheImage.src = url;
-    $(cacheImage).load(function() {
-      _this._incrementDownloadCount();
-    });
-  });
 };
 
 pixelLab.Preload.prototype._downloadAudio = function(url) {
@@ -127,10 +109,6 @@ pixelLab.Preload.prototype._doQueue = function() {
   this._processQueue();
 };
 
-pixelLab.Preload._isImage = function(url){
-  return pixelLab.Preload._hasExtension(url, pixelLab.Preload._imageExtensions);
-};
-
 pixelLab.Preload._isAudio = function(url){
   return pixelLab.Preload._hasExtension(url, pixelLab.Preload._audioExtensions);
 };
@@ -146,5 +124,4 @@ pixelLab.Preload._hasExtension = function(url, extensions){
   return value;
 };
 
-pixelLab.Preload._imageExtensions = ['png','jpg'];
 pixelLab.Preload._audioExtensions = ['mp3','mp4'];
