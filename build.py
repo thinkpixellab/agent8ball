@@ -37,7 +37,7 @@ Closure(
   closure_dependencies = js_dirs + [application_js_path],
   deps_js_path = app_deps_path,
   compiled_js_path = app_compiled_path,
-  extern_files = [jquery_extern],
+  extern_files = [jquery_extern, preload_compiled_path],
 ).build_and_process('tmp/index_compiled_pre.html', 'index_compiled.html', debug, skip_build)
 
 HtmlCompressor('index_compiled.html', 'javascripts/compressed.js', 'index.html').compress()
