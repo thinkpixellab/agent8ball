@@ -249,8 +249,7 @@ var loadApp = function (skip_graphics) {
 
     poolTable.setBombNumber(game.bombNumber);
 
-  },
-  undefined, this);
+  });
 
   goog.events.listen(game, eightball.Game.EventType.BOMBTICK, function (e) {
 
@@ -269,7 +268,7 @@ var loadApp = function (skip_graphics) {
     if (sec == 19 || sec == 10) poolTable.increaseBombPulse();
 
 
-  }, undefined, this);
+  });
 
   goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function (e) {
     // hide the timer
@@ -296,8 +295,7 @@ var loadApp = function (skip_graphics) {
 
     }, 50);
 
-  },
-  undefined, this);
+  });
 
   goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function (e) {
     soundManager.play("explode");
@@ -342,38 +340,32 @@ var loadApp = function (skip_graphics) {
     }, 50);
 
 
-  },
-  undefined, this);
+  });
 
 
   // cuestick events
   goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_START, function () {
     $("#gamecontrolsclick").hide();
-  },
-  undefined, this);
+  });
 
 
   goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_STOP, function () {
     $("#gamecontrolsclick").show();
-  },
-  undefined, this);
+  });
 
 
   // sound events
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function (e) {
     soundManager.play("cuestick");
-  },
-  undefined, this);
+  });
 
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, function (e) {
     soundManager.play("break");
-  },
-  undefined, this);
+  });
 
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, function (e) {
     soundManager.play("cuehit");
-  },
-  undefined, this);
+  });
 
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, function (e) {
     goog.debug.LogManager.getRoot().info("velocity: " + e.velocity);
@@ -383,8 +375,7 @@ var loadApp = function (skip_graphics) {
     } else if (e.velocity > 20) {
       soundManager.play("quietball");
     }
-  },
-  undefined, this);
+  });
 
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.WALL, function (e) {
     if (e.velocity > 120) {
@@ -392,13 +383,11 @@ var loadApp = function (skip_graphics) {
     } else if (e.velocity > 40) {
       soundManager.play("quietwall");
     }
-  },
-  undefined, this);
+  });
 
   goog.events.listen(poolTable, eightball.PocketDropEvent.TYPE, function (e) {
     soundManager.play("pocket");
-  },
-  undefined, this);
+  });
 
   // calling reset after the game has been loaded fires the events we 
   // need to initialize everything for game play
