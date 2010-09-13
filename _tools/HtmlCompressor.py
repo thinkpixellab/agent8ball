@@ -87,14 +87,13 @@ class HtmlCompressor:
     source_files = map(lambda e: e.getAttribute('src'), script_elements_w_src)
     concat(source_files, self.target_js)
     
-    # append compressed js
     compiledElement = dom.createElement('script')
     compiledElement.setAttribute('src', self.target_js)
-    # needed to ensure xml output writes both open/close tags
-    compiledElement.appendChild(dom.createTextNode(''))
     
     head = dom.getElementsByTagName('head')[0]
+    # append compressed css
     head.appendChild(css_element)
+    # append compiled js
     head.appendChild(compiledElement)
     
     # write changed file to temp file
