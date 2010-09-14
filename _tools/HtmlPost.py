@@ -11,6 +11,25 @@ from Shared import *
 def fixSlashes(path):
   return string.replace(path,"\\","/")
 
+def append_analytics_files(source_html, target_html, analytics_files):
+  with open(source_html,'r') as input:
+    content = input.read()
+
+  partitions = content.partition('</body>')
+  
+  new_content = [partitions[0]]
+
+  for af in analytics_files:
+    with open(af,'r') as file:
+      new_content.append(file.read())
+
+  new_content += [partitions[1],partitions[2]]
+  
+  with open(target_html, 'w') as file:
+    file.writelines(new_content)
+  
+  ensureHtmlElementsFromFile(target_html)
+
 def getScriptElementsFromDom(dom, exclude_http = True):
   # TODO: should really use xpath here, eh?
   html = dom.getElementsByTagName('html')[0]

@@ -40,4 +40,6 @@ Closure(
   extern_files = [jquery_extern, preload_compiled_path],
 ).build_and_process('tmp/index_compiled_pre.html', 'index_compiled.html', debug, skip_build)
 
-HtmlCompressor('index_compiled.html', 'index.html', 'javascripts/compressed.js', 'stylesheets/styles.css').compress()
+HtmlPost.append_analytics_files('index_compiled.html', 'index_analytics.html', ['analytics/google.html','analytics/statCounter.html'])
+
+HtmlCompressor('index_analytics.html', 'index.html', 'javascripts/compressed.js', 'stylesheets/styles.css').compress()

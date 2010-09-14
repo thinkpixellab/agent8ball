@@ -112,6 +112,11 @@ class HtmlCompressor:
     self._tmp = get_tmp_file_name(self.source)
     writeXmlSansInstructions(dom, self._tmp)
     
+    with open(self._tmp,'r') as file:
+      contents = map(lambda x: x.strip(), file.readlines())
+    with open(self._tmp,'w') as file:
+      file.writelines(contents)
+    
     # compress html
     run_command(self.get_compress_args)
     HtmlPost.ensureHtmlElementsFromFile(self.target)
