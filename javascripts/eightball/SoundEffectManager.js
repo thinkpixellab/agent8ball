@@ -2,6 +2,7 @@
 goog.provide('eightball.SoundEffectManager');
 
 goog.require('eightball.Cookies');
+goog.require('pixelLab.Audio');
 
 /**
  @constructor
@@ -26,15 +27,15 @@ eightball.SoundEffectManager.prototype.add = function(name, soundEffect, opt_min
   var minNumber = 2;
   if(opt_minNumber) minNumber = opt_minNumber;
   this.m_sounds[name] = soundEffect;
-  var elements = eightball.SoundEffectManager._getElements(soundEffect);
+  var elements = pixelLab.Audio.getElements(soundEffect);
   for(var i = elements.length; i<minNumber; i++){
-    eightball.SoundEffectManager.createAudio(soundEffect);
+    pixelLab.Audio.create(soundEffect);
   }
 };
 
 eightball.SoundEffectManager.prototype.play = function(name) {
   if (this.isSoundOn()) {
-    return eightball.SoundEffectManager.play(this.m_sounds[name]);
+    return pixelLab.Audio.play(this.m_sounds[name]);
   }
 };
 
@@ -44,49 +45,6 @@ eightball.SoundEffectManager.prototype.toggleSound = function() {
   } else {
     eightball.Cookies.set(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.OFF);
   }
-};
-
-eightball.SoundEffectManager.createAudio = function(location){
-  var audio = document.createElement("audio");
-  document.body.appendChild(audio);
-  eightball.SoundEffectManager.loadAudio(audio, location);
-  return audio;
-};
-
-eightball.SoundEffectManager.loadAudio = function (audio, location) {
-  audio.setAttribute("src", location);
-  audio.load();
-};
-
-eightball.SoundEffectManager._getElements = function(location){
-  return $('audio').filter(
-    function(index){
-      return goog.string.endsWith(this.src, location);
-    });
-};
-
-eightball.SoundEffectManager.play = function (location) {
-  var matches = eightball.SoundEffectManager._getElements(location).filter(
-    function(index){
-      return this.readyState == this.HAVE_ENOUGH_DATA;
-    });
-
-  var audio;
-  if(matches.length){
-    audio = matches[0];
-    eightball.SoundEffectManager.loadAudio(audio, location);
-  }
-  else{
-    audio = eightball.SoundEffectManager.createAudio(location);
-  }
-
-  audio.playbackRate = 1;
-  audio.muted = false;
-
-  audio.play();
-
-  return audio;
-
 };
 
 /** 
@@ -104,28 +62,3 @@ eightball.SoundEffectManager.s_CookieOnOffEnum = {
   ON: 'on',
   OFF: 'off'
 };
-
-/*
-eightball.SoundEffect.watch = function(audioElement){
-  if(console && console.log){
-    var listener = function(event) {
-      console.log(this.src, event.type);
-      eightball.SoundEffect.inspect(this);
-    };
-    var events = ['loadstart','ended','error','waiting','play','progress','canplaythrough'];
-    for(var i in events){
-      audioElement.addEventListener(events[i], listener, true);
-    }
-  }
-};
-
-eightball.SoundEffect.inspect = function(audioElement){
-  if(console && console.log){
-    var attributes = ['readyState','ended','networkState','HAVE_ENOUGH_DATA'];
-    for(var i in attributes){
-      var attr = attributes[i];
-      console.log(attr, audioElement[attr]);
-    }
-  }
-};
-*/
