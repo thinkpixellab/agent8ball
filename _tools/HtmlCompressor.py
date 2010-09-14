@@ -30,13 +30,10 @@ def concat(source_files, destination_file):
   # create a tmp file
   tmp_file_path = get_tmp_file_name(destination_file)
   
-  destination = open(tmp_file_path,'wb')
-  
-  # append, append, append
-  for source_file in source_files:
-    shutil.copyfileobj(open(source_file,'rb'), destination)
-  
-  destination.close();
+  with open(tmp_file_path,'wb') as destination:
+    # append, append, append
+    for source_file in source_files:
+      shutil.copyfileobj(open(source_file,'rb'), destination)
   
   # move to destination file
   remove_if_exists(destination_file)
