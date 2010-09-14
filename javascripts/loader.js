@@ -40,7 +40,6 @@ $(document).ready(function() {
     'images/lighton.png',
     'images/loading.jpg',
     'images/loadingbg.png',
-    'images/loadingpg.png',
     'images/num1.png',
     'images/num10.png',
     'images/num11.png',
