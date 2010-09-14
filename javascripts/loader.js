@@ -3,7 +3,7 @@ goog.require('pixelLab.Preload');
 goog.require('eightball.application');
 
 /** @define {boolean} */
-var SKIP_PRELOAD = true;
+var SKIP_PRELOAD = false;
 
 $(document).ready(function() {
   // disable selection
@@ -94,10 +94,6 @@ $(document).ready(function() {
     'sounds/wallquiet.mp3'
     ];
 
-    var prog = function(perc) {
-      $('#loadingpg').width(237 * perc);
-    };
-
     var done = function() {
       $("#loadingbg").delay(500).fadeOut(700, loadApp);
     };
@@ -107,7 +103,7 @@ $(document).ready(function() {
 
     // load the ui (on a timer so that we start after fading in -- it looks weird otherwise
     setTimeout(function() {
-      new pixelLab.Preload(files, prog, done);
+      new pixelLab.Preload(files, done);
     },
     1500);
   }

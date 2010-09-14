@@ -3,29 +3,16 @@ goog.provide('pixelLab.Preload');
 goog.require('goog.string');
 goog.require('goog.array');
 goog.require('pixelLab.Audio');
+goog.require('goog.events');
 
 /**
  @constructor
+ @param {!Array.<!string>} urls
+ @param {!function()} completedCallback
  */
-pixelLab.Preload = function(urls, progressCallback, completedCallback) {
-
-  var _this = this;
-  // config jquery ajax
-  this._ajaxSettings = {
-    'timeout': 1200000,
-    'error': function(event, request, settings) {
-      // even though there was an error, we want to update our count
-      _this._incrementDownloadCount();
-    },
-    'success': function(data, textStatus, XMLHttpRequest) {
-      _this._incrementDownloadCount();
-    }
-  };
-
+pixelLab.Preload = function(urls, completedCallback) {
   this.itemsLoaded = 0;
   this.itemsTotal = urls.length;
-  this._complete = completedCallback;
-  this._progress = progressCallback;
 
   this._queued = false;
   this._queue = [];
@@ -33,46 +20,34 @@ pixelLab.Preload = function(urls, progressCallback, completedCallback) {
   for (var i = 0; i < urls.length; i++) {
     this._downloadFile(urls[i]);
   }
+  $(document).ready(function(){
+    completedCallback();
+  });
 };
 
 pixelLab.Preload.prototype._downloadFile = function(url) {
   if(pixelLab.Preload._isAudio(url)){
     this._downloadAudio(url);
   }
-  else{
-    this._downloadAjax(url);
+  else if(pixelLab.Preload._isImage(url)){
+    this._downloadImage(url);
   }
 };
 
 pixelLab.Preload.prototype._downloadAudio = function(url) {
   var _this = this;
   this._add(function() {
-    var audio = pixelLab.Audio.play(url, true, 100);
-    audio.addEventListener('ended', function(){
-      _this._incrementDownloadCount();
-    }, false);
+    pixelLab.Audio.create(url);
   });
 };
 
-pixelLab.Preload.prototype._downloadAjax = function(url) {
-  var settings = {
-    url: url
-  };
-  $.extend(settings, this._ajaxSettings);
+pixelLab.Preload.prototype._downloadImage = function(url) {
+  var _this = this;
   this._add(function() {
-    $.ajax(settings);
+    var img = document.createElement('img');
+    img.src = url;
+    document.body.appendChild(img);
   });
-};
-
-// update our counts and call the appropriate events
-pixelLab.Preload.prototype._incrementDownloadCount = function() {
-  this.itemsLoaded++;
-  this._percentComplete = this.itemsLoaded / this.itemsTotal;
-
-  this._progress.call(this, this._percentComplete);
-  if (this._percentComplete == 1.0) {
-    this._complete.call();
-  }
 };
 
 /**
@@ -107,6 +82,10 @@ pixelLab.Preload._isAudio = function(url){
   return pixelLab.Preload._hasExtension(url, pixelLab.Preload._audioExtensions);
 };
 
+pixelLab.Preload._isImage = function(url){
+  return pixelLab.Preload._hasExtension(url, pixelLab.Preload._imageExtensions);
+};
+
 pixelLab.Preload._hasExtension = function(url, extensions){
   var value = false;
   goog.array.forEach(extensions, function(ext){
@@ -118,4 +97,5 @@ pixelLab.Preload._hasExtension = function(url, extensions){
   return value;
 };
 
+pixelLab.Preload._imageExtensions = ['png', 'jpg'];
 pixelLab.Preload._audioExtensions = ['mp3','mp4'];
