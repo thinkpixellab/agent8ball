@@ -497,10 +497,13 @@ body {
 }
 
 #loadingpg {
-    width: 128px;
-    height: 15px;
-    margin-top: 280px;
-    margin-left: 14px;
+    width: 0px;
+    height: 10px;
+    background-image: url("../images/loadingpg.png");
+    background-repeat: no-repeat;
+    position: absolute;
+    margin-top: 270px;
+    margin-left: 36px;
 }
 
 #pixellab {

@@ -5,11 +5,11 @@ goog.require('eightball.application');
 /** @define {boolean} */
 var SKIP_PRELOAD = false;
 
-$(document).ready(function() {
+$(document).ready(function () {
   // disable selection
   // from http://aleembawany.com/2009/01/20/disable-selction-on-menu-items-with-this-jquery-extension/
-  $('body').each(function() {
-    this['onselectstart'] = function() {
+  $('body').each(function () {
+    this['onselectstart'] = function () {
       return false;
     };
     this.unselectable = "on";
@@ -93,16 +93,25 @@ $(document).ready(function() {
     'sounds/wallquiet.mp3'
     ];
 
-    var done = function() {
+    var done = function () {
       $("#loadingbg").delay(500).fadeOut(700, loadApp);
     };
 
     // show the preload ui
     $('#loadingbg').delay(500).fadeIn(700);
 
+
     // load the ui (on a timer so that we start after fading in -- it looks weird otherwise
-    setTimeout(function() {
+    setTimeout(function () {
       new pixelLab.Preload(files, done);
+
+      var percent = 0.0;
+      // start the timer
+      var progress = setInterval(function () {
+        percent += goog.math.randomInt(7) / 100;
+        if (percent >= 1.0) clearInterval(progress);
+        $('#loadingpg').width((237.0 * percent));
+      }, 75);
     },
     1500);
   }
