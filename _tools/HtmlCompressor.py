@@ -62,7 +62,7 @@ class CssCompressor:
     return args, tmp_file_path, self.target
 
 class HtmlCompressor:
-  def __init__(self, source_html, target_html, target_js, target_css):
+  def __init__(self, source_html, target_html, target_js, target_css = None):
     self.source = source_html
     self.target_js = target_js
     self.target_css = target_css
@@ -71,21 +71,22 @@ class HtmlCompressor:
   def compress(self):
     dom = minidom.parse(self.source)
     
-    # find css
-    css_elements = HtmlPost.getCSSElementsFromDom(dom)
-    css_files = map(lambda e: e.getAttribute('href'), css_elements)
-    for element in css_elements:
-      # remove originals
-      element.parentNode.removeChild(element)
+    if(self.target_css):
+      # find css
+      css_elements = HtmlPost.getCSSElementsFromDom(dom)
+      css_files = map(lambda e: e.getAttribute('href'), css_elements)
+      for element in css_elements:
+        # remove originals
+        element.parentNode.removeChild(element)
     
-    # concat, compress
-    CssCompressor(css_files, self.target_css).compress()
+      # concat, compress
+      CssCompressor(css_files, self.target_css).compress()
     
-    #add new element back into dom
-    css_element = dom.createElement('link')
-    css_element.setAttribute('rel', 'stylesheet')
-    css_element.setAttribute('type', 'text/css')
-    css_element.setAttribute('href', self.target_css)
+      #add new element back into dom
+      css_element = dom.createElement('link')
+      css_element.setAttribute('rel', 'stylesheet')
+      css_element.setAttribute('type', 'text/css')
+      css_element.setAttribute('href', self.target_css)
     
     # find js
     script_elements = HtmlPost.getScriptElementsFromDom(dom)
@@ -102,8 +103,9 @@ class HtmlCompressor:
     compiledElement.setAttribute('src', self.target_js)
     
     head = dom.getElementsByTagName('head')[0]
-    # append compressed css
-    appendAfterLast(css_element, head, 'link')
+    if(self.target_css):
+      # append compressed css
+      appendAfterLast(css_element, head, 'link')
     # append compiled js
     head.appendChild(compiledElement)
     
