@@ -69,6 +69,16 @@ b2World = function(worldAABB, gravity, doSleep) {
 
   var bd = new b2BodyDef();
   this.m_groundBody = this.CreateBody(bd);
+
+  /**
+   @type {!Array.<b2Pair>}
+   */
+  this.lastPairs = [];
+
+  /**
+   @type {boolean}
+   */
+  this.sleeping = false;
 };
 
 //~b2World(){
@@ -294,7 +304,8 @@ b2World.prototype.GetGroundBody = function() {
 };
 
 /**
- @return {!Array.<b2Pair>}
+ @param {number} dt
+ @param {number} iterations
  */
 b2World.prototype.Step = function(dt, iterations) {
 
@@ -411,7 +422,7 @@ b2World.prototype.Step = function(dt, iterations) {
     this.m_positionIterationCount = b2Math.b2Max(this.m_positionIterationCount, b2Island.m_positionIterationCount);
 
     if (this.m_allowSleep) {
-      island.UpdateSleep(dt);
+      this.sleeping = island.UpdateSleep(dt);
     }
 
     // Post solve cleanup.
@@ -434,9 +445,7 @@ b2World.prototype.Step = function(dt, iterations) {
     }
   }
 
-  return this.m_broadPhase.Commit();
-
-  //this.m_stackAllocator.Free(stack);
+  this.lastPairs = this.m_broadPhase.Commit();
 };
 
 // this.Query the world for all shapes that potentially overlap the

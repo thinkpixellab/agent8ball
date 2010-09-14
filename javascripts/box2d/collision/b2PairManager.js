@@ -334,7 +334,6 @@ b2PairManager.prototype.Commit = function() {
         pair.contactData = this.m_callback.PairAdded(proxy1.userData, proxy2.userData);
         contactPairs.push(pair.contactData);
         pair.SetFinal();
-        // console.debug(pair.userData);
       }
     }
   }

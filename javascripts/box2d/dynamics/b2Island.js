@@ -225,6 +225,11 @@ b2Island.prototype.Solve = function(step, gravity) {
     b.m_torque = 0.0;
   }
 };
+
+/*
+ @param {number} dt
+ @return {boolean}
+*/
 b2Island.prototype.UpdateSleep = function(dt) {
   var i = 0;
   var b;
@@ -259,6 +264,9 @@ b2Island.prototype.UpdateSleep = function(dt) {
       b = this.m_bodies[i];
       b.m_flags |= b2Body.e_sleepFlag;
     }
+    return true;
+  } else {
+    return false;
   }
 };
 b2Island.prototype.AddBody = function(body) {

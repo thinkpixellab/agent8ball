@@ -111,7 +111,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
 
   /**
    @private
-   @type {!Array}
+   @type {!Array.<!eightball.DroppingBall>}
    */
   this.m_droppingBalls = [];
 
@@ -589,13 +589,15 @@ eightball.PoolTable.prototype.getBallLocation = function(ballNumber) {
  */
 eightball.PoolTable.prototype._step = function() {
   this.m_fpsLogger.AddInterval();
-  var pairs = this.m_world.Step(1.0 / 30.0, 1);
-  this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
-  this.m_shadowCanvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y - 6, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
+  this.m_world.Step(1.0 / 30.0, 1);
 
-  this._drawWorld();
-  this._processPairs(pairs);
-  this._processBalls();
+  if(this._hasBomb() || !(this.m_world.sleeping)){
+    this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
+    this.m_shadowCanvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y - 6, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
+    this._drawWorld();
+    this._processPairs(this.m_world.lastPairs);
+    this._processBalls();
+  }
 };
 
 /**
@@ -725,7 +727,11 @@ eightball.PoolTable.prototype._drawWorld = function() {
   }
 };
 
-eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index, array) {
+/**
+ @param {!eightball.DroppingBall} droppingBall
+ @param {number} index
+*/
+eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index) {
   droppingBall.step();
   if (!droppingBall.GetIsDropped()) {
     var location = droppingBall.GetCurrentLocation();
@@ -745,6 +751,13 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index, 
 };
 
 /**
+ @return {boolean}
+*/
+eightball.PoolTable.prototype._hasBomb = function(){
+  return !!this.m_balls[this.m_bombNumber];
+};
+
+/**
  @private
  @param {!b2Body} ballBody
  */
@@ -757,9 +770,6 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   if (!isBomb) {
     ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
   } else if (this._isBombIgnited) {
-    //    var bombBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 16);
-    //    bombBrush.addColorStop(0.0, 'rgba(255,247,214,1.0)');
-    //    bombBrush.addColorStop(1.0, 'rgba(255,185,101,1.0)');
     ctx.fillStyle = 'rgba(237,218,193,0.5)'; // bombBrush;
   } else {
     ctx.fillStyle = eightball.PoolTable.s_colors.BOMBSHELL;

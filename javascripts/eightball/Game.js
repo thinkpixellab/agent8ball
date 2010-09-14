@@ -65,7 +65,7 @@ eightball.Game.prototype.reset = function() {
 
 };
 
-eightball.Game.prototype.resetTable = function () {
+eightball.Game.prototype.resetTable = function() {
   this.bombSecondsLeft = eightball.Game.s_bombSeconds + 2;
   this.bombNumber = goog.math.randomInt(15) + 1;
   this.bombNumber = 1; // for debug
@@ -131,7 +131,7 @@ eightball.Game.prototype._loadHighScore = function() {
   return highScoreValue;
 };
 
-eightball.Game.prototype._tickAction = function () {
+eightball.Game.prototype._tickAction = function() {
   if (this.gameState == eightball.Game.States.STARTED) {
 
     this.secondsLeft--;
@@ -146,14 +146,11 @@ eightball.Game.prototype._tickAction = function () {
         // update the game clock by removing 30 seconds but making sure we have at least
         // 10 seconds left on the clock (even if that theoretically would increase the 
         // the game time--because we count on this to clean up after the explosion)
-
         this.secondsLeft -= 30;
         if (this.secondsLeft < 10) this.secondsLeft = 10;
 
         this._dispatchGameEvent(eightball.Game.EventType.BOMBEXPLODED);
         this._isBombActive = false;
-
-
       }
     }
 
@@ -166,7 +163,6 @@ eightball.Game.prototype._tickAction = function () {
     } else {
       this._dispatchGameEvent(eightball.Game.EventType.TICK);
     }
-
 
   }
 };
@@ -182,7 +178,7 @@ eightball.Game.prototype._dispatchGameEvent = function(type) {
 /**
  @private
  */
-eightball.Game.prototype._pooltable_pocketDrop = function (e) {
+eightball.Game.prototype._pooltable_pocketDrop = function(e) {
 
   if (e.ballNumber != 0) {
     goog.debug.LogManager.getRoot().info("Pocket drop: " + e.ballNumber);
