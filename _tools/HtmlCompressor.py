@@ -6,7 +6,7 @@ import HtmlPost
 
 current_file_dir = os.path.relpath(os.path.dirname(__file__))
 
-html_compressor_jar_path = os.path.join(current_file_dir, 'htmlcompressor-0.9.1.jar')
+html_compressor_jar_path = os.path.join(current_file_dir, 'htmlcompressor-0.9.3.jar')
 html_compressor_args = ['java', '-jar', html_compressor_jar_path]
 
 yui_compressor_jar_path = os.path.join(current_file_dir, 'yuicompressor-2.4.2.jar')
