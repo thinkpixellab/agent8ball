@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{759FF6EB-1405-433F-A63E-8541553191FB}</ProjectGuid>
+    <ProjectTypeGuids>{F85E285D-A4E0-4152-9332-AB1D724D3325};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebRole</RootNamespace>
+    <AssemblyName>WebRole</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics" />
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime" />
+    <Reference Include="Microsoft.WindowsAzure.StorageClient" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Extensions\CdnExtensions.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebRole.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\cpmono\cpmono.css" />
+    <Content Include="fonts\molot\molot.css" />
+    <Content Include="fonts\radioland\radioland.css" />
+    <Content Include="Global.asax" />
+    <Content Include="images\ballvignette.png" />
+    <Content Include="images\bestscore.png" />
+    <Content Include="images\bombicon.png" />
+    <Content Include="images\bombstamp.png" />
+    <Content Include="images\boom.png" />
+    <Content Include="images\cue.png" />
+    <Content Include="images\gamefacebook.png" />
+    <Content Include="images\gamefacebookover.png" />
+    <Content Include="images\gameover.png" />
+    <Content Include="images\gametwitter.png" />
+    <Content Include="images\gametwitterover.png" />
+    <Content Include="images\howtoplay.png" />
+    <Content Include="images\instructions.png" />
+    <Content Include="images\letter.png" />
+    <Content Include="images\lightoff.png" />
+    <Content Include="images\lighton.png" />
+    <Content Include="images\loading.jpg" />
+    <Content Include="images\loadingbg.png" />
+    <Content Include="images\loadingpg.png" />
+    <Content Include="images\num1.png" />
+    <Content Include="images\num10.png" />
+    <Content Include="images\num11.png" />
+    <Content Include="images\num12.png" />
+    <Content Include="images\num13.png" />
+    <Content Include="images\num14.png" />
+    <Content Include="images\num15.png" />
+    <Content Include="images\num2.png" />
+    <Content Include="images\num3.png" />
+    <Content Include="images\num4.png" />
+    <Content Include="images\num5.png" />
+    <Content Include="images\num6.png" />
+    <Content Include="images\num7.png" />
+    <Content Include="images\num8.png" />
+    <Content Include="images\num9.png" />
+    <Content Include="images\pause.png" />
+    <Content Include="images\pixellab.png" />
+    <Content Include="images\pixellabover.png" />
+    <Content Include="images\progressbg.png" />
+    <Content Include="images\progressunit.png" />
+    <Content Include="images\score.png" />
+    <Content Include="images\smalllogo.png" />
+    <Content Include="images\speaker.png" />
+    <Content Include="images\start.png" />
+    <Content Include="images\startover.png" />
+    <Content Include="images\startoverlay.png" />
+    <Content Include="images\suspended.png" />
+    <Content Include="images\table.jpg" />
+    <Content Include="images\tableborder.png" />
+    <Content Include="images\thumbnail_fb.jpg" />
+    <Content Include="images\timerbg.png" />
+    <Content Include="images\timeremaining.png" />
+    <Content Include="images\transparent.png" />
+    <Content Include="images\triangle.png" />
+    <Content Include="images\vignette.png" />
+    <Content Include="images\wood.jpg" />
+    <Content Include="javascripts\compressed.js" />
+    <Content Include="sounds\activate.mp3" />
+    <Content Include="sounds\bombtick.mp3" />
+    <Content Include="sounds\bombtickfast.mp3" />
+    <Content Include="sounds\bombtickslow.mp3" />
+    <Content Include="sounds\break.mp3" />
+    <Content Include="sounds\clack.mp3" />
+    <Content Include="sounds\clackquiet.mp3" />
+    <Content Include="sounds\cuehit.mp3" />
+    <Content Include="sounds\cuestick.mp3" />
+    <Content Include="sounds\deactivate.mp3" />
+    <Content Include="sounds\explode.mp3" />
+    <Content Include="sounds\explodeloud.mp3" />
+    <Content Include="sounds\pocket.mp3" />
+    <Content Include="sounds\theme.mp4" />
+    <Content Include="sounds\typing.mp3" />
+    <Content Include="sounds\wall.mp3" />
+    <Content Include="sounds\wallquiet.mp3" />
+    <Content Include="stylesheets\styles.css" />
+    <Content Include="Views\Shared\NotFound.aspx" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Home\Index.aspx" />
+    <Content Include="Views\Shared\Error.aspx" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Controllers\ServiceDefinition.csdef" />
+    <Content Include="fonts\cpmono\CPMono_v07_Bold-webfont.eot" />
+    <Content Include="fonts\cpmono\CPMono_v07_Bold-webfont.svg" />
+    <Content Include="fonts\cpmono\CPMono_v07_Bold-webfont.woff" />
+    <Content Include="fonts\molot\Molot-webfont.svg" />
+    <Content Include="fonts\molot\Molot-webfont.ttf" />
+    <Content Include="fonts\molot\Molot-webfont.woff" />
+    <Content Include="fonts\radioland\RADIOLAND-webfont.ttf" />
+    <Content Include="fonts\radioland\RADIOLAND-webfont.woff" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target> -->
+  <Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3515</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
