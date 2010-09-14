@@ -5,7 +5,7 @@ module CDN
   end
 
   def self.process(root_dir, content_dirs, cdn_root)
-    section_pattern = '\\w+'
+    section_pattern = '\\w[\\w-]*'
     file_pattern = "#{section_pattern}(\\.#{section_pattern})*"
     path_pattern = "(#{content_dirs.join('|')})\/(#{section_pattern}/)*"
     dot_pattern = "(\.\.\/)*"
@@ -33,10 +33,13 @@ module CDN
         matches << {:from => match[0], :to => match[7]}
       end
   
+      puts 'huh?'
       matches.each do |match|
+        #puts match.inspect
         replace = "'#{cdn_root}#{match[:to]}'"
         content.gsub!(match[:from], replace)
       end
+      puts 'maybe'
   
       File.open(file, 'w') do |stream|
         stream.write(content)

@@ -5,7 +5,7 @@ def get_files
   files = ['index.html','favicon.ico','javascripts/compressed.js','stylesheets/styles.css']
   files += Dir.glob(File.join('images','*'))
   files += Dir.glob(File.join('sounds','*'))
-  files += Dir.glob(File.join('fonts','**','*'))
+  files += Dir.glob(File.join('stylesheets','*'))
   files = files.select{ |f| File.file?(f)}
   files
 end
@@ -60,7 +60,9 @@ namespace :deploy do
 
     Dir.chdir work_dir
 
-    CDN.process(work_dir, ['sounds','fonts','stylesheets'], 'http://d11iltncmfrvxt.cloudfront.net/')
+    CDN.process(work_dir, ['sounds'], 'http://sounds.agent8ball.com/')
+    CDN.process(work_dir, ['stylesheets'], 'http://d11iltncmfrvxt.cloudfront.net/')
+    CDN.process(work_dir, ['images'], 'http://static.agent8ball.com/')
     sh "git add ."
 
     sh "git commit -m 'copy_to_server from #{from} rev #{rev}'"
