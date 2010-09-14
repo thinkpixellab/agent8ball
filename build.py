@@ -11,34 +11,24 @@ closure_path = os.path.join(js_path, 'closure-library','closure')
 app_extern = os.path.join(js_path, 'externs', 'application_extern.js')
 jquery_extern = os.path.join(js_path, 'externs', 'jquery_extern.js')
 
-preload_js_path = os.path.join(js_path, 'app_preload.js')
-preload_deps_path = os.path.join(js_path, "preload_deps.js")
-preload_compiled_path = os.path.join(js_path, "preload_compiled.js")
+loader_js_path = os.path.join(js_path, 'loader.js')
+deps_path = os.path.join(js_path, "deps.js")
 
 application_js_path = os.path.join(js_path, 'application.js')
-app_deps_path = os.path.join(js_path, "deps.js")
-app_compiled_path = os.path.join(js_path, "compiled.js")
+compiled_path = os.path.join(js_path, "compiled.js")
 
 js_dirs = map(lambda dir: os.path.join(js_path, dir), ['box2d','eightball','helpers'])
 
 debug = False
-skip_build = True
-
-preload_closure = Closure(
-  application_js_path = preload_js_path,
-  closure_dependencies = js_dirs + [preload_js_path],
-  deps_js_path = preload_deps_path,
-  compiled_js_path = preload_compiled_path,
-  extern_files = [app_extern, jquery_extern],
-).build_and_process('index_source.html', 'tmp/index_compiled_pre.html', debug, skip_build)
+skip_build = False
 
 Closure(
-  application_js_path = application_js_path,
-  closure_dependencies = js_dirs + [application_js_path],
-  deps_js_path = app_deps_path,
-  compiled_js_path = app_compiled_path,
-  extern_files = [jquery_extern, preload_compiled_path],
-).build_and_process('tmp/index_compiled_pre.html', 'index_compiled.html', debug, skip_build)
+  application_js_path = loader_js_path,
+  closure_dependencies = js_dirs + [loader_js_path, application_js_path],
+  deps_js_path = deps_path,
+  compiled_js_path = compiled_path,
+  extern_files = [app_extern, jquery_extern],
+).build_and_process('index_source.html', 'index_compiled.html', debug, skip_build)
 
 HtmlPost.append_analytics_files('index_compiled.html', 'index_analytics.html', ['analytics/google.html','analytics/statCounter.html'])
 

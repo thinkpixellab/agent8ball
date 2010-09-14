@@ -1,5 +1,8 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
+// *******************************************************************************
+// APP LOGIC
+// *******************************************************************************
+goog.provide('eightball.application');
+
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.debug.LogManager');
@@ -16,13 +19,10 @@ goog.require('eightball.Game.GameState');
 
 var _game;
 
-// *******************************************************************************
-// APP LOGIC
-// *******************************************************************************
 /*
 @param {boolean=} skip_graphics
 */
-var loadApp = function (skip_graphics) {
+eightball.application.loadApp = function (skip_graphics) {
 
   // show debug
   //pixelLab.DebugDiv.enable();
@@ -463,4 +463,4 @@ var loadApp = function (skip_graphics) {
   });
 };
 
-goog.exportSymbol('loadApp', loadApp);
+goog.exportSymbol('loadApp', eightball.application.loadApp);

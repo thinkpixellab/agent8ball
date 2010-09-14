@@ -1,5 +1,6 @@
 ﻿// Handles pre-loading the app
 goog.require('pixelLab.Preload');
+goog.require('eightball.application');
 
 /** @define {boolean} */
 var SKIP_PRELOAD = false;
