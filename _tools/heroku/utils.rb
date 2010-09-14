@@ -1,32 +1,48 @@
-DIR = '/tmp/deploy20100913-173701'
-SERVER_ROOT = 'http://localhost:9292/'
-CONTENT_DIRS = %w(images fonts javascripts sounds stylesheets)
+module CDN
 
-def wrap(inner, left, right)
-  return "#{left}#{inner}#{right}"
-end
+  def self.wrap(inner, left, right)
+    return "#{left}#{inner}#{right}"
+  end
 
-section_pattern = '\\w+'
-file_pattern = "#{section_pattern}(\\.#{section_pattern})*"
-path_pattern = "(#{CONTENT_DIRS.join('|')})\/(#{section_pattern}/)*"
-dot_pattern = "(\.\.\/)*"
+  def self.process(root_dir, content_dirs, cdn_root)
+    section_pattern = '\\w+'
+    file_pattern = "#{section_pattern}(\\.#{section_pattern})*"
+    path_pattern = "(#{content_dirs.join('|')})\/(#{section_pattern}/)*"
+    dot_pattern = "(\.\.\/)*"
 
-Dir.chdir DIR
+    value = "#{dot_pattern}(#{path_pattern}#{file_pattern})"
+    options = [wrap(value,"'","'"), wrap(value,'"','"')]
+    options = options.join('|')
+    options = "(#{options})"
 
-host_file = 'index.html'
-static_files = Dir.glob('*/*.{js,css}')
+    file_matcher = Regexp.new(options)
 
-value = "#{dot_pattern}(#{path_pattern}#{file_pattern})"
-options = [wrap(value,"'","'"), wrap(value,'"','"')]
-options = options.join('|')
-options = "(#{options})"
+    host_file = 'index.html'
+    static_files = Dir.glob('*/*.{js,css}')
 
-file_matcher = Regexp.new(options)
+    Dir.chdir root_dir
 
-(static_files + [host_file]).each do |file|
+    (static_files + [host_file]).each do |file|
+
+      puts file
+      content = File.read(file)
+
+      matches = []
+      content.scan(file_matcher) do |match|
+        puts match.inspect
+        matches << {:from => match[0], :to => match[7]}
+      end
   
-  puts file
-  content = File.read(file)
-  match = content.scan(file_matcher).map{ |match| match[7] }
-  puts match
+      matches.each do |match|
+        replace = "'#{cdn_root}#{match[:to]}'"
+        content.gsub!(match[:from], replace)
+      end
+  
+      File.open(file, 'w') do |stream|
+        stream.write(content)
+      end
+  
+  
+    end
+  end
 end

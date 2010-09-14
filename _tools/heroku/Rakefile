@@ -1,3 +1,4 @@
+require 'utils'
 PROJECT_ROOT = File.expand_path('..','..')
 
 def get_files
@@ -58,7 +59,8 @@ namespace :deploy do
     end
 
     Dir.chdir work_dir
-    puts Dir.pwd
+
+    CDN.process(work_dir, ['sounds','fonts','stylesheets'], 'http://d11iltncmfrvxt.cloudfront.net/')
     sh "git add ."
 
     sh "git commit -m 'copy_to_server from #{from} rev #{rev}'"
