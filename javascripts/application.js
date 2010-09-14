@@ -13,6 +13,7 @@ goog.require('pixelLab.DebugDiv');
 goog.require('eightball.PoolTable');
 goog.require('eightball.Music');
 goog.require('eightball.SoundEffectManager');
+goog.require('eightball.SoundEffect');
 goog.require('eightball.Game');
 goog.require('eightball.Game.EventType');
 goog.require('eightball.Game.GameState');
@@ -41,21 +42,23 @@ eightball.application.loadApp = function (skip_graphics) {
 
   // sound
   var soundManager = new eightball.SoundEffectManager();
-  soundManager.add("break", "sounds/break.mp3");
-  soundManager.add("cuestick", "sounds/cuestick.mp3");
-  soundManager.add("ball", "sounds/clack.mp3");
-  soundManager.add("quietball", "sounds/clackquiet.mp3");
-  soundManager.add("wall", "sounds/wall.mp3");
-  soundManager.add("quietwall", "sounds/wallquiet.mp3");
-  soundManager.add("cuehit", "sounds/cuehit.mp3");
-  soundManager.add("pocket", "sounds/pocket.mp3");
-  soundManager.add("typing", "sounds/typing.mp3");
-  soundManager.add("activate", "sounds/activate.mp3");
-  soundManager.add("deactivate", "sounds/deactivate.mp3");
-  soundManager.add("bombtickslow", "sounds/bombtickslow.mp3");
-  soundManager.add("bombtick", "sounds/bombtick.mp3");
-  soundManager.add("bombtickfast", "sounds/bombtickfast.mp3");
-  soundManager.add("explode", "sounds/explode.mp3");
+
+  soundManager.add("break", new eightball.SoundEffect("sounds/break.mp3", 1));
+  soundManager.add("cuestick", new eightball.SoundEffect("sounds/cuestick.mp3", 1));
+  soundManager.add("ball", new eightball.SoundEffect("sounds/clack.mp3", 8));
+  soundManager.add("quietball", new eightball.SoundEffect("sounds/clackquiet.mp3", 8))
+  soundManager.add("wall", new eightball.SoundEffect("sounds/wall.mp3", 4));
+  soundManager.add("quietwall", new eightball.SoundEffect("sounds/wallquiet.mp3", 4));
+  soundManager.add("cuehit", new eightball.SoundEffect("sounds/cuehit.mp3", 1));
+  soundManager.add("pocket", new eightball.SoundEffect("sounds/pocket.mp3", 2));
+  soundManager.add("typing", new eightball.SoundEffect("sounds/typing.mp3", 1));
+  soundManager.add("activate", new eightball.SoundEffect("sounds/activate.mp3", 1));
+  soundManager.add("deactivate", new eightball.SoundEffect("sounds/deactivate.mp3", 1));
+  soundManager.add("bombtickslow", new eightball.SoundEffect("sounds/bombtickslow.mp3", 2));
+  soundManager.add("bombtick", new eightball.SoundEffect("sounds/bombtick.mp3", 2));
+  soundManager.add("bombtickfast", new eightball.SoundEffect("sounds/bombtickfast.mp3", 2));
+  soundManager.add("explode", new eightball.SoundEffect("sounds/explode.mp3", 1));
+
   window.soundManager = soundManager;
 
   // global elements
@@ -313,7 +316,7 @@ eightball.application.loadApp = function (skip_graphics) {
 
         poolTable.removeBomb();
 
-        document.getElementById("boom").style.left = left + "px" ;
+        document.getElementById("boom").style.left = left + "px";
         document.getElementById("boom").style.top = top + "px";
         //boom.css("left", left + "px");
         //boom.css("top", top + "px");

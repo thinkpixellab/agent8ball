@@ -3,7 +3,7 @@ goog.require('pixelLab.Preload');
 goog.require('eightball.application');
 
 /** @define {boolean} */
-var SKIP_PRELOAD = false;
+var SKIP_PRELOAD = true;
 
 $(document).ready(function() {
   // disable selection
