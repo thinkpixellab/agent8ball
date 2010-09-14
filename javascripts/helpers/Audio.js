@@ -22,7 +22,12 @@ pixelLab.Audio.getElements = function(location){
     });
 };
 
-pixelLab.Audio.play = function (location) {
+/**
+ @param {!string} location
+ @param {boolean=} opt_muted
+ @param {number=} opt_playbackRate
+*/
+pixelLab.Audio.play = function (location, opt_muted, opt_playbackRate) {
   var matches = pixelLab.Audio.getElements(location).filter(
     function(index){
       return this.readyState == this.HAVE_ENOUGH_DATA;
@@ -37,10 +42,12 @@ pixelLab.Audio.play = function (location) {
     audio = pixelLab.Audio.create(location);
   }
 
-  audio.playbackRate = 1;
-  audio.muted = false;
+  if(opt_muted) audio.muted = opt_muted;
 
   audio.play();
+  var rate = 1;
+  if(opt_playbackRate) rate = opt_playbackRate;
+  audio.playbackRate = rate;
 
   return audio;
 };

@@ -2,6 +2,7 @@ goog.provide('pixelLab.Preload');
 
 goog.require('goog.string');
 goog.require('goog.array');
+goog.require('pixelLab.Audio');
 
 /**
  @constructor
@@ -46,17 +47,10 @@ pixelLab.Preload.prototype._downloadFile = function(url) {
 pixelLab.Preload.prototype._downloadAudio = function(url) {
   var _this = this;
   this._add(function() {
-    var audio = document.createElement('audio');
-    audio.setAttribute("src", url);
+    var audio = pixelLab.Audio.play(url, true, 100);
     audio.addEventListener('ended', function(){
       _this._incrementDownloadCount();
     }, false);
-    audio.muted = true;
-    audio.load();
-    audio.play();
-    audio.playbackRate = 10.0;
-
-    document.body.appendChild(audio);
   });
 };
 
