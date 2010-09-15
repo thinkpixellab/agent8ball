@@ -33,7 +33,7 @@ eightball.Game = function (poolTable) {
 
   /**
   @private
-  @type {!bool}
+  @type {boolean}
   */
   this.m_bombDemoMode = false;
 
@@ -49,7 +49,7 @@ goog.inherits(eightball.Game, goog.events.EventTarget);
 
 eightball.Game.prototype.setBombDemoMode = function () {
   this.m_bombDemoMode = true;
-}
+};
 
 eightball.Game.prototype.reset = function() {
 
