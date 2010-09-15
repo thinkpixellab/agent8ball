@@ -473,7 +473,8 @@ eightball.application.loadApp = function (skip_graphics) {
 };
 
 eightball.application._isMac = function(){
-  return goog.string.contains(goog.userAgent.getUserAgentString(), 'Mac');
+  var agent = goog.userAgent.getUserAgentString();
+  return agent && goog.string.contains(agent, 'Mac');
 };
 
 goog.exportSymbol('loadApp', eightball.application.loadApp);
