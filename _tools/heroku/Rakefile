@@ -61,7 +61,6 @@ namespace :deploy do
     Dir.chdir work_dir
 
     CDN.process(work_dir, ['sounds'], 'http://sounds.agent8ball.com/')
-    CDN.process(work_dir, ['stylesheets'], 'http://d11iltncmfrvxt.cloudfront.net/')
     CDN.process(work_dir, ['images'], 'http://static.agent8ball.com/')
     sh "git add ."
 
