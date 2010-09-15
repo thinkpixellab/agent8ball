@@ -3,6 +3,8 @@
 // *******************************************************************************
 goog.provide('eightball.application');
 
+goog.require('goog.string');
+goog.require('goog.userAgent');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.debug.LogManager');
@@ -24,6 +26,10 @@ var _game;
 @param {boolean=} skip_graphics
 */
 eightball.application.loadApp = function (skip_graphics) {
+
+  if(eightball.application._isMac()){
+    $('#timers .digit').css('line-height','62px');
+  };
 
   // show debug
   //pixelLab.DebugDiv.enable();
@@ -464,6 +470,10 @@ eightball.application.loadApp = function (skip_graphics) {
   $(".soundtest").click(function () {
     soundManager.play(this.id);
   });
+};
+
+eightball.application._isMac = function(){
+  return goog.string.contains(goog.userAgent.getUserAgentString(), 'Mac');
 };
 
 goog.exportSymbol('loadApp', eightball.application.loadApp);
