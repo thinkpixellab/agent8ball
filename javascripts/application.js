@@ -27,8 +27,8 @@ var _game;
 */
 eightball.application.loadApp = function (skip_graphics) {
 
-  if(eightball.application._isMac()){
-    $('#timers .digit').css('line-height','62px');
+  if (eightball.application._isMac()) {
+    $('#timers .digit').css('line-height', '62px');
   };
 
   // show debug
@@ -414,6 +414,14 @@ eightball.application.loadApp = function (skip_graphics) {
   $(window).keypress(function (e) {
     // 114 -> 'r'
     if (e.which == 114) {
+      game.reset();
+    }
+  });
+
+  $(window).keypress(function (e) {
+    // 98 -> 'b'
+    if (e.which == 98) {
+      game.setBombDemoMode();
       game.reset();
     }
   });
