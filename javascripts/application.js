@@ -46,7 +46,7 @@ eightball.application.loadApp = function (skip_graphics) {
   soundManager.add("break", new eightball.SoundEffect("sounds/break.mp3", 1));
   soundManager.add("cuestick", new eightball.SoundEffect("sounds/cuestick.mp3", 1));
   soundManager.add("ball", new eightball.SoundEffect("sounds/clack.mp3", 5));
-  soundManager.add("quietball", new eightball.SoundEffect("sounds/clackquiet.mp3", 2))
+  soundManager.add("quietball", new eightball.SoundEffect("sounds/clackquiet.mp3", 2));
   soundManager.add("wall", new eightball.SoundEffect("sounds/wall.mp3", 3));
   soundManager.add("quietwall", new eightball.SoundEffect("sounds/wallquiet.mp3", 2));
   soundManager.add("cuehit", new eightball.SoundEffect("sounds/cuehit.mp3", 1));
