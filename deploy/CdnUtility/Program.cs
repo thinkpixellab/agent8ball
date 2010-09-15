@@ -18,7 +18,8 @@ namespace CdnUtility
             var staticBlobClient = GetStaticBlobClient();
 
             string cacheControlHeader = CloudBlobUtility.GetPublicCacheControlHeader(
-                TimeSpan.FromMinutes(5));
+                //TimeSpan.FromMinutes(5));
+                TimeSpan.FromHours(1));
 
             // set the headers for images and sounds
             CloudBlobUtility.EnsureStaticFileHeaders(
@@ -29,12 +30,8 @@ namespace CdnUtility
                 cacheControlHeader);
 
             // set headers for non-gziped js and css
-            var fontsContainer = staticBlobClient.GetContainerReference("fonts");
             var jsContainer = staticBlobClient.GetContainerReference("javascripts");
             var cssContainer = staticBlobClient.GetContainerReference("stylesheets");
-            CloudBlobUtility.EnsureStaticFileHeaders(
-                fontsContainer,
-                cacheControlHeader);
             CloudBlobUtility.EnsureStaticFileHeaders(
                 jsContainer,
                 cacheControlHeader);
@@ -43,9 +40,6 @@ namespace CdnUtility
                 cacheControlHeader);
 
             // create gzip versions for css and js files
-            CloudBlobUtility.EnsureGzipFiles(
-                fontsContainer,
-                cacheControlHeader);
             CloudBlobUtility.EnsureGzipFiles(
                 jsContainer,
                 cacheControlHeader);

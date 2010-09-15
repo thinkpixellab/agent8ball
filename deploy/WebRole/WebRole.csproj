@@ -80,9 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
-    <Content Include="fonts\cpmono\cpmono.css" />
-    <Content Include="fonts\molot\molot.css" />
-    <Content Include="fonts\radioland\radioland.css" />
     <Content Include="Global.asax" />
     <Content Include="images\ballvignette.png" />
     <Content Include="images\bestscore.png" />
@@ -90,6 +87,7 @@
     <Content Include="images\bombstamp.png" />
     <Content Include="images\boom.png" />
     <Content Include="images\cue.png" />
+    <Content Include="images\favicon.ico" />
     <Content Include="images\gamefacebook.png" />
     <Content Include="images\gamefacebookover.png" />
     <Content Include="images\gameover.png" />
@@ -139,7 +137,7 @@
     <Content Include="images\triangle.png" />
     <Content Include="images\vignette.png" />
     <Content Include="images\wood.jpg" />
-    <Content Include="javascripts\compressed.js" />
+    <Content Include="javascripts\compressed2.js" />
     <Content Include="sounds\activate.mp3" />
     <Content Include="sounds\bombtick.mp3" />
     <Content Include="sounds\bombtickfast.mp3" />
@@ -157,9 +155,12 @@
     <Content Include="sounds\typing.mp3" />
     <Content Include="sounds\wall.mp3" />
     <Content Include="sounds\wallquiet.mp3" />
+    <Content Include="stylesheets\fonts.css" />
     <Content Include="stylesheets\styles.css" />
     <Content Include="Views\Shared\NotFound.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -177,14 +178,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Controllers\ServiceDefinition.csdef" />
-    <Content Include="fonts\cpmono\CPMono_v07_Bold-webfont.eot" />
-    <Content Include="fonts\cpmono\CPMono_v07_Bold-webfont.svg" />
-    <Content Include="fonts\cpmono\CPMono_v07_Bold-webfont.woff" />
-    <Content Include="fonts\molot\Molot-webfont.svg" />
-    <Content Include="fonts\molot\Molot-webfont.ttf" />
-    <Content Include="fonts\molot\Molot-webfont.woff" />
-    <Content Include="fonts\radioland\RADIOLAND-webfont.ttf" />
-    <Content Include="fonts\radioland\RADIOLAND-webfont.woff" />
+    <Content Include="stylesheets\CPMono_v07_Bold-webfont.eot" />
+    <Content Include="stylesheets\CPMono_v07_Bold-webfont.svg" />
+    <Content Include="stylesheets\CPMono_v07_Bold-webfont.woff" />
+    <Content Include="stylesheets\Molot-webfont.svg" />
+    <Content Include="stylesheets\Molot-webfont.ttf" />
+    <Content Include="stylesheets\Molot-webfont.woff" />
+    <Content Include="stylesheets\RADIOLAND-webfont.ttf" />
+    <Content Include="stylesheets\RADIOLAND-webfont.woff" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

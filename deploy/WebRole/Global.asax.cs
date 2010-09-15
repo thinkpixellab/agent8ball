@@ -8,9 +8,6 @@ using WebRole.Extensions;
 
 namespace WebRole
 {
-    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-    // visit http://go.microsoft.com/?LinkId=9394801
-
     public class MvcApplication : System.Web.HttpApplication
     {
         public static void RegisterRoutes(RouteCollection routes)
@@ -20,7 +17,6 @@ namespace WebRole
             routes.IgnoreRoute("javascripts/{*path}");
             routes.IgnoreRoute("sounds/{*path}");
             routes.IgnoreRoute("images/{*path}");
-            routes.IgnoreRoute("fonts/{*path}");
 
             routes.MapRoute(
                 "Default", // Route name

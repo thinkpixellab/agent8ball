@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ServiceConfiguration serviceName="EightBall" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration">
   <Role name="WebRole">
-    <Instances count="1" />
+    <Instances count="20" />
     <ConfigurationSettings>
       <Setting name="DiagnosticsConnectionString" value="DefaultEndpointsProtocol=https;AccountName=eightballdiagnostics;AccountKey=RGSDpZVkT+6NopNVSlXIlsoW54puTNrdLUq97oaFUTnNxbFErbMsYrjr4sr4TjHLn4WWLU+BgojpNdOkgIMeoQ==" />
     </ConfigurationSettings>
