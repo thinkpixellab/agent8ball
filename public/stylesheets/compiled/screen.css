@@ -1,0 +1,665 @@
+/* line 14, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+
+/* line 17, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+body {
+  line-height: 1;
+  color: black;
+  background: white;
+}
+
+/* line 19, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 21, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  vertical-align: middle;
+}
+
+/* line 23, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 25, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: "" "";
+}
+/* line 96, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+}
+
+/* line 27, ../../../../../../.rvm/gems/ree-1.8.7-2010.02/gems/compass-0.10.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 1, ../../../app/stylesheets/_style.scss */
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+/* line 6, ../../../app/stylesheets/_style.scss */
+html {
+  height: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* line 13, ../../../app/stylesheets/_style.scss */
+body {
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* line 22, ../../../app/stylesheets/_style.scss */
+#vignette {
+  background-image: url('/images/wood.jpg?1283035990');
+  background-repeat: repeat;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+}
+
+/* line 32, ../../../app/stylesheets/_style.scss */
+#vignetteimg {
+  margin: 0px;
+  margin-bottom: -5px;
+  padding: 0px;
+  border: 0px;
+}
+
+/* line 39, ../../../app/stylesheets/_style.scss */
+.stretch {
+  width: 100%;
+  height: 100%;
+}
+
+/* line 44, ../../../app/stylesheets/_style.scss */
+.content {
+  width: 860px;
+  top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+/* line 52, ../../../app/stylesheets/_style.scss */
+#gamecontrolsdisplay {
+  display: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* line 59, ../../../app/stylesheets/_style.scss */
+#game {
+  display: none;
+}
+
+/* line 63, ../../../app/stylesheets/_style.scss */
+#tableborder {
+  background-image: url('/images/tableborder.png?1284415024');
+  background-repeat: no-repeat;
+  width: 1113px;
+  height: 497px;
+  position: absolute;
+  top: 100px;
+  left: -130px;
+}
+
+/* line 73, ../../../app/stylesheets/_style.scss */
+#table {
+  background-image: url('/images/table.jpg?1283035990');
+  background-repeat: no-repeat;
+  width: 847px;
+  height: 438px;
+  position: absolute;
+  top: 19px;
+  left: 137px;
+}
+
+/* line 83, ../../../app/stylesheets/_style.scss */
+#timers {
+  background-image: url('/images/timerbg.png?1284415024');
+  background-repeat: no-repeat;
+  font: 30px 'RadiolandRegular' , Arial, sans-serif;
+  color: #cb512c;
+  color: #b23711;
+  letter-spacing: 0;
+  width: 452px;
+  height: 67px;
+  position: absolute;
+  left: 10px;
+  top: 20px;
+}
+
+/* line 97, ../../../app/stylesheets/_style.scss */
+#timers .digit {
+  text-align: right;
+  position: absolute;
+  top: 18px;
+}
+
+/* line 103, ../../../app/stylesheets/_style.scss */
+#minutesremaining {
+  left: 28px;
+}
+
+/* line 107, ../../../app/stylesheets/_style.scss */
+#bombsecondstens {
+  left: 398px;
+  color: #d8850d;
+  display: none;
+}
+
+/* line 113, ../../../app/stylesheets/_style.scss */
+#bombsecondsones {
+  left: 418px;
+  color: #d8850d;
+  display: none;
+}
+
+/* line 119, ../../../app/stylesheets/_style.scss */
+#secondsremainingtens {
+  left: 58px;
+}
+
+/* line 123, ../../../app/stylesheets/_style.scss */
+#secondsremainingones {
+  left: 78px;
+}
+
+/* line 127, ../../../app/stylesheets/_style.scss */
+#bombicon {
+  background-image: url('/images/bombicon.png?1284415024');
+  background-repeat: no-repeat;
+  width: 39px;
+  height: 19px;
+  left: 360px;
+  top: 33px;
+  position: absolute;
+  display: none;
+}
+
+/* line 138, ../../../app/stylesheets/_style.scss */
+#score {
+  background-image: url('/images/score.png?1284415024');
+  background-repeat: no-repeat;
+  text-align: center;
+  font: 30px 'MolotRegular' , Arial, sans-serif;
+  color: #c34414;
+  letter-spacing: 0;
+  width: 81px;
+  height: 71px;
+  padding-top: 28px;
+  padding-left: 0px;
+  position: absolute;
+  top: 17px;
+  left: 759px;
+}
+
+/* line 154, ../../../app/stylesheets/_style.scss */
+#progress {
+  background-image: url('/images/progressunit.png?1284415024');
+  background-repeat: repeat-x;
+  position: absolute;
+  top: 33px;
+  left: 113px;
+  width: 210px;
+  height: 34px;
+}
+
+/* line 164, ../../../app/stylesheets/_style.scss */
+#bestscore {
+  background-image: url('/images/bestscore.png?1284415024');
+  background-repeat: no-repeat;
+  text-align: center;
+  font: 22px 'MolotRegular' , Arial, sans-serif;
+  color: #47341d;
+  letter-spacing: 0;
+  width: 135px;
+  height: 118px;
+  padding-top: 56px;
+  padding-left: 2px;
+  position: absolute;
+  top: -6px;
+  left: 653px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* line 184, ../../../app/stylesheets/_style.scss */
+#soundclick {
+  left: 640px;
+  top: 583px;
+  position: absolute;
+  width: 210px;
+  height: 58px;
+  background: transparent;
+}
+
+/* line 193, ../../../app/stylesheets/_style.scss */
+#musicbuttonclick {
+  position: absolute;
+  height: 20px;
+  width: 65px;
+  top: 20px;
+  cursor: pointer;
+}
+
+/* line 201, ../../../app/stylesheets/_style.scss */
+#soundsbuttonclick {
+  position: absolute;
+  height: 20px;
+  width: 80px;
+  top: 20px;
+  left: 120px;
+  cursor: pointer;
+}
+
+/* line 210, ../../../app/stylesheets/_style.scss */
+#sounds {
+  left: 640px;
+  top: 583px;
+  position: absolute;
+  background-image: url('/images/speaker.png?1284415024');
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 210px;
+  height: 58px;
+}
+
+/* line 221, ../../../app/stylesheets/_style.scss */
+#musicbutton {
+  position: absolute;
+  height: 20px;
+  width: 65px;
+  top: 20px;
+  cursor: pointer;
+}
+
+/* line 229, ../../../app/stylesheets/_style.scss */
+#musicbutton img {
+  position: absolute;
+  margin-top: 1px;
+}
+
+/* line 234, ../../../app/stylesheets/_style.scss */
+#soundsbutton {
+  position: absolute;
+  height: 20px;
+  width: 80px;
+  top: 20px;
+  left: 120px;
+  cursor: pointer;
+}
+
+/* line 243, ../../../app/stylesheets/_style.scss */
+#smalllogo {
+  left: 5px;
+  top: 595px;
+  position: absolute;
+  background-image: url('/images/smalllogo.png?1284415024');
+  background-repeat: no-repeat;
+  width: 237px;
+  height: 42px;
+}
+
+/* line 253, ../../../app/stylesheets/_style.scss */
+#instructions {
+  left: 274px;
+  top: 598px;
+  position: absolute;
+  background-image: url('/images/instructions.png?1284415024');
+  background-repeat: no-repeat;
+  width: 96px;
+  height: 30px;
+}
+
+/* line 263, ../../../app/stylesheets/_style.scss */
+#instructionsclick {
+  left: 274px;
+  top: 598px;
+  position: absolute;
+  background: transparent;
+  width: 96px;
+  height: 30px;
+  cursor: pointer;
+}
+
+/* line 273, ../../../app/stylesheets/_style.scss */
+#pause {
+  left: 380px;
+  top: 579px;
+  position: absolute;
+  background-image: url('/images/pause.png?1284415024');
+  background-repeat: no-repeat;
+  width: 89px;
+  height: 71px;
+}
+
+/* line 283, ../../../app/stylesheets/_style.scss */
+#pauseclick {
+  left: 380px;
+  top: 579px;
+  position: absolute;
+  background: transparent;
+  width: 89px;
+  height: 71px;
+  cursor: pointer;
+}
+
+/* line 293, ../../../app/stylesheets/_style.scss */
+#messageoverlay {
+  top: -200px;
+}
+
+/* line 297, ../../../app/stylesheets/_style.scss */
+#startover {
+  left: 492px;
+  top: 598px;
+  position: absolute;
+  background-image: url('/images/startover.png?1284415024');
+  background-repeat: no-repeat;
+  width: 83px;
+  height: 30px;
+}
+
+/* line 307, ../../../app/stylesheets/_style.scss */
+#startoverclick {
+  left: 492px;
+  top: 598px;
+  position: absolute;
+  background: transparent;
+  width: 83px;
+  height: 30px;
+  cursor: pointer;
+}
+
+/* line 317, ../../../app/stylesheets/_style.scss */
+#soundsbutton img {
+  position: absolute;
+  margin-left: 69px;
+  margin-top: 1px;
+}
+
+/* line 323, ../../../app/stylesheets/_style.scss */
+#demo_canvas {
+  left: 7px;
+  top: 6px;
+  position: absolute;
+}
+
+/* line 329, ../../../app/stylesheets/_style.scss */
+#cue_canvas {
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background-image: url('/images/transparent.png?1284415024');
+}
+
+/* line 336, ../../../app/stylesheets/_style.scss */
+#boom {
+  background-image: url('/images/boom.png?1284418336');
+  position: absolute;
+  width: 277px;
+  height: 226px;
+  display: none;
+}
+
+/* line 344, ../../../app/stylesheets/_style.scss */
+#overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  z-index: 100;
+  background: #000000;
+  opacity: 0.5;
+  display: none;
+}
+
+/* line 356, ../../../app/stylesheets/_style.scss */
+.overlaymessage {
+  font: 60px 'MolotRegular' , Arial, sans-serif;
+  color: #ebd09c;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-align: center;
+  position: absolute;
+  top: 280px;
+  width: 860px;
+}
+
+/* line 367, ../../../app/stylesheets/_style.scss */
+#loading {
+  z-index: 400;
+}
+
+/* line 371, ../../../app/stylesheets/_style.scss */
+#start {
+  z-index: 500;
+  display: none;
+  background-image: url('/images/letter.png?1284415024');
+  background-repeat: no-repeat;
+  width: 424px;
+  height: 546px;
+  margin-top: 60px;
+  left: 240px;
+  text-align: center;
+}
+
+/* line 383, ../../../app/stylesheets/_style.scss */
+#startmessage {
+  background-image: url('/images/startoverlay.png?1284415024');
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 120px;
+  left: 55px;
+  font: 13px/16px "CPMono_v07Bold", Arial, sans-serif;
+  text-align: left;
+  width: 258px;
+  height: 311px;
+  color: #322c25;
+  padding-top: 15px;
+}
+
+/* line 397, ../../../app/stylesheets/_style.scss */
+#resume {
+  z-index: 500;
+  display: none;
+  background-image: url('/images/suspended.png?1284418336');
+  background-repeat: no-repeat;
+  width: 430px;
+  height: 311px;
+  margin-top: 120px;
+  left: 240px;
+  text-align: center;
+}
+
+/* line 409, ../../../app/stylesheets/_style.scss */
+#howtoplay {
+  z-index: 500;
+  left: 49px;
+  margin-top: 137px;
+  text-align: center;
+  background-image: url('/images/howtoplay.png?1284415024');
+  background-repeat: no-repeat;
+  width: 757px;
+  height: 347px;
+  cursor: pointer;
+  display: none;
+}
+
+/* line 425, ../../../app/stylesheets/_style.scss */
+#gameover {
+  z-index: 500;
+  display: none;
+  background-image: url('/images/gameover.png?1284415024');
+  background-repeat: no-repeat;
+  width: 402px;
+  height: 339px;
+  margin-top: 120px;
+  left: 240px;
+  text-align: center;
+}
+
+/* line 437, ../../../app/stylesheets/_style.scss */
+#gameoverscore {
+  position: absolute;
+  top: 130px;
+  width: 402px;
+  text-align: center;
+  font: 96px 'MolotRegular' , Arial, sans-serif;
+  color: #352716;
+}
+
+/* line 447, ../../../app/stylesheets/_style.scss */
+#gameovertwitter {
+  position: absolute;
+  top: 275px;
+  left: 127px;
+  background-image: url('/images/gametwitter.png?1284415024');
+  background-repeat: no-repeat;
+  width: 31px;
+  height: 31px;
+}
+
+/* line 457, ../../../app/stylesheets/_style.scss */
+#gameovertwitter:hover {
+  background-image: url('/images/gametwitterover.png?1284415024');
+}
+
+/* line 461, ../../../app/stylesheets/_style.scss */
+#gameoverfacebook {
+  position: absolute;
+  top: 278px;
+  left: 163px;
+  background-image: url('/images/gamefacebook.png?1284415024');
+  background-repeat: no-repeat;
+  width: 29px;
+  height: 29px;
+}
+
+/* line 471, ../../../app/stylesheets/_style.scss */
+#gameoverfacebook:hover {
+  background-image: url('/images/gamefacebookover.png?1284415024');
+}
+
+/* line 475, ../../../app/stylesheets/_style.scss */
+#loadingbg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background-image: url('/images/loadingbg.png?1284415024');
+  background-repeat: repeat;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  display: none;
+}
+
+/* line 489, ../../../app/stylesheets/_style.scss */
+#loading {
+  width: 295px;
+  height: 283px;
+  background-image: url('/images/loading.jpg?1283035990');
+  background-repeat: no-repeat;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 200px;
+}
+
+/* line 499, ../../../app/stylesheets/_style.scss */
+#loadingpg {
+  width: 0px;
+  height: 10px;
+  background-image: url('/images/loadingpg.png?1284415024');
+  background-repeat: no-repeat;
+  position: absolute;
+  margin-top: 270px;
+  margin-left: 36px;
+}
+
+/* line 509, ../../../app/stylesheets/_style.scss */
+#pixellab {
+  display: block;
+  left: 320px;
+  top: 660px;
+  position: absolute;
+  background-image: url('/images/pixellab.png?1284415024');
+  background-repeat: no-repeat;
+  background-position: center top;
+  width: 193px;
+  height: 28px;
+}
+
+/* line 521, ../../../app/stylesheets/_style.scss */
+#pixellabclick {
+  display: block;
+  left: 320px;
+  top: 660px;
+  position: absolute;
+  background: transparent;
+  width: 193px;
+  height: 28px;
+}
+
+/* line 531, ../../../app/stylesheets/_style.scss */
+#pixellabclick:hover {
+  background-image: url('/images/pixellabover.png?1284418336');
+}
+
+/* line 535, ../../../app/stylesheets/_style.scss */
+#pixellabclick a {
+  display: block;
+  width: 193px;
+  height: 28px;
+}
+
+/* line 541, ../../../app/stylesheets/_style.scss */
+.hidden {
+  display: none;
+}
+
+/* line 545, ../../../app/stylesheets/_style.scss */
+html, body {
+  background: black;
+}

@@ -20,7 +20,7 @@ body {
 }
 
 #vignette {
-    background-image: url("../images/wood.jpg");
+    background-image: image-url('wood.jpg');
     background-repeat: repeat;
     position: absolute;
     width: 100%;
@@ -61,7 +61,7 @@ body {
 }
 
 #tableborder {
-    background-image: url("../images/tableborder.png");
+    background-image: image-url("tableborder.png");
     background-repeat: no-repeat;
     width: 1113px;
     height: 497px;
@@ -71,7 +71,7 @@ body {
 }
 
 #table {
-    background-image: url("../images/table.jpg");
+    background-image: image-url("table.jpg");
     background-repeat: no-repeat;
     width: 847px;
     height: 438px;
@@ -81,7 +81,7 @@ body {
 }
 
 #timers {
-    background-image: url("../images/timerbg.png");
+    background-image: image-url("timerbg.png");
     background-repeat: no-repeat;
     font: 30px 'RadiolandRegular' , Arial, sans-serif;
     color: #cb512c;
@@ -125,7 +125,7 @@ body {
 }
 
 #bombicon {
-    background-image: url("../images/bombicon.png");
+    background-image: image-url("bombicon.png");
     background-repeat: no-repeat;
     width: 39px;
     height: 19px;
@@ -136,7 +136,7 @@ body {
 }
 
 #score {
-    background-image: url("../images/score.png");
+    background-image: image-url("score.png");
     background-repeat: no-repeat;
     text-align: center;
     font: 30px 'MolotRegular' , Arial, sans-serif;
@@ -152,7 +152,7 @@ body {
 }
 
 #progress {
-    background-image: url("../images/progressunit.png");
+    background-image: image-url("progressunit.png");
     background-repeat: repeat-x;
     position: absolute;
     top: 33px;
@@ -162,7 +162,7 @@ body {
 }
 
 #bestscore {
-    background-image: url("../images/bestscore.png");
+    background-image: image-url("bestscore.png");
     background-repeat: no-repeat;
     text-align: center;
     font: 22px 'MolotRegular' , Arial, sans-serif;
@@ -211,7 +211,7 @@ body {
     left: 640px;
     top: 583px;
     position: absolute;
-    background-image: url("../images/speaker.png");
+    background-image: image-url("speaker.png");
     background-position: center;
     background-repeat: no-repeat;
     width: 210px;
@@ -244,7 +244,7 @@ body {
     left: 5px;
     top: 595px;
     position: absolute;
-    background-image: url("../images/smalllogo.png");
+    background-image: image-url("smalllogo.png");
     background-repeat: no-repeat;
     width: 237px;
     height: 42px;
@@ -254,7 +254,7 @@ body {
     left: 274px;
     top: 598px;
     position: absolute;
-    background-image: url("../images/instructions.png");
+    background-image: image-url("instructions.png");
     background-repeat: no-repeat;
     width: 96px;
     height: 30px;
@@ -274,7 +274,7 @@ body {
     left: 380px;
     top: 579px;
     position: absolute;
-    background-image: url("../images/pause.png");
+    background-image: image-url("pause.png");
     background-repeat: no-repeat;
     width: 89px;
     height: 71px;
@@ -298,7 +298,7 @@ body {
     left: 492px;
     top: 598px;
     position: absolute;
-    background-image: url("../images/startover.png");
+    background-image: image-url("startover.png");
     background-repeat: no-repeat;
     width: 83px;
     height: 30px;
@@ -330,11 +330,11 @@ body {
     left: 0px;
     top: 0px;
     position: absolute;
-    background-image: url("../images/transparent.png");
+    background-image: image-url("transparent.png");
 }
 
 #boom {
-    background-image: url("../images/boom.png");
+    background-image: image-url("boom.png");
     position: absolute;
     width: 277px;
     height: 226px;
@@ -371,7 +371,7 @@ body {
 #start {
     z-index: 500;
     display: none;
-    background-image: url("../images/letter.png");
+    background-image: image-url("letter.png");
     background-repeat: no-repeat;
     width: 424px;
     height: 546px;
@@ -381,7 +381,7 @@ body {
 }
 
 #startmessage {
-    background-image: url("../images/startoverlay.png");
+    background-image: image-url("startoverlay.png");
     background-repeat: no-repeat;
     position: absolute;
     top: 120px;
@@ -397,7 +397,7 @@ body {
 #resume {
     z-index: 500;
     display: none;
-    background-image: url("../images/suspended.png");
+    background-image: image-url("suspended.png");
     background-repeat: no-repeat;
     width: 430px;
     height: 311px;
@@ -413,7 +413,7 @@ body {
     text-align: center;
     
     
-    background-image: url("../images/howtoplay.png");
+    background-image: image-url("howtoplay.png");
     background-repeat: no-repeat;
     width: 757px;
     height: 347px;
@@ -425,7 +425,7 @@ body {
 #gameover {
     z-index: 500;
     display: none;
-    background-image: url("../images/gameover.png");
+    background-image: image-url("gameover.png");
     background-repeat: no-repeat;
     width: 402px;
     height: 339px;
@@ -448,28 +448,28 @@ body {
     position: absolute;
     top: 275px;
     left: 127px;
-    background-image: url("../images/gametwitter.png");
+    background-image: image-url("gametwitter.png");
     background-repeat: no-repeat;
     width: 31px;
     height: 31px;
 }
 
 #gameovertwitter:hover {
-    background-image: url("../images/gametwitterover.png");
+    background-image: image-url("gametwitterover.png");
 }
 
 #gameoverfacebook {
     position: absolute;
     top: 278px;
     left: 163px;
-    background-image: url("../images/gamefacebook.png");
+    background-image: image-url("gamefacebook.png");
     background-repeat: no-repeat;
     width: 29px;
     height: 29px;
 }
 
 #gameoverfacebook:hover {
-    background-image: url("../images/gamefacebookover.png");
+    background-image: image-url("gamefacebookover.png");
 }
 
 #loadingbg {
@@ -478,7 +478,7 @@ body {
     height: 100%;
     left: 0px;
     top: 0px;
-    background-image: url("../images/loadingbg.png");
+    background-image: image-url("loadingbg.png");
     background-repeat: repeat;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -489,7 +489,7 @@ body {
 #loading {
     width: 295px;
     height: 283px;
-    background-image: url("../images/loading.jpg");
+    background-image: image-url("loading.jpg");
     background-repeat: no-repeat;
     margin-left: auto;
     margin-right: auto;
@@ -499,7 +499,7 @@ body {
 #loadingpg {
     width: 0px;
     height: 10px;
-    background-image: url("../images/loadingpg.png");
+    background-image: image-url("loadingpg.png");
     background-repeat: no-repeat;
     position: absolute;
     margin-top: 270px;
@@ -511,7 +511,7 @@ body {
     left: 320px;
     top: 660px;
     position: absolute;
-    background-image: url("../images/pixellab.png");
+    background-image: image-url("pixellab.png");
     background-repeat: no-repeat;
     background-position: center top;
     width: 193px;
@@ -529,7 +529,7 @@ body {
 }
 
 #pixellabclick:hover {
-    background-image: url("../images/pixellabover.png");
+    background-image: image-url("pixellabover.png");
 }
 
 #pixellabclick a {
