@@ -1,0 +1,55 @@
+#loadingbg
+  %img.stretch{:alt => "", :src => image_path("vignette.png"), :style => "position: absolute; width: 100%; height: 100%; left: 0px; top: 0px;"}
+  #loading
+    #loadingpg
+#vignette.hidden
+  %img#vignetteimg.stretch{:alt => "", :src => image_path("vignette.png")}
+#gamecontrolsdisplay.content.hidden
+  #timers
+    #minutesremaining.digit 2
+    #secondsremainingtens.digit 0
+    #secondsremainingones.digit 0
+    #bombicon
+    #bombsecondstens.digit 3
+    #bombsecondsones.digit 0
+    #progress
+  #bestscore
+  #score
+  #smalllogo
+  #instructions
+  #pause
+  #startover
+  #sounds
+    #musicbutton
+      %img{:src => image_path("lightoff.png")}
+      %img#musicbuttonon{:src => image_path("lighton.png")}
+    #soundsbutton
+      %img{:src => image_path("lightoff.png")}
+      %img#soundsbuttonon{:src => image_path("lighton.png")}
+  #pixellab= link_to '', "http://thinkpixellab.com"
+#game.content.hidden
+  #tableborder
+    #table
+      #boom
+      %canvas#shadow_canvas
+      %canvas#demo_canvas
+%canvas#cue_canvas.hidden
+#gamecontrolsclick.content.hidden
+  #instructionsclick
+  #pauseclick
+  #startoverclick
+  #soundclick
+    #musicbuttonclick
+    #soundsbuttonclick
+  #pixellabclick= link_to '', "http://thinkpixellab.com"
+#overlay.hidden
+%div{:style => "width: 100%; height: 100%; left: 0px; top: 0px;"}
+  #messageoverlay.content
+    #start.overlaymessage
+      #startmessage
+      #resume.overlaymessage
+      #howtoplay.overlaymessage
+      #gameover.overlaymessage
+        #gameoverscore 00
+        #gameovertwitter
+        #gameoverfacebook
