@@ -18,18 +18,24 @@ goog.require('goog.net.cookies');
  @extends {goog.events.EventTarget}
  @param {!eightball.PoolTable} poolTable
  */
-eightball.Game = function(poolTable) {
+eightball.Game = function (poolTable) {
 
   /**
-   @private
-   */
+  @private
+  */
   this.m_timer = null;
 
   /**
-   @private
-   @type {!eightball.PoolTable}
-   */
+  @private
+  @type {!eightball.PoolTable}
+  */
   this.m_poolTable = poolTable;
+
+  /**
+  @private
+  @type {boolean}
+  */
+  this.m_bombDemoMode = false;
 
   goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop, undefined, this);
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, this._pooltable_ballHit, undefined, this);
@@ -40,6 +46,10 @@ eightball.Game = function(poolTable) {
 
 };
 goog.inherits(eightball.Game, goog.events.EventTarget);
+
+eightball.Game.prototype.setBombDemoMode = function () {
+  this.m_bombDemoMode = true;
+};
 
 eightball.Game.prototype.reset = function() {
 
@@ -65,10 +75,14 @@ eightball.Game.prototype.reset = function() {
 
 };
 
-eightball.Game.prototype.resetTable = function() {
+eightball.Game.prototype.resetTable = function () {
   this.bombSecondsLeft = eightball.Game.s_bombSeconds + 2;
-  this.bombNumber = goog.math.randomInt(15) + 1;
-  this.bombNumber = 1; // for debug
+  if (this.m_bombDemoMode) {
+    this.bombNumber = 1; 
+  }
+  else {
+    this.bombNumber = goog.math.randomInt(15) + 1;
+  }
   this._isBombFound = false;
   this._isBombActive = false;
   this.m_poolTable.rackEm();

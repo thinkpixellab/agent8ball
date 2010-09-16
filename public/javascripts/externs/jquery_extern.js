@@ -107,3 +107,29 @@ jQueryObject.prototype.css = function(nameOrProperties, opt_value) {};
  * @return {jQueryObject}
  */
 jQueryObject.prototype.each = function(callback) {};
+
+/**
+ * @param {string|Object} nameOrProperties
+ * @param {*=} opt_value
+ * @return {Object|jQueryObject}
+ */
+jQueryObject.prototype.attr = function(nameOrProperties, opt_value) {};
+
+/**
+ * @param {string} selector
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.appendTo = function(selector) {};
+
+/**
+ * @param {string} string
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.unbind = function(string){};
+
+/**
+ * @param {string} string
+ * @param {function()} func
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.bind = function(string, func){};
