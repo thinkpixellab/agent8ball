@@ -11,8 +11,8 @@
     = stylesheet_link_tag '/fonts/cpmono/cpmono', '/fonts/molot/molot', '/fonts/radioland/radioland'
     = stylesheet_link_tag 'compiled/screen'
     %script{:src => "http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js", :type => "text/javascript"}
-    %script{:src => "_tools/closure-library/closure/goog/base.js", :type => "text/javascript"}
-    %script{:src => "assets.js", :type => "text/javascript"}
+    = javascript_include_tag 'closure-library/base.js'
+      %script{:src => "assets.js", :type => "text/javascript"}
     = javascript_include_tag 'deps', 'loader'
     = csrf_meta_tag
   %body
