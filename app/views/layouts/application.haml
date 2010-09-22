@@ -7,9 +7,9 @@
     %meta{:content => "Agent 008, you must sink as many balls as possible before the timer runs out.  Watchout for bomb balls!", :name => "description"}/
     %link{:href => image_path('thumbnail_fb.jpg'), :rel => "image_src"}/
     %link{:href => "/favicon.ico", :rel => "shortcut icon"}/
+    = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'
     = stylesheet_link_tag '/fonts/cpmono/cpmono', '/fonts/molot/molot', '/fonts/radioland/radioland'
     = stylesheet_link_tag 'compiled/screen'
-    %script{:src => "http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.min.js", :type => "text/javascript"}
     = javascript_include_tag 'closure-library/base.js'
       %script{:src => "assets.js", :type => "text/javascript"}
     = javascript_include_tag 'deps', 'loader'
