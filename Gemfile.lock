@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/kevmoo/hassle.git
+  revision: bd0cd41aaceb002c5364de37d2975d58079f469f
+  ref: bd0cd41aaceb002c5
+  specs:
+    hassle (0.0.1)
+      haml
+      rack
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -94,6 +103,7 @@ DEPENDENCIES
   aws-s3
   compass (= 0.10.5)
   haml (= 3.0.18)
+  hassle!
   rails (= 3.0.0)
   ruby-debug
   twitter_oauth
