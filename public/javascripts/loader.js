@@ -4,7 +4,6 @@ goog.require('eightball.application');
 
 /** @define {boolean} */
 var SKIP_PRELOAD = false;
-var USE_CDN = true;
 
 $(document).ready(function () {
   // disable selection
@@ -22,69 +21,8 @@ $(document).ready(function () {
     loadApp(true);
   } else {
 
-    var imageLocation = USE_CDN ? 'http://static.agent8ball.com/images' : 'images';
-    var soundLocation = USE_CDN ? 'http://sounds.agent8ball.com/sounds' : 'sounds';
-
-    var images = [
-    imageLocation + '/ballvignette.png',
-    imageLocation + '/bestscore.png',
-    imageLocation + '/bombicon.png',
-    imageLocation + '/bombstamp.png',
-    imageLocation + '/boom.png',
-    imageLocation + '/cue.png',
-    imageLocation + '/gamefacebook.png',
-    imageLocation + '/gamefacebookover.png',
-    imageLocation + '/gameover.png',
-    imageLocation + '/gametwitter.png',
-    imageLocation + '/gametwitterover.png',
-    imageLocation + '/howtoplay.png',
-    imageLocation + '/instructions.png',
-    imageLocation + '/letter.png',
-    imageLocation + '/lightoff.png',
-    imageLocation + '/lighton.png',
-    imageLocation + '/loading.jpg',
-    imageLocation + '/loadingbg.png',
-    imageLocation + '/num1.png',
-    imageLocation + '/num10.png',
-    imageLocation + '/num11.png',
-    imageLocation + '/num12.png',
-    imageLocation + '/num13.png',
-    imageLocation + '/num14.png',
-    imageLocation + '/num15.png',
-    imageLocation + '/num2.png',
-    imageLocation + '/num3.png',
-    imageLocation + '/num4.png',
-    imageLocation + '/num5.png',
-    imageLocation + '/num6.png',
-    imageLocation + '/num7.png',
-    imageLocation + '/num8.png',
-    imageLocation + '/num9.png',
-    imageLocation + '/pause.png',
-    imageLocation + '/pixellab.png',
-    imageLocation + '/pixellabover.png',
-    imageLocation + '/progressbg.png',
-    imageLocation + '/progressunit.png',
-    imageLocation + '/score.png',
-    imageLocation + '/smalllogo.png',
-    imageLocation + '/speaker.png',
-    imageLocation + '/start.png',
-    imageLocation + '/startover.png',
-    imageLocation + '/startoverlay.png',
-    imageLocation + '/suspended.png',
-    imageLocation + '/table.jpg',
-    imageLocation + '/tableborder.png',
-    imageLocation + '/timerbg.png',
-    imageLocation + '/timeremaining.png',
-    imageLocation + '/transparent.png',
-    imageLocation + '/triangle.png',
-    imageLocation + '/vignette.png',
-    imageLocation + '/wood.jpg'
-    ];
-
-    var sounds = [
-    soundLocation + '/theme.mp4',
-    soundLocation + '/typing.mp3'
-    ];
+    var images = preloadAssets.images;
+    var sounds = preloadAssets.audios;
 
     var done = function () {
       $("#loadingbg").delay(500).fadeOut(700, loadApp);
@@ -92,7 +30,7 @@ $(document).ready(function () {
 
     var progress = function (percent) {
       $('#loadingpg').width((237.0 * percent));
-    }
+    };
 
     // show the preload ui
     $('#loadingbg').delay(500).fadeIn(700);

@@ -44,26 +44,27 @@ eightball.application.loadApp = function (skip_graphics) {
   $('#cue_canvas').delay(500).fadeIn(1000);
 
   // music
-  var musicManager = new eightball.Music("sounds/theme.mp4");
+  var themeUrl = preloadAssets.audio_map.theme;
+  var musicManager = new eightball.Music(themeUrl);
 
   // sound
   var soundManager = new eightball.SoundEffectManager();
 
-  soundManager.add("break", new eightball.SoundEffect("sounds/break.mp3", 1));
-  soundManager.add("cuestick", new eightball.SoundEffect("sounds/cuestick.mp3", 1));
-  soundManager.add("ball", new eightball.SoundEffect("sounds/clack.mp3", 5));
-  soundManager.add("quietball", new eightball.SoundEffect("sounds/clackquiet.mp3", 2));
-  soundManager.add("wall", new eightball.SoundEffect("sounds/wall.mp3", 3));
-  soundManager.add("quietwall", new eightball.SoundEffect("sounds/wallquiet.mp3", 2));
-  soundManager.add("cuehit", new eightball.SoundEffect("sounds/cuehit.mp3", 1));
-  soundManager.add("pocket", new eightball.SoundEffect("sounds/pocket.mp3", 2));
-  soundManager.add("typing", new eightball.SoundEffect("sounds/typing.mp3", 1));
-  soundManager.add("activate", new eightball.SoundEffect("sounds/activate.mp3", 1));
-  soundManager.add("deactivate", new eightball.SoundEffect("sounds/deactivate.mp3", 1));
-  soundManager.add("bombtickslow", new eightball.SoundEffect("sounds/bombtickslow.mp3", 1));
-  soundManager.add("bombtick", new eightball.SoundEffect("sounds/bombtick.mp3", 1));
-  soundManager.add("bombtickfast", new eightball.SoundEffect("sounds/bombtickfast.mp3", 1));
-  soundManager.add("explode", new eightball.SoundEffect("sounds/explode.mp3", 1));
+  soundManager.add("break", new eightball.SoundEffect("audios/break.mp3", 1));
+  soundManager.add("cuestick", new eightball.SoundEffect("audios/cuestick.mp3", 1));
+  soundManager.add("ball", new eightball.SoundEffect("audios/clack.mp3", 5));
+  soundManager.add("quietball", new eightball.SoundEffect("audios/clackquiet.mp3", 2));
+  soundManager.add("wall", new eightball.SoundEffect("audios/wall.mp3", 3));
+  soundManager.add("quietwall", new eightball.SoundEffect("audios/wallquiet.mp3", 2));
+  soundManager.add("cuehit", new eightball.SoundEffect("audios/cuehit.mp3", 1));
+  soundManager.add("pocket", new eightball.SoundEffect("audios/pocket.mp3", 2));
+  soundManager.add("typing", new eightball.SoundEffect("audios/typing.mp3", 1));
+  soundManager.add("activate", new eightball.SoundEffect("audios/activate.mp3", 1));
+  soundManager.add("deactivate", new eightball.SoundEffect("audios/deactivate.mp3", 1));
+  soundManager.add("bombtickslow", new eightball.SoundEffect("audios/bombtickslow.mp3", 1));
+  soundManager.add("bombtick", new eightball.SoundEffect("audios/bombtick.mp3", 1));
+  soundManager.add("bombtickfast", new eightball.SoundEffect("audios/bombtickfast.mp3", 1));
+  soundManager.add("explode", new eightball.SoundEffect("audios/explode.mp3", 1));
 
   window.soundManager = soundManager;
 
