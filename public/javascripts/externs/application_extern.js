@@ -8,4 +8,3 @@ var preloadAssets = {};
 
 preloadAssets.images = {};
 preloadAssets.audios = {};
-preloadAssets.audio_map = {};

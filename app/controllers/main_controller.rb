@@ -24,14 +24,9 @@ class MainController < ApplicationController
     assets[:images] = images
 
     # audios
-    audios = %w(theme.mp4 typing.mp3)
-    audios.map!{ |f| tag_helper.audio_path(f) }
-    assets[:audios] = audios
-
-    # audio map
-    audio_map = Dir.glob(File.join(Rails.root,'public','audios','*'))
-    audio_map.map!{ |f| File.basename(f) }
-    assets[:audio_map] = audio_map.inject(Hash.new) do |h,i|
+    audios = Dir.glob(File.join(Rails.root,'public','audios','*'))
+    audios.map!{ |f| File.basename(f) }
+    assets[:audios] = audios.inject(Hash.new) do |h,i|
       entry = { File.basename(i,File.extname(i)) => tag_helper.audio_path(i) }
       entry.merge(h)
     end

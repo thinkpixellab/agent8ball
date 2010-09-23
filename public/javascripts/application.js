@@ -43,11 +43,11 @@ eightball.application.loadApp = function (skip_graphics) {
   $('#cue_canvas').delay(500).fadeIn(1000);
 
   // music
-  var themeUrl = preloadAssets.audio_map['theme'];
+  var themeUrl = preloadAssets.audios['theme'];
   var musicManager = new eightball.Music(themeUrl);
 
   // sound
-  var soundManager = new eightball.SoundEffectManager(preloadAssets.audio_map);
+  var soundManager = new eightball.SoundEffectManager(preloadAssets.audios);
 
   soundManager.add("break", 1);
   soundManager.add("cuestick", 1);

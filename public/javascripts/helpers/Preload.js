@@ -19,10 +19,11 @@ pixelLab.Preload = function (imageUrls, soundUrls, progressCallback, completedCa
   $(document).ready(function () {
 
     // handle sounds
-    for (var i = 0; i < soundUrls.length; i++) {
+    var key;
+    for (key in soundUrls) {
       var audio = document.createElement("audio");
       document.body.appendChild(audio);
-      audio.setAttribute("src", soundUrls[i]);
+      audio.setAttribute("src", soundUrls[key]);
       audio.volume = 0;
       audio.load();
     }
@@ -36,7 +37,7 @@ pixelLab.Preload = function (imageUrls, soundUrls, progressCallback, completedCa
       overflow: "hidden"
     });
 
-    for (var key in imageUrls) {
+    for (key in imageUrls) {
       var imgLoad = $("<img></img>");
       $(imgLoad).unbind("load");
       $(imgLoad).bind("load", function () {
