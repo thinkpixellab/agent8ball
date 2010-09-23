@@ -1,10 +1,6 @@
 goog.provide('pixelLab.Preload');
 
-goog.require('goog.string');
-goog.require('goog.array');
 goog.require('goog.object');
-goog.require('pixelLab.Audio');
-goog.require('goog.events');
 
 /**
 @constructor
