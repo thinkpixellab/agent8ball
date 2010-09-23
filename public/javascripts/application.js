@@ -15,7 +15,6 @@ goog.require('pixelLab.DebugDiv');
 goog.require('eightball.PoolTable');
 goog.require('eightball.Music');
 goog.require('eightball.SoundEffectManager');
-goog.require('eightball.SoundEffect');
 goog.require('eightball.Game');
 goog.require('eightball.Game.EventType');
 goog.require('eightball.Game.GameState');
@@ -48,23 +47,23 @@ eightball.application.loadApp = function (skip_graphics) {
   var musicManager = new eightball.Music(themeUrl);
 
   // sound
-  var soundManager = new eightball.SoundEffectManager();
+  var soundManager = new eightball.SoundEffectManager(preloadAssets.audio_map);
 
-  soundManager.add("break", new eightball.SoundEffect("audios/break.mp3", 1));
-  soundManager.add("cuestick", new eightball.SoundEffect("audios/cuestick.mp3", 1));
-  soundManager.add("ball", new eightball.SoundEffect("audios/clack.mp3", 5));
-  soundManager.add("quietball", new eightball.SoundEffect("audios/clackquiet.mp3", 2));
-  soundManager.add("wall", new eightball.SoundEffect("audios/wall.mp3", 3));
-  soundManager.add("quietwall", new eightball.SoundEffect("audios/wallquiet.mp3", 2));
-  soundManager.add("cuehit", new eightball.SoundEffect("audios/cuehit.mp3", 1));
-  soundManager.add("pocket", new eightball.SoundEffect("audios/pocket.mp3", 2));
-  soundManager.add("typing", new eightball.SoundEffect("audios/typing.mp3", 1));
-  soundManager.add("activate", new eightball.SoundEffect("audios/activate.mp3", 1));
-  soundManager.add("deactivate", new eightball.SoundEffect("audios/deactivate.mp3", 1));
-  soundManager.add("bombtickslow", new eightball.SoundEffect("audios/bombtickslow.mp3", 1));
-  soundManager.add("bombtick", new eightball.SoundEffect("audios/bombtick.mp3", 1));
-  soundManager.add("bombtickfast", new eightball.SoundEffect("audios/bombtickfast.mp3", 1));
-  soundManager.add("explode", new eightball.SoundEffect("audios/explode.mp3", 1));
+  soundManager.add("break", 1);
+  soundManager.add("cuestick", 1);
+  soundManager.add("ball", 5);
+  soundManager.add("quietball", 2);
+  soundManager.add("wall", 3);
+  soundManager.add("quietwall", 2);
+  soundManager.add("cuehit", 1);
+  soundManager.add("pocket", 2);
+  soundManager.add("typing", 1);
+  soundManager.add("activate", 1);
+  soundManager.add("deactivate", 1);
+  soundManager.add("bombtickslow", 1);
+  soundManager.add("bombtick", 1);
+  soundManager.add("bombtickfast", 1);
+  soundManager.add("explode", 1);
 
   window.soundManager = soundManager;
 

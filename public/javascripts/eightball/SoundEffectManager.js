@@ -6,8 +6,9 @@ goog.require('goog.net.cookies');
 
 /**
  @constructor
+ @param {!Object} audioMap
  */
-eightball.SoundEffectManager = function() {
+eightball.SoundEffectManager = function(audioMap) {
 
   /**
    @private
@@ -17,12 +18,17 @@ eightball.SoundEffectManager = function() {
   /**
    @private
    */
+  this.m_audioMap = audioMap;
+
+  /**
+   @private
+   */
   var cookieValue = goog.net.cookies.get(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.ON) == eightball.SoundEffectManager.s_CookieOnOffEnum.ON;
   this.m_isSoundOn = cookieValue;
 };
 
-eightball.SoundEffectManager.prototype.add = function(name, soundEffect) {
-  this.m_sounds[name] = soundEffect;
+eightball.SoundEffectManager.prototype.add = function(name, count) {
+  this.m_sounds[name] = new eightball.SoundEffect(this.m_audioMap[name], count);
 };
 
 eightball.SoundEffectManager.prototype.play = function(name) {
@@ -31,7 +37,7 @@ eightball.SoundEffectManager.prototype.play = function(name) {
   }
 };
 
-eightball.SoundEffectManager.prototype.isSoundOn = function () {
+eightball.SoundEffectManager.prototype.isSoundOn = function() {
   return this.m_isSoundOn;
 };
 

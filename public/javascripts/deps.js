@@ -80,4 +80,4 @@ goog.addDependency("../../../helpers/DebugDiv.js", ['pixelLab.DebugDiv'], ['goog
 goog.addDependency("../../../helpers/fpsLogger.js", ['pixelLab.fpsLogger'], []);
 goog.addDependency("../../../helpers/Preload.js", ['pixelLab.Preload'], ['goog.string', 'goog.array', 'pixelLab.Audio', 'goog.events']);
 goog.addDependency("../../../loader.js", [], ['pixelLab.Preload', 'eightball.application']);
-goog.addDependency("../../../application.js", ['eightball.application'], ['goog.string', 'goog.userAgent', 'goog.events', 'goog.events.EventType', 'goog.debug.LogManager', 'goog.i18n.NumberFormat', 'pixelLab.DebugDiv', 'eightball.PoolTable', 'eightball.Music', 'eightball.SoundEffectManager', 'eightball.SoundEffect', 'eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState']);
+goog.addDependency("../../../application.js", ['eightball.application'], ['goog.string', 'goog.userAgent', 'goog.events', 'goog.events.EventType', 'goog.debug.LogManager', 'goog.i18n.NumberFormat', 'pixelLab.DebugDiv', 'eightball.PoolTable', 'eightball.Music', 'eightball.SoundEffectManager', 'eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState']);
