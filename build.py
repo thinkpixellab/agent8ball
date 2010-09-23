@@ -31,4 +31,4 @@ Closure(
   deps_js_path = deps_path,
   compiled_js_path = compiled_path,
   extern_files = [app_extern, jquery_extern],
-).do_makeDeps()
+).deps_and_compile(debug)
