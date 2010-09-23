@@ -10,8 +10,8 @@
     = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'
     = stylesheet_link_tag '/fonts/cpmono/cpmono', '/fonts/molot/molot', '/fonts/radioland/radioland'
     = stylesheet_link_tag 'compiled/screen'
-    = javascript_include_tag 'closure-library/base.js'
-      %script{:src => "assets.js", :type => "text/javascript"}
+    = javascript_include_tag '/assets.js'
+    %script{:type => 'text/javascript', :src => '/javascripts/closure-library/closure/goog/base.js'}
     = javascript_include_tag 'deps', 'loader'
     = csrf_meta_tag
   %body
