@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def application_js(compiled = false)
+  def game_js(compiled = false)
     items = [javascript_include_tag('/assets.js')]
     if compiled
       items << javascript_include_tag('compiled')

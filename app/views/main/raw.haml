@@ -1,3 +1,6 @@
+- content_for :head do
+  = game_js(params.has_key?('compiled'))
+
 #loadingbg
   %img.stretch{:alt => "", :src => image_path("vignette.png"), :style => "position: absolute; width: 100%; height: 100%; left: 0px; top: 0px;"}
   #loading

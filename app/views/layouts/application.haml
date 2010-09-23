@@ -5,12 +5,12 @@
     %title Agent 008 Ball
     %meta{:content => "IE=9", "http-equiv" => "X-UA-Compatible"}/
     %meta{:content => "Agent 008, you must sink as many balls as possible before the timer runs out.  Watchout for bomb balls!", :name => "description"}/
+    = csrf_meta_tag
     %link{:href => image_path('thumbnail_fb.jpg'), :rel => "image_src"}/
     %link{:href => "/favicon.ico", :rel => "shortcut icon"}/
     = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'
     = stylesheet_link_tag '/fonts/cpmono/cpmono', '/fonts/molot/molot', '/fonts/radioland/radioland'
     = stylesheet_link_tag 'compiled/screen'
-    = application_js(params.has_key?('compiled'))
-    = csrf_meta_tag
+    = yield :head
   %body
     = yield
