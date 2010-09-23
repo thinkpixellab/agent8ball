@@ -33,14 +33,4 @@ class MainController < ApplicationController
 
     render :js => "var preloadAssets = #{assets.to_json}"
   end
-
-  private
-    def map_assets(type)
-      map = Dir.glob(File.join(Rails.root,'public',type,'*'))
-      map.map!{ |f| File.basename(f) }
-      map.inject(Hash.new) do |h,i|
-        entry = { File.basename(i,File.extname(i)) => tag_helper.audio_path(i) }
-        entry.merge(h)
-      end
-    end
 end
