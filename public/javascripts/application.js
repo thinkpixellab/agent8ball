@@ -234,7 +234,7 @@ eightball.application.loadApp = function (skip_graphics) {
     window.open('http://twitter.com/home?status=I%20just%20scored%20' + game.score + '%20points%20on%20Agent008Ball!%20http%3A%2F%2Fagent8ball.com%20%23html5');
   });
 
-  var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement, shadowCanvasElement);
+  var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement, shadowCanvasElement, preloadAssets.images);
 
   // create a game object
   var game = new eightball.Game(poolTable);

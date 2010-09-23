@@ -30,9 +30,10 @@ goog.require('eightball.DroppingBall');
  @constructor
  @param {!HTMLCanvasElement} canvasElement
  @param {!HTMLCanvasElement} cueCanvasElement
+ @param {!Object.<string,string>} imageMap
  @extends {goog.events.EventTarget}
  */
-eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElement) {
+eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElement, imageMap) {
 
   // variables
   /**
@@ -138,20 +139,20 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
   this.m_cueImage.onload = function() {
     _this._updateCue();
   };
-  this.m_cueImage.src = "images/cue.png";
+  this.m_cueImage.src = imageMap['cue'];
 
   this.m_ballVignetteImage = new Image();
-  this.m_ballVignetteImage.src = "images/ballvignette.png";
+  this.m_ballVignetteImage.src = imageMap['ballvignette'];
 
   this.m_ballImages = {};
   for (var i = 1; i <= 15; i++) {
     var image = new Image();
-    image.src = "images/num" + i + ".png";
+    image.src = imageMap["num" + i];
     this.m_ballImages[i] = image;
   }
 
   this.m_bombStampImage = new Image();
-  this.m_bombStampImage.src = "images/bombstamp.png";
+  this.m_bombStampImage.src = imageMap['bombstamp'];
 
   // get local references for our canvas elements
   this.m_canvasElement = canvasElement;
