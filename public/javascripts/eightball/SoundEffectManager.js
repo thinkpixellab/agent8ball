@@ -6,7 +6,7 @@ goog.require('goog.net.cookies');
 
 /**
  @constructor
- @param {!Object} audioMap
+ @param {!Object.<string,string>} audioMap
  */
 eightball.SoundEffectManager = function(audioMap) {
 
@@ -17,6 +17,7 @@ eightball.SoundEffectManager = function(audioMap) {
 
   /**
    @private
+   @type {!Object.<string,string>}
    */
   this.m_audioMap = audioMap;
 

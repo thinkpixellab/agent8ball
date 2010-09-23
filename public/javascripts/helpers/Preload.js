@@ -2,6 +2,7 @@ goog.provide('pixelLab.Preload');
 
 goog.require('goog.string');
 goog.require('goog.array');
+goog.require('goog.object');
 goog.require('pixelLab.Audio');
 goog.require('goog.events');
 
@@ -14,7 +15,7 @@ goog.require('goog.events');
 */
 pixelLab.Preload = function (imageUrls, soundUrls, progressCallback, completedCallback) {
   this.imagesLoaded = 0;
-  this.imagesTotal = imageUrls.length;
+  this.imagesTotal = goog.object.getCount(imageUrls);
   this.hasLoaded = false;
 
   var _this = this;
@@ -22,7 +23,6 @@ pixelLab.Preload = function (imageUrls, soundUrls, progressCallback, completedCa
   $(document).ready(function () {
 
     // handle sounds
-
     for (var i = 0; i < soundUrls.length; i++) {
       var audio = document.createElement("audio");
       document.body.appendChild(audio);
@@ -33,7 +33,6 @@ pixelLab.Preload = function (imageUrls, soundUrls, progressCallback, completedCa
 
 
     // handle images
-
     _this.preloadDiv = document.createElement("div");
     $(_this.preloadDiv).css({
       height: "0px",
@@ -41,7 +40,7 @@ pixelLab.Preload = function (imageUrls, soundUrls, progressCallback, completedCa
       overflow: "hidden"
     });
 
-    for (var i = 0; i < _this.imagesTotal; i++) {
+    for (var key in imageUrls) {
       var imgLoad = $("<img></img>");
       $(imgLoad).unbind("load");
       $(imgLoad).bind("load", function () {
@@ -53,7 +52,7 @@ pixelLab.Preload = function (imageUrls, soundUrls, progressCallback, completedCa
           _this.hasLoaded = true;
         }
       });
-      $(imgLoad).attr("src", imageUrls[i]);
+      $(imgLoad).attr("src", imageUrls[key]);
       $(imgLoad).appendTo(this.preloadDiv);
     }
 

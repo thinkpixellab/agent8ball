@@ -17,7 +17,10 @@ class MainController < ApplicationController
     # images
     images = Dir.glob(File.join(Rails.root,'public','images','*'))
     images.map!{ |f| File.basename(f) }
-    images.map!{ |f| tag_helper.image_path(f) }
+    images = images.inject(Hash.new) do |h,i|
+      entry = { File.basename(i,File.extname(i)) => tag_helper.image_path(i) }
+      entry.merge(h)
+    end
     assets[:images] = images
 
     # audios
