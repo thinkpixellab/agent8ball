@@ -44,7 +44,7 @@ eightball.application.loadApp = function (skip_graphics) {
   $('#cue_canvas').delay(500).fadeIn(1000);
 
   // music
-  var themeUrl = preloadAssets.audio_map.theme;
+  var themeUrl = preloadAssets.audio_map['theme'];
   var musicManager = new eightball.Music(themeUrl);
 
   // sound
