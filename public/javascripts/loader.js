@@ -12,9 +12,7 @@ $(document).ready(function () {
     this['onselectstart'] = function () {
       return false;
     };
-    this.unselectable = "on";
-    jQuery(this).css('-moz-user-select', 'none');
-    jQuery(this).css('-webkit-user-select', 'none');
+    this.unselectable = 'on';
   });
 
   if (SKIP_PRELOAD) {

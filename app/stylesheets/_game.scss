@@ -1,11 +1,6 @@
-// TODO: fill these in
-
-
 #gamecontrolsdisplay {
+    @include no-select;
     display: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
 }
 
 #game {
@@ -114,6 +109,7 @@
 }
 
 #bestscore {
+    @include no-select;
     background-image: image-url("bestscore.png");
     background-repeat: no-repeat;
     text-align: center;
@@ -127,10 +123,6 @@
     position: absolute;
     top: -6px;
     left: 653px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-
 }
 
 #soundclick {
@@ -425,6 +417,7 @@
 }
 
 #loadingbg {
+    @include no-select;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -432,9 +425,6 @@
     top: 0px;
     background-image: image-url("loadingbg.png");
     background-repeat: repeat;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
     display: none;
 }
 
