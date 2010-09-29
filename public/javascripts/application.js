@@ -9,8 +9,10 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.debug.LogManager');
 goog.require('goog.i18n.NumberFormat');
+goog.require('goog.events.KeyCodes');
 
 goog.require('pixelLab.DebugDiv');
+goog.require('pixelLab.KeyBinding');
 
 goog.require('eightball.PoolTable');
 goog.require('eightball.Music');
@@ -411,19 +413,15 @@ eightball.application.loadApp = function (skip_graphics) {
   $(window).resize(updatePoolTableLayout);
   updatePoolTableLayout();
 
-  $(window).keypress(function (e) {
-    // 114 -> 'r'
-    if (e.which == 114) {
-      game.reset();
-    }
+  var keyBinding = new pixelLab.KeyBinding();
+
+  keyBinding.add(goog.events.KeyCodes.R, "Restart game", function(){
+    game.reset();
   });
 
-  $(window).keypress(function (e) {
-    // 98 -> 'b'
-    if (e.which == 98) {
-      game.setBombDemoMode();
-      game.reset();
-    }
+  keyBinding.add(goog.events.KeyCodes.B, "Bomb demo mode", function(){
+    game.setBombDemoMode();
+    game.reset();
   });
 
   var updateMusicButton = function () {
