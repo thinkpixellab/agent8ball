@@ -133,3 +133,10 @@ jQueryObject.prototype.unbind = function(string){};
  * @return {jQueryObject}
  */
 jQueryObject.prototype.bind = function(string, func){};
+
+/**
+ * @param {boolean} opt_clearQueue
+ * @param {boolean} opt_gotoEnd
+ * @return {jQueryObject}
+ */
+jQueryObject.prototype.stop = function(opt_clearQueue, opt_gotoEnd) {};
