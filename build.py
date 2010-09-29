@@ -19,10 +19,7 @@ deps_path = os.path.join(js_path, 'deps.js')
 application_js_path = os.path.join(js_path, 'application.js')
 compiled_path = os.path.join(js_path, "compiled.js")
 
-js_dirs = map(lambda x: os.path.join(js_path, x), ['box2d','eightball','helpers'])
-
-debug = False
-skip_build = False
+js_dirs = map(lambda x: os.path.join(js_path, x), ['box2d','eightball','pixelLab'])
 
 Closure(
   closure_path = closure_path,
@@ -31,4 +28,4 @@ Closure(
   deps_js_path = deps_path,
   compiled_js_path = compiled_path,
   extern_files = [app_extern, jquery_extern],
-).deps_and_compile(debug)
+).deps_and_compile(debug = False)

@@ -13,7 +13,7 @@ goog.require('goog.style');
 goog.require('goog.color');
 
 goog.require('pixelLab.DebugDiv');
-goog.require('pixelLab.fpsLogger');
+goog.require('pixelLab.FpsLogger');
 
 goog.require('b2Vec2');
 goog.require('b2AABB');
@@ -106,9 +106,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
 
   /**
    @private
-   @type {!pixelLab.fpsLogger}
+   @type {!pixelLab.FpsLogger}
    */
-  this.m_fpsLogger = new pixelLab.fpsLogger();
+  this.m_fpsLogger = new pixelLab.FpsLogger();
 
   /**
    @private
