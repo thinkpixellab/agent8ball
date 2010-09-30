@@ -112,6 +112,7 @@ eightball.Game.prototype.start = function() {
 
 eightball.Game.prototype.pause = function() {
   if (this.gameState == eightball.Game.States.STARTED) {
+    this.m_poolTable.pause();
     this.gameState = eightball.Game.States.PAUSED;
     this._dispatchGameEvent(eightball.Game.EventType.PAUSE);
   }
@@ -119,6 +120,7 @@ eightball.Game.prototype.pause = function() {
 
 eightball.Game.prototype.resume = function() {
   if (this.gameState == eightball.Game.States.PAUSED) {
+    this.m_poolTable.resume();
     this.gameState = eightball.Game.States.STARTED;
     this._dispatchGameEvent(eightball.Game.EventType.RESUME);
   }
@@ -173,6 +175,7 @@ eightball.Game.prototype._tickAction = function() {
       this.secondsLeft = 0;
       this._dispatchGameEvent(eightball.Game.EventType.TICK);
       this.m_timer.stop();
+      this.m_poolTable.pause();
       this.gameState = eightball.Game.States.ENDED;
       this._dispatchGameEvent(eightball.Game.EventType.END);
     } else {
