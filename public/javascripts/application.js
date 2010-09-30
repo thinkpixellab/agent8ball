@@ -424,6 +424,12 @@ eightball.application.loadApp = function (skip_graphics) {
     game.reset();
   });
 
+  keyBinding.add(goog.events.KeyCodes.E, "End game early", function(){
+    if(game.gameState == eightball.Game.States.STARTED){
+      game.secondsLeft = 5;
+    }
+  });
+
   var updateMusicButton = function () {
     if (musicManager.isMusicOn()) {
       $("#musicbuttonon").fadeIn(200);
