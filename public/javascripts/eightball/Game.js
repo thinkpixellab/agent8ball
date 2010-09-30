@@ -18,23 +18,23 @@ goog.require('goog.net.cookies');
  @extends {goog.events.EventTarget}
  @param {!eightball.PoolTable} poolTable
  */
-eightball.Game = function (poolTable) {
+eightball.Game = function(poolTable) {
 
   /**
-  @private
-  */
+   @private
+   */
   this.m_timer = null;
 
   /**
-  @private
-  @type {!eightball.PoolTable}
-  */
+   @private
+   @type {!eightball.PoolTable}
+   */
   this.m_poolTable = poolTable;
 
   /**
-  @private
-  @type {boolean}
-  */
+   @private
+   @type {boolean}
+   */
   this.m_bombDemoMode = false;
 
   goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop, undefined, this);
@@ -47,7 +47,7 @@ eightball.Game = function (poolTable) {
 };
 goog.inherits(eightball.Game, goog.events.EventTarget);
 
-eightball.Game.prototype.setBombDemoMode = function () {
+eightball.Game.prototype.setBombDemoMode = function() {
   this.m_bombDemoMode = true;
 };
 
@@ -75,12 +75,11 @@ eightball.Game.prototype.reset = function() {
 
 };
 
-eightball.Game.prototype.resetTable = function () {
+eightball.Game.prototype.resetTable = function() {
   this.bombSecondsLeft = eightball.Game.s_bombSeconds + 2;
   if (this.m_bombDemoMode) {
-    this.bombNumber = 1; 
-  }
-  else {
+    this.bombNumber = 1;
+  } else {
     this.bombNumber = goog.math.randomInt(15) + 1;
   }
   this._isBombFound = false;
@@ -111,16 +110,18 @@ eightball.Game.prototype.start = function() {
 
 };
 
-eightball.Game.prototype.togglePaused = function() {
-
+eightball.Game.prototype.pause = function() {
   if (this.gameState == eightball.Game.States.STARTED) {
     this.gameState = eightball.Game.States.PAUSED;
     this._dispatchGameEvent(eightball.Game.EventType.PAUSE);
-  } else if (this.gameState == eightball.Game.States.PAUSED) {
+  }
+};
+
+eightball.Game.prototype.resume = function() {
+  if (this.gameState == eightball.Game.States.PAUSED) {
     this.gameState = eightball.Game.States.STARTED;
     this._dispatchGameEvent(eightball.Game.EventType.RESUME);
   }
-  // TODO: else?
 };
 
 eightball.Game.prototype.addPoints = function(points) {

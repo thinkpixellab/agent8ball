@@ -202,7 +202,7 @@ eightball.application.loadApp = function (skip_graphics) {
   });
 
   pause.click(function () {
-    game.togglePaused();
+    game.pause();
     poolTable.pause();
     overlay.fadeIn(400);
     resume.fadeIn(400);
@@ -216,7 +216,7 @@ eightball.application.loadApp = function (skip_graphics) {
   resume.click(function () {
     overlay.fadeOut(400);
     resume.fadeOut(400, function () {
-      game.togglePaused();
+      game.resume();
       poolTable.resume();
     });
 
@@ -448,7 +448,7 @@ eightball.application.loadApp = function (skip_graphics) {
   };
 
   $("#instructionsclick").click(function () {
-    game.togglePaused();
+    game.pause();
     poolTable.pause();
     overlay.fadeIn(500);
     $("#howtoplay").fadeIn(200);
@@ -456,7 +456,7 @@ eightball.application.loadApp = function (skip_graphics) {
   });
 
   $("#howtoplay").click(function () {
-    game.togglePaused();
+    game.resume();
     poolTable.resume();
     overlay.fadeOut(200);
     $("#howtoplay").fadeOut(200);
