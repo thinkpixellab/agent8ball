@@ -8,11 +8,14 @@ goog.require('goog.style');
 
 /**
  @constructor
+ @param {boolean=} opt_skipStyles
  */
-pixelLab.KeyBinding = function() {
+pixelLab.KeyBinding = function(opt_skipStyles) {
   this.m_keyHandler = new goog.events.KeyHandler(document);
 
   this.m_map = {};
+
+  this.m_useStyles = !opt_skipStyles;
 
   goog.events.listen(this.m_keyHandler, goog.events.KeyHandler.EventType.KEY, goog.bind(this._handleKey, this));
 };
@@ -29,34 +32,37 @@ pixelLab.KeyBinding.prototype._handleKey = function(event) {
   if (entry) {
     entry['action'].call();
     event.stopPropagation();
-    pixelLab.KeyBinding._alert(entry['description']);
+    this._alert(entry['description']);
   }
 };
 
-pixelLab.KeyBinding._alert = function(message) {
+pixelLab.KeyBinding.prototype._alert = function(message) {
   var div = document.getElementById(pixelLab.KeyBinding.c_alertDivId);
   if (div) {
-    $(div).stop(true, true);
+    jQuery(div).stop(true, true).show();
+  } else {
+    div = document.createElement('div');
+    goog.dom.setProperties(div, {
+      'id': pixelLab.KeyBinding.c_alertDivId
+    });
   }
-  div = document.createElement('div');
-  goog.dom.setProperties(div, {
-    'id': pixelLab.KeyBinding.c_alertDivId
-  });
-  goog.style.setStyle(div, {
-    'z-index': 99,
-    'position': 'fixed',
-    'right': '10px',
-    'top': '10px',
-    'background': 'black',
-    'color': 'white',
-    'padding': '15px',
-    'font-size': '40px',
-    'font-family': 'monospace'
-  });
+  if (this.m_useStyles) {
+    goog.style.setStyle(div, {
+      'z-index': 99,
+      'position': 'fixed',
+      'right': '10px',
+      'top': '10px',
+      'background': 'black',
+      'color': 'white',
+      'padding': '15px',
+      'font-size': '40px',
+      'font-family': 'monospace'
+    });
+  }
   document.body.appendChild(div);
 
   goog.dom.setTextContent(div, message);
-  $(div).delay(1000).fadeOut(500);
+  jQuery(div).delay(1000).fadeOut(500);
 };
 
 /*
