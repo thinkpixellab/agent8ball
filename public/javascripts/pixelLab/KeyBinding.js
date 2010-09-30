@@ -28,11 +28,13 @@ pixelLab.KeyBinding.prototype.add = function(keyCode, description, action) {
 };
 
 pixelLab.KeyBinding.prototype._handleKey = function(event) {
-  var entry = this.m_map[event.keyCode];
-  if (entry) {
-    entry['action'].call();
-    event.stopPropagation();
-    this._alert(entry['description']);
+  if (! (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)) {
+    var entry = this.m_map[event.keyCode];
+    if (entry) {
+      entry['action'].call();
+      event.stopPropagation();
+      this._alert(entry['description']);
+    }
   }
 };
 
