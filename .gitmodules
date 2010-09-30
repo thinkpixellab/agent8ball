@@ -1,3 +1,6 @@
 [submodule "_tools"]
 	path = _tools
 	url = git://github.com/thinkpixellab/google-closure-tools.git
+[submodule "public/javascripts/box2d"]
+	path = public/javascripts/box2d
+	url = git@github.com:thinkpixellab/box2d.git

@@ -15,12 +15,12 @@ goog.require('goog.color');
 goog.require('pixelLab.DebugDiv');
 goog.require('pixelLab.FpsLogger');
 
-goog.require('b2Vec2');
-goog.require('b2AABB');
-goog.require('b2World');
-goog.require('b2BodyDef');
-goog.require('b2PolyDef');
-goog.require('b2CircleDef');
+goog.require('box2d.Vec2');
+goog.require('box2d.AABB');
+goog.require('box2d.World');
+goog.require('box2d.BodyDef');
+goog.require('box2d.PolyDef');
+goog.require('box2d.CircleDef');
 
 goog.require('eightball.CollisionEvent');
 goog.require('eightball.PocketDropEvent');
@@ -100,7 +100,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
 
   /**
    @private
-   @type {!Object.<number, !b2Body>}
+   @type {!Object.<number, !box2d.Body>}
    */
   this.m_balls = {};
 
@@ -169,7 +169,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
   this.m_canvasElement.setAttribute('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
   this.m_shadowCanvasElement.setAttribute('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.s_bumperThickness * 4);
   this.m_shadowCanvasElement.setAttribute('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
-  this.m_centerOffset = new b2Vec2(eightball.PoolTable.s_width + eightball.PoolTable.s_bumperThickness * 2, eightball.PoolTable.s_height + eightball.PoolTable.s_bumperThickness * 2);
+  this.m_centerOffset = new box2d.Vec2(eightball.PoolTable.s_width + eightball.PoolTable.s_bumperThickness * 2, eightball.PoolTable.s_height + eightball.PoolTable.s_bumperThickness * 2);
 
   // setup our physics world
   this._createWorld();
@@ -299,11 +299,11 @@ eightball.PoolTable.prototype._showCue = function() {
 eightball.PoolTable.prototype._strikeCue = function() {
   if (this.m_cueLine && this._getCueBall()) {
 
-    var velocity = new b2Vec2(this.m_cueLine.x1 - this.m_cueLine.x0, this.m_cueLine.y1 - this.m_cueLine.y0);
+    var velocity = new box2d.Vec2(this.m_cueLine.x1 - this.m_cueLine.x0, this.m_cueLine.y1 - this.m_cueLine.y0);
     velocity.Normalize();
-    velocity.Multiply(800 * this.m_strikePower + 100);
+    velocity.scale(800 * this.m_strikePower + 100);
 
-    this._dispatchCollisionEvent(velocity.Length(), eightball.CollisionEvent.EventType.CUESTICK, -1, -1);
+    this._dispatchCollisionEvent(velocity.magnitude(), eightball.CollisionEvent.EventType.CUESTICK, -1, -1);
     this._isCueHit = true;
 
     this._getCueBall().SetLinearVelocity(velocity);
@@ -458,12 +458,12 @@ eightball.PoolTable.prototype._getLineAngleDegrees = function(line) {
  */
 eightball.PoolTable.prototype._createWorld = function() {
 
-  var worldAABB = new b2AABB();
+  var worldAABB = new box2d.AABB();
   worldAABB.minVertex.Set(-1000, -1000);
   worldAABB.maxVertex.Set(1000, 1000);
-  var gravity = new b2Vec2(0, 0);
+  var gravity = new box2d.Vec2(0, 0);
   var doSleep = true;
-  this.m_world = new b2World(worldAABB, gravity, doSleep);
+  this.m_world = new box2d.World(worldAABB, gravity, doSleep);
 
   eightball.PoolTable._createTable(this.m_world, this.m_centerOffset);
   eightball.PoolTable._createPockets(this.m_world, this.m_centerOffset);
@@ -481,7 +481,7 @@ eightball.PoolTable.prototype._testRack = function() {
   var ballRadius = eightball.PoolTable.c_ballRadius;
   this.m_balls[0] = this._createBall(0, -0.5 * eightball.PoolTable.s_width, -150);
 
-  this._getCueBall().SetLinearVelocity(new b2Vec2(-150, -15));
+  this._getCueBall().SetLinearVelocity(new box2d.Vec2(-150, -15));
 };
 
 eightball.PoolTable.prototype._rackEm = function() {
@@ -532,16 +532,16 @@ eightball.PoolTable.prototype._clearTable = function() {
  @param {number} index
  @param {number} x
  @param {number} y
- @return {!b2Body}
+ @return {!box2d.Body}
  */
 eightball.PoolTable.prototype._createBall = function(index, x, y) {
-  var ballSd = new b2CircleDef();
+  var ballSd = new box2d.CircleDef();
   ballSd.density = 5.0;
   ballSd.radius = eightball.PoolTable.c_ballRadius;
   ballSd.restitution = 0.95;
   ballSd.friction = 0.20;
 
-  var ballBd = new b2BodyDef();
+  var ballBd = new box2d.BodyDef();
   ballBd.AddShape(ballSd);
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.018;
@@ -560,9 +560,9 @@ eightball.PoolTable.prototype.removeBomb = function() {
   goog.object.forEach(this.m_balls, function(ball, key, theThis) {
 
     ball.GetLinearVelocity();
-    var v = new b2Vec2(ball.m_position.x - bombBall.m_position.x, ball.m_position.y - bombBall.m_position.y);
+    var v = new box2d.Vec2(ball.m_position.x - bombBall.m_position.x, ball.m_position.y - bombBall.m_position.y);
     //v.Multiply(1.0);
-    ball.GetLinearVelocity().Add(v);
+    ball.GetLinearVelocity().add(v);
     ball.WakeUp();
 
   },
@@ -576,7 +576,7 @@ eightball.PoolTable.prototype.removeBomb = function() {
 
 /**
  @param {number} ballNumber
- @return {b2Vec2}
+ @return {box2d.Vec2}
  */
 eightball.PoolTable.prototype.getBallLocation = function(ballNumber) {
   var ball = this.m_balls[ballNumber];
@@ -603,7 +603,7 @@ eightball.PoolTable.prototype._step = function() {
 
 /**
  @private
- @param {!Array.<b2Pair>} pairs
+ @param {!Array.<box2d.Pair>} pairs
  */
 eightball.PoolTable.prototype._processPairs = function(pairs) {
   var _this = this,
@@ -641,12 +641,12 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
       if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.BALL) {
         ballHit++;
         ballNum2 = pair.m_shape2.m_body.GetUserData()[1];
-        totalVelocity += pair.m_shape1.m_body.GetLinearVelocity().Length();
-        totalVelocity += pair.m_shape2.m_body.GetLinearVelocity().Length();
+        totalVelocity += pair.m_shape1.m_body.GetLinearVelocity().magnitude();
+        totalVelocity += pair.m_shape2.m_body.GetLinearVelocity().magnitude();
       } else if (bodyTypes[1] == eightball.PoolTable.s_bodyTypes.TABLE) {
         wallHit++;
-        totalVelocity += pair.m_shape1.m_body.GetLinearVelocity().Length();
-        totalVelocity += pair.m_shape2.m_body.GetLinearVelocity().Length();
+        totalVelocity += pair.m_shape1.m_body.GetLinearVelocity().magnitude();
+        totalVelocity += pair.m_shape2.m_body.GetLinearVelocity().magnitude();
       }
     }
   });
@@ -680,8 +680,8 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
 
 /**
  @private
- @param {!b2Body} pocketBody
- @param {!b2Body} ballBody
+ @param {!box2d.Body} pocketBody
+ @param {!box2d.Body} ballBody
  */
 eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
 
@@ -760,7 +760,7 @@ eightball.PoolTable.prototype._hasBomb = function(){
 
 /**
  @private
- @param {!b2Body} ballBody
+ @param {!box2d.Body} ballBody
  */
 eightball.PoolTable.prototype._drawBall = function(ballBody) {
   var shape = ballBody.GetShapeList();
@@ -904,7 +904,7 @@ eightball.PoolTable.prototype.increaseBombPulse = function() {
 
 /**
  @private
- @param {!b2Body} b2body
+ @param {!box2d.Body} b2body
  */
 eightball.PoolTable.prototype._drawBody = function(b2body) {
   for (var shape = b2body.GetShapeList(); shape != null; shape = shape.GetNext()) {
@@ -918,7 +918,7 @@ eightball.PoolTable.prototype._drawShape = function(shape) {
   context.strokeStyle = 'white';
   context.beginPath();
   switch (shape.m_type) {
-  case b2Shape.e_circleShape:
+  case box2d.Shape.e_circleShape:
     {
       var circle = shape;
       var pos = circle.m_position;
@@ -929,17 +929,17 @@ eightball.PoolTable.prototype._drawShape = function(shape) {
       // draw radius
       context.moveTo(pos.x, pos.y);
       var ax = circle.m_R.col1;
-      var pos2 = new b2Vec2(pos.x + r * ax.x, pos.y + r * ax.y);
+      var pos2 = new box2d.Vec2(pos.x + r * ax.x, pos.y + r * ax.y);
       context.lineTo(pos2.x, pos2.y);
     }
     break;
-  case b2Shape.e_polyShape:
+  case box2d.Shape.e_polyShape:
     {
       var poly = shape;
-      var tV = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
+      var tV = box2d.Math.AddVV(poly.m_position, box2d.Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
       context.moveTo(tV.x, tV.y);
       for (var i = 0; i < poly.m_vertexCount; i++) {
-        var v = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[i]));
+        var v = box2d.Math.AddVV(poly.m_position, box2d.Math.b2MulMV(poly.m_R, poly.m_vertices[i]));
         context.lineTo(v.x, v.y);
       }
       context.lineTo(tV.x, tV.y);
@@ -1021,12 +1021,12 @@ eightball.PoolTable.prototype._processBalls = function() {
   var count = goog.object.getCount(this.m_balls);
 
   var processBall = function(ball, key, theThis) {
-    var velocity = ball.GetLinearVelocity().Length();
+    var velocity = ball.GetLinearVelocity().magnitude();
     if (velocity == 0) {
       stoppedBalls++;
       slowBalls++;
     } else if (velocity < 10) {
-      ball.SetLinearVelocity(new b2Vec2());
+      ball.SetLinearVelocity(new box2d.Vec2());
       stoppedBalls++;
       slowBalls++;
     } else if (velocity < 20) {
@@ -1036,7 +1036,7 @@ eightball.PoolTable.prototype._processBalls = function() {
 
   goog.object.forEach(this.m_balls, processBall, this);
   if (!this.m_isCueVisible) {
-    if (stoppedBalls == count || (slowBalls == count && (this._getCueBall() && this._getCueBall().GetLinearVelocity().Length() == 0))) {
+    if (stoppedBalls == count || (slowBalls == count && (this._getCueBall() && this._getCueBall().GetLinearVelocity().magnitude() == 0))) {
       this._dispatchCueStopEvent();
       this._showCue();
     }
@@ -1045,7 +1045,7 @@ eightball.PoolTable.prototype._processBalls = function() {
 
 /**
  @private
- @return {b2Body}
+ @return {box2d.Body}
  */
 eightball.PoolTable.prototype._getCueBall = function() {
   return this.m_balls[0];
@@ -1058,11 +1058,11 @@ eightball.PoolTable.prototype._getCueBall = function() {
 //
 /**
  @private
- @param {!b2World} world
- @param {!b2Vec2} centerOffset
+ @param {!box2d.World} world
+ @param {!box2d.Vec2} centerOffset
  */
 eightball.PoolTable._createTable = function(world, centerOffset) {
-  var table = new b2BodyDef();
+  var table = new box2d.BodyDef();
   table.restitution = 1;
   table.friction = 1.0;
 
@@ -1070,7 +1070,7 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
   var points;
 
   // Left
-  side = new b2PolyDef();
+  side = new box2d.PolyDef();
   points = [
     [-centerOffset.x, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2.5],
     [-centerOffset.x + eightball.PoolTable.s_bumperThickness * 2, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 4.5],
@@ -1080,7 +1080,7 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
   table.AddShape(side);
 
   // Right
-  side = new b2PolyDef();
+  side = new box2d.PolyDef();
   points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
   side.SetVertices(points);
   table.AddShape(side);
@@ -1092,24 +1092,24 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
     [-eightball.PoolTable.s_bumperThickness * 2.3, -centerOffset.y + eightball.PoolTable.s_bumperThickness * 2],
     [-eightball.PoolTable.s_bumperThickness * 1.5, -centerOffset.y]].reverse();
 
-  side = new b2PolyDef();
+  side = new box2d.PolyDef();
   side.SetVertices(points);
   table.AddShape(side);
 
   // top right
-  side = new b2PolyDef();
+  side = new box2d.PolyDef();
   points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
   side.SetVertices(points);
   table.AddShape(side);
 
   // bottom right
-  side = new b2PolyDef();
+  side = new box2d.PolyDef();
   points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipVertical).toArray();
   side.SetVertices(points);
   table.AddShape(side);
 
   // bottom left
-  side = new b2PolyDef();
+  side = new box2d.PolyDef();
   points = new goog.math.Matrix(points).multiply(eightball.PoolTable.s_matrixFlipHorizontal).toArray().reverse();
   side.SetVertices(points);
   table.AddShape(side);
@@ -1120,8 +1120,8 @@ eightball.PoolTable._createTable = function(world, centerOffset) {
 
 /**
  @private
- @param {!b2World} world
- @param {!b2Vec2} centerOffset
+ @param {!box2d.World} world
+ @param {!box2d.Vec2} centerOffset
  */
 eightball.PoolTable._createPockets = function(world, centerOffset) {
   var pockets = new Array(6);
@@ -1151,15 +1151,15 @@ eightball.PoolTable._createPockets = function(world, centerOffset) {
 
 /**
  @private
- @param {!b2World} world
+ @param {!box2d.World} world
  @param {number} x
  @param {number} y
  */
 eightball.PoolTable._createPocket = function(world, x, y) {
-  var pocketSd = new b2CircleDef();
+  var pocketSd = new box2d.CircleDef();
   pocketSd.radius = 7;
 
-  var pocketBd = new b2BodyDef();
+  var pocketBd = new box2d.BodyDef();
   pocketBd.AddShape(pocketSd);
   pocketBd.position.Set(x, y);
   pocketBd.userData = [eightball.PoolTable.s_bodyTypes.POCKET];

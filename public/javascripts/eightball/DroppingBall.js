@@ -3,8 +3,8 @@ goog.provide('eightball.DroppingBall');
 /**
  @constructor
  @param {number} number
- @param {!b2Vec2} ballLocation
- @param {!b2Vec2} pocketLocation
+ @param {!box2d.Vec2} ballLocation
+ @param {!box2d.Vec2} pocketLocation
  */
 eightball.DroppingBall = function(number, ballLocation, pocketLocation) {
   /**
@@ -15,13 +15,13 @@ eightball.DroppingBall = function(number, ballLocation, pocketLocation) {
 
   /**
    @private
-   @type {!b2Vec2}
+   @type {!box2d.Vec2}
    */
   this.m_ballLocation = ballLocation;
 
   /**
    @private
-   @type {!b2Vec2}
+   @type {!box2d.Vec2}
    */
   this.m_pocketLocation = pocketLocation;
 
@@ -48,13 +48,13 @@ eightball.DroppingBall.prototype.GetIsDropped = function() {
 };
 
 /*
- @return {!b2Vec2}
+ @return {!box2d.Vec2}
 */
 eightball.DroppingBall.prototype.GetCurrentLocation = function() {
   var delta = this.m_pocketLocation.Copy();
-  delta.Subtract(this.m_ballLocation);
-  delta.Multiply(this.GetPercentDropped());
-  delta.Add(this.m_ballLocation);
+  delta.subtract(this.m_ballLocation);
+  delta.scale(this.GetPercentDropped());
+  delta.add(this.m_ballLocation);
   return delta;
 };
 
