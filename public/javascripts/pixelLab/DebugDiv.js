@@ -1,4 +1,3 @@
-﻿
 goog.provide('pixelLab.DebugDiv');
 
 goog.require('goog.debug.LogManager');

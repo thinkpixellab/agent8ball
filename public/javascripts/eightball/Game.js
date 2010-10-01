@@ -1,4 +1,3 @@
-﻿// a line to make the builder happy
 goog.provide('eightball.Game');
 goog.provide('eightball.Game.EventType');
 goog.provide('eightball.Game.GameState');

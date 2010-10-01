@@ -1,4 +1,3 @@
-﻿// a line to make the builder happy
 goog.provide('eightball.SoundEffect');
 
 /**

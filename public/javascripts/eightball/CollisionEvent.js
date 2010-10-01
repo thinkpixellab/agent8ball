@@ -1,4 +1,3 @@
-﻿//
 goog.provide('eightball.CollisionEvent');
 
 goog.require('goog.events.Event');
