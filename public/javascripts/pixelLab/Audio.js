@@ -3,21 +3,21 @@ goog.provide('pixelLab.Audio');
 
 goog.require('goog.string');
 
-pixelLab.Audio.create = function(location){
-  var audio = document.createElement("audio");
+pixelLab.Audio.create = function(location) {
+  var audio = document.createElement('audio');
   document.body.appendChild(audio);
   pixelLab.Audio.load(audio, location);
   return audio;
 };
 
-pixelLab.Audio.load = function (audio, location) {
-  audio.setAttribute("src", location);
+pixelLab.Audio.load = function(audio, location) {
+  audio.setAttribute('src', location);
   audio.load();
 };
 
-pixelLab.Audio.getElements = function(location){
+pixelLab.Audio.getElements = function(location) {
   return $('audio').filter(
-    function(index){
+    function(index) {
       return goog.string.endsWith(this.src, location);
     });
 };
@@ -27,26 +27,26 @@ pixelLab.Audio.getElements = function(location){
  @param {boolean=} opt_muted
  @param {number=} opt_playbackRate
 */
-pixelLab.Audio.play = function (location, opt_muted, opt_playbackRate) {
+pixelLab.Audio.play = function(location, opt_muted, opt_playbackRate) {
   var matches = pixelLab.Audio.getElements(location).filter(
-    function(index){
+    function(index) {
       return this.readyState == this.HAVE_ENOUGH_DATA;
     });
 
   var audio;
-  if(matches.length){
+  if (matches.length) {
     audio = matches[0];
     pixelLab.Audio.load(audio, location);
   }
-  else{
+  else {
     audio = pixelLab.Audio.create(location);
   }
 
-  if(opt_muted) audio.muted = opt_muted;
+  if (opt_muted) audio.muted = opt_muted;
 
   audio.play();
   var rate = 1;
-  if(opt_playbackRate) rate = opt_playbackRate;
+  if (opt_playbackRate) rate = opt_playbackRate;
   audio.playbackRate = rate;
 
   return audio;

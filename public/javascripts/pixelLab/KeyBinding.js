@@ -2,9 +2,9 @@
 goog.provide('pixelLab.KeyBinding');
 
 goog.require('goog.dom');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.events.KeyHandler.EventType');
-goog.require('goog.events.KeyCodes');
 goog.require('goog.style');
 
 /**
@@ -23,7 +23,7 @@ pixelLab.KeyBinding = function(opt_skipStyles) {
 
 pixelLab.KeyBinding.prototype.add = function(keyCode, description, action) {
   if (goog.array.contains(pixelLab.KeyBinding.c_reservedKeyCodes, keyCode)) {
-    throw new Error("The specified keyCode is reserved - " + keyCode);
+    throw new Error('The specified keyCode is reserved - ' + keyCode);
   }
 
   this.m_map[keyCode] = {
@@ -44,7 +44,7 @@ pixelLab.KeyBinding.prototype._handleKey = function(event) {
     if (! (event.ctrlKey || event.altKey || event.metaKey)) {
       if (event.keyCode == goog.events.KeyCodes.QUESTION_MARK || event.keyCode == goog.events.KeyCodes.SLASH) {
         event.stopPropagation();
-        this._alert("HELP!!");
+        this._alert('HELP!!');
       }
     }
   }
@@ -83,6 +83,6 @@ pixelLab.KeyBinding.prototype._alert = function(message) {
  @const
  @type {string}
 */
-pixelLab.KeyBinding.c_alertDivId = "KeyBindingAlertDiv";
+pixelLab.KeyBinding.c_alertDivId = 'KeyBindingAlertDiv';
 
 pixelLab.KeyBinding.c_reservedKeyCodes = [goog.events.KeyCodes.QUESTION_MARK, goog.events.KeyCodes.SLASH];

@@ -30,9 +30,9 @@ eightball.Music.prototype.startMusic = function() {
   this._clearMusic();
 
   // create the audio element
-  this.m_music = document.createElement("audio");
-  this.m_music.setAttribute("src", this.m_location);
-  this.m_music.setAttribute("loop", "loop");
+  this.m_music = document.createElement('audio');
+  this.m_music.setAttribute('src', this.m_location);
+  this.m_music.setAttribute('loop', 'loop');
   this.m_music.play();
 
   // add it to the document
@@ -70,14 +70,14 @@ eightball.Music.prototype._clearMusic = function() {
   }
 };
 
-/** 
+/**
  @const
  @private
  @type {string}
  */
-eightball.Music.s_CookieMusicOn = "eightball.Music.musicOn";
+eightball.Music.s_CookieMusicOn = 'eightball.Music.musicOn';
 
-/** 
+/**
  @const
  @private
  @enum {string}

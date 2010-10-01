@@ -9,38 +9,38 @@ goog.require('goog.object');
 @param {!function(!number)} progressCallback
 @param {!function()} completedCallback
 */
-pixelLab.Preload = function (imageUrls, soundUrls, progressCallback, completedCallback) {
+pixelLab.Preload = function(imageUrls, soundUrls, progressCallback, completedCallback) {
   this.imagesLoaded = 0;
   this.imagesTotal = goog.object.getCount(imageUrls);
   this.hasLoaded = false;
 
   var _this = this;
 
-  $(document).ready(function () {
+  $(document).ready(function() {
 
     // handle sounds
     var key;
     for (key in soundUrls) {
-      var audio = document.createElement("audio");
+      var audio = document.createElement('audio');
       document.body.appendChild(audio);
-      audio.setAttribute("src", soundUrls[key]);
+      audio.setAttribute('src', soundUrls[key]);
       audio.volume = 0;
       audio.load();
     }
 
 
     // handle images
-    _this.preloadDiv = document.createElement("div");
+    _this.preloadDiv = document.createElement('div');
     $(_this.preloadDiv).css({
-      height: "0px",
-      width: "0px",
-      overflow: "hidden"
+      height: '0px',
+      width: '0px',
+      overflow: 'hidden'
     });
 
     for (key in imageUrls) {
-      var imgLoad = $("<img></img>");
-      $(imgLoad).unbind("load");
-      $(imgLoad).bind("load", function () {
+      var imgLoad = $('<img></img>');
+      $(imgLoad).unbind('load');
+      $(imgLoad).bind('load', function() {
         _this.imagesLoaded++;
         var progress = _this.imagesLoaded / _this.imagesTotal;
         progressCallback(progress);
@@ -49,13 +49,13 @@ pixelLab.Preload = function (imageUrls, soundUrls, progressCallback, completedCa
           _this.hasLoaded = true;
         }
       });
-      $(imgLoad).attr("src", imageUrls[key]);
+      $(imgLoad).attr('src', imageUrls[key]);
       $(imgLoad).appendTo(this.preloadDiv);
     }
 
 
-    // create a failsafe of 30 seconds 
-    setTimeout(function () {
+    // create a failsafe of 30 seconds
+    setTimeout(function() {
       if (!_this.hasLoaded) {
         completedCallback();
       }

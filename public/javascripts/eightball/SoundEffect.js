@@ -5,7 +5,7 @@ goog.provide('eightball.SoundEffect');
  @param {string} location
  @param {number} simulCount
  */
-eightball.SoundEffect = function (location, simulCount) {
+eightball.SoundEffect = function(location, simulCount) {
 
   /**
   @private
@@ -30,7 +30,7 @@ eightball.SoundEffect = function (location, simulCount) {
   // create audio elements for each of the potential simultaneous plays; we add
   // the audio elements directly to the document for maximum browser compatibility
   for (var i = 0; i <= simulCount; i++) {
-    var audio = document.createElement("audio");
+    var audio = document.createElement('audio');
     document.body.appendChild(audio);
     this.m_audios[i] = audio;
     this.m_audios[i].location = location;
@@ -38,12 +38,12 @@ eightball.SoundEffect = function (location, simulCount) {
   }
 };
 
-eightball.SoundEffect.prototype.loadAudio = function (audio, location) {
-  audio.setAttribute("src", location);
+eightball.SoundEffect.prototype.loadAudio = function(audio, location) {
+  audio.setAttribute('src', location);
   audio.load();
 };
 
-eightball.SoundEffect.prototype.play = function () {
+eightball.SoundEffect.prototype.play = function() {
 
   // get the next audio
   this.m_currSimul++;

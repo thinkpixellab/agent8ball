@@ -1,30 +1,29 @@
 goog.provide('eightball.PoolTable');
 
-goog.require('goog.object');
+goog.require('box2d.AABB');
+goog.require('box2d.BodyDef');
+goog.require('box2d.CircleDef');
+goog.require('box2d.PolyDef');
+goog.require('box2d.Vec2');
+goog.require('box2d.World');
+
+goog.require('eightball.CollisionEvent');
+goog.require('eightball.DroppingBall');
+goog.require('eightball.PocketDropEvent');
+goog.require('goog.Timer');
 goog.require('goog.array');
-goog.require('goog.math.Matrix');
-goog.require('goog.math.Line');
-goog.require('goog.math.Vec2');
+goog.require('goog.color');
 goog.require('goog.debug.LogManager');
 goog.require('goog.events');
-goog.require('goog.Timer');
 goog.require('goog.events.EventTarget');
+goog.require('goog.math.Line');
+goog.require('goog.math.Matrix');
+goog.require('goog.math.Vec2');
+goog.require('goog.object');
 goog.require('goog.style');
-goog.require('goog.color');
 
 goog.require('pixelLab.DebugDiv');
 goog.require('pixelLab.FpsLogger');
-
-goog.require('box2d.Vec2');
-goog.require('box2d.AABB');
-goog.require('box2d.World');
-goog.require('box2d.BodyDef');
-goog.require('box2d.PolyDef');
-goog.require('box2d.CircleDef');
-
-goog.require('eightball.CollisionEvent');
-goog.require('eightball.PocketDropEvent');
-goog.require('eightball.DroppingBall');
 
 /**
  @constructor
@@ -147,7 +146,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
   this.m_ballImages = {};
   for (var i = 1; i <= 15; i++) {
     var image = new Image();
-    image.src = imageMap["num" + i];
+    image.src = imageMap['num' + i];
     this.m_ballImages[i] = image;
   }
 
@@ -222,9 +221,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
         _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.s_maxStrikeDistance;
 
         pixelLab.DebugDiv.clear();
-        logger.info("Allowed Angle Range: " + Math.round(cueAngle - 90) + " to " + Math.round(cueAngle + 90));
-        logger.info("Strike Angle: " + Math.round(strikeAngle));
-        logger.info("Strike Power: " + _this.m_strikePower);
+        logger.info('Allowed Angle Range: ' + Math.round(cueAngle - 90) + ' to ' + Math.round(cueAngle + 90));
+        logger.info('Strike Angle: ' + Math.round(strikeAngle));
+        logger.info('Strike Power: ' + _this.m_strikePower);
 
         _this._updateCue(_this.m_lastMouseDown, strikeOffset);
       } else {
@@ -245,7 +244,6 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
   this._timer.start();
 
 };
-
 goog.inherits(eightball.PoolTable, goog.events.EventTarget);
 
 eightball.PoolTable.prototype.updateLayout = function(width, height) {
@@ -279,7 +277,7 @@ eightball.PoolTable.prototype._hideCue = function() {
   // we need to delay hiding the canvas because otherwise we get weird selection behavior on mouse up
   var timer = new goog.Timer(50);
   goog.events.listen(timer, goog.Timer.TICK, function() {
-    goog.style.setStyle(this.m_cueCanvasElement, "display", "none");
+    goog.style.setStyle(this.m_cueCanvasElement, 'display', 'none');
     timer.dispose();
   },
   undefined, this);
@@ -288,7 +286,7 @@ eightball.PoolTable.prototype._hideCue = function() {
 };
 
 eightball.PoolTable.prototype._showCue = function() {
-  goog.style.setStyle(this.m_cueCanvasElement, "display", "block");
+  goog.style.setStyle(this.m_cueCanvasElement, 'display', 'block');
   this.m_isCueVisible = true;
 
   this._ensureCueBall();
@@ -592,7 +590,7 @@ eightball.PoolTable.prototype._step = function() {
   this.m_fpsLogger.AddInterval();
   this.m_world.Step(1.0 / 30.0, 1);
 
-  if(this._hasBomb() || !(this.m_world.sleeping)){
+  if (this._hasBomb() || !(this.m_world.sleeping)) {
     this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
     this.m_shadowCanvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y - 6, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
     this._drawWorld();
@@ -754,7 +752,7 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index) 
 /**
  @return {boolean}
 */
-eightball.PoolTable.prototype._hasBomb = function(){
+eightball.PoolTable.prototype._hasBomb = function() {
   return !!this.m_balls[this.m_bombNumber];
 };
 

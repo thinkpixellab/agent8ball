@@ -3,41 +3,41 @@
 // *******************************************************************************
 goog.provide('eightball.application');
 
-goog.require('goog.string');
-goog.require('goog.userAgent');
-goog.require('goog.events');
-goog.require('goog.events.EventType');
-goog.require('goog.debug.LogManager');
-goog.require('goog.i18n.NumberFormat');
-goog.require('goog.events.KeyCodes');
-
-goog.require('pixelLab.DebugDiv');
-goog.require('pixelLab.KeyBinding');
-
-goog.require('eightball.PoolTable');
-goog.require('eightball.Music');
-goog.require('eightball.SoundEffectManager');
 goog.require('eightball.Game');
 goog.require('eightball.Game.EventType');
 goog.require('eightball.Game.GameState');
+goog.require('eightball.Music');
+goog.require('eightball.PoolTable');
+goog.require('eightball.SoundEffectManager');
+
+goog.require('goog.debug.LogManager');
+goog.require('goog.events');
+goog.require('goog.events.EventType');
+goog.require('goog.events.KeyCodes');
+goog.require('goog.i18n.NumberFormat');
+goog.require('goog.string');
+goog.require('goog.userAgent');
+
+goog.require('pixelLab.DebugDiv');
+goog.require('pixelLab.KeyBinding');
 
 var _game;
 
 /*
 @param {boolean=} skip_graphics
 */
-eightball.application.loadApp = function (skip_graphics) {
+eightball.application.loadApp = function(skip_graphics) {
 
   if (eightball.application._isMac()) {
     $('#timers .digit').css('line-height', '62px');
-  };
+  }
 
   // show debug
   //pixelLab.DebugDiv.enable();
   // show the content, hide the loading element
   $('#vignette').delay(500).fadeIn(1000);
   $('#game').delay(500).fadeIn(1000);
-  $('#gamecontrolsdisplay').delay(500).fadeIn(1000, function () {
+  $('#gamecontrolsdisplay').delay(500).fadeIn(1000, function() {
     updateMusicButton();
     updateSoundButton();
   });
@@ -51,21 +51,21 @@ eightball.application.loadApp = function (skip_graphics) {
   // sound
   var soundManager = new eightball.SoundEffectManager(preloadAssets.audios);
 
-  soundManager.add("break", 1);
-  soundManager.add("cuestick", 1);
-  soundManager.add("ball", 5);
-  soundManager.add("quietball", 2);
-  soundManager.add("wall", 3);
-  soundManager.add("quietwall", 2);
-  soundManager.add("cuehit", 1);
-  soundManager.add("pocket", 2);
-  soundManager.add("typing", 1);
-  soundManager.add("activate", 1);
-  soundManager.add("deactivate", 1);
-  soundManager.add("bombtickslow", 1);
-  soundManager.add("bombtick", 1);
-  soundManager.add("bombtickfast", 1);
-  soundManager.add("explode", 1);
+  soundManager.add('break', 1);
+  soundManager.add('cuestick', 1);
+  soundManager.add('ball', 5);
+  soundManager.add('quietball', 2);
+  soundManager.add('wall', 3);
+  soundManager.add('quietwall', 2);
+  soundManager.add('cuehit', 1);
+  soundManager.add('pocket', 2);
+  soundManager.add('typing', 1);
+  soundManager.add('activate', 1);
+  soundManager.add('deactivate', 1);
+  soundManager.add('bombtickslow', 1);
+  soundManager.add('bombtick', 1);
+  soundManager.add('bombtickfast', 1);
+  soundManager.add('explode', 1);
 
   window.soundManager = soundManager;
 
@@ -85,17 +85,17 @@ eightball.application.loadApp = function (skip_graphics) {
   var cueCanvasElement = $('canvas#cue_canvas')[0];
   var shadowCanvasElement = $('canvas#shadow_canvas')[0];
 
-  // other globals 
+  // other globals
   var lastBars = 29;
   var isExplosionActive = false;
   var lastTickSeconds = 0;
   var lastMusicOnPause = false;
   var skipTyping = false;
-  var missionMessage = "Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.";
+  var missionMessage = 'Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.';
   var typingSound = null;
 
   // event handlers
-  var _tickAction = function () {
+  var _tickAction = function() {
 
     if (isExplosionActive) return;
     _updateTimerVisuals(game.secondsLeft);
@@ -103,10 +103,10 @@ eightball.application.loadApp = function (skip_graphics) {
     pixelLab.DebugDiv.clear();
     var fmt = new goog.i18n.NumberFormat('#,###.##');
     var str = fmt.format(poolTable.stepsPerSecond());
-    goog.debug.LogManager.getRoot().info("FPS: " + str);
+    goog.debug.LogManager.getRoot().info('FPS: ' + str);
   };
 
-  var _updateTimerVisuals = function (s) {
+  var _updateTimerVisuals = function(s) {
 
     lastTickSeconds = s;
 
@@ -127,33 +127,33 @@ eightball.application.loadApp = function (skip_graphics) {
     }
   };
 
-  var highScoreAction = function () {
+  var highScoreAction = function() {
     $('#bestscore').html(game.highScore);
   };
 
-  var _scoreAction = function () {
+  var _scoreAction = function() {
     var s = game.score;
-    if (s == 0) s = "00";
+    if (s == 0) s = '00';
     $('#score').html(s);
     $('#gameoverscore').html(s);
   };
 
-  var readyAction = function () {
+  var readyAction = function() {
     overlay.fadeIn(1000);
 
-    $("#bombicon").hide();
-    $("#bombsecondstens").hide();
-    $("#bombsecondsones").hide();
+    $('#bombicon').hide();
+    $('#bombsecondstens').hide();
+    $('#bombsecondsones').hide();
     $('#boom').hide();
 
     var msg = missionMessage;
     var index = 0;
 
-    start.delay(800).fadeIn(400, function () {
+    start.delay(800).fadeIn(400, function() {
 
       if (!skipTyping) {
-        typingSound = soundManager.play("typing");
-        var interval = setInterval(function () {
+        typingSound = soundManager.play('typing');
+        var interval = setInterval(function() {
 
           startmessage.html(msg.substr(0, index));
           index++;
@@ -169,26 +169,26 @@ eightball.application.loadApp = function (skip_graphics) {
   };
 
   if (skip_graphics) {
-    readyAction = function () {
+    readyAction = function() {
       game.start();
     };
   }
 
-  var endAction = function () {
+  var endAction = function() {
     overlay.fadeIn(500);
     gameover.fadeIn(400);
   };
 
-  gameover.click(function () {
+  gameover.click(function() {
     gameover.fadeOut(400);
     game.reset();
   });
 
-  startover.click(function () {
+  startover.click(function() {
     game.reset();
   });
 
-  start.click(function () {
+  start.click(function() {
     start.fadeOut(100);
     overlay.fadeOut(400);
     game.start();
@@ -200,7 +200,7 @@ eightball.application.loadApp = function (skip_graphics) {
 
   });
 
-  pause.click(function () {
+  pause.click(function() {
     game.pause();
     overlay.fadeIn(400);
     resume.fadeIn(400);
@@ -211,9 +211,9 @@ eightball.application.loadApp = function (skip_graphics) {
     }
   });
 
-  resume.click(function () {
+  resume.click(function() {
     overlay.fadeOut(400);
-    resume.fadeOut(400, function () {
+    resume.fadeOut(400, function() {
       game.resume();
     });
 
@@ -223,12 +223,12 @@ eightball.application.loadApp = function (skip_graphics) {
 
   });
 
-  $('#gameoverfacebook').click(function (e) {
+  $('#gameoverfacebook').click(function(e) {
     e.stopPropagation();
     window.open('http://www.facebook.com/sharer.php?u=http%3A%2F%2Fagent8ball.com&t=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball!');
   });
 
-  $('#gameovertwitter').click(function (e) {
+  $('#gameovertwitter').click(function(e) {
     e.stopPropagation();
     window.open('http://twitter.com/home?status=Hey%2C%20%40agent8ball!%20I%20just%20scored%20' + game.score + '%20points%20on%20http%3A%2F%2Fagent8ball.com.%20Beat%20that!');
   });
@@ -248,49 +248,49 @@ eightball.application.loadApp = function (skip_graphics) {
   goog.events.listen(game, eightball.Game.EventType.END, endAction);
 
   // timebomb events
-  goog.events.listen(game, eightball.Game.EventType.BOMBACTIVATED, function (e) {
+  goog.events.listen(game, eightball.Game.EventType.BOMBACTIVATED, function(e) {
 
-    $("#bombicon").fadeIn(200);
-    $("#bombsecondstens").fadeIn(200);
-    $("#bombsecondsones").fadeIn(200);
-    soundManager.play("activate");
+    $('#bombicon').fadeIn(200);
+    $('#bombsecondstens').fadeIn(200);
+    $('#bombsecondsones').fadeIn(200);
+    soundManager.play('activate');
 
     poolTable.setBombNumber(game.bombNumber);
 
   });
 
-  goog.events.listen(game, eightball.Game.EventType.BOMBTICK, function (e) {
+  goog.events.listen(game, eightball.Game.EventType.BOMBTICK, function(e) {
 
     var sec = game.bombSecondsLeft % 60;
     if (sec > 30) sec = 30;
     var sec_tens = Math.floor(sec / 10);
     var sec_ones = sec % 10;
 
-    $("#bombsecondstens").html(String(sec_tens));
-    $("#bombsecondsones").html(String(sec_ones));
+    $('#bombsecondstens').html(String(sec_tens));
+    $('#bombsecondsones').html(String(sec_ones));
 
-    if (sec > 19) soundManager.play("bombtickslow");
-    else if (sec <= 10) soundManager.play("bombtickfast");
-    else if (sec >= 1) soundManager.play("bombtick");
+    if (sec > 19) soundManager.play('bombtickslow');
+    else if (sec <= 10) soundManager.play('bombtickfast');
+    else if (sec >= 1) soundManager.play('bombtick');
 
     if (sec == 19 || sec == 10) poolTable.increaseBombPulse();
 
 
   });
 
-  goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function (e) {
+  goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function(e) {
     // hide the timer
-    soundManager.play("deactivate");
+    soundManager.play('deactivate');
 
-    $("#bombicon").fadeOut(1200);
-    $("#bombsecondstens").fadeOut(1200);
-    $("#bombsecondsones").fadeOut(1200);
+    $('#bombicon').fadeOut(1200);
+    $('#bombsecondstens').fadeOut(1200);
+    $('#bombsecondsones').fadeOut(1200);
 
 
     var lastTime = lastTickSeconds;
 
     // count up the timer
-    var timerInterval = setInterval(function () {
+    var timerInterval = setInterval(function() {
 
       if (lastTime >= game.secondsLeft) {
         clearInterval(timerInterval);
@@ -305,13 +305,13 @@ eightball.application.loadApp = function (skip_graphics) {
 
   });
 
-  goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function (e) {
-    soundManager.play("explode");
+  goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function(e) {
+    soundManager.play('explode');
     poolTable.igniteBomb();
-    $("#bombicon").fadeOut(1200);
-    $("#bombsecondstens").fadeOut(1200);
-    $("#bombsecondsones").fadeOut(1200);
-    setTimeout(function () {
+    $('#bombicon').fadeOut(1200);
+    $('#bombsecondstens').fadeOut(1200);
+    $('#bombsecondsones').fadeOut(1200);
+    setTimeout(function() {
       // get the location of the ball that exploded
       var bombLocation = poolTable.getBallLocation(game.bombNumber);
       if (bombLocation) {
@@ -321,8 +321,8 @@ eightball.application.loadApp = function (skip_graphics) {
 
         poolTable.removeBomb();
 
-        document.getElementById("boom").style.left = left + "px";
-        document.getElementById("boom").style.top = top + "px";
+        document.getElementById('boom').style.left = left + 'px';
+        document.getElementById('boom').style.top = top + 'px';
         //boom.css("left", left + "px");
         //boom.css("top", top + "px");
         $('#boom').show();
@@ -334,7 +334,7 @@ eightball.application.loadApp = function (skip_graphics) {
     var lastTime = lastTickSeconds;
 
     // countdown the timer
-    var timerInterval = setInterval(function () {
+    var timerInterval = setInterval(function() {
 
       if (lastTime < game.secondsLeft) {
         clearInterval(timerInterval);
@@ -352,56 +352,56 @@ eightball.application.loadApp = function (skip_graphics) {
 
 
   // cuestick events
-  goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_START, function () {
-    $("#gamecontrolsclick").hide();
+  goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_START, function() {
+    $('#gamecontrolsclick').hide();
   });
 
 
-  goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_STOP, function () {
-    $("#gamecontrolsclick").show();
+  goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_STOP, function() {
+    $('#gamecontrolsclick').show();
   });
 
 
   // sound events
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function (e) {
-    soundManager.play("cuestick");
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function(e) {
+    soundManager.play('cuestick');
   });
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, function (e) {
-    soundManager.play("break");
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, function(e) {
+    soundManager.play('break');
   });
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, function (e) {
-    soundManager.play("cuehit");
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, function(e) {
+    soundManager.play('cuehit');
   });
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, function (e) {
-    goog.debug.LogManager.getRoot().info("velocity: " + e.velocity);
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, function(e) {
+    goog.debug.LogManager.getRoot().info('velocity: ' + e.velocity);
 
     if (e.velocity > 80) {
-      soundManager.play("ball");
+      soundManager.play('ball');
     } else if (e.velocity > 20) {
-      soundManager.play("quietball");
+      soundManager.play('quietball');
     }
   });
 
-  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.WALL, function (e) {
+  goog.events.listen(poolTable, eightball.CollisionEvent.EventType.WALL, function(e) {
     if (e.velocity > 120) {
-      soundManager.play("wall");
+      soundManager.play('wall');
     } else if (e.velocity > 40) {
-      soundManager.play("quietwall");
+      soundManager.play('quietwall');
     }
   });
 
-  goog.events.listen(poolTable, eightball.PocketDropEvent.TYPE, function (e) {
-    soundManager.play("pocket");
+  goog.events.listen(poolTable, eightball.PocketDropEvent.TYPE, function(e) {
+    soundManager.play('pocket');
   });
 
-  // calling reset after the game has been loaded fires the events we 
+  // calling reset after the game has been loaded fires the events we
   // need to initialize everything for game play
   game.reset();
 
-  var updatePoolTableLayout = function () {
+  var updatePoolTableLayout = function() {
     var width = $(window).width();
     var height = $(window).height();
     poolTable.updateLayout(width, height);
@@ -412,60 +412,60 @@ eightball.application.loadApp = function (skip_graphics) {
 
   var keyBinding = new pixelLab.KeyBinding();
 
-  keyBinding.add(goog.events.KeyCodes.R, "Restart game", function(){
+  keyBinding.add(goog.events.KeyCodes.R, 'Restart game', function() {
     game.reset();
   });
 
-  keyBinding.add(goog.events.KeyCodes.B, "Bomb demo mode", function(){
+  keyBinding.add(goog.events.KeyCodes.B, 'Bomb demo mode', function() {
     game.setBombDemoMode();
     game.reset();
   });
 
-  keyBinding.add(goog.events.KeyCodes.E, "End game early", function(){
-    if(game.gameState == eightball.Game.States.STARTED){
+  keyBinding.add(goog.events.KeyCodes.E, 'End game early', function() {
+    if (game.gameState == eightball.Game.States.STARTED) {
       game.secondsLeft = 5;
     }
   });
 
-  var updateMusicButton = function () {
+  var updateMusicButton = function() {
     if (musicManager.isMusicOn()) {
-      $("#musicbuttonon").fadeIn(200);
+      $('#musicbuttonon').fadeIn(200);
     } else {
-      var m = $("#musicbuttonon");
+      var m = $('#musicbuttonon');
       m.fadeOut(200);
     }
   };
 
-  var updateSoundButton = function () {
+  var updateSoundButton = function() {
     if (soundManager.isSoundOn()) {
-      $("#soundsbuttonon").fadeIn(200);
+      $('#soundsbuttonon').fadeIn(200);
     } else {
-      $("#soundsbuttonon").fadeOut(200);
+      $('#soundsbuttonon').fadeOut(200);
     }
   };
 
-  $("#instructionsclick").click(function () {
+  $('#instructionsclick').click(function() {
     game.pause();
     overlay.fadeIn(500);
-    $("#howtoplay").fadeIn(200);
-    $("#cue_canvas").fadeOut(200);
+    $('#howtoplay').fadeIn(200);
+    $('#cue_canvas').fadeOut(200);
   });
 
-  $("#howtoplay").click(function () {
+  $('#howtoplay').click(function() {
     game.resume();
     overlay.fadeOut(200);
-    $("#howtoplay").fadeOut(200);
-    $("#cue_canvas").fadeIn(200);
+    $('#howtoplay').fadeOut(200);
+    $('#cue_canvas').fadeIn(200);
   });
 
   // music on/off
-  $("#musicbuttonclick").click(function () {
+  $('#musicbuttonclick').click(function() {
     musicManager.toggleMusic();
     updateMusicButton();
   });
 
   // sound effects on/off
-  $("#soundsbuttonclick").click(function () {
+  $('#soundsbuttonclick').click(function() {
     soundManager.toggleSound();
     updateSoundButton();
   });
@@ -474,12 +474,12 @@ eightball.application.loadApp = function (skip_graphics) {
   updateSoundButton();
 
   // sound effects test code
-  $(".soundtest").click(function () {
+  $('.soundtest').click(function() {
     soundManager.play(this.id);
   });
 };
 
-eightball.application._isMac = function(){
+eightball.application._isMac = function() {
   var agent = goog.userAgent.getUserAgentString();
   return agent && goog.string.contains(agent, 'Mac');
 };

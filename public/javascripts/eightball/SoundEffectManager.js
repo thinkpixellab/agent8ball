@@ -50,14 +50,14 @@ eightball.SoundEffectManager.prototype.toggleSound = function() {
   }
 };
 
-/** 
+/**
  @const
  @private
  @type {string}
  */
-eightball.SoundEffectManager.s_CookieSoundOn = "eightball.SoundEffectManager.soundOn";
+eightball.SoundEffectManager.s_CookieSoundOn = 'eightball.SoundEffectManager.soundOn';
 
-/** 
+/**
  @private
  @enum {string}
  */

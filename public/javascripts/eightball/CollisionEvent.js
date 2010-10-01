@@ -58,7 +58,7 @@ eightball.CollisionEvent.EventType = {
   BREAK: 'BREAK',
 
   /**
-   * Dispatched when two balls collide 
+   * Dispatched when two balls collide
    */
   BALL: 'BALL',
 

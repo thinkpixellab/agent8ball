@@ -4,13 +4,13 @@ goog.provide('eightball.Game.GameState');
 
 goog.require('eightball.PoolTable');
 
-goog.require('goog.debug.LogManager');
 goog.require('goog.Timer');
 goog.require('goog.array');
+goog.require('goog.debug.LogManager');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
-goog.require('goog.object');
 goog.require('goog.net.cookies');
+goog.require('goog.object');
 
 /**
  @constructor
@@ -160,7 +160,7 @@ eightball.Game.prototype._tickAction = function() {
       if (this.bombSecondsLeft <= 0) {
 
         // update the game clock by removing 30 seconds but making sure we have at least
-        // 10 seconds left on the clock (even if that theoretically would increase the 
+        // 10 seconds left on the clock (even if that theoretically would increase the
         // the game time--because we count on this to clean up after the explosion)
         this.secondsLeft -= 30;
         if (this.secondsLeft < 10) this.secondsLeft = 10;
@@ -198,7 +198,7 @@ eightball.Game.prototype._dispatchGameEvent = function(type) {
 eightball.Game.prototype._pooltable_pocketDrop = function(e) {
 
   if (e.ballNumber != 0) {
-    goog.debug.LogManager.getRoot().info("Pocket drop: " + e.ballNumber);
+    goog.debug.LogManager.getRoot().info('Pocket drop: ' + e.ballNumber);
     this.addPoints(100);
   }
 
@@ -234,7 +234,7 @@ eightball.Game._inMs = function(seconds) {
   return seconds * 1000;
 };
 
-/** 
+/**
  * Possible game states
  * @enum {string}
  */
@@ -342,9 +342,9 @@ eightball.Game.s_gameSeconds = 120;
  */
 eightball.Game.s_bombSeconds = 30;
 
-/** 
+/**
  @const
  @private
  @type {string}
  */
-eightball.Game.s_CookieGameHighScore = "eightball.Game.highScore";
+eightball.Game.s_CookieGameHighScore = 'eightball.Game.highScore';
