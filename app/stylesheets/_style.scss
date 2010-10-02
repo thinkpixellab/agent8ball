@@ -13,35 +13,27 @@ body {
 }
 
 #vignette {
-    background-image: image-url('wood.jpg');
-    background-repeat: repeat;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0px;
-    top: 0px;
+  background-image: image-url('wood.jpg');
+  background-repeat: repeat;
+  @include fill-all;
 }
 
 #vignetteimg {
-    margin: 0px;
-    margin-bottom: -5px;
-    padding: 0px;
-    border: 0px;
-}
-
-.stretch {
-    width: 100%;
-    height: 100%;
+  @include fill-all;
+  margin: 0px;
+  margin-bottom: -5px;
+  padding: 0px;
+  border: 0px;
 }
 
 .content {
-    width: 860px;
-    top: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
+  width: 860px;
+  top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
