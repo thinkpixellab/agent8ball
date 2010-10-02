@@ -292,7 +292,8 @@
   display: none;
 }
 
-.overlaymessage {
+@mixin overlaymessage {
+    z-index: 500;
     font: 60px 'MolotRegular' , Arial, sans-serif;
     color: #ebd09c;
     letter-spacing: 1px;
@@ -301,6 +302,8 @@
     position: absolute;
     top: 280px;
     width: 860px;
+    display: none;
+    text-align: center;
 }
 
 #loading {
@@ -308,15 +311,13 @@
 }
 
 #start {
-    z-index: 500;
-    display: none;
+    @include overlaymessage;
     background-image: image-url("letter.png");
     background-repeat: no-repeat;
     width: 424px;
     height: 546px;
     margin-top: 60px;
     left: 240px;
-    text-align:center;
 }
 
 #startmessage {
@@ -334,43 +335,35 @@
 }
 
 #resume {
-    z-index: 500;
-    display: none;
+    @include overlaymessage;
     background-image: image-url("suspended.png");
     background-repeat: no-repeat;
     width: 430px;
     height: 311px;
     margin-top: 120px;
     left: 240px;
-    text-align:center;
 }
 
 #howtoplay {
-    z-index: 500;
+    @include overlaymessage;
     left: 49px;
     margin-top: 137px;
-    text-align: center;
-    
-    
     background-image: image-url("howtoplay.png");
     background-repeat: no-repeat;
     width: 757px;
     height: 347px;
     cursor: pointer;
-    display: none;
 }
 
 
 #gameover {
-    z-index: 500;
-    display: none;
+    @include overlaymessage;
     background-image: image-url("gameover.png");
     background-repeat: no-repeat;
     width: 402px;
     height: 339px;
     margin-top: 120px;
     left: 240px;
-    text-align:center;
 }
 
 #gameoverscore {
