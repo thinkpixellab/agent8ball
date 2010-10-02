@@ -1,8 +1,13 @@
 #gamecontrolsdisplay
-  +no-select
+  @include no-select
+  @include content
   display: none
 
+#gamecontrolsclick
+  @include content
+
 #game
+  @include content
   display: none
 
 #tableborder
@@ -36,39 +41,39 @@
   left: 10px
   top: 20px
 
-#timers .digit
-  text-align: right
-  position: absolute
-  top: 18px
+  .digit
+    text-align: right
+    position: absolute
+    top: 18px
 
-#minutesremaining
-  left: 28px
+  #minutesremaining
+    left: 28px
 
-#bombsecondstens
-  left: 398px
-  color: #d8850d
-  display: none
+  #bombsecondstens
+    left: 398px
+    color: #d8850d
+    display: none
 
-#bombsecondsones
-  left: 418px
-  color: #d8850d
-  display: none
+  #bombsecondsones
+    left: 418px
+    color: #d8850d
+    display: none
 
-#secondsremainingtens
-  left: 58px
+  #secondsremainingtens
+    left: 58px
 
-#secondsremainingones
-  left: 78px
+  #secondsremainingones
+    left: 78px
 
-#bombicon
-  background-image: image-url("bombicon.png")
-  background-repeat: no-repeat
-  width: 39px
-  height: 19px
-  left: 360px
-  top: 33px
-  position: absolute
-  display: none
+  #bombicon
+    background-image: image-url("bombicon.png")
+    background-repeat: no-repeat
+    width: 39px
+    height: 19px
+    left: 360px
+    top: 33px
+    position: absolute
+    display: none
 
 #score
   background-image: image-url("score.png")
@@ -96,7 +101,7 @@
   height: 34px
 
 #bestscore
-  +no-select
+  @include no-select
   background-image: image-url("bestscore.png")
   background-repeat: no-repeat
   text-align: center
@@ -210,6 +215,7 @@
   cursor: pointer
 
 #messageoverlay
+  @include content
   top: -200px
 
 #startover
@@ -360,7 +366,7 @@
   background-image: image-url("gamefacebookover.png")
 
 #loadingbg
-  +no-select
+  @include no-select
   +fill-all
   background-image: image-url("loadingbg.png")
   background-repeat: repeat

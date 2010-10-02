@@ -7,7 +7,7 @@
     #loadingpg
 #vignette.hidden
   %img#vignetteimg{:alt => "", :src => image_path("vignette.png")}
-#gamecontrolsdisplay.content.hidden
+#gamecontrolsdisplay.hidden
   #timers
     #minutesremaining.digit 2
     #secondsremainingtens.digit 0
@@ -30,14 +30,14 @@
       %img{:src => image_path("lightoff.png")}
       %img#soundsbuttonon{:src => image_path("lighton.png")}
   #pixellab= link_to '', "http://thinkpixellab.com"
-#game.content.hidden
+#game.hidden
   #tableborder
     #table
       #boom
       %canvas#shadow_canvas
       %canvas#demo_canvas
 %canvas#cue_canvas.hidden
-#gamecontrolsclick.content.hidden
+#gamecontrolsclick.hidden
   #instructionsclick
   #pauseclick
   #startoverclick
@@ -46,7 +46,7 @@
     #soundsbuttonclick
   #pixellabclick= link_to '', "http://thinkpixellab.com"
 #overlay.hidden
-  #messageoverlay.content
+  #messageoverlay
     #start
       #startmessage
     #resume
