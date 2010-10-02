@@ -86,7 +86,8 @@
     background-image: image-url("score.png");
     background-repeat: no-repeat;
     text-align: center;
-    font: 30px 'MolotRegular' , Arial, sans-serif;
+    @include sansfont;
+    font-size: 30px;
     color: #c34414;
     letter-spacing: 0;
     width: 81px;
@@ -113,7 +114,8 @@
     background-image: image-url("bestscore.png");
     background-repeat: no-repeat;
     text-align: center;
-    font: 22px 'MolotRegular' , Arial, sans-serif;
+    @include sansfont;
+    font-size: 22px;;
     color: #47341d;
     letter-spacing: 0;
     width: 135px;
@@ -294,7 +296,8 @@
 
 @mixin overlaymessage {
     z-index: 500;
-    font: 60px 'MolotRegular' , Arial, sans-serif;
+    @include sansfont;
+    font-size: 60px;
     color: #ebd09c;
     letter-spacing: 1px;
     cursor: pointer;
@@ -371,9 +374,9 @@
     top: 130px;
     width: 402px;
     text-align:center;
-    font: 96px 'MolotRegular' , Arial, sans-serif;
+    @include sansfont;
+    font-size: 96px;
     color: #352716;
-    
 }
 
 #gameovertwitter {
