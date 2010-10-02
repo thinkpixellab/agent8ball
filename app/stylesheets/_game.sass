@@ -1,0 +1,416 @@
+#gamecontrolsdisplay
+  +no-select
+  display: none
+
+#game
+  display: none
+
+#tableborder
+  background-image: image-url("tableborder.png")
+  background-repeat: no-repeat
+  width: 1113px
+  height: 497px
+  position: absolute
+  top: 100px
+  left: -130px
+
+#table
+  background-image: image-url("table.jpg")
+  background-repeat: no-repeat
+  width: 847px
+  height: 438px
+  position: absolute
+  top: 19px
+  left: 137px
+
+#timers
+  background-image: image-url("timerbg.png")
+  background-repeat: no-repeat
+  font: 30px 'RadiolandRegular' , Arial, sans-serif
+  color: #cb512c
+  color: #b23711
+  letter-spacing: 0
+  width: 452px
+  height: 67px
+  position: absolute
+  left: 10px
+  top: 20px
+
+#timers .digit
+  text-align: right
+  position: absolute
+  top: 18px
+
+#minutesremaining
+  left: 28px
+
+#bombsecondstens
+  left: 398px
+  color: #d8850d
+  display: none
+
+#bombsecondsones
+  left: 418px
+  color: #d8850d
+  display: none
+
+#secondsremainingtens
+  left: 58px
+
+#secondsremainingones
+  left: 78px
+
+#bombicon
+  background-image: image-url("bombicon.png")
+  background-repeat: no-repeat
+  width: 39px
+  height: 19px
+  left: 360px
+  top: 33px
+  position: absolute
+  display: none
+
+#score
+  background-image: image-url("score.png")
+  background-repeat: no-repeat
+  text-align: center
+  +sansfont
+  font-size: 30px
+  color: #c34414
+  letter-spacing: 0
+  width: 81px
+  height: 71px
+  padding-top: 28px
+  padding-left: 0px
+  position: absolute
+  top: 17px
+  left: 759px
+
+#progress
+  background-image: image-url("progressunit.png")
+  background-repeat: repeat-x
+  position: absolute
+  top: 33px
+  left: 113px
+  width: 210px
+  height: 34px
+
+#bestscore
+  +no-select
+  background-image: image-url("bestscore.png")
+  background-repeat: no-repeat
+  text-align: center
+  +sansfont
+  font-size: 22px
+  color: #47341d
+  letter-spacing: 0
+  width: 135px
+  height: 118px
+  padding-top: 56px
+  padding-left: 2px
+  position: absolute
+  top: -6px
+  left: 653px
+
+#soundclick
+  left: 640px
+  top: 583px
+  position: absolute
+  width: 210px
+  height: 58px
+  background: transparent
+
+#musicbuttonclick
+  position: absolute
+  height: 20px
+  width: 65px
+  top: 20px
+  cursor: pointer
+
+#soundsbuttonclick
+  position: absolute
+  height: 20px
+  width: 80px
+  top: 20px
+  left: 120px
+  cursor: pointer
+
+#sounds
+  left: 640px
+  top: 583px
+  position: absolute
+  background-image: image-url("speaker.png")
+  background-position: center
+  background-repeat: no-repeat
+  width: 210px
+  height: 58px
+
+#musicbutton
+  position: absolute
+  height: 20px
+  width: 65px
+  top: 20px
+  cursor: pointer
+
+#musicbutton img
+  position: absolute
+  margin-top: 1px
+
+#soundsbutton
+  position: absolute
+  height: 20px
+  width: 80px
+  top: 20px
+  left: 120px
+  cursor: pointer
+
+#smalllogo
+  left: 5px
+  top: 595px
+  position: absolute
+  background-image: image-url("smalllogo.png")
+  background-repeat: no-repeat
+  width: 237px
+  height: 42px
+
+#instructions
+  left: 274px
+  top: 598px
+  position: absolute
+  background-image: image-url("instructions.png")
+  background-repeat: no-repeat
+  width: 96px
+  height: 30px
+
+#instructionsclick
+  left: 274px
+  top: 598px
+  position: absolute
+  background: transparent
+  width: 96px
+  height: 30px
+  cursor: pointer
+
+#pause
+  left: 380px
+  top: 579px
+  position: absolute
+  background-image: image-url("pause.png")
+  background-repeat: no-repeat
+  width: 89px
+  height: 71px
+
+#pauseclick
+  left: 380px
+  top: 579px
+  position: absolute
+  background: transparent
+  width: 89px
+  height: 71px
+  cursor: pointer
+
+#messageoverlay
+  top: -200px
+
+#startover
+  left: 492px
+  top: 598px
+  position: absolute
+  background-image: image-url("startover.png")
+  background-repeat: no-repeat
+  width: 83px
+  height: 30px
+
+#startoverclick
+  left: 492px
+  top: 598px
+  position: absolute
+  background: transparent
+  width: 83px
+  height: 30px
+  cursor: pointer
+
+#soundsbutton img
+  position: absolute
+  margin-left: 69px
+  margin-top: 1px
+
+#demo_canvas
+  left: 7px
+  top: 6px
+  position: absolute
+
+#cue_canvas
+  left: 0px
+  top: 0px
+  position: absolute
+  background-image: image-url("transparent.png")
+
+#boom
+  background-image: image-url("boom.png")
+  position: absolute
+  width: 277px
+  height: 226px
+  display: none
+
+#overlay
+  +fill-all
+  z-index: 100
+  background: rgba(0, 0, 0, 0.5)
+  display: none
+
+=overlaymessage
+  z-index: 500
+  +sansfont
+  font-size: 60px
+  color: #ebd09c
+  letter-spacing: 1px
+  cursor: pointer
+  text-align: center
+  position: absolute
+  top: 280px
+  width: 860px
+  display: none
+  text-align: center
+
+#loading
+  z-index: 400
+
+#start
+  +overlaymessage
+  background-image: image-url("letter.png")
+  background-repeat: no-repeat
+  width: 424px
+  height: 546px
+  margin-top: 60px
+  left: 240px
+
+#startmessage
+  background-image: image-url("startoverlay.png")
+  background-repeat: no-repeat
+  position: absolute
+  top: 120px
+  left: 55px
+  font: 13px / 16px "CPMono_v07Bold", Arial, sans-serif
+  text-align: left
+  width: 258px
+  height: 311px
+  color: #322c25
+  padding-top: 15px
+
+#resume
+  +overlaymessage
+  background-image: image-url("suspended.png")
+  background-repeat: no-repeat
+  width: 430px
+  height: 311px
+  margin-top: 120px
+  left: 240px
+
+#howtoplay
+  +overlaymessage
+  left: 49px
+  margin-top: 137px
+  background-image: image-url("howtoplay.png")
+  background-repeat: no-repeat
+  width: 757px
+  height: 347px
+  cursor: pointer
+
+#gameover
+  +overlaymessage
+  background-image: image-url("gameover.png")
+  background-repeat: no-repeat
+  width: 402px
+  height: 339px
+  margin-top: 120px
+  left: 240px
+
+#gameoverscore
+  position: absolute
+  top: 130px
+  width: 402px
+  text-align: center
+  +sansfont
+  font-size: 96px
+  color: #352716
+
+#gameovertwitter
+  position: absolute
+  top: 275px
+  left: 127px
+  background-image: image-url("gametwitter.png")
+  background-repeat: no-repeat
+  width: 31px
+  height: 31px
+
+#gameovertwitter:hover
+  background-image: image-url("gametwitterover.png")
+
+#gameoverfacebook
+  position: absolute
+  top: 278px
+  left: 163px
+  background-image: image-url("gamefacebook.png")
+  background-repeat: no-repeat
+  width: 29px
+  height: 29px
+
+#gameoverfacebook:hover
+  background-image: image-url("gamefacebookover.png")
+
+#loadingbg
+  +no-select
+  +fill-all
+  background-image: image-url("loadingbg.png")
+  background-repeat: repeat
+  display: none
+
+#loadingbg img
+  +fill-all
+
+#loading
+  width: 295px
+  height: 283px
+  background-image: image-url("loading.jpg")
+  background-repeat: no-repeat
+  margin-left: auto
+  margin-right: auto
+  margin-top: 200px
+
+#loadingpg
+  width: 0px
+  height: 10px
+  background-image: image-url("loadingpg.png")
+  background-repeat: no-repeat
+  position: absolute
+  margin-top: 270px
+  margin-left: 36px
+
+#pixellab
+  display: block
+  left: 320px
+  top: 660px
+  position: absolute
+  background-image: image-url("pixellab.png")
+  background-repeat: no-repeat
+  background-position: center top
+  width: 193px
+  height: 28px
+
+#pixellabclick
+  display: block
+  left: 320px
+  top: 660px
+  position: absolute
+  background: transparent
+  width: 193px
+  height: 28px
+
+#pixellabclick:hover
+  background-image: image-url("pixellabover.png")
+
+#pixellabclick a
+  display: block
+  width: 193px
+  height: 28px
