@@ -140,12 +140,6 @@
   left: 120px
   cursor: pointer
 
-@mixin sound-light
-  width: 19px
-  height: 19px
-  background-image: image-url('lights.png')
-  position: absolute
-
 #sounds
   left: 640px
   top: 583px
@@ -175,7 +169,10 @@
       right: 0
 
   .on, .off
-    @include sound-light
+    width: 19px
+    height: 19px
+    background-image: image-url('lights.png')
+    position: absolute
 
   .off
     background-position: 0px 19px
