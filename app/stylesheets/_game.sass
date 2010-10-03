@@ -140,6 +140,12 @@
   left: 120px
   cursor: pointer
 
+@mixin sound-light
+  width: 19px
+  height: 19px
+  background-image: image-url('lights.png')
+  position: absolute
+
 #sounds
   left: 640px
   top: 583px
@@ -150,24 +156,29 @@
   width: 210px
   height: 58px
 
-#musicbutton
-  position: absolute
-  height: 20px
-  width: 65px
-  top: 20px
-  cursor: pointer
+  #musicbutton
+    position: absolute
+    height: 20px
+    width: 65px
+    top: 20px
+    cursor: pointer
 
-#musicbutton img
-  position: absolute
-  margin-top: 1px
+  #soundsbutton
+    position: absolute
+    height: 20px
+    width: 90px
+    top: 20px
+    left: 120px
+    cursor: pointer
 
-#soundsbutton
-  position: absolute
-  height: 20px
-  width: 80px
-  top: 20px
-  left: 120px
-  cursor: pointer
+    .on, .off
+      right: 0
+
+  .on, .off
+    @include sound-light
+
+  .off
+    background-position: 0px 19px
 
 #smalllogo
   left: 5px

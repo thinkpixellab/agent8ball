@@ -429,18 +429,17 @@ eightball.application.loadApp = function(skip_graphics) {
 
   var updateMusicButton = function() {
     if (musicManager.isMusicOn()) {
-      $('#musicbuttonon').fadeIn(200);
+      $('#musicbutton .on').fadeIn(200);
     } else {
-      var m = $('#musicbuttonon');
-      m.fadeOut(200);
+      $('#musicbutton .on').fadeOut(200);
     }
   };
 
   var updateSoundButton = function() {
     if (soundManager.isSoundOn()) {
-      $('#soundsbuttonon').fadeIn(200);
+      $('#soundsbutton .on').fadeIn(200);
     } else {
-      $('#soundsbuttonon').fadeOut(200);
+      $('#soundsbutton .on').fadeOut(200);
     }
   };
 
