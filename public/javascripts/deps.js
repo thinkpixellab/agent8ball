@@ -78,7 +78,7 @@ goog.addDependency("../../../eightball/SoundEffectManager.js", ['eightball.Sound
 goog.addDependency("../../../pixelLab/Audio.js", ['pixelLab.Audio'], ['goog.string']);
 goog.addDependency("../../../pixelLab/DebugDiv.js", ['pixelLab.DebugDiv'], ['goog.debug.LogManager', 'goog.dom']);
 goog.addDependency("../../../pixelLab/FpsLogger.js", ['pixelLab.FpsLogger'], []);
-goog.addDependency("../../../pixelLab/KeyBinding.js", ['pixelLab.KeyBinding'], ['goog.dom', 'goog.events.KeyCodes', 'goog.events.KeyHandler', 'goog.events.KeyHandler.EventType', 'goog.style']);
+goog.addDependency("../../../pixelLab/KeyBinding.js", ['pixelLab.KeyBinding'], ['goog.dom', 'goog.ui.KeyboardShortcutHandler', 'goog.ui.KeyboardShortcutHandler.EventType', 'goog.style']);
 goog.addDependency("../../../pixelLab/Preload.js", ['pixelLab.Preload'], ['goog.object']);
 goog.addDependency("../../../loader.js", [], ['eightball.application', 'pixelLab.Preload']);
-goog.addDependency("../../../application.js", ['eightball.application'], ['eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState', 'eightball.Music', 'eightball.PoolTable', 'eightball.SoundEffectManager', 'goog.debug.LogManager', 'goog.events', 'goog.events.EventType', 'goog.events.KeyCodes', 'goog.i18n.NumberFormat', 'goog.string', 'goog.userAgent', 'pixelLab.DebugDiv', 'pixelLab.KeyBinding']);
+goog.addDependency("../../../application.js", ['eightball.application'], ['eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState', 'eightball.Music', 'eightball.PoolTable', 'eightball.SoundEffectManager', 'goog.debug.LogManager', 'goog.events', 'goog.events.EventType', 'goog.i18n.NumberFormat', 'goog.string', 'goog.userAgent', 'pixelLab.DebugDiv', 'pixelLab.KeyBinding']);

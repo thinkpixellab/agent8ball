@@ -13,7 +13,6 @@ goog.require('eightball.SoundEffectManager');
 goog.require('goog.debug.LogManager');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
-goog.require('goog.events.KeyCodes');
 goog.require('goog.i18n.NumberFormat');
 goog.require('goog.string');
 goog.require('goog.userAgent');
@@ -412,16 +411,16 @@ eightball.application.loadApp = function(skip_graphics) {
 
   var keyBinding = new pixelLab.KeyBinding();
 
-  keyBinding.add(goog.events.KeyCodes.R, 'Restart game', function() {
+  keyBinding.add('r', 'Restart game', function() {
     game.reset();
   });
 
-  keyBinding.add(goog.events.KeyCodes.B, 'Bomb demo mode', function() {
+  keyBinding.add('b', 'Bomb demo mode', function() {
     game.setBombDemoMode();
     game.reset();
   });
 
-  keyBinding.add(goog.events.KeyCodes.E, 'End game early', function() {
+  keyBinding.add('e', 'End game early', function() {
     if (game.gameState == eightball.Game.States.STARTED) {
       game.secondsLeft = 5;
     }
