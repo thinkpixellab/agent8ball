@@ -2,9 +2,9 @@
 goog.provide('pixelLab.KeyBinding');
 
 goog.require('goog.dom');
+goog.require('goog.style');
 goog.require('goog.ui.KeyboardShortcutHandler');
 goog.require('goog.ui.KeyboardShortcutHandler.EventType');
-goog.require('goog.style');
 
 /**
  @constructor
@@ -23,6 +23,11 @@ pixelLab.KeyBinding = function(opt_skipStyles) {
       goog.bind(this._handleKey, this));
 };
 
+/**
+ @param {!string} keybinding
+ @param {!string} description
+ @param {function():void} action
+ */
 pixelLab.KeyBinding.prototype.add = function(keybinding, description, action) {
   var indexStr = this.m_map.length.toString();
   this.m_shortcutHandler.registerShortcut(indexStr, keybinding);
@@ -32,6 +37,10 @@ pixelLab.KeyBinding.prototype.add = function(keybinding, description, action) {
   });
 };
 
+/*
+  @privae
+  @param {!goog.ui.KeyboardShortcutEvent} event
+*/
 pixelLab.KeyBinding.prototype._handleKey = function(event) {
   var number = new Number(event.identifier);
   var entry = this.m_map[number];
@@ -40,6 +49,10 @@ pixelLab.KeyBinding.prototype._handleKey = function(event) {
   this._alert(entry['description']);
 };
 
+/*
+  @privae
+  @param {!message} message
+*/
 pixelLab.KeyBinding.prototype._alert = function(message) {
   var div = document.getElementById(pixelLab.KeyBinding.c_alertDivId);
   if (div) {
@@ -70,6 +83,7 @@ pixelLab.KeyBinding.prototype._alert = function(message) {
 };
 
 /*
+ @private
  @const
  @type {string}
 */
