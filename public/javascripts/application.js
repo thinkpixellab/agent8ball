@@ -410,6 +410,12 @@ eightball.application.loadApp = function(skip_graphics) {
   updatePoolTableLayout();
 
   var keyBinding = new pixelLab.KeyBinding();
+  goog.events.listen(keyBinding, pixelLab.KeyBinding.TYPE, function(e) {
+    var div = jQuery('#KeyBindingAlertDiv');
+    div.stop(true, true).show();
+    div.text(e['description']);
+    div.delay(1000).fadeOut(500);
+  });
 
   keyBinding.add('r', 'Restart game', function() {
     game.reset();
