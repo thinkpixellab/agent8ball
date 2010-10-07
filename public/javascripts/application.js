@@ -94,7 +94,7 @@ eightball.application.loadApp = function(skip_graphics) {
   var typingSound = null;
 
   // event handlers
-  var _tickAction = function() {
+  var tickAction = function() {
 
     if (isExplosionActive) return;
     _updateTimerVisuals(game.secondsLeft);
@@ -130,7 +130,7 @@ eightball.application.loadApp = function(skip_graphics) {
     $('#bestscore').html(game.highScore);
   };
 
-  var _scoreAction = function() {
+  var scoreAction = function() {
     var s = game.score;
     if (s == 0) s = '00';
     $('#score').html(s);
@@ -240,8 +240,8 @@ eightball.application.loadApp = function(skip_graphics) {
   _game = game;
 
   // game events (TODO: make these inline)
-  goog.events.listen(game, eightball.Game.EventType.TICK, _tickAction);
-  goog.events.listen(game, eightball.Game.EventType.SCORE, _scoreAction);
+  goog.events.listen(game, eightball.Game.EventType.TICK, tickAction);
+  goog.events.listen(game, eightball.Game.EventType.SCORE, scoreAction);
   goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, highScoreAction);
   goog.events.listen(game, eightball.Game.EventType.READY, readyAction);
   goog.events.listen(game, eightball.Game.EventType.END, endAction);
