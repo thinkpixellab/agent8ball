@@ -2,11 +2,16 @@ goog.provide('eightball.Music');
 
 goog.require('eightball.Cookies');
 
+goog.require('goog.events.Event');
+goog.require('goog.events.EventTarget');
+
 /**
  @constructor
+ @extends {goog.events.EventTarget}
  @param {string} location
  */
 eightball.Music = function(location) {
+  goog.events.EventTarget.call(this);
 
   /**
    @private
@@ -24,6 +29,7 @@ eightball.Music = function(location) {
     this.startMusic();
   }
 };
+goog.inherits(eightball.Music, goog.events.EventTarget);
 
 eightball.Music.prototype.startMusic = function() {
 
@@ -39,11 +45,13 @@ eightball.Music.prototype.startMusic = function() {
   document.body.appendChild(this.m_music);
 
   eightball.Cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.ON);
+  this.dispatchEvent(new goog.events.Event(eightball.Music.STATE_CHANGE_EVENT_TYPE));
 };
 
 eightball.Music.prototype.stopMusic = function() {
   this._clearMusic();
   eightball.Cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.OFF);
+  this.dispatchEvent(new goog.events.Event(eightball.Music.STATE_CHANGE_EVENT_TYPE));
 };
 
 eightball.Music.prototype.isMusicOn = function() {
@@ -57,6 +65,12 @@ eightball.Music.prototype.toggleMusic = function() {
     this.startMusic();
   }
 };
+
+/**
+  @const
+  @type {string}
+*/
+eightball.Music.STATE_CHANGE_EVENT_TYPE = 'eightball.Music.STATE_CHANGE_EVENT_TYPE';
 
 /**
  @private

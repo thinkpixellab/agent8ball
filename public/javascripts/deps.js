@@ -70,11 +70,11 @@ goog.addDependency("../../../eightball/CollisionEvent.js", ['eightball.Collision
 goog.addDependency("../../../eightball/Cookies.js", ['eightball.Cookies'], ['goog.net.cookies']);
 goog.addDependency("../../../eightball/DroppingBall.js", ['eightball.DroppingBall'], []);
 goog.addDependency("../../../eightball/Game.js", ['eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState'], ['eightball.PoolTable', 'goog.Timer', 'goog.array', 'goog.debug.LogManager', 'goog.events.Event', 'goog.events.EventTarget', 'goog.net.cookies', 'goog.object']);
-goog.addDependency("../../../eightball/Music.js", ['eightball.Music'], ['eightball.Cookies']);
+goog.addDependency("../../../eightball/Music.js", ['eightball.Music'], ['eightball.Cookies', 'goog.events.Event', 'goog.events.EventTarget']);
 goog.addDependency("../../../eightball/PocketDropEvent.js", ['eightball.PocketDropEvent'], ['goog.events.Event']);
 goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], ['box2d.AABB', 'box2d.BodyDef', 'box2d.CircleDef', 'box2d.PolyDef', 'box2d.Vec2', 'box2d.World', 'eightball.CollisionEvent', 'eightball.DroppingBall', 'eightball.PocketDropEvent', 'goog.Timer', 'goog.array', 'goog.color', 'goog.debug.LogManager', 'goog.events', 'goog.events.EventTarget', 'goog.math.Line', 'goog.math.Matrix', 'goog.math.Vec2', 'goog.object', 'goog.style', 'pixelLab.DebugDiv', 'pixelLab.FpsLogger']);
 goog.addDependency("../../../eightball/SoundEffect.js", ['eightball.SoundEffect'], []);
-goog.addDependency("../../../eightball/SoundEffectManager.js", ['eightball.SoundEffectManager'], ['eightball.SoundEffect', 'goog.net.cookies']);
+goog.addDependency("../../../eightball/SoundEffectManager.js", ['eightball.SoundEffectManager'], ['eightball.SoundEffect', 'goog.events.Event', 'goog.events.EventTarget', 'goog.net.cookies']);
 goog.addDependency("../../../pixelLab/Audio.js", ['pixelLab.Audio'], ['goog.string']);
 goog.addDependency("../../../pixelLab/DebugDiv.js", ['pixelLab.DebugDiv'], ['goog.debug.LogManager', 'goog.dom']);
 goog.addDependency("../../../pixelLab/FpsLogger.js", ['pixelLab.FpsLogger'], []);
