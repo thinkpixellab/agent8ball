@@ -432,6 +432,20 @@ eightball.application.loadApp = function(skip_graphics) {
     }
   });
 
+  keyBinding.add('m', 'Toggle music', function() {
+    musicManager.toggleMusic();
+    updateMusicButton();
+    var state = musicManager.isMusicOn() ? 'on' : 'off';
+    return 'Game music is now ' + state;
+  });
+
+  keyBinding.add('s', 'Toggle sound', function() {
+    soundManager.toggleSound();
+    updateSoundButton();
+    var state = soundManager.isSoundOn() ? 'on' : 'off';
+    return 'Game sounds are now ' + state;
+  });
+
   var updateMusicButton = function() {
     if (musicManager.isMusicOn()) {
       $('#musicbutton .on').fadeIn(200);
