@@ -1,5 +1,5 @@
 - content_for :head do
-  = game_js(params.has_key?('compiled'))
+  = game_js(params.has_key?('debug'))
 
 #loadingbg
   %img{:alt => "", :src => image_path("vignette.png")}

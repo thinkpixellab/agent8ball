@@ -1,15 +1,15 @@
 module MainHelper
-  def game_js(compiled = false)
+  def game_js(debug = false)
     items = []
 
     asset_js = "var preloadAssets = #{assets_hash.to_json};"
     items << content_tag('script', asset_js, {'type' => Mime::JS}, escape = false)
 
-    if compiled
-      items << javascript_include_tag('compiled')
-    else
+    if debug
       items << content_tag('script', '', {'type' => Mime::JS, 'src' => '/javascripts/closure-library/closure/goog/base.js'})
       items << javascript_include_tag('deps', 'loader')
+    else
+      items << javascript_include_tag('compiled')
     end
     items.join("\n").html_safe
   end
