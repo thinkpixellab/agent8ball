@@ -414,7 +414,7 @@ eightball.application.loadApp = function(skip_graphics) {
     var div = jQuery('#KeyBindingAlertDiv');
     div.stop(true, true).show();
     div.text(e['description']);
-    div.delay(1000).fadeOut(500);
+    div.delay(2000).fadeOut(500);
   });
 
   keyBinding.add('r', 'Restart game', function() {
