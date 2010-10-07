@@ -71,21 +71,21 @@ eightball.application.loadApp = function(skip_graphics) {
 
   goog.events.listen(soundManager, eightball.SoundEffectManager.STATE_CHANGE_EVENT_TYPE, updateSoundButton);
 
-  soundManager.add('break', 1);
-  soundManager.add('cuestick', 1);
-  soundManager.add('ball', 5);
-  soundManager.add('quietball', 2);
-  soundManager.add('wall', 3);
-  soundManager.add('quietwall', 2);
-  soundManager.add('cuehit', 1);
-  soundManager.add('pocket', 2);
-  soundManager.add('typing', 1);
   soundManager.add('activate', 1);
-  soundManager.add('deactivate', 1);
-  soundManager.add('bombtickslow', 1);
+  soundManager.add('ball', 5);
   soundManager.add('bombtick', 1);
   soundManager.add('bombtickfast', 1);
+  soundManager.add('bombtickslow', 1);
+  soundManager.add('break', 1);
+  soundManager.add('cuehit', 1);
+  soundManager.add('cuestick', 1);
+  soundManager.add('deactivate', 1);
   soundManager.add('explode', 1);
+  soundManager.add('pocket', 2);
+  soundManager.add('quietball', 2);
+  soundManager.add('quietwall', 2);
+  soundManager.add('typing', 1);
+  soundManager.add('wall', 3);
 
   window.soundManager = soundManager;
 
@@ -487,11 +487,6 @@ eightball.application.loadApp = function(skip_graphics) {
   // sound effects on/off
   $('#soundsbuttonclick').click(function() {
     soundManager.toggleSound();
-  });
-
-  // sound effects test code
-  $('.soundtest').click(function() {
-    soundManager.play(this.id);
   });
 };
 
