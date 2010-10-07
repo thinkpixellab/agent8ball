@@ -18,6 +18,7 @@ goog.require('goog.object');
  @param {!eightball.PoolTable} poolTable
  */
 eightball.Game = function(poolTable) {
+  goog.events.EventTarget.call(this);
 
   /**
    @private
@@ -36,7 +37,7 @@ eightball.Game = function(poolTable) {
    */
   this.m_bombDemoMode = false;
 
-  goog.events.listen(this.m_poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop, undefined, this);
+  goog.events.listen(poolTable, eightball.PocketDropEvent.TYPE, this._pooltable_pocketDrop, undefined, this);
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BALL, this._pooltable_ballHit, undefined, this);
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUEBALL, this._pooltable_ballHit, undefined, this);
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.BREAK, this._pooltable_ballHit, undefined, this);
