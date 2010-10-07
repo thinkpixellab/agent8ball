@@ -46,9 +46,10 @@ pixelLab.KeyBinding.prototype.add = function(keybinding, description, action) {
 pixelLab.KeyBinding.prototype._handleKey = function(event) {
   var number = new Number(event.identifier);
   var entry = this.m_map[number];
-  entry['action'].call();
+  var result = entry['action'].call();
   event.stopPropagation();
-  this.dispatchEvent(new pixelLab.KeyBindingEvent(entry['shortcut'], entry['description']));
+  var description = result || entry['description'];
+  this.dispatchEvent(new pixelLab.KeyBindingEvent(entry['shortcut'], description));
 };
 
 /*
