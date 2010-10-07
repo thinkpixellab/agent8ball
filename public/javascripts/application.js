@@ -43,12 +43,33 @@ eightball.application.loadApp = function(skip_graphics) {
   $('#gamecontrolsclick').delay(500).fadeIn(1000);
   $('#cue_canvas').delay(500).fadeIn(1000);
 
-  // music
-  var themeUrl = preloadAssets.audios['theme'];
-  var musicManager = new eightball.Music(themeUrl);
+  //
+  // MUSIC
+  //
+  var musicManager = new eightball.Music(preloadAssets.audios['theme']);
 
-  // sound
+  var updateMusicButton = function() {
+    if (musicManager.isMusicOn()) {
+      $('#musicbutton .on').fadeIn(200);
+    } else {
+      $('#musicbutton .on').fadeOut(200);
+    }
+  };
+
+  goog.events.listen(musicManager, eightball.Music.STATE_CHANGE_EVENT_TYPE, updateMusicButton);
+
+  // Sound
   var soundManager = new eightball.SoundEffectManager(preloadAssets.audios);
+
+  var updateSoundButton = function() {
+    if (soundManager.isSoundOn()) {
+      $('#soundsbutton .on').fadeIn(200);
+    } else {
+      $('#soundsbutton .on').fadeOut(200);
+    }
+  };
+
+  goog.events.listen(soundManager, eightball.SoundEffectManager.STATE_CHANGE_EVENT_TYPE, updateSoundButton);
 
   soundManager.add('break', 1);
   soundManager.add('cuestick', 1);
@@ -434,33 +455,15 @@ eightball.application.loadApp = function(skip_graphics) {
 
   keyBinding.add('m', 'Toggle music', function() {
     musicManager.toggleMusic();
-    updateMusicButton();
     var state = musicManager.isMusicOn() ? 'on' : 'off';
     return 'Game music is now ' + state;
   });
 
   keyBinding.add('s', 'Toggle sound', function() {
     soundManager.toggleSound();
-    updateSoundButton();
     var state = soundManager.isSoundOn() ? 'on' : 'off';
     return 'Game sounds are now ' + state;
   });
-
-  var updateMusicButton = function() {
-    if (musicManager.isMusicOn()) {
-      $('#musicbutton .on').fadeIn(200);
-    } else {
-      $('#musicbutton .on').fadeOut(200);
-    }
-  };
-
-  var updateSoundButton = function() {
-    if (soundManager.isSoundOn()) {
-      $('#soundsbutton .on').fadeIn(200);
-    } else {
-      $('#soundsbutton .on').fadeOut(200);
-    }
-  };
 
   $('#instructionsclick').click(function() {
     game.pause();
@@ -479,17 +482,12 @@ eightball.application.loadApp = function(skip_graphics) {
   // music on/off
   $('#musicbuttonclick').click(function() {
     musicManager.toggleMusic();
-    updateMusicButton();
   });
 
   // sound effects on/off
   $('#soundsbuttonclick').click(function() {
     soundManager.toggleSound();
-    updateSoundButton();
   });
-
-  updateMusicButton();
-  updateSoundButton();
 
   // sound effects test code
   $('.soundtest').click(function() {
