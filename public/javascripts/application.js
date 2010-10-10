@@ -24,9 +24,9 @@ var _game;
 
 /**
  @constructor
- @param {boolean=} skip_graphics
+ @param {boolean=} opt_skipGraphics
 */
-eightball.Application = function(skip_graphics) {
+eightball.Application = function(opt_skipGraphics) {
 
   if (eightball.Application._isMac()) {
     $('#timers .digit').css('line-height', '62px');
@@ -217,7 +217,7 @@ eightball.Application = function(skip_graphics) {
     $('#bestscore').html(game.highScore);
   });
 
-  if (skip_graphics) {
+  if (opt_skipGraphics) {
     goog.events.listen(game, eightball.Game.EventType.READY, function() {
       game.start();
     });
