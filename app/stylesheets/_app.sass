@@ -1,3 +1,23 @@
+a#debug
+  display: block
+  opacity: .8
+  background: black
+  bottom: 0
+  font-family: monospace
+  font-size: 15px
+  margin: 5px
+  padding: 10px
+  position: fixed
+  right: 0
+  z-index: 500
+  text-decoration: none
+
+  &:visited, &:active, &:link
+    color: white
+
+  &:hover
+    text-decoration: underline
+
 #error
   @extend .error
   margin-top: 100px

@@ -1,5 +1,11 @@
+- uncompiled = params.has_key?('uncompiled')
 - content_for :head do
-  = game_js(params.has_key?('debug'))
+  = game_js(uncompiled)
+- if Rails.env == 'development'
+  - if(uncompiled)
+    = link_to "Uncompiled", root_path, :id => 'debug', :title => 'Go to compiled version'
+  - else
+    = link_to "Complied", '/?uncompiled', :id => 'debug', :title => 'Go to uncompiled version'
 
 #loadingbg
   %img{:alt => "", :src => image_path("vignette.png")}
