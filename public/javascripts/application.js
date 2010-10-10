@@ -1,7 +1,7 @@
 // *******************************************************************************
 // APP LOGIC
 // *******************************************************************************
-goog.provide('eightball.application');
+goog.provide('eightball.Application');
 
 goog.require('eightball.Game');
 goog.require('eightball.Game.EventType');
@@ -22,12 +22,13 @@ goog.require('pixelLab.KeyBinding');
 
 var _game;
 
-/*
-@param {boolean=} skip_graphics
+/**
+ @constructor
+ @param {boolean=} skip_graphics
 */
-eightball.application.loadApp = function(skip_graphics) {
+eightball.Application = function(skip_graphics) {
 
-  if (eightball.application._isMac()) {
+  if (eightball.Application._isMac()) {
     $('#timers .digit').css('line-height', '62px');
   }
 
@@ -474,9 +475,10 @@ eightball.application.loadApp = function(skip_graphics) {
   });
 };
 
-eightball.application._isMac = function() {
+/**
+ @private
+*/
+eightball.Application._isMac = function() {
   var agent = goog.userAgent.getUserAgentString();
   return agent && goog.string.contains(agent, 'Mac');
 };
-
-goog.exportSymbol('loadApp', eightball.application.loadApp);

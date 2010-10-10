@@ -1,4 +1,4 @@
-goog.require('eightball.application');
+goog.require('eightball.Application');
 goog.require('pixelLab.Preload');
 
 /** @define {boolean} */
@@ -15,14 +15,16 @@ $(document).ready(function() {
   });
 
   if (SKIP_PRELOAD) {
-    loadApp(true);
+    new eightball.Application(true);
   } else {
 
     var images = preloadAssets.images;
     var preloadAudios = [preloadAssets.audios['theme'], preloadAssets.audios['typing']];
 
     var done = function() {
-      $('#loadingbg').delay(500).fadeOut(700, loadApp);
+      $('#loadingbg').delay(500).fadeOut(700, function() {
+        new eightball.Application();
+      });
     };
 
     var progress = function(percent) {
@@ -32,8 +34,10 @@ $(document).ready(function() {
     // show the preload ui
     $('#loadingbg').delay(500).fadeIn(700);
 
-
     // load the ui (on a timer so that we start after fading in -- it looks weird otherwise)
-    setTimeout(function() { new pixelLab.Preload(images, preloadAudios, progress, done); }, 1500);
+    setTimeout(function() {
+      new pixelLab.Preload(images, preloadAudios, progress, done);
+    },
+    1500);
   }
 });
