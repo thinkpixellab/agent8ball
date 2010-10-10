@@ -115,18 +115,7 @@ eightball.application.loadApp = function(skip_graphics) {
   var typingSound = null;
 
   // event handlers
-  var tickAction = function() {
-
-    if (isExplosionActive) return;
-    _updateTimerVisuals(game.secondsLeft);
-
-    pixelLab.DebugDiv.clear();
-    var fmt = new goog.i18n.NumberFormat('#,###.##');
-    var str = fmt.format(poolTable.stepsPerSecond());
-    goog.debug.LogManager.getRoot().info('FPS: ' + str);
-  };
-
-  var _updateTimerVisuals = function(s) {
+  var updateTimerVisuals = function(s) {
 
     lastTickSeconds = s;
 
@@ -145,58 +134,6 @@ eightball.application.loadApp = function(skip_graphics) {
       lastBars = bars;
       progress.width(Math.min((7 * bars), (7 * 30)));
     }
-  };
-
-  var highScoreAction = function() {
-    $('#bestscore').html(game.highScore);
-  };
-
-  var scoreAction = function() {
-    var s = game.score;
-    if (s == 0) s = '00';
-    $('#score').html(s);
-    $('#gameoverscore').html(s);
-  };
-
-  var readyAction = function() {
-    overlay.fadeIn(1000);
-
-    $('#bombicon').hide();
-    $('#bombsecondstens').hide();
-    $('#bombsecondsones').hide();
-    $('#boom').hide();
-
-    var msg = missionMessage;
-    var index = 0;
-
-    start.delay(800).fadeIn(400, function() {
-
-      if (!skipTyping) {
-        typingSound = soundManager.play('typing');
-        var interval = setInterval(function() {
-
-          startmessage.html(msg.substr(0, index));
-          index++;
-
-          if (index > msg.length) {
-            clearInterval(interval);
-            if (typingSound) typingSound.pause();
-          }
-        },
-      10);
-      }
-    });
-  };
-
-  if (skip_graphics) {
-    readyAction = function() {
-      game.start();
-    };
-  }
-
-  var endAction = function() {
-    overlay.fadeIn(500);
-    gameover.fadeIn(400);
   };
 
   gameover.click(function() {
@@ -260,12 +197,67 @@ eightball.application.loadApp = function(skip_graphics) {
   // *DEBUG*
   _game = game;
 
-  // game events (TODO: make these inline)
-  goog.events.listen(game, eightball.Game.EventType.TICK, tickAction);
-  goog.events.listen(game, eightball.Game.EventType.SCORE, scoreAction);
-  goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, highScoreAction);
-  goog.events.listen(game, eightball.Game.EventType.READY, readyAction);
-  goog.events.listen(game, eightball.Game.EventType.END, endAction);
+  goog.events.listen(game, eightball.Game.EventType.TICK, function() {
+    if (isExplosionActive) return;
+    updateTimerVisuals(game.secondsLeft);
+
+    pixelLab.DebugDiv.clear();
+    var fmt = new goog.i18n.NumberFormat('#,###.##');
+    var str = fmt.format(poolTable.stepsPerSecond());
+    goog.debug.LogManager.getRoot().info('FPS: ' + str);
+  });
+
+  goog.events.listen(game, eightball.Game.EventType.SCORE, function() {
+    var s = game.score;
+    if (s == 0) s = '00';
+    $('#score').html(s);
+    $('#gameoverscore').html(s);
+  });
+
+  goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, function() {
+    $('#bestscore').html(game.highScore);
+  });
+
+  if (skip_graphics) {
+    goog.events.listen(game, eightball.Game.EventType.READY, function() {
+      game.start();
+    });
+  } else {
+    goog.events.listen(game, eightball.Game.EventType.READY, function() {
+      overlay.fadeIn(1000);
+
+      $('#bombicon').hide();
+      $('#bombsecondstens').hide();
+      $('#bombsecondsones').hide();
+      $('#boom').hide();
+
+      var msg = missionMessage;
+      var index = 0;
+
+      start.delay(800).fadeIn(400, function() {
+
+        if (!skipTyping) {
+          typingSound = soundManager.play('typing');
+          var interval = setInterval(function() {
+
+            startmessage.html(msg.substr(0, index));
+            index++;
+
+            if (index > msg.length) {
+              clearInterval(interval);
+              if (typingSound) typingSound.pause();
+            }
+          },
+          10);
+        }
+      });
+    });
+  }
+
+  goog.events.listen(game, eightball.Game.EventType.END, function() {
+    overlay.fadeIn(500);
+    gameover.fadeIn(400);
+  });
 
   // timebomb events
   goog.events.listen(game, eightball.Game.EventType.BOMBACTIVATED, function(e) {
@@ -295,7 +287,6 @@ eightball.application.loadApp = function(skip_graphics) {
 
     if (sec == 19 || sec == 10) poolTable.increaseBombPulse();
 
-
   });
 
   goog.events.listen(game, eightball.Game.EventType.BOMBDEACTIVATED, function(e) {
@@ -306,7 +297,6 @@ eightball.application.loadApp = function(skip_graphics) {
     $('#bombsecondstens').fadeOut(1200);
     $('#bombsecondsones').fadeOut(1200);
 
-
     var lastTime = lastTickSeconds;
 
     // count up the timer
@@ -315,14 +305,13 @@ eightball.application.loadApp = function(skip_graphics) {
       if (lastTime >= game.secondsLeft) {
         clearInterval(timerInterval);
         isExplosionActive = false;
-      }
-      else {
+      } else {
         lastTime++;
-        _updateTimerVisuals(lastTime);
+        updateTimerVisuals(lastTime);
       }
 
-    }, 50);
-
+    },
+    50);
   });
 
   goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function(e) {
@@ -347,7 +336,8 @@ eightball.application.loadApp = function(skip_graphics) {
         //boom.css("top", top + "px");
         $('#boom').show();
       }
-    }, 1500);
+    },
+    1500);
 
     isExplosionActive = true;
 
@@ -359,28 +349,24 @@ eightball.application.loadApp = function(skip_graphics) {
       if (lastTime < game.secondsLeft) {
         clearInterval(timerInterval);
         isExplosionActive = false;
-      }
-      else {
+      } else {
         lastTime--;
-        _updateTimerVisuals(lastTime);
+        updateTimerVisuals(lastTime);
       }
 
-    }, 50);
-
+    },
+    50);
 
   });
-
 
   // cuestick events
   goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_START, function() {
     $('#gamecontrolsclick').hide();
   });
 
-
   goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_STOP, function() {
     $('#gamecontrolsclick').show();
   });
-
 
   // sound events
   goog.events.listen(poolTable, eightball.CollisionEvent.EventType.CUESTICK, function(e) {
