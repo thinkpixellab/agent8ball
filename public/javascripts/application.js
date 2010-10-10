@@ -87,8 +87,6 @@ eightball.application.loadApp = function(skip_graphics) {
   soundManager.add('typing', 1);
   soundManager.add('wall', 3);
 
-  window.soundManager = soundManager;
-
   // global elements
   var minutesremaining = $('#minutesremaining');
   var secondsremainingtens = $('#secondsremainingtens');
