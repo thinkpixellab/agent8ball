@@ -7,7 +7,10 @@
     = csrf_meta_tag
     %link{:href => image_path('thumbnail_fb.jpg'), :rel => "image_src"}/
     %link{:href => "/favicon.ico", :rel => "shortcut icon"}/
-    = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'
+    - if Rails.env == 'development'
+      = javascript_include_tag 'jquery-1.4.2.min'
+    - else
+      = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'
     = stylesheet_link_tag '/fonts/cpmono/cpmono', '/fonts/molot/molot', '/fonts/radioland/radioland'
     = stylesheet_link_tag 'compiled/screen'
     = yield :head
