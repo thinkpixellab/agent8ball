@@ -475,6 +475,17 @@ eightball.PoolTable.prototype.rackEm = function() {
   //this._testRack();
 };
 
+/**
+ @param {number} ballNumber
+ @return {boolean}
+*/
+eightball.PoolTable.prototype.hasBall = function(ballNumber) {
+  return ballNumber in this.m_balls;
+};
+
+/**
+ @private
+ */
 eightball.PoolTable.prototype._testRack = function() {
   var ballRadius = eightball.PoolTable.c_ballRadius;
   this.m_balls[0] = this._createBall(0, -0.5 * eightball.PoolTable.s_width, -150);
@@ -482,6 +493,9 @@ eightball.PoolTable.prototype._testRack = function() {
   this._getCueBall().SetLinearVelocity(new box2d.Vec2(-150, -15));
 };
 
+/**
+ @private
+ */
 eightball.PoolTable.prototype._rackEm = function() {
 
   this._ensureCueBall();
@@ -502,6 +516,9 @@ eightball.PoolTable.prototype._rackEm = function() {
   }
 };
 
+/**
+ @private
+ */
 eightball.PoolTable.prototype._ensureCueBall = function() {
   // make sure we don't already have a cue ball on the table
   if (!this._getCueBall()) {
