@@ -2,6 +2,7 @@ goog.provide('eightball.Game');
 goog.provide('eightball.Game.EventType');
 goog.provide('eightball.Game.GameState');
 
+goog.require('eightball.Cookies');
 goog.require('eightball.PoolTable');
 
 goog.require('goog.Timer');
@@ -10,7 +11,6 @@ goog.require('goog.asserts');
 goog.require('goog.debug.LogManager');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
-goog.require('goog.net.cookies');
 goog.require('goog.object');
 
 /**
@@ -194,7 +194,7 @@ eightball.Game.prototype.addPoints = function(points) {
  @param {number} highScore
  */
 eightball.Game.prototype._saveHighScore = function(highScore) {
-  goog.net.cookies.set(eightball.Game.s_CookieGameHighScore, highScore, 7776000);
+  eightball.Cookies.set(eightball.Game.s_CookieGameHighScore, highScore);
 };
 
 /**
