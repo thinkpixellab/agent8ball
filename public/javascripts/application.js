@@ -7,6 +7,7 @@ goog.require('eightball.Music');
 goog.require('eightball.PoolTable');
 goog.require('eightball.SoundEffectManager');
 
+goog.require('goog.array');
 goog.require('goog.debug.LogManager');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
@@ -390,8 +391,25 @@ eightball.Application = function(opt_skipGraphics) {
   goog.events.listen(keyBinding, pixelLab.KeyBinding.TYPE, function(e) {
     var div = jQuery('#KeyBindingAlertDiv');
     div.stop(true, true).show();
-    div.text(e['description']);
-    div.delay(2000).fadeOut(500);
+    if (e.keybinding == 'h') {
+      var map = keyBinding.getMap();
+
+      var table = $('<table>');
+      goog.array.forEach(map, function(item, index, array) {
+        var row = $('<tr>');
+        row.append($('<td>' + item.keybinding + '</td>'));
+        row.append($('<td>' + item.description + '</td>'));
+        table.append(row);
+      });
+
+      div.html('').append(table);
+
+      div.delay(4000).fadeOut(500);
+    }
+    else {
+      div.text(e['description']);
+      div.delay(2000).fadeOut(500);
+    }
   });
 
   keyBinding.add('r', 'Restart game', function() {
@@ -435,6 +453,8 @@ eightball.Application = function(opt_skipGraphics) {
     var detonated = game.detonateBomb();
     return detonated ? 'Bomb detonated' : 'No-op';
   });
+
+  keyBinding.add('h', 'Help', goog.nullFunction);
 
   //
   // Click handlers

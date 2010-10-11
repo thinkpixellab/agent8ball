@@ -34,10 +34,14 @@ pixelLab.KeyBinding.prototype.add = function(keybinding, description, action) {
   var indexStr = this.m_map.length.toString();
   this.m_shortcutHandler.registerShortcut(indexStr, keybinding);
   this.m_map.push({
-    'shortcut': keybinding,
+    'keybinding': keybinding,
     'description': description,
     'action': action
   });
+};
+
+pixelLab.KeyBinding.prototype.getMap = function() {
+  return this.m_map;
 };
 
 /*
@@ -50,7 +54,7 @@ pixelLab.KeyBinding.prototype._handleKey = function(event) {
   var result = entry['action'].call();
   event.stopPropagation();
   var description = result || entry['description'];
-  this.dispatchEvent(new pixelLab.KeyBindingEvent(entry['shortcut'], description));
+  this.dispatchEvent(new pixelLab.KeyBindingEvent(entry['keybinding'], description));
 };
 
 /*
