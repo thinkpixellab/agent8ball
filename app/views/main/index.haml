@@ -1,5 +1,5 @@
 - uncompiled = Rails.env == 'development' && params.has_key?('uncompiled')
-- content_for :head do
+- content_for :view_javascript do
   = game_js(uncompiled)
 - if Rails.env == 'development'
   - if(uncompiled)
