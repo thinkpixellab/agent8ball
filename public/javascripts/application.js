@@ -431,6 +431,11 @@ eightball.Application = function(opt_skipGraphics) {
     return deactivated ? 'Bomb deactivated' : 'No-op';
   });
 
+  keyBinding.add('x', 'Detonate bomb', function() {
+    var detonated = game.detonateBomb();
+    return detonated ? 'Bomb detonated' : 'No-op';
+  });
+
   //
   // Click handlers
   //

@@ -132,6 +132,7 @@ eightball.Game.prototype.resume = function() {
  */
 eightball.Game.prototype.activateBomb = function() {
   if (!this._isBombFound && this.m_poolTable.hasBall(this.bombNumber)) {
+    goog.asserts.assert(this.gameState == eightball.Game.States.STARTED);
     this._isBombFound = true;
     this._isBombActive = true;
     this.m_poolTable.setBombNumber(this.bombNumber);
@@ -161,6 +162,19 @@ eightball.Game.prototype.deactivateBomb = function() {
   }
 };
 
+/**
+ @return {boolean}
+ */
+eightball.Game.prototype.detonateBomb = function() {
+  if (this._isBombActive) {
+    goog.asserts.assert(this.gameState == eightball.Game.States.STARTED);
+    this.bombSecondsLeft = Math.min(2, this.bombSecondsLeft);
+    return true;
+  }
+  else {
+    return false;
+  }
+};
 /**
  @param {number} points
  */
