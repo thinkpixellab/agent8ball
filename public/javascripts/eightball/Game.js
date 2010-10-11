@@ -215,23 +215,26 @@ eightball.Game.prototype._pooltable_pocketDrop = function(e) {
  @private
  */
 eightball.Game.prototype._pooltable_ballHit = function(e) {
-
-  // if the bomb has already been found then we can bail
-  if (this._isBombFound) return;
-
-  if ((e.ballNumber1 == 0 && e.ballNumber2 == this.bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this.bombNumber)) {
-    this._activateBomb();
+  if (!this._isBombFound) {
+    if ((e.ballNumber1 == 0 && e.ballNumber2 == this.bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this.bombNumber)) {
+      var activated = this._activateBomb();
+      goog.asserts.assert(activated, 'should always activate bomb in this context');
+    }
   }
-
 };
 
-eightball.Game.prototype._activateBomb = function() {
-  goog.asserts.assert(!this._isBombFound, 'The bomb has already been found');
-  goog.asserts.assert(this.m_poolTable.hasBall(this.bombNumber), 'The table does not have the bomb ball anymore.');
-
-  this._isBombFound = true;
-  this._isBombActive = true;
-  this._dispatchGameEvent(eightball.Game.EventType.BOMBACTIVATED);
+/**
+ @return {boolean}
+ */
+eightball.Game.prototype.activateBomb = function() {
+  if (!this._isBombFound && this.m_poolTable.hasBall(this.bombNumber)) {
+    this._isBombFound = true;
+    this._isBombActive = true;
+    this._dispatchGameEvent(eightball.Game.EventType.BOMBACTIVATED);
+    return true;
+  } else {
+    return false;
+  }
 };
 
 /**
