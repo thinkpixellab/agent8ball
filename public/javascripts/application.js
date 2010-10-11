@@ -397,8 +397,8 @@ eightball.Application = function(opt_skipGraphics) {
       var table = $('<table>');
       goog.array.forEach(map, function(item, index, array) {
         var row = $('<tr>');
-        row.append($('<td>' + item.keybinding + '</td>'));
-        row.append($('<td>' + item.description + '</td>'));
+        row.append($('<td>' + item['keybinding'] + '</td>'));
+        row.append($('<td>' + item['description'] + '</td>'));
         table.append(row);
       });
 
