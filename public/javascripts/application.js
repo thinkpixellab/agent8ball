@@ -429,6 +429,11 @@ eightball.Application = function(opt_skipGraphics) {
     return 'Game sounds are now ' + state;
   });
 
+  keyBinding.add('a', 'Activate bomb', function() {
+    var activated = game.activateBomb();
+    return activated ? 'Bomb activated' : 'No-op';
+  });
+
   $('#instructionsclick').click(function() {
     game.pause();
     overlay.fadeIn(500);
