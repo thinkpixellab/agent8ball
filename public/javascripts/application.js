@@ -1,6 +1,3 @@
-// *******************************************************************************
-// APP LOGIC
-// *******************************************************************************
 goog.provide('eightball.Application');
 
 goog.require('eightball.Game');
@@ -28,6 +25,10 @@ var _game;
  */
 eightball.Application = function(opt_skipGraphics) {
 
+  // instance fields
+  this.m_lastTickSeconds = 0;
+  this.m_lastBars = 29;
+
   if (eightball.Application._isMac()) {
     $('#timers .digit').css('line-height', '62px');
   }
@@ -41,8 +42,8 @@ eightball.Application = function(opt_skipGraphics) {
     updateMusicButton();
     updateSoundButton();
   });
-  $('#gamecontrolsclick').delay(500).fadeIn(1000);
-  $('#cue_canvas').delay(500).fadeIn(1000);
+  $('#gamecontrolsclick').show();
+  $('#cue_canvas').show();
 
   //
   // MUSIC
@@ -92,17 +93,8 @@ eightball.Application = function(opt_skipGraphics) {
   var overlay = $('#overlay');
   var start = $('#start');
   var startmessage = $('#startmessage');
-  var pause = $('#pauseclick');
   var resume = $('#resume');
   var gameover = $('#gameover');
-  var startover = $('#startoverclick');
-  var canvasElement = $('canvas#demo_canvas')[0];
-  var cueCanvasElement = $('canvas#cue_canvas')[0];
-  var shadowCanvasElement = $('canvas#shadow_canvas')[0];
-
-  // instance fields
-  this.m_lastTickSeconds = 0;
-  this.m_lastBars = 29;
 
   // other globals
   var isExplosionActive = false;
@@ -117,7 +109,7 @@ eightball.Application = function(opt_skipGraphics) {
     game.reset();
   });
 
-  startover.click(function() {
+  $('#startoverclick').click(function() {
     game.reset();
   });
 
@@ -133,7 +125,7 @@ eightball.Application = function(opt_skipGraphics) {
 
   });
 
-  pause.click(function() {
+  $('#pauseclick').click(function() {
     game.pause();
     overlay.fadeIn(400);
     resume.fadeIn(400);
@@ -166,7 +158,7 @@ eightball.Application = function(opt_skipGraphics) {
     window.open('http://twitter.com/home?status=Hey%2C%20%40agent8ball!%20I%20just%20scored%20' + game.score + '%20points%20on%20http%3A%2F%2Fagent8ball.com.%20Beat%20that!');
   });
 
-  var poolTable = new eightball.PoolTable(canvasElement, cueCanvasElement, shadowCanvasElement, preloadAssets.images);
+  var poolTable = new eightball.PoolTable($('canvas#demo_canvas')[0], $('canvas#cue_canvas')[0], $('canvas#shadow_canvas')[0], preloadAssets.images);
 
   // create a game object
   var game = new eightball.Game(poolTable);
@@ -438,14 +430,14 @@ eightball.Application = function(opt_skipGraphics) {
     game.pause();
     overlay.fadeIn(500);
     $('#howtoplay').fadeIn(200);
-    $('#cue_canvas').fadeOut(200);
+    $('#cue_canvas').hide();
   });
 
   $('#howtoplay').click(function() {
     game.resume();
     overlay.fadeOut(200);
     $('#howtoplay').fadeOut(200);
-    $('#cue_canvas').fadeIn(200);
+    $('#cue_canvas').show();
   });
 
   // music on/off
