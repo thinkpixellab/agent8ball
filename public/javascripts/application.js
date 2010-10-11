@@ -25,7 +25,7 @@ var _game;
 /**
  @constructor
  @param {boolean=} opt_skipGraphics
-*/
+ */
 eightball.Application = function(opt_skipGraphics) {
 
   if (eightball.Application._isMac()) {
@@ -33,7 +33,7 @@ eightball.Application = function(opt_skipGraphics) {
   }
 
   // show debug
-  //pixelLab.DebugDiv.enable();
+  // pixelLab.DebugDiv.enable();
   // show the content, hide the loading element
   $('#vignette').delay(500).fadeIn(1000);
   $('#game').delay(500).fadeIn(1000);
@@ -89,10 +89,6 @@ eightball.Application = function(opt_skipGraphics) {
   soundManager.add('wall', 3);
 
   // global elements
-  var minutesremaining = $('#minutesremaining');
-  var secondsremainingtens = $('#secondsremainingtens');
-  var secondsremainingones = $('#secondsremainingones');
-  var progress = $('#progress');
   var overlay = $('#overlay');
   var start = $('#start');
   var startmessage = $('#startmessage');
@@ -104,37 +100,18 @@ eightball.Application = function(opt_skipGraphics) {
   var cueCanvasElement = $('canvas#cue_canvas')[0];
   var shadowCanvasElement = $('canvas#shadow_canvas')[0];
 
+  // instance fields
+  this.m_lastTickSeconds = 0;
+  this.m_lastBars = 29;
+
   // other globals
-  var lastBars = 29;
   var isExplosionActive = false;
-  var lastTickSeconds = 0;
   var lastMusicOnPause = false;
   var skipTyping = false;
   var missionMessage = 'Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.';
   var typingSound = null;
 
   // event handlers
-  var updateTimerVisuals = function(s) {
-
-    lastTickSeconds = s;
-
-    var min = Math.floor(s / 60);
-    var sec = s % 60;
-    var sec_tens = Math.floor(sec / 10);
-    var sec_ones = sec % 10;
-
-    minutesremaining.html(min);
-    secondsremainingtens.html(sec_tens);
-    secondsremainingones.html(sec_ones);
-
-    var bars = 1 + Math.floor((s - 1) / 4);
-
-    if (bars != lastBars) {
-      lastBars = bars;
-      progress.width(Math.min((7 * bars), (7 * 30)));
-    }
-  };
-
   gameover.click(function() {
     gameover.fadeOut(400);
     game.reset();
@@ -198,13 +175,13 @@ eightball.Application = function(opt_skipGraphics) {
 
   goog.events.listen(game, eightball.Game.EventType.TICK, function() {
     if (isExplosionActive) return;
-    updateTimerVisuals(game.secondsLeft);
+    this._updateTimerVisuals(game.secondsLeft);
 
     pixelLab.DebugDiv.clear();
     var fmt = new goog.i18n.NumberFormat('#,###.##');
     var str = fmt.format(poolTable.stepsPerSecond());
     goog.debug.LogManager.getRoot().info('FPS: ' + str);
-  });
+  }, false, this);
 
   goog.events.listen(game, eightball.Game.EventType.SCORE, function() {
     var s = game.score;
@@ -296,7 +273,7 @@ eightball.Application = function(opt_skipGraphics) {
     $('#bombsecondstens').fadeOut(1200);
     $('#bombsecondsones').fadeOut(1200);
 
-    var lastTime = lastTickSeconds;
+    var lastTime = this.m_lastTickSeconds;
 
     // count up the timer
     var timerInterval = setInterval(function() {
@@ -306,12 +283,12 @@ eightball.Application = function(opt_skipGraphics) {
         isExplosionActive = false;
       } else {
         lastTime++;
-        updateTimerVisuals(lastTime);
+        this._updateTimerVisuals(lastTime);
       }
-
     },
     50);
-  });
+  },
+  false, this);
 
   goog.events.listen(game, eightball.Game.EventType.BOMBEXPLODED, function(e) {
     soundManager.play('explode');
@@ -324,11 +301,13 @@ eightball.Application = function(opt_skipGraphics) {
       var bombLocation = poolTable.getBallLocation(game.bombNumber);
       if (bombLocation) {
 
+        // TODO: magic values here. Boo! Make this better
         var left = Math.min(Math.max((bombLocation.x + 300), -60), 660);
         var top = Math.min(Math.max((bombLocation.y + 88), -60), 250);
 
         poolTable.removeBomb();
 
+        // TODO: make this more jQuery ish
         document.getElementById('boom').style.left = left + 'px';
         document.getElementById('boom').style.top = top + 'px';
         //boom.css("left", left + "px");
@@ -340,7 +319,7 @@ eightball.Application = function(opt_skipGraphics) {
 
     isExplosionActive = true;
 
-    var lastTime = lastTickSeconds;
+    var lastTime = this.m_lastTickSeconds;
 
     // countdown the timer
     var timerInterval = setInterval(function() {
@@ -350,13 +329,13 @@ eightball.Application = function(opt_skipGraphics) {
         isExplosionActive = false;
       } else {
         lastTime--;
-        updateTimerVisuals(lastTime);
       }
 
     },
     50);
 
-  });
+  },
+  false, this);
 
   // cuestick events
   goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_START, function() {
@@ -477,7 +456,31 @@ eightball.Application = function(opt_skipGraphics) {
 
 /**
  @private
-*/
+ @param {number} s
+ */
+eightball.Application.prototype._updateTimerVisuals = function(s) {
+  this.m_lastTickSeconds = s;
+
+  var min = Math.floor(s / 60);
+  var sec = s % 60;
+  var sec_tens = Math.floor(sec / 10);
+  var sec_ones = sec % 10;
+
+  $('#minutesremaining').html(min.toString());
+  $('#secondsremainingtens').html(sec_tens.toString());
+  $('#secondsremainingones').html(sec_ones.toString());
+
+  var bars = 1 + Math.floor((s - 1) / 4);
+
+  if (bars != this.m_lastBars) {
+    this.m_lastBars = bars;
+    $('#progress').width(Math.min((7 * bars), (7 * 30)));
+  }
+};
+
+/**
+ @private
+ */
 eightball.Application._isMac = function() {
   var agent = goog.userAgent.getUserAgentString();
   return agent && goog.string.contains(agent, 'Mac');
