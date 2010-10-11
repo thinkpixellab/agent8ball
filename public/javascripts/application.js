@@ -173,7 +173,8 @@ eightball.Application = function(opt_skipGraphics) {
     var fmt = new goog.i18n.NumberFormat('#,###.##');
     var str = fmt.format(poolTable.stepsPerSecond());
     goog.debug.LogManager.getRoot().info('FPS: ' + str);
-  }, false, this);
+  },
+  false, this);
 
   goog.events.listen(game, eightball.Game.EventType.SCORE, function() {
     var s = game.score;
@@ -229,14 +230,10 @@ eightball.Application = function(opt_skipGraphics) {
 
   // timebomb events
   goog.events.listen(game, eightball.Game.EventType.BOMBACTIVATED, function(e) {
-
     $('#bombicon').fadeIn(200);
     $('#bombsecondstens').fadeIn(200);
     $('#bombsecondsones').fadeIn(200);
     soundManager.play('activate');
-
-    poolTable.setBombNumber(game.bombNumber);
-
   });
 
   goog.events.listen(game, eightball.Game.EventType.BOMBTICK, function(e) {
@@ -268,7 +265,7 @@ eightball.Application = function(opt_skipGraphics) {
     var lastTime = this.m_lastTickSeconds;
 
     // count up the timer
-    var timerInterval = setInterval(function() {
+    var timerInterval = setInterval(goog.bind(function() {
 
       if (lastTime >= game.secondsLeft) {
         clearInterval(timerInterval);
@@ -278,7 +275,7 @@ eightball.Application = function(opt_skipGraphics) {
         this._updateTimerVisuals(lastTime);
       }
     },
-    50);
+    this), 50);
   },
   false, this);
 
@@ -386,6 +383,9 @@ eightball.Application = function(opt_skipGraphics) {
   $(window).resize(updatePoolTableLayout);
   updatePoolTableLayout();
 
+  //
+  // Keyboard shortcuts
+  //
   var keyBinding = new pixelLab.KeyBinding();
   goog.events.listen(keyBinding, pixelLab.KeyBinding.TYPE, function(e) {
     var div = jQuery('#KeyBindingAlertDiv');
@@ -426,6 +426,14 @@ eightball.Application = function(opt_skipGraphics) {
     return activated ? 'Bomb activated' : 'No-op';
   });
 
+  keyBinding.add('d', 'Deactivate bomb', function() {
+    var deactivated = game.deactivateBomb();
+    return deactivated ? 'Bomb deactivated' : 'No-op';
+  });
+
+  //
+  // Click handlers
+  //
   $('#instructionsclick').click(function() {
     game.pause();
     overlay.fadeIn(500);

@@ -127,8 +127,44 @@ eightball.Game.prototype.resume = function() {
   }
 };
 
-eightball.Game.prototype.addPoints = function(points) {
+/**
+ @return {boolean}
+ */
+eightball.Game.prototype.activateBomb = function() {
+  if (!this._isBombFound && this.m_poolTable.hasBall(this.bombNumber)) {
+    this._isBombFound = true;
+    this._isBombActive = true;
+    this.m_poolTable.setBombNumber(this.bombNumber);
+    this._dispatchGameEvent(eightball.Game.EventType.BOMBACTIVATED);
+    return true;
+  } else {
+    return false;
+  }
+};
 
+/**
+ @return {boolean}
+ */
+eightball.Game.prototype.deactivateBomb = function() {
+  if (this._isBombActive) {
+    goog.asserts.assert(this.gameState == eightball.Game.States.STARTED);
+    this._isBombActive = false;
+    this.bombNumber = -1;
+    this.secondsLeft += 30;
+    // only needed if deactivation happens via code, not sinking the ball
+    this.m_poolTable.clearBombNumber();
+    this._dispatchGameEvent(eightball.Game.EventType.BOMBDEACTIVATED);
+    return true;
+  }
+  else {
+    return false;
+  }
+};
+
+/**
+ @param {number} points
+ */
+eightball.Game.prototype.addPoints = function(points) {
   this.score += points;
   this._dispatchGameEvent(eightball.Game.EventType.SCORE);
 
@@ -137,18 +173,27 @@ eightball.Game.prototype.addPoints = function(points) {
     this._saveHighScore(this.highScore);
     this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
   }
-
 };
 
+/**
+ @private
+ @param {number} highScore
+ */
 eightball.Game.prototype._saveHighScore = function(highScore) {
   goog.net.cookies.set(eightball.Game.s_CookieGameHighScore, highScore, 7776000);
 };
 
+/**
+ @private
+ */
 eightball.Game.prototype._loadHighScore = function() {
   var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, '500');
   return highScoreValue;
 };
 
+/**
+ @private
+ */
 eightball.Game.prototype._tickAction = function() {
   if (this.gameState == eightball.Game.States.STARTED) {
 
@@ -205,9 +250,8 @@ eightball.Game.prototype._pooltable_pocketDrop = function(e) {
   }
 
   if (this._isBombFound && e.ballNumber == this.bombNumber) {
-    this._isBombActive = false;
-    this.secondsLeft += 30;
-    this._dispatchGameEvent(eightball.Game.EventType.BOMBDEACTIVATED);
+    var deactivated = this.deactivateBomb();
+    goog.asserts.assert(deactivated);
   }
 };
 
@@ -217,23 +261,9 @@ eightball.Game.prototype._pooltable_pocketDrop = function(e) {
 eightball.Game.prototype._pooltable_ballHit = function(e) {
   if (!this._isBombFound) {
     if ((e.ballNumber1 == 0 && e.ballNumber2 == this.bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this.bombNumber)) {
-      var activated = this._activateBomb();
+      var activated = this.activateBomb();
       goog.asserts.assert(activated, 'should always activate bomb in this context');
     }
-  }
-};
-
-/**
- @return {boolean}
- */
-eightball.Game.prototype.activateBomb = function() {
-  if (!this._isBombFound && this.m_poolTable.hasBall(this.bombNumber)) {
-    this._isBombFound = true;
-    this._isBombActive = true;
-    this._dispatchGameEvent(eightball.Game.EventType.BOMBACTIVATED);
-    return true;
-  } else {
-    return false;
   }
 };
 
