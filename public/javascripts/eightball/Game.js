@@ -6,6 +6,7 @@ goog.require('eightball.PoolTable');
 
 goog.require('goog.Timer');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.debug.LogManager');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
@@ -219,11 +220,18 @@ eightball.Game.prototype._pooltable_ballHit = function(e) {
   if (this._isBombFound) return;
 
   if ((e.ballNumber1 == 0 && e.ballNumber2 == this.bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this.bombNumber)) {
-    this._isBombFound = true;
-    this._isBombActive = true;
-    this._dispatchGameEvent(eightball.Game.EventType.BOMBACTIVATED);
+    this._activateBomb();
   }
 
+};
+
+eightball.Game.prototype._activateBomb = function() {
+  goog.asserts.assert(!this._isBombFound, 'The bomb has already been found');
+  goog.asserts.assert(this.m_poolTable.hasBall(this.bombNumber), 'The table does not have the bomb ball anymore.');
+
+  this._isBombFound = true;
+  this._isBombActive = true;
+  this._dispatchGameEvent(eightball.Game.EventType.BOMBACTIVATED);
 };
 
 /**
