@@ -3,9 +3,6 @@
   @include content
   display: none
 
-#gamecontrolsclick
-  @include content
-
 #game
   @include content
   display: none
@@ -117,29 +114,6 @@
   top: -6px
   left: 653px
 
-#soundclick
-  left: 640px
-  top: 583px
-  position: absolute
-  width: 210px
-  height: 58px
-  background: transparent
-
-#musicbuttonclick
-  position: absolute
-  height: 20px
-  width: 65px
-  top: 20px
-  cursor: pointer
-
-#soundsbuttonclick
-  position: absolute
-  height: 20px
-  width: 80px
-  top: 20px
-  left: 120px
-  cursor: pointer
-
 #sounds
   left: 640px
   top: 583px
@@ -187,6 +161,7 @@
   height: 42px
 
 #instructions
+  cursor: pointer
   left: 274px
   top: 598px
   position: absolute
@@ -195,16 +170,8 @@
   width: 96px
   height: 30px
 
-#instructionsclick
-  left: 274px
-  top: 598px
-  position: absolute
-  background: transparent
-  width: 96px
-  height: 30px
-  cursor: pointer
-
 #pause
+  cursor: pointer
   left: 380px
   top: 579px
   position: absolute
@@ -213,20 +180,12 @@
   width: 89px
   height: 71px
 
-#pauseclick
-  left: 380px
-  top: 579px
-  position: absolute
-  background: transparent
-  width: 89px
-  height: 71px
-  cursor: pointer
-
 #messageoverlay
   @include content
   top: -200px
 
 #startover
+  cursor: pointer
   left: 492px
   top: 598px
   position: absolute
@@ -235,30 +194,14 @@
   width: 83px
   height: 30px
 
-#startoverclick
-  left: 492px
-  top: 598px
-  position: absolute
-  background: transparent
-  width: 83px
-  height: 30px
-  cursor: pointer
-
-#soundsbutton img
-  position: absolute
-  margin-left: 69px
-  margin-top: 1px
-
 #demo_canvas
   left: 7px
   top: 6px
   position: absolute
 
 #cue_canvas
-  left: 0px
-  top: 0px
-  position: absolute
-  background-image: image-url("transparent.png")
+  +fill-all
+  pointer-events: none
 
 #boom
   background-image: image-url("boom.png")
@@ -402,32 +345,17 @@
   margin-left: 36px
 
 #pixellab
+  cursor: pointer
   display: block
   left: 320px
   top: 660px
   position: absolute
-  background-image: image-url("pixellab.png")
-  background-repeat: no-repeat
-  background-position: center top
+  background-image: image-url("pixellab_sprite.png")
   width: 193px
   height: 28px
 
-#pixellabclick
-  display: block
-  left: 320px
-  top: 660px
-  position: absolute
-  background: transparent
-  width: 193px
-  height: 28px
-
-#pixellabclick:hover
-  background-image: image-url("pixellabover.png")
-
-#pixellabclick a
-  display: block
-  width: 193px
-  height: 28px
+  &:hover
+    background-position: 0 -28px
 
 #KeyBindingAlertDiv
   display: none

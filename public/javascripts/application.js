@@ -48,7 +48,6 @@ eightball.Application = function(opt_skipGraphics) {
     updateMusicButton();
     updateSoundButton();
   });
-  $('#gamecontrolsclick').show();
   $('#cue_canvas').show();
 
   //
@@ -115,7 +114,7 @@ eightball.Application = function(opt_skipGraphics) {
     game.reset();
   });
 
-  $('#startoverclick').click(function() {
+  $('#startover').click(function() {
     game.reset();
   });
 
@@ -131,7 +130,7 @@ eightball.Application = function(opt_skipGraphics) {
 
   });
 
-  $('#pauseclick').click(function() {
+  $('#pause').click(function() {
     game.pause();
     overlay.fadeIn(400);
     resume.fadeIn(400);
@@ -328,11 +327,11 @@ eightball.Application = function(opt_skipGraphics) {
 
   // cuestick events
   goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_START, function() {
-    $('#gamecontrolsclick').hide();
+    // something
   });
 
   goog.events.listen(poolTable, eightball.PoolTable.EventType.CUESTICK_HIT_STOP, function() {
-    $('#gamecontrolsclick').show();
+    // something
   });
 
   // sound events
@@ -458,7 +457,7 @@ eightball.Application = function(opt_skipGraphics) {
   //
   // Click handlers
   //
-  $('#instructionsclick').click(function() {
+  $('#instructions').click(function() {
     game.pause();
     overlay.fadeIn(500);
     $('#howtoplay').fadeIn(200);
@@ -473,12 +472,12 @@ eightball.Application = function(opt_skipGraphics) {
   });
 
   // music on/off
-  $('#musicbuttonclick').click(function() {
+  $('#musicbutton').click(function() {
     musicManager.toggleMusic();
   });
 
   // sound effects on/off
-  $('#soundsbuttonclick').click(function() {
+  $('#soundsbutton').click(function() {
     soundManager.toggleSound();
   });
 };

@@ -179,7 +179,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
   this.m_isMouseDown = false;
 
   // mouse down
-  $(this.m_cueCanvasElement).mousedown(function(e) {
+  $(this.m_canvasElement).mousedown(function(e) {
     if (_this.m_lastMouse && _this._getCueBall()) {
       _this.m_isMouseDown = true;
       _this.m_lastMouseDown = _this.m_lastMouse;
@@ -189,18 +189,18 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
   });
 
   // mouse up
-  $(this.m_cueCanvasElement).mouseup(function(e) {
-    _this.m_isMouseDown = false;
-    if (_this.m_isCueVisible && _this.m_strikePower > 0.01) {
-      _this._hideCue();
+  $(window).mouseup(function(e) {
+    if (_this.m_isMouseDown && _this.m_isCueVisible && _this.m_strikePower > 0.01) {
+      _this.m_isCueVisible = false;
       _this._strikeCue();
       _this._updateCue();
       _this._dispatchCuestickHitStopEvent();
     }
+    _this.m_isMouseDown = false;
   });
 
   // mouse move
-  $(this.m_cueCanvasElement).mousemove(function(e) {
+  $(this.m_canvasElement).mousemove(function(e) {
     if (_this.m_isCueVisible) {
       var cursorPageOffset = new goog.math.Vec2(e.pageX, e.pageY);
       var elementOffset = new goog.math.Vec2($(_this.m_canvasElement).offset().left, $(_this.m_canvasElement).offset().top);
@@ -288,9 +288,7 @@ eightball.PoolTable.prototype._hideCue = function() {
 eightball.PoolTable.prototype._showCue = function() {
   goog.style.setStyle(this.m_cueCanvasElement, 'display', 'block');
   this.m_isCueVisible = true;
-
   this._ensureCueBall();
-
   this._updateCue(this.m_lastMouse, 0);
 };
 
@@ -584,7 +582,7 @@ eightball.PoolTable.prototype.removeBomb = function() {
   this);
 
   bombBall.m_position.Set(5000, 5000);
-  this._hideCue();
+  this.m_isCueVisible = false;
   //this.m_world.DestroyBody(this.m_balls[this.m_bombNumber]);
   delete this.m_balls[this.m_bombNumber];
 };
