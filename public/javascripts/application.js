@@ -295,19 +295,13 @@ eightball.Application = function(opt_skipGraphics) {
       // get the location of the ball that exploded
       var bombLocation = poolTable.getBallLocation(game.bombNumber);
       if (bombLocation) {
+        poolTable.removeBomb();
 
         // TODO: magic values here. Boo! Make this better
         var left = Math.min(Math.max((bombLocation.x + 300), -60), 660);
         var top = Math.min(Math.max((bombLocation.y + 88), -60), 250);
 
-        poolTable.removeBomb();
-
-        // TODO: make this more jQuery ish
-        document.getElementById('boom').style.left = left + 'px';
-        document.getElementById('boom').style.top = top + 'px';
-        //boom.css("left", left + "px");
-        //boom.css("top", top + "px");
-        $('#boom').show();
+        $('#boom').css('left', left).css('top', top).show();
       }
     },
     1500);
