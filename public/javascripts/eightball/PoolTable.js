@@ -478,7 +478,7 @@ eightball.PoolTable.prototype.rackEm = function() {
 /**
  @param {number} ballNumber
  @return {boolean}
-*/
+ */
 eightball.PoolTable.prototype.hasBall = function(ballNumber) {
   return ballNumber in this.m_balls;
 };
@@ -590,14 +590,15 @@ eightball.PoolTable.prototype.removeBomb = function() {
 };
 
 /**
- @param {number} ballNumber
- @return {box2d.Vec2}
+ @return {?box2d.Vec2}
  */
-eightball.PoolTable.prototype.getBallLocation = function(ballNumber) {
-  var ball = this.m_balls[ballNumber];
+eightball.PoolTable.prototype.getBombLocation = function() {
+  var ball = this.m_balls[this.m_bombNumber];
   if (ball) {
     return ball.m_position;
-  } else return null;
+  } else {
+    return null;
+  }
 };
 
 /**
@@ -746,7 +747,7 @@ eightball.PoolTable.prototype._drawWorld = function() {
 /**
  @param {!eightball.DroppingBall} droppingBall
  @param {number} index
-*/
+ */
 eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index) {
   droppingBall.step();
   if (!droppingBall.GetIsDropped()) {
@@ -768,7 +769,7 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index) 
 
 /**
  @return {boolean}
-*/
+ */
 eightball.PoolTable.prototype._hasBomb = function() {
   return !!this.m_balls[this.m_bombNumber];
 };

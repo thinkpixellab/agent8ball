@@ -293,7 +293,7 @@ eightball.Application = function(opt_skipGraphics) {
     $('#bombsecondsones').fadeOut(1200);
     setTimeout(function() {
       // get the location of the ball that exploded
-      var bombLocation = poolTable.getBallLocation(game.bombNumber);
+      var bombLocation = poolTable.getBombLocation();
       if (bombLocation) {
         poolTable.removeBomb();
 

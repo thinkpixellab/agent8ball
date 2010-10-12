@@ -28,6 +28,12 @@ eightball.Game = function(poolTable) {
 
   /**
    @private
+   @type {number}
+  */
+  this.m_bombNumber = -1;
+
+  /**
+   @private
    @type {!eightball.PoolTable}
    */
   this.m_poolTable = poolTable;
@@ -48,10 +54,6 @@ eightball.Game = function(poolTable) {
 };
 goog.inherits(eightball.Game, goog.events.EventTarget);
 
-eightball.Game.prototype.setBombDemoMode = function() {
-  this.m_bombDemoMode = true;
-};
-
 eightball.Game.prototype.reset = function() {
 
   // reset the timer and our clock
@@ -60,7 +62,7 @@ eightball.Game.prototype.reset = function() {
     this.secondsLeft = eightball.Game.s_gameSeconds;
   }
 
-  this.resetTable();
+  this._resetTable();
 
   this.secondsLeft = eightball.Game.s_gameSeconds;
   this._dispatchGameEvent(eightball.Game.EventType.TICK);
@@ -74,20 +76,6 @@ eightball.Game.prototype.reset = function() {
   this.gameState = eightball.Game.States.READY;
   this._dispatchGameEvent(eightball.Game.EventType.READY);
 
-};
-
-eightball.Game.prototype.resetTable = function() {
-  this.bombSecondsLeft = eightball.Game.s_bombSeconds + 2;
-  if (this.m_bombDemoMode) {
-    this.bombNumber = 1;
-  } else {
-    this.bombNumber = goog.math.randomInt(15) + 1;
-  }
-  this._isBombFound = false;
-  this._isBombActive = false;
-  this.m_poolTable.rackEm();
-  this.m_poolTable.resume();
-  this.m_poolTable.clearBombNumber();
 };
 
 eightball.Game.prototype.start = function() {
@@ -127,15 +115,20 @@ eightball.Game.prototype.resume = function() {
   }
 };
 
+// TODO: make this a toggle bomb demo mode
+eightball.Game.prototype.setBombDemoMode = function() {
+  this.m_bombDemoMode = true;
+};
+
 /**
  @return {boolean}
  */
 eightball.Game.prototype.activateBomb = function() {
-  if (!this._isBombFound && this.m_poolTable.hasBall(this.bombNumber)) {
+  if (!this._isBombFound && this.m_poolTable.hasBall(this.m_bombNumber)) {
     goog.asserts.assert(this.gameState == eightball.Game.States.STARTED);
     this._isBombFound = true;
     this._isBombActive = true;
-    this.m_poolTable.setBombNumber(this.bombNumber);
+    this.m_poolTable.setBombNumber(this.m_bombNumber);
     this._dispatchGameEvent(eightball.Game.EventType.BOMBACTIVATED);
     return true;
   } else {
@@ -150,7 +143,7 @@ eightball.Game.prototype.deactivateBomb = function() {
   if (this._isBombActive) {
     goog.asserts.assert(this.gameState == eightball.Game.States.STARTED);
     this._isBombActive = false;
-    this.bombNumber = -1;
+    this.m_bombNumber = -1;
     this.secondsLeft += 30;
     // only needed if deactivation happens via code, not sinking the ball
     this.m_poolTable.clearBombNumber();
@@ -187,6 +180,23 @@ eightball.Game.prototype.addPoints = function(points) {
     this._saveHighScore(this.highScore);
     this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
   }
+};
+
+/**
+ @private
+*/
+eightball.Game.prototype._resetTable = function() {
+  this.bombSecondsLeft = eightball.Game.s_bombSeconds + 2;
+  if (this.m_bombDemoMode) {
+    this.m_bombNumber = 1;
+  } else {
+    this.m_bombNumber = goog.math.randomInt(15) + 1;
+  }
+  this._isBombFound = false;
+  this._isBombActive = false;
+  this.m_poolTable.rackEm();
+  this.m_poolTable.resume();
+  this.m_poolTable.clearBombNumber();
 };
 
 /**
@@ -263,7 +273,7 @@ eightball.Game.prototype._pooltable_pocketDrop = function(e) {
     this.addPoints(100);
   }
 
-  if (this._isBombFound && e.ballNumber == this.bombNumber) {
+  if (this._isBombFound && e.ballNumber == this.m_bombNumber) {
     var deactivated = this.deactivateBomb();
     goog.asserts.assert(deactivated);
   }
@@ -274,7 +284,7 @@ eightball.Game.prototype._pooltable_pocketDrop = function(e) {
  */
 eightball.Game.prototype._pooltable_ballHit = function(e) {
   if (!this._isBombFound) {
-    if ((e.ballNumber1 == 0 && e.ballNumber2 == this.bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this.bombNumber)) {
+    if ((e.ballNumber1 == 0 && e.ballNumber2 == this.m_bombNumber) || (e.ballNumber2 == 0 && e.ballNumber1 == this.m_bombNumber)) {
       var activated = this.activateBomb();
       goog.asserts.assert(activated, 'should always activate bomb in this context');
     }
