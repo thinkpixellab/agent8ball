@@ -589,12 +589,15 @@ goog.string.unescapeEntitiesUsingDom_ = function(str) {
   // Wrap in PRE to preserve whitespace in IE.
   // The PRE must be part of the innerHTML markup,
   // just setting innerHTML on a PRE element does not work.
-  el['innerHTML'] = '<pre>' + str + '</pre>';
+  // Also include a leading character since conforming HTML5
+  // UAs will strip leading newlines inside a PRE element.
+  el['innerHTML'] = '<pre>x' + str + '</pre>';
   // Accesing the function directly triggers some virus scanners.
   if (el['firstChild'][goog.string.NORMALIZE_FN_]) {
     el['firstChild'][goog.string.NORMALIZE_FN_]();
   }
-  str = el['firstChild']['firstChild']['nodeValue'];
+  // Remove the leading character we added.
+  str = el['firstChild']['firstChild']['nodeValue'].slice(1);
   el['innerHTML'] = '';
   // IE will also return non-standard newlines for TextNode.nodeValue,
   // switching \r and \n, so canonicalize them before returning.
@@ -790,7 +793,7 @@ goog.string.quote = function(s) {
 
 
 /**
- * Takes a string and returns the escaped string for that charater.
+ * Takes a string and returns the escaped string for that character.
  * @param {string} str The string to escape.
  * @return {string} An escaped string representing {@code str}.
  */
@@ -925,7 +928,7 @@ goog.string.removeAll = function(s, ss) {
  */
 goog.string.regExpEscape = function(s) {
   return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
-                   replace(/\x08/g, '\\x08');
+      replace(/\x08/g, '\\x08');
 };
 
 
@@ -1059,7 +1062,7 @@ goog.string.compareVersions = function(version1, version2) {
           goog.string.compareElements_(v1Comp[2].length == 0,
               v2Comp[2].length == 0) ||
           goog.string.compareElements_(v1Comp[2], v2Comp[2]);
-    // Stop as soon as an inequality is discovered.
+      // Stop as soon as an inequality is discovered.
     } while (order == 0);
   }
 

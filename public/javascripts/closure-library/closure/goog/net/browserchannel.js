@@ -35,6 +35,7 @@
 
 
 goog.provide('goog.net.BrowserChannel');
+goog.provide('goog.net.BrowserChannel.Error');
 goog.provide('goog.net.BrowserChannel.Handler');
 goog.provide('goog.net.BrowserChannel.LogSaver');
 goog.provide('goog.net.BrowserChannel.QueuedMap');
@@ -2068,7 +2069,7 @@ goog.net.BrowserChannel.prototype.createXhrIo = function(hostPrefix) {
  * @return {boolean} Whether the channel is currently active.
  */
 goog.net.BrowserChannel.prototype.isActive = function() {
-  return this.handler_.isActive(this);
+  return !!this.handler_ && this.handler_.isActive(this);
 };
 
 
