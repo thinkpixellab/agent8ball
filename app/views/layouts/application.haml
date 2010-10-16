@@ -11,10 +11,9 @@
     - if Rails.env == 'development'
       = javascript_include_tag 'jquery-1.4.3.min'
     - else
-      = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js'
-    = yield :view_javascript
-    - if Rails.env != 'development'
       :javascript
         window.doStats = true;
+      = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js'
+    = yield :view_javascript
   %body
     = yield
