@@ -762,8 +762,6 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index) 
     var droppingRadius = eightball.PoolTable.c_ballRadius * (1 - 0.5 * percentDropped);
     this.m_canvasContext.arc(location.x, location.y, droppingRadius, 0, 2 * Math.PI, false);
     this.m_canvasContext.fill();
-  } else {
-    droppingBall.m_ballLocation.Set(5000, 5000);
   }
 };
 
