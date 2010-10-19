@@ -45,12 +45,23 @@ jQueryObject.prototype.mouseup = function(fn) {};
  * @param {Function} fn
  * @return {jQueryObject}
  */
+jQueryObject.prototype.click = function(fn) {};
+/**
+ * @param {Function} fn
+ * @return {jQueryObject}
+ */
 jQueryObject.prototype.keypress = function(fn) {};
 
 /**
  * @return {Object}
  */
 jQueryObject.prototype.offset = function() {};
+
+/**
+ * @return {!jQueryObject}
+ */
+jQueryObject.prototype.show = function() {};
+
 /**
  * @param {(number|string)=} opt_speed
  * @param {Function=} opt_fn
@@ -83,6 +94,18 @@ jQueryObject.prototype.hide = function(opt_speed, opt_fn) {};
  * @return {string|jQueryObject}
  */
 jQueryObject.prototype.html = function(opt_val) {};
+
+/**
+ * @param {Element|string|jQueryObject} value
+ * @return {string|jQueryObject}
+ */
+jQueryObject.prototype.append = function(value) {};
+
+/**
+ * @param {string} opt_val
+ * @return {string|jQueryObject}
+ */
+jQueryObject.prototype.text = function(opt_val) {};
 
 /**
  * @param {Function} fn
