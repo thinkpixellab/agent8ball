@@ -33,6 +33,7 @@ goog.require('pixelLab.FpsLogger');
  @extends {goog.events.EventTarget}
  */
 eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElement, imageMap) {
+  goog.events.EventTarget.call(this);
 
   // variables
   /**
