@@ -295,7 +295,7 @@ eightball.Application = function(opt_skipGraphics) {
       // get the location of the ball that exploded
       var bombLocation = poolTable.getBombLocation();
       if (bombLocation) {
-        poolTable.removeBomb();
+        poolTable.explodeBomb();
 
         // TODO: magic values here. Boo! Make this better
         var left = Math.min(Math.max((bombLocation.x + 300), -60), 660);

@@ -569,7 +569,7 @@ eightball.PoolTable.prototype.igniteBomb = function() {
   this._isBombIgnited = true;
 };
 
-eightball.PoolTable.prototype.removeBomb = function() {
+eightball.PoolTable.prototype.explodeBomb = function() {
   var bombBall = this.m_balls[this.m_bombNumber];
 
   goog.object.forEach(this.m_balls, function(ball, key, theThis) {
