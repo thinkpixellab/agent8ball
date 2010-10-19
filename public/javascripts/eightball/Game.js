@@ -265,9 +265,9 @@ eightball.Game.prototype._dispatchGameEvent = function(type) {
 
 /**
  @private
+ @param {!eightball.PocketDropEvent} e
  */
 eightball.Game.prototype._pooltable_pocketDrop = function(e) {
-
   if (e.ballNumber != 0) {
     goog.debug.LogManager.getRoot().info('Pocket drop: ' + e.ballNumber);
     this.addPoints(100);
