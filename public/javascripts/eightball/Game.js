@@ -97,7 +97,7 @@ eightball.Game.prototype.start = function() {
 
   // set the game state
   this.gameState = eightball.Game.States.STARTED;
-
+  this._dispatchGameEvent(eightball.Game.EventType.START);
 };
 
 eightball.Game.prototype.pause = function() {
