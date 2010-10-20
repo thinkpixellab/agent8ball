@@ -69,7 +69,7 @@ goog.addDependency("../../../box2d/dynamics/joints/b2RevoluteJointDef.js", ['box
 goog.addDependency("../../../eightball/CollisionEvent.js", ['eightball.CollisionEvent'], ['goog.events.Event']);
 goog.addDependency("../../../eightball/Cookies.js", ['eightball.Cookies'], ['goog.net.cookies']);
 goog.addDependency("../../../eightball/DroppingBall.js", ['eightball.DroppingBall'], []);
-goog.addDependency("../../../eightball/Game.js", ['eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState'], ['eightball.Cookies', 'eightball.PoolTable', 'goog.Timer', 'goog.array', 'goog.asserts', 'goog.debug.LogManager', 'goog.events.Event', 'goog.events.EventTarget', 'goog.object']);
+goog.addDependency("../../../eightball/Game.js", ['eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState'], ['eightball.Cookies', 'eightball.PoolTable', 'eightball.Stats', 'goog.Timer', 'goog.array', 'goog.asserts', 'goog.debug.LogManager', 'goog.events.Event', 'goog.events.EventTarget', 'goog.object']);
 goog.addDependency("../../../eightball/Music.js", ['eightball.Music'], ['eightball.Cookies', 'goog.events.Event', 'goog.events.EventTarget']);
 goog.addDependency("../../../eightball/PocketDropEvent.js", ['eightball.PocketDropEvent'], ['goog.events.Event']);
 goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], ['box2d.AABB', 'box2d.BodyDef', 'box2d.CircleDef', 'box2d.PolyDef', 'box2d.Vec2', 'box2d.World', 'eightball.CollisionEvent', 'eightball.DroppingBall', 'eightball.PocketDropEvent', 'goog.Timer', 'goog.array', 'goog.color', 'goog.debug.LogManager', 'goog.events', 'goog.events.EventTarget', 'goog.math.Line', 'goog.math.Matrix', 'goog.math.Vec2', 'goog.object', 'goog.style', 'pixelLab.DebugDiv', 'pixelLab.FpsLogger']);

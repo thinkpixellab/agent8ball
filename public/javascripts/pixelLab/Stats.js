@@ -23,6 +23,17 @@ pixelLab.Stats.gaqPush = function(commandArray) {
 };
 
 /**
+ * @param {string} category
+ * @param {string} action
+ * @param {string=} opt_label
+ * @param {number=} opt_value
+ * @return {undefined}
+ */
+pixelLab.Stats.gaqTrackEvent = function(category, action, opt_label, opt_value) {
+  pixelLab.Stats.gaqPush(['_trackEvent', category, action, opt_label, opt_value]);
+};
+
+/**
  @param {number} projectId
  @param {!string} securityId
  */

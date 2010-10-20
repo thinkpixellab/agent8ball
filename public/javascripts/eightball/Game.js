@@ -4,6 +4,7 @@ goog.provide('eightball.Game.GameState');
 
 goog.require('eightball.Cookies');
 goog.require('eightball.PoolTable');
+goog.require('eightball.Stats');
 
 goog.require('goog.Timer');
 goog.require('goog.array');
@@ -261,6 +262,10 @@ eightball.Game.prototype._tickAction = function() {
  */
 eightball.Game.prototype._dispatchGameEvent = function(type) {
   this.dispatchEvent(new goog.events.Event(type, this));
+
+  if (goog.array.contains(eightball.Game.TrackedEvents, type)) {
+    eightball.Stats.game(type);
+  }
 };
 
 /**
@@ -393,6 +398,13 @@ eightball.Game.EventType = {
   BOMBEXPLODED: 'bombexploded'
 
 };
+
+/**
+ * @private
+ * @const
+ * @type {!Array.<string>}
+*/
+eightball.Game.TrackedEvents = [eightball.Game.EventType.START, eightball.Game.EventType.PAUSE, eightball.Game.EventType.RESUME, eightball.Game.EventType.END, eightball.Game.EventType.BOMBACTIVATED, eightball.Game.EventType.BOMBDEACTIVATED, eightball.Game.EventType.BOMBEXPLODED, eightball.Game.EventType];
 
 /**
  @private
