@@ -6,6 +6,7 @@ goog.require('eightball.Game.GameState');
 goog.require('eightball.Music');
 goog.require('eightball.PoolTable');
 goog.require('eightball.SoundEffectManager');
+goog.require('eightball.Stats');
 
 goog.require('goog.array');
 goog.require('goog.debug.LogManager');
@@ -17,7 +18,6 @@ goog.require('goog.userAgent');
 
 goog.require('pixelLab.DebugDiv');
 goog.require('pixelLab.KeyBinding');
-goog.require('pixelLab.Stats');
 
 var _game;
 
@@ -26,10 +26,7 @@ var _game;
  @param {boolean=} opt_skipGraphics
  */
 eightball.Application = function(opt_skipGraphics) {
-  if (window['doStats']) {
-    pixelLab.Stats.addGoogleAnalytics('UA-18601140-1');
-    pixelLab.Stats.addStatCounter(6221324, '0296de03');
-  }
+  eightball.Stats.load();
 
   // instance fields
   this.m_lastTickSeconds = 0;

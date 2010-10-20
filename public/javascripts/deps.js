@@ -75,6 +75,7 @@ goog.addDependency("../../../eightball/PocketDropEvent.js", ['eightball.PocketDr
 goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], ['box2d.AABB', 'box2d.BodyDef', 'box2d.CircleDef', 'box2d.PolyDef', 'box2d.Vec2', 'box2d.World', 'eightball.CollisionEvent', 'eightball.DroppingBall', 'eightball.PocketDropEvent', 'goog.Timer', 'goog.array', 'goog.color', 'goog.debug.LogManager', 'goog.events', 'goog.events.EventTarget', 'goog.math.Line', 'goog.math.Matrix', 'goog.math.Vec2', 'goog.object', 'goog.style', 'pixelLab.DebugDiv', 'pixelLab.FpsLogger']);
 goog.addDependency("../../../eightball/SoundEffect.js", ['eightball.SoundEffect'], []);
 goog.addDependency("../../../eightball/SoundEffectManager.js", ['eightball.SoundEffectManager'], ['eightball.Cookies', 'eightball.SoundEffect', 'goog.events.Event', 'goog.events.EventTarget']);
+goog.addDependency("../../../eightball/Stats.js", ['eightball.Stats'], ['pixelLab.Stats']);
 goog.addDependency("../../../pixelLab/Audio.js", ['pixelLab.Audio'], ['goog.string']);
 goog.addDependency("../../../pixelLab/DebugDiv.js", ['pixelLab.DebugDiv'], ['goog.debug.LogManager', 'goog.dom']);
 goog.addDependency("../../../pixelLab/FpsLogger.js", ['pixelLab.FpsLogger'], []);
@@ -82,4 +83,4 @@ goog.addDependency("../../../pixelLab/KeyBinding.js", ['pixelLab.KeyBinding', 'p
 goog.addDependency("../../../pixelLab/Preload.js", ['pixelLab.Preload'], ['goog.object']);
 goog.addDependency("../../../pixelLab/Stats.js", ['pixelLab.Stats'], ['goog.dom']);
 goog.addDependency("../../../loader.js", [], ['eightball.Application', 'pixelLab.Preload']);
-goog.addDependency("../../../application.js", ['eightball.Application'], ['eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState', 'eightball.Music', 'eightball.PoolTable', 'eightball.SoundEffectManager', 'goog.array', 'goog.debug.LogManager', 'goog.events', 'goog.events.EventType', 'goog.i18n.NumberFormat', 'goog.string', 'goog.userAgent', 'pixelLab.DebugDiv', 'pixelLab.KeyBinding', 'pixelLab.Stats']);
+goog.addDependency("../../../application.js", ['eightball.Application'], ['eightball.Game', 'eightball.Game.EventType', 'eightball.Game.GameState', 'eightball.Music', 'eightball.PoolTable', 'eightball.SoundEffectManager', 'eightball.Stats', 'goog.array', 'goog.debug.LogManager', 'goog.events', 'goog.events.EventType', 'goog.i18n.NumberFormat', 'goog.string', 'goog.userAgent', 'pixelLab.DebugDiv', 'pixelLab.KeyBinding']);
