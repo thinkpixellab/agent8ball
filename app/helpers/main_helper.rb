@@ -31,10 +31,17 @@ module MainHelper
     # audios
     audios = Dir.glob(File.join(Rails.root,'public','audios','*'))
     audios.map!{ |f| File.basename(f) }
-    assets[:audios] = audios.inject(Hash.new) do |h,i|
-      entry = { File.basename(i,File.extname(i)) => audio_path(i) }
-      entry.merge(h)
+
+    audios_hash = {}
+    audios.each do |audio|
+      name = File.basename(audio,File.extname(audio))
+      path = audio_path(audio)
+      unless audios_hash[name]
+        audios_hash[name] = []
+      end
+      audios_hash[name] << path
     end
+    assets[:audios] = audios_hash
 
     assets
   end

@@ -5,11 +5,10 @@ goog.require('goog.object');
 /**
 @constructor
 @param {!Array.<!string>} imageUrls
-@param {!Array.<!string>} soundUrls
 @param {!function(!number)} progressCallback
 @param {!function()} completedCallback
 */
-pixelLab.Preload = function(imageUrls, soundUrls, progressCallback, completedCallback) {
+pixelLab.Preload = function(imageUrls, progressCallback, completedCallback) {
   this.imagesLoaded = 0;
   this.imagesTotal = goog.object.getCount(imageUrls);
   this.hasLoaded = false;
@@ -17,18 +16,6 @@ pixelLab.Preload = function(imageUrls, soundUrls, progressCallback, completedCal
   var _this = this;
 
   $(document).ready(function() {
-
-    // handle sounds
-    var key;
-    for (key in soundUrls) {
-      var audio = document.createElement('audio');
-      document.body.appendChild(audio);
-      audio.setAttribute('src', soundUrls[key]);
-      audio.volume = 0;
-      audio.load();
-    }
-
-
     // handle images
     _this.preloadDiv = document.createElement('div');
     $(_this.preloadDiv).css({
@@ -37,7 +24,7 @@ pixelLab.Preload = function(imageUrls, soundUrls, progressCallback, completedCal
       overflow: 'hidden'
     });
 
-    for (key in imageUrls) {
+    for (var key in imageUrls) {
       var imgLoad = $('<img></img>');
       $(imgLoad).unbind('load');
       $(imgLoad).bind('load', function() {

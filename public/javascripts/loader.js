@@ -19,7 +19,6 @@ $(document).ready(function() {
   } else {
 
     var images = preloadAssets.images;
-    var preloadAudios = [preloadAssets.audios['theme'], preloadAssets.audios['typing']];
 
     var done = function() {
       $('#loadingbg').delay(500).fadeOut(700, function() {
@@ -36,7 +35,7 @@ $(document).ready(function() {
 
     // load the ui (on a timer so that we start after fading in -- it looks weird otherwise)
     setTimeout(function() {
-      new pixelLab.Preload(images, preloadAudios, progress, done);
+      new pixelLab.Preload(images, progress, done);
     },
     1500);
   }

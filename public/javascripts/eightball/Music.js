@@ -8,9 +8,9 @@ goog.require('goog.events.EventTarget');
 /**
  @constructor
  @extends {goog.events.EventTarget}
- @param {string} location
+ @param {!Array.<string>} locations
  */
-eightball.Music = function(location) {
+eightball.Music = function(locations) {
   goog.events.EventTarget.call(this);
 
   /**
@@ -20,9 +20,9 @@ eightball.Music = function(location) {
 
   /**
    @private
-   @type {string}
+   @type {!Array.<string>}
    */
-  this.m_location = location;
+  this.m_locations = locations;
 
   var cookieValue = goog.net.cookies.get(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.ON) == eightball.Music.s_CookieOnOffEnum.ON;
   if (cookieValue) {
@@ -36,13 +36,20 @@ eightball.Music.prototype.startMusic = function() {
   this._clearMusic();
 
   // create the audio element
-  this.m_music = document.createElement('audio');
-  this.m_music.setAttribute('src', this.m_location);
-  this.m_music.setAttribute('loop', 'loop');
-  this.m_music.play();
+  var audio = document.createElement('audio');
+  this.m_music = audio;
+  document.body.appendChild(audio);
+  for (var index in this.m_locations) {
+    var source = document.createElement('source');
+    source.src = this.m_locations[index];
+    audio.appendChild(source);
+  }
 
-  // add it to the document
+  this.m_music.loop = 'loop';
+
   document.body.appendChild(this.m_music);
+
+  this.m_music.play();
 
   eightball.Cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.ON);
   this.dispatchEvent(new goog.events.Event(eightball.Music.STATE_CHANGE_EVENT_TYPE));
