@@ -401,8 +401,7 @@ eightball.Application = function(opt_skipGraphics) {
       div.html('').append(table);
 
       div.delay(4000).fadeOut(500);
-    }
-    else {
+    } else {
       div.text(e['description']);
       div.delay(2000).fadeOut(500);
     }
@@ -451,6 +450,11 @@ eightball.Application = function(opt_skipGraphics) {
   });
 
   keyBinding.add('h', 'Help', goog.nullFunction);
+
+  keyBinding.add('p', 'Play random sound effect', function() {
+    var soundName = soundManager.playRandom();
+    return 'Playing ' + soundName;
+  });
 
   //
   // Click handlers

@@ -40,6 +40,13 @@ eightball.SoundEffectManager.prototype.play = function(name) {
   }
 };
 
+eightball.SoundEffectManager.prototype.playRandom = function() {
+  var keys = goog.object.getKeys(this.m_sounds);
+  var index = Math.floor(Math.random() * keys.length);
+  this.play(keys[index]);
+  return keys[index];
+};
+
 eightball.SoundEffectManager.prototype.isSoundOn = function() {
   return this.m_isSoundOn;
 };
