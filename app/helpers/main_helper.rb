@@ -34,12 +34,14 @@ module MainHelper
 
     audios_hash = {}
     audios.each do |audio|
-      name = File.basename(audio,File.extname(audio))
+      ext = File.extname(audio)
+      name = File.basename(audio, ext)
+      ext = ext[1,100] # strip the first char and keeps up to the next 100. Assume extensions aren't that long
       path = audio_path(audio)
       unless audios_hash[name]
         audios_hash[name] = []
       end
-      audios_hash[name] << path
+      audios_hash[name] << [path, Mime::Type.lookup_by_extension(ext).to_s]
     end
     assets[:audios] = audios_hash
 

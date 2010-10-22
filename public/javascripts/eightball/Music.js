@@ -35,18 +35,8 @@ eightball.Music.prototype.startMusic = function() {
 
   this._clearMusic();
 
-  // create the audio element
-  var audio = document.createElement('audio');
-  this.m_music = audio;
-  document.body.appendChild(audio);
-  for (var index in this.m_locations) {
-    var source = document.createElement('source');
-    source.src = this.m_locations[index];
-    audio.appendChild(source);
-  }
-
+  this.m_music = eightball.SoundEffect.create(this.m_locations);
   this.m_music.loop = 'loop';
-
   document.body.appendChild(this.m_music);
 
   this.m_music.play();

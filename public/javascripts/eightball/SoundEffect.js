@@ -29,14 +29,7 @@ eightball.SoundEffect = function(locations, simulCount) {
   // create audio elements for each of the potential simultaneous plays; we add
   // the audio elements directly to the document for maximum browser compatibility
   for (var i = 0; i <= simulCount; i++) {
-    var audio = document.createElement('audio');
-    this.m_audios[i] = audio;
-    document.body.appendChild(audio);
-    for (var index in locations) {
-      var source = document.createElement('source');
-      source.src = locations[index];
-      audio.appendChild(source);
-    }
+    this.m_audios[i] = eightball.SoundEffect.create(locations);
   }
 };
 
@@ -49,5 +42,20 @@ eightball.SoundEffect.prototype.play = function() {
   var audio = this.m_audios[this.m_currSimul];
   audio.load();
   audio.play();
+  return audio;
+};
+
+/**
+ @param {!Array.<!Array.<string>>} data
+*/
+eightball.SoundEffect.create = function(data) {
+  var audio = document.createElement('audio');
+  document.body.appendChild(audio);
+  for (var index in data) {
+    var source = document.createElement('source');
+    source.src = data[index][0];
+    source.type = data[index][1];
+    audio.appendChild(source);
+  }
   return audio;
 };
