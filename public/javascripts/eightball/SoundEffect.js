@@ -55,8 +55,15 @@ eightball.SoundEffect.prototype.play = function() {
  @return {Element}
 */
 eightball.SoundEffect.create = function(data) {
+  var holder = document.getElementById(eightball.SoundEffect.s_audioHolderId);
+  if (holder === undefined || holder == null) {
+    holder = document.createElement('div');
+    holder.id = eightball.SoundEffect.s_audioHolderId;
+    holder.style['display'] = 'none';
+    document.body.appendChild(holder);
+  }
   var audio = document.createElement('audio');
-  document.body.appendChild(audio);
+  holder.appendChild(audio);
   for (var index in data) {
     var source = document.createElement('source');
     source.src = data[index][0];
@@ -65,3 +72,10 @@ eightball.SoundEffect.create = function(data) {
   }
   return audio;
 };
+
+/**
+ @private
+ @type {string}
+ @const
+*/
+eightball.SoundEffect.s_audioHolderId = '_audios';
