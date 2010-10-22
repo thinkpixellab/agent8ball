@@ -385,8 +385,7 @@ eightball.Application = function(opt_skipGraphics) {
   //
   var keyBinding = new pixelLab.KeyBinding();
   goog.events.listen(keyBinding, pixelLab.KeyBinding.TYPE, function(e) {
-    var div = jQuery('#KeyBindingAlertDiv');
-    div.stop(true, true).show();
+    $('#alert-div-holder').stop(true, true).show();
     if (e.keybinding == 'h') {
       var map = keyBinding.getMap();
 
@@ -398,12 +397,11 @@ eightball.Application = function(opt_skipGraphics) {
         table.append(row);
       });
 
-      div.html('').append(table);
-
-      div.delay(4000).fadeOut(500);
+      $('#alert-div').html('').append(table);
+      $('#alert-div-holder').delay(4000).fadeOut(500);
     } else {
-      div.text(e['description']);
-      div.delay(2000).fadeOut(500);
+      $('#alert-div').text(e['description']);
+      $('#alert-div-holder').delay(2000).fadeOut(500);
     }
   });
 
@@ -449,12 +447,12 @@ eightball.Application = function(opt_skipGraphics) {
     return detonated ? 'Bomb detonated' : 'No-op';
   });
 
-  keyBinding.add('h', 'Help', goog.nullFunction);
-
   keyBinding.add('p', 'Play random sound effect', function() {
     var soundName = soundManager.playRandom();
     return 'Playing ' + soundName;
   });
+
+  keyBinding.add('h', 'Help', goog.nullFunction);
 
   //
   // Click handlers
