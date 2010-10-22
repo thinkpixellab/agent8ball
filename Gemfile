@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.0'
 
-gem 'haml'
+gem 'haml-rails'
 gem 'compass'
 gem 'aws-s3'
 gem 'twitter_oauth'

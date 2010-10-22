@@ -50,11 +50,16 @@ GEM
       haml (>= 3.0.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
-    haml (3.0.18)
+    haml (3.0.22)
+    haml-rails (0.3.4)
+      actionpack (~> 3.0)
+      activesupport (~> 3.0)
+      haml (~> 3.0)
+      railties (~> 3.0)
     i18n (0.4.1)
     json (1.4.6)
     linecache (0.43)
-    mail (2.2.6.1)
+    mail (2.2.7)
       activesupport (>= 2.3.6)
       mime-types
       treetop (>= 1.4.5)
@@ -85,7 +90,7 @@ GEM
       ruby-debug-base (~> 0.10.3.0)
     ruby-debug-base (0.10.3)
       linecache (>= 0.3)
-    thor (0.14.2)
+    thor (0.14.3)
     treetop (1.4.8)
       polyglot (>= 0.3.1)
     twitter_oauth (0.4.3)
@@ -102,7 +107,7 @@ DEPENDENCIES
   awesome_print
   aws-s3
   compass
-  haml
+  haml-rails
   hassle!
   rails (= 3.0.0)
   ruby-debug
