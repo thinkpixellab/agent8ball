@@ -51,6 +51,9 @@ eightball.Music.prototype.stopMusic = function() {
   this.dispatchEvent(new goog.events.Event(eightball.Music.STATE_CHANGE_EVENT_TYPE));
 };
 
+/**
+ @return {boolean}
+ */
 eightball.Music.prototype.isMusicOn = function() {
   return (this.m_music != null);
 };

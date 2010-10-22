@@ -16,6 +16,7 @@ eightball.SoundEffectManager = function(audioMap) {
 
   /**
    @private
+   @type {!Object.<string, eightball.SoundEffect>}
    */
   this.m_sounds = {};
 
@@ -75,6 +76,7 @@ eightball.SoundEffectManager.STATE_CHANGE_EVENT_TYPE = 'eightball.SoundEffectMan
 eightball.SoundEffectManager.s_CookieSoundOn = 'eightball.SoundEffectManager.soundOn';
 
 /**
+ @const
  @private
  @enum {string}
  */
