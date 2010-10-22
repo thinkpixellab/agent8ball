@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 
 import os
-import sys
 import glob
 from _tools.Closure import Closure
-import _tools.HtmlPost
-from _tools.HtmlCompressor import HtmlCompressor, CssCompressor
 
 js_path = os.path.join('public', 'javascripts')
 
