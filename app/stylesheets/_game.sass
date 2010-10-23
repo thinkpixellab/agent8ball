@@ -358,8 +358,8 @@
   width: 31px
   height: 31px
 
-#gameovertwitter:hover
-  background-image: image-url("gametwitterover.png")
+  &:hover
+    background-position: 0 -31px
 
 #gameoverfacebook
   position: absolute
@@ -370,8 +370,8 @@
   width: 29px
   height: 29px
 
-#gameoverfacebook:hover
-  background-image: image-url("gamefacebookover.png")
+  &:hover
+    background-position: 0 -29px
 
 #loadingbg
   @include no-select
@@ -421,8 +421,9 @@
   width: 193px
   height: 28px
 
-#pixellabclick:hover
-  background-image: image-url("pixellabover.png")
+  &:hover
+    background-image: image-url('pixellab.png')
+    background-position: 0 -28px
 
 #pixellabclick a
   display: block
