@@ -144,15 +144,8 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
   this.m_ballVignetteImage = new Image();
   this.m_ballVignetteImage.src = imageMap['ballvignette'];
 
-  this.m_ballImages = {};
-  for (var i = 1; i <= 15; i++) {
-    var image = new Image();
-    image.src = imageMap['num' + i];
-    this.m_ballImages[i] = image;
-  }
-
-  this.m_bombStampImage = new Image();
-  this.m_bombStampImage.src = imageMap['bombstamp'];
+  this.m_ballNumbers = new Image();
+  this.m_ballNumbers.src = imageMap['ball_numbers'];
 
   // get local references for our canvas elements
   this.m_canvasElement = canvasElement;
@@ -871,16 +864,14 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     }
 
     //draw the number stamps
-    if (!isBomb) {
-      ctx.drawImage(this.m_ballImages[ballNumber], pt1.x - 4, pt1.y - 4);
-      if (d > shape.m_radius) {
-        ctx.drawImage(this.m_ballImages[ballNumber], pt2.x - 4, pt2.y - 4);
-      }
-    } else {
-      ctx.drawImage(this.m_bombStampImage, pt1.x - 6, pt1.y - 6);
-      if (d > shape.m_radius) {
-        ctx.drawImage(this.m_bombStampImage, pt2.x - 6, pt2.y - 6);
-      }
+    var yOffset = ballNumber * 9;
+    if (isBomb) {
+      yOffset = 0;
+    }
+
+    ctx.drawImage(this.m_ballNumbers, 0, yOffset, 9, 9, pt1.x - 4, pt1.y - 4, 9, 9);
+    if (d > shape.m_radius) {
+      ctx.drawImage(this.m_ballNumbers, 0, yOffset, 9, 9, pt2.x - 4, pt2.y - 4, 9, 9);
     }
     ctx.restore();
   }
