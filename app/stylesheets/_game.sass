@@ -287,9 +287,6 @@
   display: none
   text-align: center
 
-#loading
-  z-index: 400
-
 #start
   +overlaymessage
   background-image: image-url("letter.png")
@@ -372,34 +369,6 @@
 
   &:hover
     background-position: 0 -29px
-
-#loadingbg
-  @include no-select
-  +fill-all
-  background-image: image-url("loadingbg.png")
-  background-repeat: repeat
-  display: none
-
-#loadingbg img
-  +fill-all
-
-#loading
-  width: 295px
-  height: 283px
-  background-image: image-url("loading.jpg")
-  background-repeat: no-repeat
-  margin-left: auto
-  margin-right: auto
-  margin-top: 200px
-
-#loadingpg
-  width: 0px
-  height: 10px
-  background-image: image-url("loadingpg.png")
-  background-repeat: no-repeat
-  position: absolute
-  margin-top: 270px
-  margin-left: 36px
 
 #pixellab
   display: block
