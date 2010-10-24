@@ -51,7 +51,7 @@ eightball.Application = function(opt_skipGraphics) {
   //
   // MUSIC
   //
-  var musicManager = new eightball.Music(preloadAssets.audios['theme']);
+  var musicManager = new eightball.Music('theme', preloadAssets.audios['theme']);
 
   var updateMusicButton = function() {
     if (musicManager.isMusicOn()) {

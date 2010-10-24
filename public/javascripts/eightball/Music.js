@@ -10,13 +10,20 @@ goog.require('goog.events.EventTarget');
  @extends {goog.events.EventTarget}
  @param {!Array.<string>} locations
  */
-eightball.Music = function(locations) {
+eightball.Music = function(name, locations) {
   goog.events.EventTarget.call(this);
 
   /**
    @private
+   @type {Element}
    */
   this.m_music = null;
+
+  /**
+   @private
+   @type {string}
+   */
+  this.m_name = name;
 
   /**
    @private
@@ -35,9 +42,8 @@ eightball.Music.prototype.startMusic = function() {
 
   this._clearMusic();
 
-  this.m_music = eightball.SoundEffect.create(this.m_locations);
+  this.m_music = eightball.SoundEffect.create(this.m_name, this.m_locations);
   this.m_music.loop = 'loop';
-  document.body.appendChild(this.m_music);
 
   this.m_music.play();
 

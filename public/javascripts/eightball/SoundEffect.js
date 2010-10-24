@@ -2,10 +2,11 @@ goog.provide('eightball.SoundEffect');
 
 /**
  @constructor
+ @param {string} name
  @param {!Array.<string>} locations
  @param {number} simulCount
  */
-eightball.SoundEffect = function(locations, simulCount) {
+eightball.SoundEffect = function(name, locations, simulCount) {
   /**
   @private
   @type {!Array.<!Element>}
@@ -33,7 +34,7 @@ eightball.SoundEffect = function(locations, simulCount) {
   // create audio elements for each of the potential simultaneous plays; we add
   // the audio elements directly to the document for maximum browser compatibility
   for (var i = 0; i <= simulCount; i++) {
-    this.m_audios.push(eightball.SoundEffect.create(locations));
+    this.m_audios.push(eightball.SoundEffect.create(name, locations));
   }
 };
 
@@ -52,9 +53,10 @@ eightball.SoundEffect.prototype.play = function() {
 
 /**
  @param {!Array.<!Array.<string>>} data
+ @param {string} name of the audio being added.
  @return {Element}
 */
-eightball.SoundEffect.create = function(data) {
+eightball.SoundEffect.create = function(name, data) {
   var holder = document.getElementById(eightball.SoundEffect.s_audioHolderId);
   if (holder === undefined || holder == null) {
     holder = document.createElement('div');
@@ -63,6 +65,7 @@ eightball.SoundEffect.create = function(data) {
     document.body.appendChild(holder);
   }
   var audio = document.createElement('audio');
+  audio.className = 'audio_' + name;
   holder.appendChild(audio);
   for (var index in data) {
     var source = document.createElement('source');

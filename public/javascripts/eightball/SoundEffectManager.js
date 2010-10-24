@@ -32,7 +32,7 @@ eightball.SoundEffectManager = function(audioMap) {
 goog.inherits(eightball.SoundEffectManager, goog.events.EventTarget);
 
 eightball.SoundEffectManager.prototype.add = function(name, count) {
-  this.m_sounds[name] = new eightball.SoundEffect(this.m_audioMap[name], count);
+  this.m_sounds[name] = new eightball.SoundEffect(name, this.m_audioMap[name], count);
 };
 
 eightball.SoundEffectManager.prototype.play = function(name) {
