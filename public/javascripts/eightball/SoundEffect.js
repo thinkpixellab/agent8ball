@@ -40,7 +40,9 @@ eightball.SoundEffect.prototype.play = function() {
   this.m_currSimul++;
   this.m_currSimul %= this.m_maxSimul;
   var audio = this.m_audios[this.m_currSimul];
-  audio.load();
+  if (goog.userAgent.WEBKIT) {
+    audio.load();
+  }
   audio.play();
   return audio;
 };
