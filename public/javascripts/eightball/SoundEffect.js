@@ -33,7 +33,7 @@ eightball.SoundEffect = function(name, locations, simulCount) {
 
   // create audio elements for each of the potential simultaneous plays; we add
   // the audio elements directly to the document for maximum browser compatibility
-  for (var i = 0; i <= simulCount; i++) {
+  while (document.getElementsByClassName('audio_' + name).length < simulCount) {
     this.m_audios.push(eightball.SoundEffect.create(name, locations));
   }
 };
