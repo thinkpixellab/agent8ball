@@ -106,61 +106,6 @@ eightball.Application = function(opt_skipGraphics) {
   var missionMessage = 'Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.';
   var typingSound = null;
 
-  // event handlers
-  gameover.click(function() {
-    gameover.fadeOut(400);
-    game.reset();
-  });
-
-  $('#startoverclick').click(function() {
-    game.reset();
-  });
-
-  start.click(function() {
-    start.fadeOut(100);
-    overlay.fadeOut(400);
-    game.start();
-
-    // clean up the typing
-    skipTyping = true;
-    if (typingSound) typingSound.pause();
-    startmessage.html(missionMessage);
-
-  });
-
-  $('#pauseclick').click(function() {
-    game.pause();
-    overlay.fadeIn(400);
-    resume.fadeIn(400);
-
-    lastMusicOnPause = musicManager.isMusicOn();
-    if (lastMusicOnPause) {
-      musicManager.stopMusic();
-    }
-  });
-
-  resume.click(function() {
-    overlay.fadeOut(400);
-    resume.fadeOut(400, function() {
-      game.resume();
-    });
-
-    if (lastMusicOnPause) {
-      musicManager.startMusic();
-    }
-
-  });
-
-  $('#gameoverfacebook').click(function(e) {
-    e.stopPropagation();
-    window.open('http://www.facebook.com/sharer.php?u=http%3A%2F%2Fagent8ball.com&t=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball!');
-  });
-
-  $('#gameovertwitter').click(function(e) {
-    e.stopPropagation();
-    window.open('http://twitter.com/home?status=Hey%2C%20%40agent8ball!%20I%20just%20scored%20' + game.score + '%20points%20on%20http%3A%2F%2Fagent8ball.com.%20Beat%20that!');
-  });
-
   var poolTable = new eightball.PoolTable($('canvas#demo_canvas')[0], $('canvas#cue_canvas')[0], $('canvas#shadow_canvas')[0], preloadAssets.images);
 
   // create a game object
@@ -457,6 +402,60 @@ eightball.Application = function(opt_skipGraphics) {
   //
   // Click handlers
   //
+  gameover.click(function() {
+    gameover.fadeOut(400);
+    game.reset();
+  });
+
+  $('#startoverclick').click(function() {
+    game.reset();
+  });
+
+  start.click(function() {
+    start.fadeOut(100);
+    overlay.fadeOut(400);
+    game.start();
+
+    // clean up the typing
+    skipTyping = true;
+    if (typingSound) typingSound.pause();
+    startmessage.html(missionMessage);
+
+  });
+
+  $('#pauseclick').click(function() {
+    game.pause();
+    overlay.fadeIn(400);
+    resume.fadeIn(400);
+
+    lastMusicOnPause = musicManager.isMusicOn();
+    if (lastMusicOnPause) {
+      musicManager.stopMusic();
+    }
+  });
+
+  resume.click(function() {
+    overlay.fadeOut(400);
+    resume.fadeOut(400, function() {
+      game.resume();
+    });
+
+    if (lastMusicOnPause) {
+      musicManager.startMusic();
+    }
+
+  });
+
+  $('#gameoverfacebook').click(function(e) {
+    e.stopPropagation();
+    window.open('http://www.facebook.com/sharer.php?u=http%3A%2F%2Fagent8ball.com&t=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball!');
+  });
+
+  $('#gameovertwitter').click(function(e) {
+    e.stopPropagation();
+    window.open('http://twitter.com/home?status=Hey%2C%20%40agent8ball!%20I%20just%20scored%20' + game.score + '%20points%20on%20http%3A%2F%2Fagent8ball.com.%20Beat%20that!');
+  });
+
   $('#instructionsclick').click(function() {
     game.pause();
     overlay.fadeIn(500);
