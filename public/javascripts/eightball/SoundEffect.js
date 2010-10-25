@@ -25,12 +25,6 @@ eightball.SoundEffect = function(name, locations, simulCount) {
   */
   this.m_currSimul = 0;
 
-  /**
-  @private
-  @type {boolean}
-  */
-  this.m_isWebKit = navigator.userAgent.toLowerCase().indexOf('webkit') > -1;
-
   // create audio elements for each of the potential simultaneous plays; we add
   // the audio elements directly to the document for maximum browser compatibility
   while (document.getElementsByClassName('audio_' + name).length < simulCount) {
