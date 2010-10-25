@@ -31,7 +31,7 @@ eightball.Music = function(name, locations) {
    */
   this.m_locations = locations;
 
-  var cookieValue = goog.net.cookies.get(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.ON) == eightball.Music.s_CookieOnOffEnum.ON;
+  var cookieValue = goog.net.cookies.get(eightball.Cookies.Keys.MUSIC, eightball.Cookies.CookieOnOffEnum.ON) == eightball.Cookies.CookieOnOffEnum.ON;
   if (cookieValue) {
     this.startMusic();
   }
@@ -47,13 +47,13 @@ eightball.Music.prototype.startMusic = function() {
 
   this.m_music.play();
 
-  eightball.Cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.ON);
+  eightball.Cookies.set(eightball.Cookies.Keys.MUSIC, eightball.Cookies.CookieOnOffEnum.ON);
   this.dispatchEvent(new goog.events.Event(eightball.Music.STATE_CHANGE_EVENT_TYPE));
 };
 
 eightball.Music.prototype.stopMusic = function() {
   this._clearMusic();
-  eightball.Cookies.set(eightball.Music.s_CookieMusicOn, eightball.Music.s_CookieOnOffEnum.OFF);
+  eightball.Cookies.set(eightball.Cookies.Keys.MUSIC, eightball.Cookies.CookieOnOffEnum.OFF);
   this.dispatchEvent(new goog.events.Event(eightball.Music.STATE_CHANGE_EVENT_TYPE));
 };
 
@@ -89,21 +89,3 @@ eightball.Music.prototype._clearMusic = function() {
     this.m_music = null;
   }
 };
-
-/**
- @const
- @private
- @type {string}
- */
-eightball.Music.s_CookieMusicOn = 'm';
-
-/**
- @const
- @private
- @enum {string}
- */
-eightball.Music.s_CookieOnOffEnum = {
-  ON: 'on',
-  OFF: 'off'
-};
-

@@ -26,7 +26,7 @@ eightball.SoundEffectManager = function(audioMap) {
    */
   this.m_audioMap = audioMap;
 
-  var cookieValue = goog.net.cookies.get(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.ON) == eightball.SoundEffectManager.s_CookieOnOffEnum.ON;
+  var cookieValue = goog.net.cookies.get(eightball.Cookies.Keys.SOUND_EFFECTS, eightball.Cookies.CookieOnOffEnum.ON) == eightball.Cookies.CookieOnOffEnum.ON;
   this.m_isSoundOn = cookieValue;
 };
 goog.inherits(eightball.SoundEffectManager, goog.events.EventTarget);
@@ -55,9 +55,9 @@ eightball.SoundEffectManager.prototype.isSoundOn = function() {
 eightball.SoundEffectManager.prototype.toggleSound = function() {
   this.m_isSoundOn = !this.m_isSoundOn;
   if (this.m_isSoundOn) {
-    eightball.Cookies.set(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.ON);
+    eightball.Cookies.set(eightball.Cookies.Keys.SOUND_EFFECTS, eightball.Cookies.CookieOnOffEnum.ON);
   } else {
-    eightball.Cookies.set(eightball.SoundEffectManager.s_CookieSoundOn, eightball.SoundEffectManager.s_CookieOnOffEnum.OFF);
+    eightball.Cookies.set(eightball.Cookies.Keys.SOUND_EFFECTS, eightball.Cookies.CookieOnOffEnum.OFF);
   }
   this.dispatchEvent(new goog.events.Event(eightball.SoundEffectManager.STATE_CHANGE_EVENT_TYPE));
 };
@@ -67,20 +67,3 @@ eightball.SoundEffectManager.prototype.toggleSound = function() {
  @type {string}
 */
 eightball.SoundEffectManager.STATE_CHANGE_EVENT_TYPE = 'eightball.SoundEffectManager.STATE_CHANGE_EVENT_TYPE';
-
-/**
- @const
- @private
- @type {string}
- */
-eightball.SoundEffectManager.s_CookieSoundOn = 's';
-
-/**
- @const
- @private
- @enum {string}
- */
-eightball.SoundEffectManager.s_CookieOnOffEnum = {
-  ON: 'on',
-  OFF: 'off'
-};

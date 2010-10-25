@@ -205,14 +205,14 @@ eightball.Game.prototype._resetTable = function() {
  @param {number} highScore
  */
 eightball.Game.prototype._saveHighScore = function(highScore) {
-  eightball.Cookies.set(eightball.Game.s_CookieGameHighScore, highScore);
+  eightball.Cookies.set(eightball.Cookies.Keys.HIGH_SCORE, highScore);
 };
 
 /**
  @private
  */
 eightball.Game.prototype._loadHighScore = function() {
-  var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, '0');
+  var highScoreValue = goog.net.cookies.get(eightball.Cookies.Keys.HIGH_SCORE, '0');
   return highScoreValue;
 };
 
@@ -419,10 +419,3 @@ eightball.Game.s_gameSeconds = 120;
  @type {number}
  */
 eightball.Game.s_bombSeconds = 30;
-
-/**
- @const
- @private
- @type {string}
- */
-eightball.Game.s_CookieGameHighScore = 'hs';

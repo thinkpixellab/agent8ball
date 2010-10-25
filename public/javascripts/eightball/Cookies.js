@@ -10,3 +10,22 @@ goog.require('goog.net.cookies');
 eightball.Cookies.set = function(name, value) {
   goog.net.cookies.set(name, value, 60 * 60 * 24 * 365 * 10);
 };
+
+/**
+ @const
+ @enum {string}
+ */
+eightball.Cookies.Keys = {
+  SOUND_EFFECTS: 's',
+  MUSIC: 'm',
+  HIGH_SCORE: 'h'
+};
+
+/**
+ @const
+ @enum {string}
+ */
+eightball.Cookies.CookieOnOffEnum = {
+  ON: '1',
+  OFF: '0'
+};
