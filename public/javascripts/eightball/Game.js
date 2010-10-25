@@ -71,7 +71,6 @@ eightball.Game.prototype.reset = function() {
   this.score = 0;
   this._dispatchGameEvent(eightball.Game.EventType.SCORE);
 
-  this.highScore = this._loadHighScore();
   this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
 
   this.gameState = eightball.Game.States.READY;
@@ -176,10 +175,8 @@ eightball.Game.prototype.addPoints = function(points) {
   this.score += points;
   this._dispatchGameEvent(eightball.Game.EventType.SCORE);
 
-  if (this.score > this.highScore) {
-    this.highScore = this.score;
-    this._saveHighScore(this.highScore);
-    this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
+  if (this.score > this.getHighScore()) {
+    this._setHighScore(this.score);
   }
 };
 
@@ -204,16 +201,17 @@ eightball.Game.prototype._resetTable = function() {
  @private
  @param {number} highScore
  */
-eightball.Game.prototype._saveHighScore = function(highScore) {
+eightball.Game.prototype._setHighScore = function(highScore) {
   eightball.Cookies.set(eightball.Cookies.Keys.HIGH_SCORE, highScore);
+  this._dispatchGameEvent(eightball.Game.EventType.HIGHSCORE);
 };
 
 /**
- @private
+ @return {number}
  */
-eightball.Game.prototype._loadHighScore = function() {
+eightball.Game.prototype.getHighScore = function() {
   var highScoreValue = goog.net.cookies.get(eightball.Cookies.Keys.HIGH_SCORE, '0');
-  return highScoreValue;
+  return parseInt(highScoreValue, 10);
 };
 
 /**

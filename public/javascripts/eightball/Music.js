@@ -31,6 +31,9 @@ eightball.Music = function(name, locations) {
    */
   this.m_locations = locations;
 
+  /**
+   @type {boolean}
+   */
   var cookieValue = goog.net.cookies.get(eightball.Cookies.Keys.MUSIC, eightball.Cookies.CookieOnOffEnum.ON) == eightball.Cookies.CookieOnOffEnum.ON;
   if (cookieValue) {
     this.startMusic();
