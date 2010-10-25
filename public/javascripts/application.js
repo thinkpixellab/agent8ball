@@ -416,7 +416,7 @@ eightball.Application = function(opt_skipGraphics) {
 
   keyBinding.add('e', 'End game early', function() {
     if (game.gameState == eightball.Game.States.STARTED) {
-      game.secondsLeft = 5;
+      game.secondsLeft = 2;
     }
   });
 
