@@ -32,7 +32,7 @@ eightball.Application = function(opt_skipGraphics) {
   this.m_lastTickSeconds = 0;
   this.m_lastBars = 29;
 
-  if (eightball.Application._isMac()) {
+  if (goog.userAgent.MAC) {
     $('#timers .digit').css('line-height', '62px');
   }
 
@@ -504,12 +504,4 @@ eightball.Application.prototype._updateTimerVisuals = function(s) {
     this.m_lastBars = bars;
     $('#progress').width(Math.min((7 * bars), (7 * 30)));
   }
-};
-
-/**
- @private
- */
-eightball.Application._isMac = function() {
-  var agent = goog.userAgent.getUserAgentString();
-  return agent && goog.string.contains(agent, 'Mac');
 };
