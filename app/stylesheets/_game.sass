@@ -19,14 +19,26 @@
   top: 100px
   left: -130px
 
-#table
-  background-image: image-url("table.jpg")
-  background-repeat: no-repeat
-  width: 847px
-  height: 438px
-  position: absolute
-  top: 19px
-  left: 137px
+  #table
+    background-image: image-url("table.jpg")
+    background-repeat: no-repeat
+    width: 847px
+    height: 438px
+    position: absolute
+    top: 19px
+    left: 137px
+
+    #boom
+      background-image: image-url("boom.png")
+      position: absolute
+      width: 277px
+      height: 226px
+      display: none
+
+    #demo_canvas
+      left: 7px
+      top: 6px
+      position: absolute
 
 #timers
   background-image: image-url("timerbg.png")
@@ -249,23 +261,11 @@
   margin-left: 69px
   margin-top: 1px
 
-#demo_canvas
-  left: 7px
-  top: 6px
-  position: absolute
-
 #cue_canvas
   left: 0px
   top: 0px
   position: absolute
   background-image: image-url("transparent.png")
-
-#boom
-  background-image: image-url("boom.png")
-  position: absolute
-  width: 277px
-  height: 226px
-  display: none
 
 #overlay
   +fill-all
