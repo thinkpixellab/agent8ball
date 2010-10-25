@@ -17,13 +17,13 @@ eightball.DroppingBall = function(number, ballLocation, pocketLocation) {
    @private
    @type {!box2d.Vec2}
    */
-  this.m_ballLocation = ballLocation;
+  this.m_ballLocation = ballLocation.Copy();
 
   /**
    @private
    @type {!box2d.Vec2}
    */
-  this.m_pocketLocation = pocketLocation;
+  this.m_pocketLocation = pocketLocation.Copy();
 
   /**
    @private

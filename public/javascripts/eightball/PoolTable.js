@@ -577,10 +577,8 @@ eightball.PoolTable.prototype.explodeBomb = function() {
   },
   this);
 
-  bombBall.m_position.Set(5000, 5000);
   this._hideCue();
-  //this.m_world.DestroyBody(this.m_balls[this.m_bombNumber]);
-  delete this.m_balls[this.m_bombNumber];
+  this._deleteBall(this.m_bombNumber);
 };
 
 /**
@@ -719,17 +717,26 @@ eightball.PoolTable.prototype._processPairs = function(pairs) {
  */
 eightball.PoolTable.prototype._processPocket = function(pocketBody, ballBody) {
 
-  this.m_world.DestroyBody(ballBody);
-
-  // ballBody.GetUserData() == ['ball', ball #]
   var ballNumber = ballBody.GetUserData()[1];
-  // remove ball from collection
-  delete this.m_balls[ballNumber];
 
   var droppingBall = new eightball.DroppingBall(ballNumber, ballBody.GetCenterPosition(), pocketBody.GetCenterPosition());
   this.m_droppingBalls.push(droppingBall);
 
+  this._deleteBall(ballNumber);
+
   this._dispatchPocketDropEvent(ballNumber);
+};
+
+/**
+ @private
+ @param {number} ballNumber
+ */
+eightball.PoolTable.prototype._deleteBall = function(ballNumber) {
+  var ball = this.m_balls[ballNumber];
+  ball.Freeze();
+  // this.m_world.DestroyBody(this.m_balls[this.m_bombNumber]);
+  ball.m_position.Set(5000, 5000);
+  delete this.m_balls[ballNumber];
 };
 
 /**
@@ -744,22 +751,9 @@ eightball.PoolTable.prototype._drawWorld = function() {
     // no body needed ;-)
   }
 
-  for (var body = this.m_world.m_bodyList; body; body = body.m_next) {
-    var userData = body.GetUserData();
-    if (userData) {
-      switch (userData[0]) {
-      case eightball.PoolTable.s_bodyTypes.BALL:
-        this._drawBall(body);
-        break;
-      case eightball.PoolTable.s_bodyTypes.POCKET:
-        //this._drawBody(body);
-        break;
-      case eightball.PoolTable.s_bodyTypes.TABLE:
-        //this._drawBody(body);
-        break;
-      }
-    }
-  }
+  goog.object.forEach(this.m_balls, function(element, index, hash) {
+    this._drawBall(element);
+  }, this);
 };
 
 /**
