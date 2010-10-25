@@ -95,7 +95,7 @@ eightball.Music.prototype._clearMusic = function() {
  @private
  @type {string}
  */
-eightball.Music.s_CookieMusicOn = 'eightball.Music.musicOn';
+eightball.Music.s_CookieMusicOn = 'm';
 
 /**
  @const

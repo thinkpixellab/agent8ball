@@ -73,7 +73,7 @@ eightball.SoundEffectManager.STATE_CHANGE_EVENT_TYPE = 'eightball.SoundEffectMan
  @private
  @type {string}
  */
-eightball.SoundEffectManager.s_CookieSoundOn = 'eightball.SoundEffectManager.soundOn';
+eightball.SoundEffectManager.s_CookieSoundOn = 's';
 
 /**
  @const

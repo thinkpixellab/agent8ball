@@ -212,7 +212,7 @@ eightball.Game.prototype._saveHighScore = function(highScore) {
  @private
  */
 eightball.Game.prototype._loadHighScore = function() {
-  var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, '500');
+  var highScoreValue = goog.net.cookies.get(eightball.Game.s_CookieGameHighScore, '0');
   return highScoreValue;
 };
 
@@ -425,4 +425,4 @@ eightball.Game.s_bombSeconds = 30;
  @private
  @type {string}
  */
-eightball.Game.s_CookieGameHighScore = 'eightball.Game.highScore';
+eightball.Game.s_CookieGameHighScore = 'hs';
