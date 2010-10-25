@@ -322,6 +322,17 @@ eightball.Application = function(opt_skipGraphics) {
     poolTable.updateLayout(width, height);
   };
 
+  var pauseApp = function() {
+    game.pause();
+    overlay.fadeIn(400);
+    resume.fadeIn(400);
+
+    lastMusicOnPause = musicManager.isMusicOn();
+    if (lastMusicOnPause) {
+      musicManager.stopMusic();
+    }
+  };
+
   $(window).resize(updatePoolTableLayout);
   updatePoolTableLayout();
 
@@ -392,7 +403,9 @@ eightball.Application = function(opt_skipGraphics) {
     return detonated ? 'Bomb detonated' : 'No-op';
   });
 
-  keyBinding.add('p', 'Play random sound effect', function() {
+  keyBinding.add('p', 'Pause game', pauseApp);
+
+  keyBinding.add('o', 'Play random sound effect', function() {
     var soundName = soundManager.playRandom();
     return 'Playing ' + soundName;
   });
@@ -423,16 +436,7 @@ eightball.Application = function(opt_skipGraphics) {
 
   });
 
-  $('#pauseclick').click(function() {
-    game.pause();
-    overlay.fadeIn(400);
-    resume.fadeIn(400);
-
-    lastMusicOnPause = musicManager.isMusicOn();
-    if (lastMusicOnPause) {
-      musicManager.stopMusic();
-    }
-  });
+  $('#pauseclick').click(pauseApp);
 
   resume.click(function() {
     overlay.fadeOut(400);
