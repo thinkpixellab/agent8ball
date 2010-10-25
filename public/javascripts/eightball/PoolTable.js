@@ -929,56 +929,6 @@ eightball.PoolTable.prototype.increaseBombPulse = function() {
 };
 
 /**
- @private
- @param {!box2d.Body} b2body
- */
-eightball.PoolTable.prototype._drawBody = function(b2body) {
-  for (var shape = b2body.GetShapeList(); shape != null; shape = shape.GetNext()) {
-    this._drawShape(shape);
-  }
-};
-
-eightball.PoolTable.prototype._drawShape = function(shape) {
-  var context = this.m_canvasContext;
-  context.fillStyle = 'rgba(255,255,255,0.5)';
-  context.strokeStyle = 'white';
-  context.beginPath();
-  switch (shape.m_type) {
-  case box2d.Shape.e_circleShape:
-    {
-      var circle = shape;
-      var pos = circle.m_position;
-      var r = circle.m_radius;
-
-      context.arc(circle.m_position.x, circle.m_position.y, circle.m_radius, 0, 2 * Math.PI, false);
-
-      // draw radius
-      context.moveTo(pos.x, pos.y);
-      var ax = circle.m_R.col1;
-      var pos2 = new box2d.Vec2(pos.x + r * ax.x, pos.y + r * ax.y);
-      context.lineTo(pos2.x, pos2.y);
-    }
-    break;
-  case box2d.Shape.e_polyShape:
-    {
-      var poly = shape;
-      var tV = box2d.Math.AddVV(poly.m_position, box2d.Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
-      context.moveTo(tV.x, tV.y);
-      for (var i = 0; i < poly.m_vertexCount; i++) {
-        var v = box2d.Math.AddVV(poly.m_position, box2d.Math.b2MulMV(poly.m_R, poly.m_vertices[i]));
-        context.lineTo(v.x, v.y);
-      }
-      context.lineTo(tV.x, tV.y);
-    }
-    break;
-  default:
-    throw "Don't know how to draw shape type " + shape.m_type;
-  }
-  context.stroke();
-  context.fill();
-};
-
-/**
  @return {number}
  */
 eightball.PoolTable.prototype.stepsPerSecond = function() {
