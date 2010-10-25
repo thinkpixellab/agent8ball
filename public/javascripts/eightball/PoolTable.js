@@ -596,6 +596,30 @@ eightball.PoolTable.prototype.getBombLocation = function() {
 };
 
 /**
+ @param {boolean=} opt_enabled
+ @return {boolean} True if things are random.
+ */
+eightball.PoolTable.prototype.randomGravity = function(opt_enabled) {
+  if (!(opt_enabled === undefined)) {
+    var vec;
+    if (opt_enabled) {
+      vec = new box2d.Vec2(Math.random() - 0.5, Math.random() - 0.5);
+      vec.Normalize();
+      vec.scale(100);
+    }
+    else {
+      vec = new box2d.Vec2();
+    }
+    this.m_world.m_gravity = vec;
+    goog.object.forEach(this.m_balls, function(ball, key, theThis) {
+      ball.WakeUp();
+    });
+
+  }
+  return this.m_world.m_gravity.magnitude() == 0;
+};
+
+/**
  @private
  */
 eightball.PoolTable.prototype._step = function() {
@@ -739,6 +763,7 @@ eightball.PoolTable.prototype._drawWorld = function() {
 };
 
 /**
+ @private
  @param {!eightball.DroppingBall} droppingBall
  @param {number} index
  */
@@ -760,6 +785,7 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index) 
 };
 
 /**
+ @private
  @return {boolean}
  */
 eightball.PoolTable.prototype._hasBomb = function() {
@@ -1032,7 +1058,9 @@ eightball.PoolTable.prototype._processBalls = function() {
       stoppedBalls++;
       slowBalls++;
     } else if (velocity < 10) {
-      ball.SetLinearVelocity(new box2d.Vec2());
+      if (!this.randomGravity()) {
+        ball.SetLinearVelocity(new box2d.Vec2());
+      }
       stoppedBalls++;
       slowBalls++;
     } else if (velocity < 20) {

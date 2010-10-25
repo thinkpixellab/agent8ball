@@ -410,6 +410,14 @@ eightball.Application = function(opt_skipGraphics) {
     return 'Playing ' + soundName;
   });
 
+  keyBinding.add('g', 'Gravity', function() {
+    poolTable.randomGravity(true);
+  });
+
+  keyBinding.add('f', 'No Gravity', function() {
+    poolTable.randomGravity(false);
+  });
+
   keyBinding.add('h', 'Help', goog.nullFunction);
 
   //
