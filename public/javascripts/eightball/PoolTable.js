@@ -242,10 +242,6 @@ eightball.PoolTable.prototype.updateLayout = function(width, height) {
   this._updateCue();
 };
 
-eightball.PoolTable.prototype.ballCount = function() {
-  return this.m_balls.length();
-};
-
 eightball.PoolTable.prototype.resume = function() {
   if (this._timer) {
     if (!this._timer.enabled) {
