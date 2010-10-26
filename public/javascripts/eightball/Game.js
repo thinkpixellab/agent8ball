@@ -242,16 +242,21 @@ eightball.Game.prototype._tickAction = function() {
 
     if (this.secondsLeft <= 0) {
       this.secondsLeft = 0;
-      this._dispatchGameEvent(eightball.Game.EventType.TICK);
-      this.m_timer.stop();
-      this.m_poolTable.pause();
-      this.gameState = eightball.Game.States.ENDED;
-      this._dispatchGameEvent(eightball.Game.EventType.END);
-    } else {
-      this._dispatchGameEvent(eightball.Game.EventType.TICK);
+      this._endGame();
     }
+    this._dispatchGameEvent(eightball.Game.EventType.TICK);
 
   }
+};
+
+/**
+ @private
+ */
+eightball.Game.prototype._endGame = function(){
+  this.m_timer.stop();
+  this.m_poolTable.pause();
+  this.gameState = eightball.Game.States.ENDED;
+  this._dispatchGameEvent(eightball.Game.EventType.END);
 };
 
 /**
