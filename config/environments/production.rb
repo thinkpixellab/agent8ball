@@ -33,6 +33,20 @@ Agent8ballRails::Application.configure do
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
+  # Enable serving of images, stylesheets, and javascripts from an asset server
+  Agent8ballRails::Application.configure do
+    asset_host_proc = Proc.new { |source|
+      source = source.gsub(/\?\d*/,'')
+      if source =~ /.css/
+        nil
+      else
+        "http://assets%d.agent8ball.com" % (source.hash % 4)
+      end
+    }
+
+    Compass.configuration.asset_host = asset_host_proc
+    config.action_controller.asset_host = asset_host_proc
+  end
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
