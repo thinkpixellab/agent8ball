@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 
-import os
+from os import path
 import glob
 from _tools.Closure import Closure
 
-js_path = os.path.join('public', 'javascripts')
+js_path = path.join('public', 'javascripts')
 
-closure_path = os.path.join(js_path, 'closure-library','closure')
+closure_path = path.join(js_path, 'closure-library','closure')
 
-externs = os.path.join(js_path, 'externs', '*.js')
+externs = path.join(js_path, 'externs', '*.js')
 externs = glob.glob(externs)
 
-loader_js_path = os.path.join(js_path, 'loader.js')
-deps_path = os.path.join(js_path, 'deps.js')
+loader_js_path = path.join(js_path, 'loader.js')
+deps_path = path.join(js_path, 'deps.js')
 
-application_js_path = os.path.join(js_path, 'application.js')
-compiled_path = os.path.join(js_path, "compiled.js")
+application_js_path = path.join(js_path, 'application.js')
+compiled_path = path.join(js_path, "compiled.js")
 
-js_dirs = map(lambda x: os.path.join(js_path, x), ['box2d','eightball','pixelLab'])
+js_dirs = map(lambda x: path.join(js_path, x), ['box2d','eightball','pixelLab'])
 
 Closure(
   closure_path = closure_path,
