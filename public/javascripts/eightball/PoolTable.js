@@ -550,7 +550,7 @@ eightball.PoolTable.prototype._createBall = function(index, x, y) {
   ballBd.position.Set(x, y);
   ballBd.linearDamping = 0.018;
   ballBd.angularDamping = 0.12;
-  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(28 - eightball.PoolTable.c_ballRadius, 28 - eightball.PoolTable.c_ballRadius)];
+  ballBd.userData = [eightball.PoolTable.s_bodyTypes.BALL, index, new box2d.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius), new goog.math.Vec2(eightball.PoolTable.c_ballRadius, eightball.PoolTable.c_ballRadius)];
   return this.m_world.CreateBody(ballBd);
 };
 
@@ -813,29 +813,32 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
     this.m_context.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, Math.PI * 2, true);
     this.m_context.clip();
 
-    ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * 0.03;
-    ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * 0.03;
+    var vec1 = ballBody.GetUserData()[2];
+    vec1.add(box2d.Vec2.multiplyScalar(0.03, ballBody.GetLinearVelocity()));
 
-    var dx = shape.m_radius - ballBody.GetUserData()[2].x;
-    var dy = shape.m_radius - ballBody.GetUserData()[2].y;
+    var vec2 = ballBody.GetUserData()[3];
+
+    var dx = shape.m_radius - vec1.x;
+    var dy = shape.m_radius - vec1.y;
     var d = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
     var angle = Math.atan2(dy, dx);
 
     //check if wrapping needed
     if (d > shape.m_radius * 3) {
-      ballBody.GetUserData()[2].x = ballBody.GetUserData()[3].x;
-      ballBody.GetUserData()[2].y = ballBody.GetUserData()[3].y;
+      vec1.SetV(vec2);
     }
 
+    var ballCenter = ballBody.GetCenterPosition().Copy();
+
     //global coordinates for first point
-    pt1.x = ballBody.GetCenterPosition().x + ballBody.GetUserData()[2].x - shape.m_radius;
-    pt1.y = ballBody.GetCenterPosition().y + ballBody.GetUserData()[2].y - shape.m_radius;
+    pt1.x = ballCenter.x + vec1.x - shape.m_radius;
+    pt1.y = ballCenter.y + vec1.y - shape.m_radius;
 
     //global coordinates for second point
-    ballBody.GetUserData()[3].x = ballBody.GetUserData()[2].x + Math.sin(Math.PI * 2.5 - angle) * shape.m_radius * 2.7;
-    ballBody.GetUserData()[3].y = ballBody.GetUserData()[2].y + Math.cos(Math.PI * 2.5 - angle) * shape.m_radius * 2.7;
-    pt2.x = ballBody.GetCenterPosition().x + ballBody.GetUserData()[3].x - shape.m_radius;
-    pt2.y = ballBody.GetCenterPosition().y + ballBody.GetUserData()[3].y - shape.m_radius;
+    vec2.x = vec1.x + Math.sin(Math.PI * 2.5 - angle) * shape.m_radius * 2.7;
+    vec2.y = vec1.y + Math.cos(Math.PI * 2.5 - angle) * shape.m_radius * 2.7;
+    pt2.x = ballCenter.x + vec2.x - shape.m_radius;
+    pt2.y = ballCenter.y + vec2.y - shape.m_radius;
 
     //add stripes
     if (!isBomb && ballNumber > 8) {
@@ -845,14 +848,15 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       var pt5 = new goog.math.Vec2(0, 0);
       var pt6 = new goog.math.Vec2(0, 0);
 
-      pt3.x = ballBody.GetUserData()[2].x + Math.sin((Math.PI * -0.7) - angle) * shape.m_radius + ballBody.GetCenterPosition().x - shape.m_radius;
-      pt3.y = ballBody.GetUserData()[2].y + Math.cos((Math.PI * -0.7) - angle) * shape.m_radius + ballBody.GetCenterPosition().y - shape.m_radius;
-      pt4.x = ballBody.GetUserData()[2].x + Math.sin((Math.PI * -0.7) - angle) * shape.m_radius * 2 + ballBody.GetCenterPosition().x - shape.m_radius;
-      pt4.y = ballBody.GetUserData()[2].y + Math.cos((Math.PI * -0.7) - angle) * shape.m_radius * 2 + ballBody.GetCenterPosition().y - shape.m_radius;
-      pt5.x = ballBody.GetUserData()[3].x + Math.sin((Math.PI * 0.7) - angle) * shape.m_radius * 2 + ballBody.GetCenterPosition().x - shape.m_radius;
-      pt5.y = ballBody.GetUserData()[3].y + Math.cos((Math.PI * 0.7) - angle) * shape.m_radius * 2 + ballBody.GetCenterPosition().y - shape.m_radius;
-      pt6.x = ballBody.GetUserData()[3].x + Math.sin((Math.PI * 0.7) - angle) * shape.m_radius + ballBody.GetCenterPosition().x - shape.m_radius;
-      pt6.y = ballBody.GetUserData()[3].y + Math.cos((Math.PI * 0.7) - angle) * shape.m_radius + ballBody.GetCenterPosition().y - shape.m_radius;
+
+      pt3.x = vec1.x + Math.sin((Math.PI * -0.7) - angle) * shape.m_radius + ballCenter.x - shape.m_radius;
+      pt3.y = vec1.y + Math.cos((Math.PI * -0.7) - angle) * shape.m_radius + ballCenter.y - shape.m_radius;
+      pt4.x = vec1.x + Math.sin((Math.PI * -0.7) - angle) * shape.m_radius * 2 + ballCenter.x - shape.m_radius;
+      pt4.y = vec1.y + Math.cos((Math.PI * -0.7) - angle) * shape.m_radius * 2 + ballCenter.y - shape.m_radius;
+      pt5.x = vec2.x + Math.sin((Math.PI * 0.7) - angle) * shape.m_radius * 2 + ballCenter.x - shape.m_radius;
+      pt5.y = vec2.y + Math.cos((Math.PI * 0.7) - angle) * shape.m_radius * 2 + ballCenter.y - shape.m_radius;
+      pt6.x = vec2.x + Math.sin((Math.PI * 0.7) - angle) * shape.m_radius + ballCenter.x - shape.m_radius;
+      pt6.y = vec2.y + Math.cos((Math.PI * 0.7) - angle) * shape.m_radius + ballCenter.y - shape.m_radius;
 
       this.m_context.beginPath();
       this.m_context.moveTo(pt3.x, pt3.y);
@@ -861,14 +865,14 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       this.m_context.lineTo(pt6.x, pt6.y);
       this.m_context.fill();
 
-      pt3.x = ballBody.GetUserData()[2].x + Math.sin((Math.PI * -0.3) - angle) * shape.m_radius + ballBody.GetCenterPosition().x - shape.m_radius;
-      pt3.y = ballBody.GetUserData()[2].y + Math.cos((Math.PI * -0.3) - angle) * shape.m_radius + ballBody.GetCenterPosition().y - shape.m_radius;
-      pt4.x = ballBody.GetUserData()[2].x + Math.sin((Math.PI * -0.3) - angle) * shape.m_radius * 2 + ballBody.GetCenterPosition().x - shape.m_radius;
-      pt4.y = ballBody.GetUserData()[2].y + Math.cos((Math.PI * -0.3) - angle) * shape.m_radius * 2 + ballBody.GetCenterPosition().y - shape.m_radius;
-      pt5.x = ballBody.GetUserData()[3].x + Math.sin((Math.PI * 0.3) - angle) * shape.m_radius * 2 + ballBody.GetCenterPosition().x - shape.m_radius;
-      pt5.y = ballBody.GetUserData()[3].y + Math.cos((Math.PI * 0.3) - angle) * shape.m_radius * 2 + ballBody.GetCenterPosition().y - shape.m_radius;
-      pt6.x = ballBody.GetUserData()[3].x + Math.sin((Math.PI * 0.3) - angle) * shape.m_radius + ballBody.GetCenterPosition().x - shape.m_radius;
-      pt6.y = ballBody.GetUserData()[3].y + Math.cos((Math.PI * 0.3) - angle) * shape.m_radius + ballBody.GetCenterPosition().y - shape.m_radius;
+      pt3.x = vec1.x + Math.sin((Math.PI * -0.3) - angle) * shape.m_radius + ballCenter.x - shape.m_radius;
+      pt3.y = vec1.y + Math.cos((Math.PI * -0.3) - angle) * shape.m_radius + ballCenter.y - shape.m_radius;
+      pt4.x = vec1.x + Math.sin((Math.PI * -0.3) - angle) * shape.m_radius * 2 + ballCenter.x - shape.m_radius;
+      pt4.y = vec1.y + Math.cos((Math.PI * -0.3) - angle) * shape.m_radius * 2 + ballCenter.y - shape.m_radius;
+      pt5.x = vec2.x + Math.sin((Math.PI * 0.3) - angle) * shape.m_radius * 2 + ballCenter.x - shape.m_radius;
+      pt5.y = vec2.y + Math.cos((Math.PI * 0.3) - angle) * shape.m_radius * 2 + ballCenter.y - shape.m_radius;
+      pt6.x = vec2.x + Math.sin((Math.PI * 0.3) - angle) * shape.m_radius + ballCenter.x - shape.m_radius;
+      pt6.y = vec2.y + Math.cos((Math.PI * 0.3) - angle) * shape.m_radius + ballCenter.y - shape.m_radius;
 
       this.m_context.beginPath();
       this.m_context.moveTo(pt3.x, pt3.y);
@@ -895,6 +899,9 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
   this.m_context.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
 };
 
+/**
+ @private
+ */
 eightball.PoolTable.prototype._drawBombGlow = function() {
   var ball = this.m_balls[this.m_bombNumber];
   if (ball) {
