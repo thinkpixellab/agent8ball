@@ -27,8 +27,8 @@ goog.addDependency("../../../box2d/collision/shapes/b2ShapeDef.js", ['box2d.Shap
 goog.addDependency("../../../box2d/collision/shapes/b2ShapeFactory.js", ['box2d.ShapeFactory'], ['box2d.CircleShape', 'box2d.PolyShape', 'box2d.Shape']);
 goog.addDependency("../../../box2d/common/b2Settings.js", ['box2d.Settings'], []);
 goog.addDependency("../../../box2d/common/math/b2Mat22.js", ['box2d.Mat22'], []);
-goog.addDependency("../../../box2d/common/math/b2Math.js", ['box2d.Math'], []);
-goog.addDependency("../../../box2d/common/math/b2Vec2.js", ['box2d.Vec2'], ['box2d.Math', 'goog.math.Vec2']);
+goog.addDependency("../../../box2d/common/math/b2Math.js", ['box2d.Math'], ['box2d.Mat22', 'box2d.Vec2', 'goog.math']);
+goog.addDependency("../../../box2d/common/math/b2Vec2.js", ['box2d.Vec2'], ['goog.math.Vec2']);
 goog.addDependency("../../../box2d/dynamics/b2Body.js", ['box2d.Body'], ['box2d.MassData', 'box2d.Mat22', 'box2d.Math', 'box2d.ShapeFactory', 'box2d.Vec2']);
 goog.addDependency("../../../box2d/dynamics/b2BodyDef.js", ['box2d.BodyDef'], ['box2d.Settings']);
 goog.addDependency("../../../box2d/dynamics/b2CollisionFilter.js", ['box2d.CollisionFilter'], []);
