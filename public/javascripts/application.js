@@ -106,7 +106,7 @@ eightball.Application = function(opt_skipGraphics) {
   var missionMessage = 'Mission #1146<br/>To: Agent 008<br/>From: Cue<br/><br/><br/>The International Billiards Tournament is being infil- trated by the terrorist organization CHALK.<br/><br/>Do not let them win! Sink as  many balls as possible before the timer runs out.';
   var typingSound = null;
 
-  var poolTable = new eightball.PoolTable($('canvas#demo_canvas')[0], $('canvas#cue_canvas')[0], $('canvas#shadow_canvas')[0], preloadAssets.images);
+  var poolTable = new eightball.PoolTable($('canvas#demo_canvas')[0], $('canvas#cue_canvas')[0], preloadAssets.images);
 
   // create a game object
   var game = new eightball.Game(poolTable);

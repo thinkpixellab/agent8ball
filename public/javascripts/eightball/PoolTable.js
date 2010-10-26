@@ -32,7 +32,7 @@ goog.require('pixelLab.FpsLogger');
  @param {!Object.<string,string>} imageMap
  @extends {goog.events.EventTarget}
  */
-eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElement, imageMap) {
+eightball.PoolTable = function(canvasElement, cueCanvasElement, imageMap) {
   goog.events.EventTarget.call(this);
 
   // variables
@@ -150,24 +150,19 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, shadowCanvasElem
   // get local references for our canvas elements
   this.m_canvasElement = canvasElement;
   this.m_cueCanvasElement = cueCanvasElement;
-  this.m_shadowCanvasElement = shadowCanvasElement;
 
   // get local references for our canvas drawing contexts
   this.m_canvasContext = this.m_canvasElement.getContext('2d');
   this.m_cueCanvasContext = this.m_cueCanvasElement.getContext('2d');
-  this.m_shadowCanvasContext = this.m_shadowCanvasElement.getContext('2d');
 
   // set the width and height of the table
   this.m_canvasElement.setAttribute('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.s_bumperThickness * 4);
   this.m_canvasElement.setAttribute('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
-  this.m_shadowCanvasElement.setAttribute('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.s_bumperThickness * 4);
-  this.m_shadowCanvasElement.setAttribute('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
   this.m_centerOffset = new box2d.Vec2(eightball.PoolTable.s_width + eightball.PoolTable.s_bumperThickness * 2, eightball.PoolTable.s_height + eightball.PoolTable.s_bumperThickness * 2);
 
   // setup our physics world
   this._createWorld();
   this.m_canvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y);
-  this.m_shadowCanvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y + 6);
 
   // mouse tracking fields
   this.m_isMouseDown = false;
@@ -626,7 +621,6 @@ eightball.PoolTable.prototype._step = function() {
 
   if (this._hasBomb() || !(this.m_world.sleeping)) {
     this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
-    this.m_shadowCanvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y - 6, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
     this._drawWorld();
     this._processPairs(this.m_world.lastPairs);
     this._processBalls();
@@ -751,9 +745,11 @@ eightball.PoolTable.prototype._drawWorld = function() {
     // no body needed ;-)
   }
 
+  this._drawBombGlow();
   goog.object.forEach(this.m_balls, function(element, index, hash) {
     this._drawBall(element);
-  }, this);
+  },
+  this);
 };
 
 /**
@@ -898,15 +894,22 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 
   //draw shading and reflections
   ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
-  if (isBomb) {
+};
+
+eightball.PoolTable.prototype._drawBombGlow = function() {
+  var ball = this.m_balls[this.m_bombNumber];
+  if (ball) {
+    var shape = ball.GetShapeList();
+    var ctx = this.m_canvasContext;
+
     this.m_bombPulseAngle += this.m_bombPulseInc;
-    var glowBrush = this.m_shadowCanvasContext.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 32);
+    var glowBrush = ctx.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 32);
     glowBrush.addColorStop(0.2, 'rgba(255,234,136,' + Math.abs(Math.sin(this.m_bombPulseAngle)) + ')');
     glowBrush.addColorStop(0.8, 'rgba(255,234,136,0.0)');
-    this.m_shadowCanvasContext.fillStyle = glowBrush;
-    this.m_shadowCanvasContext.beginPath();
-    this.m_shadowCanvasContext.arc(shape.m_position.x, shape.m_position.y, 32, 0, 2 * Math.PI, false);
-    this.m_shadowCanvasContext.fill();
+    ctx.fillStyle = glowBrush;
+    ctx.beginPath();
+    ctx.arc(shape.m_position.x, shape.m_position.y, 32, 0, 2 * Math.PI, false);
+    ctx.fill();
   }
 };
 
