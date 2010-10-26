@@ -258,6 +258,15 @@ eightball.PoolTable.prototype.pause = function() {
   }
 };
 
+/**
+ @return {boolean}
+ */
+eightball.PoolTable.prototype.tableCleared = function() {
+  return goog.object.every(this.m_balls, function(element, index, hash) {
+    return index <= 0;
+  });
+};
+
 eightball.PoolTable.prototype._hideCue = function() {
   // we need to delay hiding the canvas because otherwise we get weird selection behavior on mouse up
   var timer = new goog.Timer(50);

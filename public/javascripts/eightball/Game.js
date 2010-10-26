@@ -252,7 +252,7 @@ eightball.Game.prototype._tickAction = function() {
 /**
  @private
  */
-eightball.Game.prototype._endGame = function(){
+eightball.Game.prototype._endGame = function() {
   this.m_timer.stop();
   this.m_poolTable.pause();
   this.gameState = eightball.Game.States.ENDED;
@@ -284,6 +284,10 @@ eightball.Game.prototype._pooltable_pocketDrop = function(e) {
   if (this._isBombFound && e.ballNumber == this.m_bombNumber) {
     var deactivated = this.deactivateBomb();
     goog.asserts.assert(deactivated);
+  }
+
+  if (this.m_poolTable.tableCleared()) {
+    this._endGame();
   }
 };
 
