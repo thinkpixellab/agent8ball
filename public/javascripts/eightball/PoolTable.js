@@ -152,7 +152,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, imageMap) {
   this.m_cueCanvasElement = cueCanvasElement;
 
   // get local references for our canvas drawing contexts
-  this.m_canvasContext = this.m_canvasElement.getContext('2d');
+  this.m_context = this.m_canvasElement.getContext('2d');
   this.m_cueCanvasContext = this.m_cueCanvasElement.getContext('2d');
 
   // set the width and height of the table
@@ -162,7 +162,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, imageMap) {
 
   // setup our physics world
   this._createWorld();
-  this.m_canvasContext.translate(this.m_centerOffset.x, this.m_centerOffset.y);
+  this.m_context.translate(this.m_centerOffset.x, this.m_centerOffset.y);
 
   // mouse tracking fields
   this.m_isMouseDown = false;
@@ -620,7 +620,7 @@ eightball.PoolTable.prototype._step = function() {
   this.m_world.Step(1.0 / 30.0, 1);
 
   if (this._hasBomb() || !(this.m_world.sleeping)) {
-    this.m_canvasContext.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
+    this.m_context.clearRect(-this.m_centerOffset.x, -this.m_centerOffset.y, 2 * this.m_centerOffset.x, 2 * this.m_centerOffset.y);
     this._drawWorld();
     this._processPairs(this.m_world.lastPairs);
     this._processBalls();
@@ -766,11 +766,11 @@ eightball.PoolTable.prototype._drawDroppingBall = function(droppingBall, index) 
     var colorVal = goog.color.parseRgb(color);
     var percentDropped = droppingBall.GetPercentDropped();
     colorVal = goog.color.darken(colorVal, percentDropped);
-    this.m_canvasContext.fillStyle = goog.color.rgbArrayToHex(colorVal);
-    this.m_canvasContext.beginPath();
+    this.m_context.fillStyle = goog.color.rgbArrayToHex(colorVal);
+    this.m_context.beginPath();
     var droppingRadius = eightball.PoolTable.c_ballRadius * (1 - 0.5 * percentDropped);
-    this.m_canvasContext.arc(location.x, location.y, droppingRadius, 0, 2 * Math.PI, false);
-    this.m_canvasContext.fill();
+    this.m_context.arc(location.x, location.y, droppingRadius, 0, 2 * Math.PI, false);
+    this.m_context.fill();
   }
 };
 
@@ -788,31 +788,30 @@ eightball.PoolTable.prototype._hasBomb = function() {
  */
 eightball.PoolTable.prototype._drawBall = function(ballBody) {
   var shape = ballBody.GetShapeList();
-  var ctx = this.m_canvasContext;
   var ballNumber = ballBody.GetUserData()[1];
   var isBomb = this.m_bombNumber == ballNumber;
 
   if (!isBomb) {
-    ctx.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
+    this.m_context.fillStyle = eightball.PoolTable.s_ballColors[ballNumber];
   } else if (this._isBombIgnited) {
-    ctx.fillStyle = 'rgba(237,218,193,0.5)'; // bombBrush;
+    this.m_context.fillStyle = 'rgba(237,218,193,0.5)'; // bombBrush;
   } else {
-    ctx.fillStyle = eightball.PoolTable.s_colors.BOMBSHELL;
+    this.m_context.fillStyle = eightball.PoolTable.s_colors.BOMBSHELL;
   }
 
-  ctx.beginPath();
-  ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
-  ctx.fill();
+  this.m_context.beginPath();
+  this.m_context.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, 2 * Math.PI, false);
+  this.m_context.fill();
 
   if (ballNumber > 0) {
     var pt1 = new goog.math.Vec2(0, 0);
     var pt2 = new goog.math.Vec2(0, 0);
-    ctx.save();
+    this.m_context.save();
 
     //draw clip
-    ctx.beginPath();
-    ctx.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, Math.PI * 2, true);
-    ctx.clip();
+    this.m_context.beginPath();
+    this.m_context.arc(shape.m_position.x, shape.m_position.y, shape.m_radius, 0, Math.PI * 2, true);
+    this.m_context.clip();
 
     ballBody.GetUserData()[2].x += ballBody.GetLinearVelocity().x * 0.03;
     ballBody.GetUserData()[2].y += ballBody.GetLinearVelocity().y * 0.03;
@@ -840,7 +839,7 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
 
     //add stripes
     if (!isBomb && ballNumber > 8) {
-      ctx.fillStyle = eightball.PoolTable.s_ballColors[0];
+      this.m_context.fillStyle = eightball.PoolTable.s_ballColors[0];
       var pt3 = new goog.math.Vec2(0, 0);
       var pt4 = new goog.math.Vec2(0, 0);
       var pt5 = new goog.math.Vec2(0, 0);
@@ -855,12 +854,12 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       pt6.x = ballBody.GetUserData()[3].x + Math.sin((Math.PI * 0.7) - angle) * shape.m_radius + ballBody.GetCenterPosition().x - shape.m_radius;
       pt6.y = ballBody.GetUserData()[3].y + Math.cos((Math.PI * 0.7) - angle) * shape.m_radius + ballBody.GetCenterPosition().y - shape.m_radius;
 
-      ctx.beginPath();
-      ctx.moveTo(pt3.x, pt3.y);
-      ctx.lineTo(pt4.x, pt4.y);
-      ctx.lineTo(pt5.x, pt5.y);
-      ctx.lineTo(pt6.x, pt6.y);
-      ctx.fill();
+      this.m_context.beginPath();
+      this.m_context.moveTo(pt3.x, pt3.y);
+      this.m_context.lineTo(pt4.x, pt4.y);
+      this.m_context.lineTo(pt5.x, pt5.y);
+      this.m_context.lineTo(pt6.x, pt6.y);
+      this.m_context.fill();
 
       pt3.x = ballBody.GetUserData()[2].x + Math.sin((Math.PI * -0.3) - angle) * shape.m_radius + ballBody.GetCenterPosition().x - shape.m_radius;
       pt3.y = ballBody.GetUserData()[2].y + Math.cos((Math.PI * -0.3) - angle) * shape.m_radius + ballBody.GetCenterPosition().y - shape.m_radius;
@@ -871,12 +870,12 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       pt6.x = ballBody.GetUserData()[3].x + Math.sin((Math.PI * 0.3) - angle) * shape.m_radius + ballBody.GetCenterPosition().x - shape.m_radius;
       pt6.y = ballBody.GetUserData()[3].y + Math.cos((Math.PI * 0.3) - angle) * shape.m_radius + ballBody.GetCenterPosition().y - shape.m_radius;
 
-      ctx.beginPath();
-      ctx.moveTo(pt3.x, pt3.y);
-      ctx.lineTo(pt4.x, pt4.y);
-      ctx.lineTo(pt5.x, pt5.y);
-      ctx.lineTo(pt6.x, pt6.y);
-      ctx.fill();
+      this.m_context.beginPath();
+      this.m_context.moveTo(pt3.x, pt3.y);
+      this.m_context.lineTo(pt4.x, pt4.y);
+      this.m_context.lineTo(pt5.x, pt5.y);
+      this.m_context.lineTo(pt6.x, pt6.y);
+      this.m_context.fill();
     }
 
     //draw the number stamps
@@ -885,31 +884,30 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       yOffset = 0;
     }
 
-    ctx.drawImage(this.m_ballNumbers, 0, yOffset, 9, 9, pt1.x - 4, pt1.y - 4, 9, 9);
+    this.m_context.drawImage(this.m_ballNumbers, 0, yOffset, 9, 9, pt1.x - 4, pt1.y - 4, 9, 9);
     if (d > shape.m_radius) {
-      ctx.drawImage(this.m_ballNumbers, 0, yOffset, 9, 9, pt2.x - 4, pt2.y - 4, 9, 9);
+      this.m_context.drawImage(this.m_ballNumbers, 0, yOffset, 9, 9, pt2.x - 4, pt2.y - 4, 9, 9);
     }
-    ctx.restore();
+    this.m_context.restore();
   }
 
   //draw shading and reflections
-  ctx.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
+  this.m_context.drawImage(this.m_ballVignetteImage, shape.m_position.x - shape.m_radius - 2, shape.m_position.y - shape.m_radius - 2);
 };
 
 eightball.PoolTable.prototype._drawBombGlow = function() {
   var ball = this.m_balls[this.m_bombNumber];
   if (ball) {
     var shape = ball.GetShapeList();
-    var ctx = this.m_canvasContext;
 
     this.m_bombPulseAngle += this.m_bombPulseInc;
-    var glowBrush = ctx.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 32);
+    var glowBrush = this.m_context.createRadialGradient(shape.m_position.x, shape.m_position.y, 0, shape.m_position.x, shape.m_position.y, 32);
     glowBrush.addColorStop(0.2, 'rgba(255,234,136,' + Math.abs(Math.sin(this.m_bombPulseAngle)) + ')');
     glowBrush.addColorStop(0.8, 'rgba(255,234,136,0.0)');
-    ctx.fillStyle = glowBrush;
-    ctx.beginPath();
-    ctx.arc(shape.m_position.x, shape.m_position.y, 32, 0, 2 * Math.PI, false);
-    ctx.fill();
+    this.m_context.fillStyle = glowBrush;
+    this.m_context.beginPath();
+    this.m_context.arc(shape.m_position.x, shape.m_position.y, 32, 0, 2 * Math.PI, false);
+    this.m_context.fill();
   }
 };
 
