@@ -156,15 +156,18 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, imageMap) {
   this.m_cueCanvasContext = this.m_cueCanvasElement.getContext('2d');
 
   // set the width and height of the table
-  this.m_canvasElement.setAttribute('width', eightball.PoolTable.s_width * 2 + eightball.PoolTable.s_bumperThickness * 4);
-  this.m_canvasElement.setAttribute('height', eightball.PoolTable.s_height * 2 + eightball.PoolTable.s_bumperThickness * 4);
-  this.m_centerOffset = new box2d.Vec2(eightball.PoolTable.s_width + eightball.PoolTable.s_bumperThickness * 2, eightball.PoolTable.s_height + eightball.PoolTable.s_bumperThickness * 2);
+  this.m_canvasElement.setAttribute('width', eightball.PoolTable.Width * 2 + eightball.PoolTable.s_bumperThickness * 4);
+  this.m_canvasElement.setAttribute('height', eightball.PoolTable.Height * 2 + eightball.PoolTable.s_bumperThickness * 4);
+  this.m_centerOffset = new box2d.Vec2(eightball.PoolTable.Width + eightball.PoolTable.s_bumperThickness * 2, eightball.PoolTable.Height + eightball.PoolTable.s_bumperThickness * 2);
 
   // setup our physics world
   this._createWorld();
   this.m_context.translate(this.m_centerOffset.x, this.m_centerOffset.y);
 
   // mouse tracking fields
+  /**
+   @type {boolean}
+   */
   this.m_isMouseDown = false;
 
   // mouse down
@@ -482,7 +485,7 @@ eightball.PoolTable.prototype.hasBall = function(ballNumber) {
  */
 eightball.PoolTable.prototype._testRack = function() {
   var ballRadius = eightball.PoolTable.c_ballRadius;
-  this.m_balls[0] = this._createBall(0, -0.5 * eightball.PoolTable.s_width, -150);
+  this.m_balls[0] = this._createBall(0, -0.5 * eightball.PoolTable.Width, -150);
 
   this._getCueBall().SetLinearVelocity(new box2d.Vec2(-150, -15));
 };
@@ -500,7 +503,7 @@ eightball.PoolTable.prototype._rackEm = function() {
   for (var col = 0; col < 5; col++) {
 
     var ballCount = col + 1;
-    var x = 0.5 * eightball.PoolTable.s_width + col * ballRadius * Math.sqrt(3);
+    var x = 0.5 * eightball.PoolTable.Width + col * ballRadius * Math.sqrt(3);
     var yStart = -col * ballRadius;
 
     for (var row = 0; row < ballCount; row++) {
@@ -519,7 +522,7 @@ eightball.PoolTable.prototype._ensureCueBall = function() {
 
     // create the cuee ball
     var ballRadius = eightball.PoolTable.c_ballRadius;
-    this.m_balls[0] = this._createBall(0, -0.5 * eightball.PoolTable.s_width, 0);
+    this.m_balls[0] = this._createBall(0, -0.5 * eightball.PoolTable.Width, 0);
   }
 };
 
@@ -587,7 +590,7 @@ eightball.PoolTable.prototype.explodeBomb = function() {
 eightball.PoolTable.prototype.getBombLocation = function() {
   var ball = this.m_balls[this.m_bombNumber];
   if (ball) {
-    return ball.m_position;
+    return ball.GetCenterPosition();
   } else {
     return null;
   }
@@ -1273,20 +1276,18 @@ eightball.PoolTable.s_verticalCueOffset = -15;
 eightball.PoolTable.s_horizontalCueOffset = 7;
 
 /**
- @private
  @const
  @type {number}
  cm, regulation
  */
-eightball.PoolTable.s_height = 192;
+eightball.PoolTable.Height = 192;
 
 /**
- @private
  @const
  @type {number}
  cm, regulation
  */
-eightball.PoolTable.s_width = 396;
+eightball.PoolTable.Width = 396;
 
 /**
  @private
