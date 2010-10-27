@@ -14,6 +14,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.i18n.NumberFormat');
 goog.require('goog.string');
+goog.require('goog.string.format');
 goog.require('goog.userAgent');
 
 goog.require('pixelLab.DebugDiv');
@@ -455,12 +456,12 @@ eightball.Application = function(opt_skipGraphics) {
 
   $('#gameoverfacebook').click(function(e) {
     e.stopPropagation();
-    window.open('http://www.facebook.com/sharer.php?u=http%3A%2F%2Fagent8ball.com&t=I%20just%20scored%20' + game.score + '%20points%20on%20Agent%20008%20Ball!');
+    window.open(eightball.Application._getFacebookShareUrl(game.score));
   });
 
   $('#gameovertwitter').click(function(e) {
     e.stopPropagation();
-    window.open('http://twitter.com/home?status=Hey%2C%20%40agent8ball!%20I%20just%20scored%20' + game.score + '%20points%20on%20http%3A%2F%2Fagent8ball.com.%20Beat%20that!');
+    window.open(eightball.Application._getTwitterShareUrl(game.score));
   });
 
   $('#instructionsclick').click(function() {
@@ -511,3 +512,58 @@ eightball.Application.prototype._updateTimerVisuals = function(s) {
     $('#progress').width(Math.min((7 * bars), (7 * 30)));
   }
 };
+
+/**
+ @private
+ @param {number} score
+ @return {string}
+ */
+eightball.Application._getFacebookShareUrl = function(score) {
+  var title = goog.string.format(eightball.Application.s_facebookShareText, score);
+  return goog.string.format(eightball.Application.s_facebookShareUrl, escape(eightball.Application.s_appUrl), escape(title));
+};
+
+/**
+ @private
+ @param {number} score
+ @return {string}
+ */
+eightball.Application._getTwitterShareUrl = function(score) {
+  var status = goog.string.format(eightball.Application.s_twitterStatusText, score, eightball.Application.s_appUrl);
+  return goog.string.format(eightball.Application.s_twitterShareUrl, escape(status));
+};
+
+/**
+ @const
+ @private
+ @type {string}
+ */
+eightball.Application.s_facebookShareUrl = 'http://www.facebook.com/sharer.php?u=%s&t=%s';
+
+/**
+ @const
+ @private
+ @type {string}
+ */
+eightball.Application.s_facebookShareText = 'I just scored %d points on Agent 008 Ball!';
+
+/**
+ @const
+ @private
+ @type {string}
+ */
+eightball.Application.s_twitterShareUrl = 'http://twitter.com/home?status=%s';
+
+/**
+ @const
+ @private
+ @type {string}
+ */
+eightball.Application.s_twitterStatusText = 'Hey @agent8ball! I just scored %d points on %s. Beat that!';
+
+/**
+ @const
+ @private
+ @type {string}
+ */
+eightball.Application.s_appUrl = 'http://agent8ball.com';
