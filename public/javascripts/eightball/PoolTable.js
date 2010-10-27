@@ -590,7 +590,8 @@ eightball.PoolTable.prototype.explodeBomb = function() {
 eightball.PoolTable.prototype.getBombLocation = function() {
   var ball = this.m_balls[this.m_bombNumber];
   if (ball) {
-    return ball.GetCenterPosition();
+    var delta = new goog.math.Coordinate(eightball.PoolTable.Width, eightball.PoolTable.Height);
+    return ball.GetCenterPosition().Copy().add(delta);
   } else {
     return null;
   }

@@ -238,12 +238,7 @@ eightball.Application = function(opt_skipGraphics) {
       var bombLocation = poolTable.getBombLocation();
       if (bombLocation) {
         poolTable.explodeBomb();
-
-        // TODO: magic values here. Boo! Make this better
-        var left = Math.min(Math.max((bombLocation.x + 300), -60), 660);
-        var top = Math.min(Math.max((bombLocation.y + 88), -60), 250);
-
-        $('#boom').css('left', left).css('top', top).show();
+        $('#boom').css('left', bombLocation.x).css('top', bombLocation.y).show();
       }
     },
     1500);
