@@ -1,4 +1,5 @@
 goog.require('eightball.Application');
+goog.require('goog.object');
 goog.require('pixelLab.Preload');
 
 /** @define {boolean} */
@@ -33,10 +34,9 @@ $(document).ready(function() {
     // show the preload ui
     $('#loadingbg').delay(500).fadeIn(700);
 
-    // load the ui (on a timer so that we start after fading in -- it looks weird otherwise)
-    setTimeout(function() {
-      new pixelLab.Preload(images, progress, done);
-    },
-    1500);
+    goog.object.forEach(preloadAssets.audios, function(element, key, hash) {
+      eightball.SoundEffect.create(key, element);
+    });
+    pixelLab.Preload(images, progress, done);
   }
 });

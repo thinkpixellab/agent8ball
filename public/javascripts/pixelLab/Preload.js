@@ -3,22 +3,19 @@ goog.provide('pixelLab.Preload');
 goog.require('goog.object');
 
 /**
-@constructor
 @param {!Array.<!string>} imageUrls
 @param {!function(!number)} progressCallback
 @param {!function()} completedCallback
 */
 pixelLab.Preload = function(imageUrls, progressCallback, completedCallback) {
-  this.imagesLoaded = 0;
-  this.imagesTotal = goog.object.getCount(imageUrls);
-  this.hasLoaded = false;
-
-  var _this = this;
+  var imagesLoaded = 0;
+  var imagesTotal = goog.object.getCount(imageUrls);
+  var hasLoaded = false;
 
   $(document).ready(function() {
     // handle images
-    _this.preloadDiv = document.createElement('div');
-    $(_this.preloadDiv).css({
+    var preloadDiv = document.createElement('div');
+    $(preloadDiv).css({
       height: '0px',
       width: '0px',
       overflow: 'hidden'
@@ -28,22 +25,22 @@ pixelLab.Preload = function(imageUrls, progressCallback, completedCallback) {
       var imgLoad = $('<img></img>');
       $(imgLoad).unbind('load');
       $(imgLoad).bind('load', function() {
-        _this.imagesLoaded++;
-        var progress = _this.imagesLoaded / _this.imagesTotal;
+        imagesLoaded++;
+        var progress = imagesLoaded / imagesTotal;
         progressCallback(progress);
-        if (_this.imagesLoaded == _this.imagesTotal) {
+        if (imagesLoaded == imagesTotal) {
           completedCallback();
-          _this.hasLoaded = true;
+          hasLoaded = true;
         }
       });
       $(imgLoad).attr('src', imageUrls[key]);
-      $(imgLoad).appendTo(this.preloadDiv);
+      $(preloadDiv).append(imgLoad);
     }
 
 
     // create a failsafe of 30 seconds
     setTimeout(function() {
-      if (!_this.hasLoaded) {
+      if (!hasLoaded) {
         completedCallback();
       }
     }, 30000);
