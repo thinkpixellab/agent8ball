@@ -38,7 +38,6 @@ eightball.Application = function(opt_skipGraphics) {
   }
 
   // show debug
-  // pixelLab.DebugDiv.enable();
   // show the content, hide the loading element
   $('#vignette').delay(500).fadeIn(1000);
   $('#game').delay(500).fadeIn(1000);
@@ -412,6 +411,11 @@ eightball.Application = function(opt_skipGraphics) {
 
   keyBinding.add('f', 'No Gravity', function() {
     poolTable.randomGravity(false);
+  });
+
+  keyBinding.add('l', 'Toggle debug log', function() {
+    var enabled = pixelLab.DebugDiv.toggle();
+    return enabled ? 'Logger on' : 'Logger off';
   });
 
   keyBinding.add('h', 'Help', goog.nullFunction);
