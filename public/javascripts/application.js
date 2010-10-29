@@ -356,13 +356,19 @@ eightball.Application = function(opt_skipGraphics) {
     }
   });
 
-  keyBinding.add('r', 'Restart game', function() {
-    game.reset();
+  keyBinding.add('a', 'Activate bomb', function() {
+    var activated = game.activateBomb();
+    return activated ? 'Bomb activated' : 'No-op';
   });
 
   keyBinding.add('b', 'Bomb demo mode', function() {
     game.setBombDemoMode();
     game.reset();
+  });
+
+  keyBinding.add('d', 'Deactivate bomb', function() {
+    var deactivated = game.deactivateBomb();
+    return deactivated ? 'Bomb deactivated' : 'No-op';
   });
 
   keyBinding.add('e', 'End game early', function() {
@@ -371,10 +377,36 @@ eightball.Application = function(opt_skipGraphics) {
     }
   });
 
+  keyBinding.add('f', 'No Gravity', function() {
+    poolTable.randomGravity(false);
+  });
+
+  keyBinding.add('g', 'Gravity', function() {
+    poolTable.randomGravity(true);
+  });
+
+  keyBinding.add('h', 'Help', goog.nullFunction);
+
+  keyBinding.add('l', 'Toggle debug log', function() {
+    var enabled = pixelLab.DebugDiv.toggle();
+    return enabled ? 'Logger on' : 'Logger off';
+  });
+
   keyBinding.add('m', 'Toggle music', function() {
     musicManager.toggleMusic();
     var state = musicManager.isMusicOn() ? 'on' : 'off';
     return 'Game music is now ' + state;
+  });
+
+  keyBinding.add('o', 'Play random sound effect', function() {
+    var soundName = soundManager.playRandom();
+    return 'Playing ' + soundName;
+  });
+
+  keyBinding.add('p', 'Pause game', pauseApp);
+
+  keyBinding.add('r', 'Restart game', function() {
+    game.reset();
   });
 
   keyBinding.add('s', 'Toggle sound', function() {
@@ -383,42 +415,10 @@ eightball.Application = function(opt_skipGraphics) {
     return 'Game sounds are now ' + state;
   });
 
-  keyBinding.add('a', 'Activate bomb', function() {
-    var activated = game.activateBomb();
-    return activated ? 'Bomb activated' : 'No-op';
-  });
-
-  keyBinding.add('d', 'Deactivate bomb', function() {
-    var deactivated = game.deactivateBomb();
-    return deactivated ? 'Bomb deactivated' : 'No-op';
-  });
-
   keyBinding.add('x', 'Detonate bomb', function() {
     var detonated = game.detonateBomb();
     return detonated ? 'Bomb detonated' : 'No-op';
   });
-
-  keyBinding.add('p', 'Pause game', pauseApp);
-
-  keyBinding.add('o', 'Play random sound effect', function() {
-    var soundName = soundManager.playRandom();
-    return 'Playing ' + soundName;
-  });
-
-  keyBinding.add('g', 'Gravity', function() {
-    poolTable.randomGravity(true);
-  });
-
-  keyBinding.add('f', 'No Gravity', function() {
-    poolTable.randomGravity(false);
-  });
-
-  keyBinding.add('l', 'Toggle debug log', function() {
-    var enabled = pixelLab.DebugDiv.toggle();
-    return enabled ? 'Logger on' : 'Logger off';
-  });
-
-  keyBinding.add('h', 'Help', goog.nullFunction);
 
   //
   // Click handlers
