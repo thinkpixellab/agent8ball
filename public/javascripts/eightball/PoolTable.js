@@ -949,7 +949,7 @@ eightball.PoolTable.prototype.increaseBombPulse = function() {
  @return {number}
  */
 eightball.PoolTable.prototype.stepsPerSecond = function() {
-  return this.m_fpsLogger.fps;
+  return this.m_fpsLogger.getFps();
 };
 
 /**
