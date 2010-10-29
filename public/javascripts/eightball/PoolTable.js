@@ -235,6 +235,26 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, imageMap) {
   goog.events.listen(this._timer, goog.Timer.TICK, this._step, undefined, this);
   this._timer.start();
 
+  this.m_last = new goog.math.Vec2();
+
+  goog.global.addEventListener('MozOrientation', goog.bind(function(e) {
+    var newOrientation = goog.math.Vec2.fromCoordinate(e);
+    var scale = 10;
+    goog.array.forEach(['x', 'y'], function(element,index,array) {
+      newOrientation[element] = Math.round(newOrientation[element] * scale) / scale;
+    });
+
+    if (!this.m_last.equals(newOrientation)) {
+      this.m_last = newOrientation;
+
+      this.m_world.m_gravity = this.m_last.clone().scale(100);
+      goog.object.forEach(this.m_balls, function(ball, key, theThis) {
+        ball.WakeUp();
+      });
+    }
+
+  }, this), true);
+
 };
 goog.inherits(eightball.PoolTable, goog.events.EventTarget);
 
