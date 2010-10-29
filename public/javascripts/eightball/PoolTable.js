@@ -599,6 +599,32 @@ eightball.PoolTable.prototype.getBombLocation = function() {
 
 /**
  @param {boolean=} opt_enabled
+ @return {boolean} True if framerate is fixed.
+ */
+eightball.PoolTable.prototype.fixFramerate = function(opt_enabled) {
+  if (opt_enabled === undefined) {
+    opt_enabled = true;
+  }
+
+  if (opt_enabled) {
+    this._timer.setInterval(eightball.PoolTable.s_millisecondsPerFrame);
+    return true;
+  }
+  else {
+    this._timer.setInterval(1);
+    return false;
+  }
+};
+
+/**
+ @return {boolean}
+ */
+eightball.PoolTable.prototype.isFixFramerate = function() {
+  return this._timer.getInterval() == eightball.PoolTable.s_millisecondsPerFrame;
+};
+
+/**
+ @param {boolean=} opt_enabled
  @return {boolean} True if things are random.
  */
 eightball.PoolTable.prototype.randomGravity = function(opt_enabled) {

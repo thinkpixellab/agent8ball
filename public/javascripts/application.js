@@ -387,6 +387,17 @@ eightball.Application = function(opt_skipGraphics) {
 
   keyBinding.add('h', 'Help', goog.nullFunction);
 
+  keyBinding.add('i', 'Toggle framerate throttling', function() {
+    if (poolTable.isFixFramerate()) {
+      poolTable.fixFramerate(false);
+      return 'Framerate: floating';
+    }
+    else {
+      poolTable.fixFramerate(true);
+      return 'Framerate: fixed';
+    }
+  });
+
   keyBinding.add('l', 'Toggle debug log', function() {
     var enabled = pixelLab.DebugDiv.toggle();
     return enabled ? 'Logger on' : 'Logger off';
