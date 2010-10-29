@@ -114,8 +114,9 @@ eightball.Application = function(opt_skipGraphics) {
   _game = game;
 
   goog.events.listen(game, eightball.Game.EventType.TICK, function() {
-    if (isExplosionActive) return;
-    this._updateTimerVisuals(game.secondsLeft);
+    if (!isExplosionActive){
+      this._updateTimerVisuals(game.secondsLeft);
+    }
 
     pixelLab.DebugDiv.clear();
     var fmt = new goog.i18n.NumberFormat('#,###.##');
