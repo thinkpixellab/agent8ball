@@ -1,3 +1,6 @@
+// TODO -> make this 8-ball. Makes assumptions about the preloadDiv, etc
+// WARNING: this uses jQuery implicitly. Not a pure closure library
+
 goog.provide('pixelLab.Preload');
 
 goog.require('goog.object');
