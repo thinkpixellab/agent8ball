@@ -76,7 +76,6 @@ goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], [
 goog.addDependency("../../../eightball/SoundEffect.js", ['eightball.SoundEffect'], []);
 goog.addDependency("../../../eightball/SoundEffectManager.js", ['eightball.SoundEffectManager'], ['eightball.Cookies', 'eightball.SoundEffect', 'goog.events.Event', 'goog.events.EventTarget']);
 goog.addDependency("../../../eightball/Stats.js", ['eightball.Stats'], ['pixelLab.Stats']);
-goog.addDependency("../../../pixelLab/Audio.js", ['pixelLab.Audio'], ['goog.string']);
 goog.addDependency("../../../pixelLab/DebugDiv.js", ['pixelLab.DebugDiv'], ['goog.debug.LogManager', 'goog.dom']);
 goog.addDependency("../../../pixelLab/FpsLogger.js", ['pixelLab.FpsLogger'], []);
 goog.addDependency("../../../pixelLab/KeyBinding.js", ['pixelLab.KeyBinding', 'pixelLab.KeyBindingEvent'], ['goog.events.Event', 'goog.events.EventTarget', 'goog.ui.KeyboardShortcutHandler', 'goog.ui.KeyboardShortcutHandler.EventType']);
