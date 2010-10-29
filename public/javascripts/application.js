@@ -107,21 +107,17 @@ eightball.Application = function(opt_skipGraphics) {
   var typingSound = null;
 
   var poolTable = new eightball.PoolTable($('canvas#demo_canvas')[0], $('canvas#cue_canvas')[0], preloadAssets.images);
+  this.m_poolTable = poolTable;
 
   // create a game object
   var game = new eightball.Game(poolTable);
-  // *DEBUG*
-  _game = game;
+  this.m_game = game;
 
   goog.events.listen(game, eightball.Game.EventType.TICK, function() {
-    if (!isExplosionActive){
+    if (!isExplosionActive) {
       this._updateTimerVisuals(game.secondsLeft);
     }
-
-    pixelLab.DebugDiv.clear();
-    var fmt = new goog.i18n.NumberFormat('#,###.##');
-    var str = fmt.format(poolTable.stepsPerSecond());
-    goog.debug.LogManager.getRoot().info('FPS: ' + str);
+    this._updateFpsLog();
   },
   false, this);
 
@@ -503,6 +499,18 @@ eightball.Application = function(opt_skipGraphics) {
   $('#soundsbuttonclick').click(function() {
     soundManager.toggleSound();
   });
+};
+
+/**
+ @private
+ */
+eightball.Application.prototype._updateFpsLog = function() {
+  pixelLab.DebugDiv.clear();
+  if (this.m_game.gameState == eightball.Game.States.STARTED) {
+    var fmt = new goog.i18n.NumberFormat('#,###.##');
+    var message = 'FPS: ' + fmt.format(this.m_poolTable.stepsPerSecond());
+    goog.debug.LogManager.getRoot().info(message);
+  }
 };
 
 /**
