@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/kevmoo/hassle.git
-  revision: bd0cd41aaceb002c5364de37d2975d58079f469f
+  revision: bd0cd41
   ref: bd0cd41aaceb002c5
   specs:
     hassle (0.0.1)
@@ -37,13 +37,10 @@ GEM
       activemodel (= 3.0.0)
       activesupport (= 3.0.0)
     activesupport (3.0.0)
+    archive-tar-minitar (0.5.2)
     arel (1.0.1)
       activesupport (~> 3.0.0)
     awesome_print (0.2.1)
-    aws-s3 (0.6.2)
-      builder
-      mime-types
-      xml-simple
     builder (2.1.2)
     columnize (0.3.1)
     compass (0.10.5)
@@ -57,15 +54,14 @@ GEM
       haml (~> 3.0)
       railties (~> 3.0)
     i18n (0.4.1)
-    json (1.4.6)
-    linecache (0.43)
+    linecache19 (0.5.11)
+      ruby_core_source (>= 0.1.4)
     mail (2.2.9)
       activesupport (>= 2.3.6)
       i18n (~> 0.4.1)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
-    oauth (0.4.3)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -86,30 +82,28 @@ GEM
       rake (>= 0.8.4)
       thor (~> 0.14.0)
     rake (0.8.7)
-    ruby-debug (0.10.3)
-      columnize (>= 0.1)
-      ruby-debug-base (~> 0.10.3.0)
-    ruby-debug-base (0.10.3)
-      linecache (>= 0.3)
+    ruby-debug-base19 (0.11.24)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.4)
+      archive-tar-minitar (>= 0.5.2)
     thor (0.14.3)
     treetop (1.4.8)
       polyglot (>= 0.3.1)
-    twitter_oauth (0.4.3)
-      json (>= 1.1.9)
-      mime-types (>= 1.16)
-      oauth (>= 0.4.1)
     tzinfo (0.3.23)
-    xml-simple (1.0.12)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   awesome_print
-  aws-s3
   compass
   haml-rails
   hassle!
   rails (= 3.0.0)
-  ruby-debug
-  twitter_oauth
+  ruby-debug19
