@@ -46,8 +46,9 @@ eightball.Music.prototype.startMusic = function() {
   this._clearMusic();
 
   this.m_music = eightball.SoundEffect.create(this.m_name, this.m_locations);
-  this.m_music.loop = 'loop';
+  this.m_music.setAttribute('loop', 'loop');
 
+  this.m_music.load();
   this.m_music.play();
 
   eightball.Cookies.set(eightball.Cookies.Keys.MUSIC, eightball.Cookies.CookieOnOffEnum.ON);
@@ -91,4 +92,8 @@ eightball.Music.prototype._clearMusic = function() {
     this.m_music.parentNode.removeChild(this.m_music);
     this.m_music = null;
   }
+  var audios = document.getElementsByClassName('audio_' + this.m_name);
+  goog.array.forEach(audios, function(element, index, array) {
+    element.parentNode.removeChild(element);
+  });
 };
