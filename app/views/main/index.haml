@@ -1,6 +1,7 @@
 - uncompiled = Rails.env == 'development' && params.has_key?('uncompiled')
-- content_for :view_javascript do
+- content_for :header do
   = game_js(uncompiled)
+  %link{:rel => 'canonical', :href => 'http://agent8ball.com'}
 - if Rails.env == 'development'
   - if(uncompiled)
     = link_to "Uncompiled", root_path, :id => 'debug', :title => 'Go to compiled version'
