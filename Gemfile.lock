@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/kevmoo/hassle.git
-  revision: bd0cd41
+  revision: bd0cd41aaceb002c5364de37d2975d58079f469f
   ref: bd0cd41aaceb002c5
   specs:
     hassle (0.0.1)
@@ -40,7 +40,7 @@ GEM
     archive-tar-minitar (0.5.2)
     arel (1.0.1)
       activesupport (~> 3.0.0)
-    awesome_print (0.3.0)
+    awesome_print (0.3.1)
     builder (2.1.2)
     columnize (0.3.2)
     compass (0.10.6)
