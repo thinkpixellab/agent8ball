@@ -7,4 +7,8 @@ class MainController < ApplicationController
   def handle404
     render :status => 404
   end
+
+  def redirects
+    render :json => Agent8ballRails::Application.from.to_json
+  end
 end

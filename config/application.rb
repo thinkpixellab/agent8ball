@@ -42,5 +42,27 @@ module Agent8ballRails
     config.filter_parameters += [:password]
 
     config.session_store :disabled
+
+    @@from = {}
+    @@since = Time.now.utc
+
+    def self.from
+      {
+        :from => @@from,
+        :since => @@since
+      }
+    end
+
+    def self.redirect(from)
+      value = @@from[from]
+      if(value)
+        value += 1
+      else
+        value = 1
+      end
+      @@from[from] = value
+      puts "new value! #{value}"
+    end
+
   end
 end

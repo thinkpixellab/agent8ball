@@ -4,7 +4,8 @@ class ApplicationController < ActionController::Base
 
   private
     def right_domain
-      if request.subdomain.present? && !%(beta www).include?(request.subdomain)
+      if request.subdomain.present?
+        Agent8ballRails::Application.redirect(request.referer)
         redirect_to 'http://agent8ball.com', :status => :moved_permanently
       end
     end
