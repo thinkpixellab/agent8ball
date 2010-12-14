@@ -15,7 +15,6 @@
 /**
  * @fileoverview Renderer for {@link goog.ui.ColorButton}s.
  *
- *
  */
 
 goog.provide('goog.ui.ColorButtonRenderer');
@@ -23,6 +22,7 @@ goog.provide('goog.ui.ColorButtonRenderer');
 goog.require('goog.dom.classes');
 goog.require('goog.functions');
 goog.require('goog.ui.ColorMenuButtonRenderer');
+
 
 
 /**

@@ -15,16 +15,12 @@
 /**
  * @fileoverview Utilities for manipulating arrays.
  *
- *
- *
- *
  */
 
 
 goog.provide('goog.array');
 
 goog.require('goog.asserts');
-
 
 
 /**
@@ -845,7 +841,7 @@ goog.array.removeDuplicates = function(arr, opt_rv) {
  * @param {*} target The sought value.
  * @param {Function=} opt_compareFn Optional comparison function by which the
  *     array is ordered. Should take 2 arguments to compare, and return a
- *     negative integer, zero, or a positive integer depending on whether the
+ *     negative number, zero, or a positive number depending on whether the
  *     first argument is less than, equal to, or greater than the second.
  * @return {number} Lowest index of the target value if found, otherwise
  *     (-(insertion point) - 1). The insertion point is where the value should
@@ -870,9 +866,9 @@ goog.array.binarySearch = function(arr, target, opt_compareFn) {
  *
  * @param {goog.array.ArrayLike} arr The array to be searched.
  * @param {Function} evaluator Evaluator function that receives 3 arguments
- *     (the element, the index and the array).  Should return a negative
- *     integer, zero, or a positive integer depending on whether the
- *     desired index is before, at, or after the element passed to it.
+ *     (the element, the index and the array). Should return a negative number,
+ *     zero, or a positive number depending on whether the desired index is
+ *     before, at, or after the element passed to it.
  * @param {Object=} opt_obj The object to be used as the value of 'this'
  *     within evaluator.
  * @return {number} Index of the leftmost element matched by the evaluator, if
@@ -957,7 +953,7 @@ goog.array.binarySearch_ = function(arr, compareFn, isEvaluator, opt_target,
  * @param {Array} arr The array to be sorted.
  * @param {Function=} opt_compareFn Optional comparison function by which the
  *     array is to be ordered. Should take 2 arguments to compare, and return a
- *     negative integer, zero, or a positive integer depending on whether the
+ *     negative number, zero, or a positive number depending on whether the
  *     first argument is less than, equal to, or greater than the second.
  */
 goog.array.sort = function(arr, opt_compareFn) {
@@ -982,7 +978,7 @@ goog.array.sort = function(arr, opt_compareFn) {
  * @param {Array} arr The array to be sorted.
  * @param {function(*, *): number=} opt_compareFn Optional comparison function
  *     by which the array is to be ordered. Should take 2 arguments to compare,
- *     and return a negative integer, zero, or a positive integer depending on
+ *     and return a negative number, zero, or a positive number depending on
  *     whether the first argument is less than, equal to, or greater than the
  *     second.
  */
@@ -1017,6 +1013,28 @@ goog.array.sortObjectsByKey = function(arr, key, opt_compareFn) {
   goog.array.sort(arr, function(a, b) {
     return compare(a[key], b[key]);
   });
+};
+
+
+/**
+ * Tells if the array is sorted.
+ * @param {!Array} arr The array.
+ * @param {Function=} opt_compareFn Function to compare the array elements.
+ *     Should take 2 arguments to compare, and return a negative number, zero,
+ *     or a positive number depending on whether the first argument is less
+ *     than, equal to, or greater than the second.
+ * @param {boolean=} opt_strict If true no equal elements are allowed.
+ * @return {boolean} Whether the array is sorted.
+ */
+goog.array.isSorted = function(arr, opt_compareFn, opt_strict) {
+  var compare = opt_compareFn || goog.array.defaultCompare;
+  for (var i = 1; i < arr.length; i++) {
+    var compareResult = compare(arr[i - 1], arr[i]);
+    if (compareResult > 0 || compareResult == 0 && opt_strict) {
+      return false;
+    }
+  }
+  return true;
 };
 
 
@@ -1066,9 +1084,8 @@ goog.array.compare = function(arr1, arr2, opt_equalsFn) {
  * operators.
  * @param {*} a The first object to be compared.
  * @param {*} b The second object to be compared.
- * @return {number} a negative integer, zero, or a positive integer
- *     as the first argument is less than, equal to, or greater than the
- *     second.
+ * @return {number} A negative number, zero, or a positive number as the first
+ *     argument is less than, equal to, or greater than the second.
  */
 goog.array.defaultCompare = function(a, b) {
   return a > b ? 1 : a < b ? -1 : 0;
@@ -1092,10 +1109,9 @@ goog.array.defaultCompareEquality = function(a, b) {
  * @param {Array} array The array to modify.
  * @param {*} value The object to insert.
  * @param {Function=} opt_compareFn Optional comparison function by which the
- *     array is ordered. Should take 2 arguments to compare, and
- *     return a negative integer, zero, or a positive integer depending on
- *     whether the first argument is less than, equal to, or greater than the
- *     second.
+ *     array is ordered. Should take 2 arguments to compare, and return a
+ *     negative number, zero, or a positive number depending on whether the
+ *     first argument is less than, equal to, or greater than the second.
  * @return {boolean} True if an element was inserted.
  */
 goog.array.binaryInsert = function(array, value, opt_compareFn) {
@@ -1113,10 +1129,9 @@ goog.array.binaryInsert = function(array, value, opt_compareFn) {
  * @param {Array} array The array to modify.
  * @param {*} value The object to remove.
  * @param {Function=} opt_compareFn Optional comparison function by which the
- *     array is ordered. Should take 2 arguments to compare, and
- *     return a negative integer, zero, or a positive integer depending on
- *     whether the first argument is less than, equal to, or greater than the
- *     second.
+ *     array is ordered. Should take 2 arguments to compare, and return a
+ *     negative number, zero, or a positive number depending on whether the
+ *     first argument is less than, equal to, or greater than the second.
  * @return {boolean} True if an element was removed.
  */
 goog.array.binaryRemove = function(array, value, opt_compareFn) {
@@ -1246,5 +1261,32 @@ goog.array.zip = function(var_args) {
       value.push(arr[i]);
     }
     result.push(value);
+  }
+};
+
+
+/**
+ * Shuffles the values in the specified array using the Fisher-Yates in-place
+ * shuffle (also known as the Knuth Shuffle). By default, calls Math.random()
+ * and so resets the state of that random number generator. Similarly, may reset
+ * the state of the any other specified random number generator.
+ *
+ * Runtime: O(n)
+ *
+ * @param {!Array} arr The array to be shuffled.
+ * @param {Function=} opt_randFn Optional random function to use for shuffling.
+ *     Takes no arguments, and returns a random number on the interval [0, 1).
+ *     Defaults to Math.random() using JavaScript's built-in Math library.
+ */
+goog.array.shuffle = function(arr, opt_randFn) {
+  var randFn = opt_randFn || Math.random;
+
+  for (var i = arr.length - 1; i > 0; i--) {
+    // Choose a random array index in [0, i] (inclusive with i).
+    var j = Math.floor(randFn() * (i + 1));
+
+    var tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
   }
 };

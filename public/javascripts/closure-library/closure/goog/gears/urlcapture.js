@@ -16,7 +16,6 @@
  * @fileoverview Interface for capturing URLs to a ResourceStore on the
  * LocalServer.
  *
- *
  */
 
 
@@ -29,6 +28,7 @@ goog.require('goog.debug.Logger');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.gears');
+
 
 
 /**
@@ -330,6 +330,7 @@ goog.gears.UrlCapture.prototype.usesGoogUri_ = function(captureId) {
   }
   return false;
 };
+
 
 
 /**

@@ -34,12 +34,11 @@
  * - altKey         {boolean}   Was alt key depressed
  * - shiftKey       {boolean}   Was shift key depressed
  * - metaKey        {boolean}   Was meta key depressed
+ * - state          {Object}    History state object
  *
  * NOTE: The keyCode member contains the raw browser keyCode. For normalized
  * key and character code use {@link goog.events.KeyHandler}.
  * </pre>
- *
- *
  *
  */
 
@@ -49,6 +48,7 @@ goog.provide('goog.events.BrowserEvent.MouseButton');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
+goog.require('goog.reflect');
 goog.require('goog.userAgent');
 
 
@@ -209,6 +209,14 @@ goog.events.BrowserEvent.prototype.metaKey = false;
 
 
 /**
+ * History state object, only set for PopState events where it's a copy of the
+ * state object provided to pushState or replaceState.
+ * @type {Object}
+ */
+goog.events.BrowserEvent.prototype.state;
+
+
+/**
  * Whether the default platform modifier key was pressed at time of event.
  * (This is control for all platforms except Mac, where it's Meta.
  * @type {boolean}
@@ -232,7 +240,10 @@ goog.events.BrowserEvent.prototype.event_ = null;
  */
 goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   var type = this.type = e.type;
-  this.target = e.target || e.srcElement;
+
+  // TODO(nicksantos): Change this.target to type EventTarget.
+  this.target = /** @type {Node} */ (e.target) || e.srcElement;
+
   this.currentTarget = opt_currentTarget;
 
   var relatedTarget = /** @type {Node} */ (e.relatedTarget);
@@ -244,7 +255,7 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
     if (goog.userAgent.GECKO) {
       /** @preserveTry */
       try {
-        relatedTarget = relatedTarget.nodeName && relatedTarget;
+        goog.reflect.sinkValue(relatedTarget.nodeName);
       } catch (err) {
         relatedTarget = null;
       }
@@ -275,10 +286,12 @@ goog.events.BrowserEvent.prototype.init = function(e, opt_currentTarget) {
   this.shiftKey = e.shiftKey;
   this.metaKey = e.metaKey;
   this.platformModifierKey = goog.userAgent.MAC ? e.metaKey : e.ctrlKey;
+  this.state = e.state;
   this.event_ = e;
   delete this.returnValue_;
   delete this.propagationStopped_;
 };
+
 
 /**
  * Tests to see which button was pressed during the event. This is really only

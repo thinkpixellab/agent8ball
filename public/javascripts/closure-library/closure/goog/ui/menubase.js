@@ -15,7 +15,6 @@
 /**
  * @fileoverview Definition of the MenuBase class.
  *
- *
  */
 
 goog.provide('goog.ui.MenuBase');
@@ -25,6 +24,8 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.ui.Popup');
+
+
 
 /**
  * The MenuBase class provides an abstract base class for different
@@ -102,6 +103,7 @@ goog.ui.MenuBase.prototype.onShow_ = function() {
       goog.events.KeyHandler.EventType.KEY,
       this.onKeyDown);
 };
+
 
 /**
  * Called after the menu is hidden. Derived classes can override to hook this

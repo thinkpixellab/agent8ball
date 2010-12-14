@@ -16,7 +16,7 @@
 /**
  * @fileoverview Objects representing shapes drawn on a canvas.
  * @author robbyw@google.com (Robby Walker)
- *
+ * @author wcrosby@google.com (Wayne Crosby)
  */
 
 goog.provide('goog.graphics.CanvasEllipseElement');
@@ -36,6 +36,7 @@ goog.require('goog.graphics.Path');
 goog.require('goog.graphics.PathElement');
 goog.require('goog.graphics.RectElement');
 goog.require('goog.graphics.TextElement');
+
 
 
 /**
@@ -101,6 +102,7 @@ goog.graphics.CanvasGroupElement.prototype.draw = function(ctx) {
     this.getGraphics().drawElement(this.children_[i]);
   }
 };
+
 
 
 /**
@@ -223,6 +225,7 @@ goog.graphics.CanvasEllipseElement.prototype.draw = function(ctx) {
 };
 
 
+
 /**
  * Thin wrapper for canvas rectangle elements.
  * This is an implementation of the goog.graphics.RectElement interface.
@@ -329,6 +332,7 @@ goog.graphics.CanvasRectElement.prototype.draw = function(ctx) {
 };
 
 
+
 /**
  * Thin wrapper for canvas path elements.
  * This is an implementation of the goog.graphics.PathElement interface.
@@ -413,6 +417,7 @@ goog.graphics.CanvasPathElement.prototype.draw = function(ctx) {
     }
   });
 };
+
 
 
 /**
@@ -622,6 +627,7 @@ goog.graphics.CanvasTextElement.prototype.updateText_ = function() {
     this.innerElement_.innerHTML = goog.string.htmlEscape(this.text_);
   }
 };
+
 
 
 /**

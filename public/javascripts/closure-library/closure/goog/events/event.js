@@ -15,13 +15,13 @@
 /**
  * @fileoverview A base class for event objects.
  *
- *
  */
 
 
 goog.provide('goog.events.Event');
 
 goog.require('goog.Disposable');
+
 
 
 /**

@@ -15,8 +15,6 @@
 
 /**
  * @fileoverview SvgGraphics sub class that uses SVG to draw the graphics.
- *
- *
  */
 
 goog.provide('goog.graphics.SvgGraphics');
@@ -38,6 +36,7 @@ goog.require('goog.graphics.SvgRectElement');
 goog.require('goog.graphics.SvgTextElement');
 goog.require('goog.math.Size');
 goog.require('goog.userAgent');
+
 
 
 /**

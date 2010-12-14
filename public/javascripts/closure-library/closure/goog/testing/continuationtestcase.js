@@ -74,7 +74,6 @@
  * }
  * </pre>
  *
- *
  */
 
 
@@ -87,6 +86,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.testing.TestCase');
 goog.require('goog.testing.TestCase.Test');
 goog.require('goog.testing.asserts');
+
 
 
 /**

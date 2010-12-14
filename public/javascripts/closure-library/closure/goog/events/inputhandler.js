@@ -31,7 +31,6 @@
  *     trigger in emulation mode if text was modified by context menu commands
  *     such as 'Undo' and 'Delete'.
  * </ul>
- *
  * @see ../demos/inputhandler.html
  */
 
@@ -46,6 +45,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.userAgent');
+
 
 
 /**
@@ -104,6 +104,7 @@ goog.events.InputHandler.EventType = {
   INPUT: 'input'
 };
 
+
 /**
  * Id of a timer used to postpone firing input event in emulation mode.
  * @type {?number}
@@ -129,6 +130,16 @@ goog.events.InputHandler.prototype.handleEvent = function(e) {
     // also a little bit dangerous. If value is changed programmatically in
     // another key down handler, we will detect it as user-initiated change.
     var valueBeforeKey = e.type == 'keydown' ? this.element_.value : null;
+
+    // In IE on XP, IME the element's value has already changed when we get
+    // keydown events when the user is using an IME. In this case, we can't
+    // check the current value normally, so we assume that it's a modifying key
+    // event. This means that ENTER when used to commit will fire a spurious
+    // input event, but it's better to have a false positive than let some input
+    // slip through the cracks.
+    if (goog.userAgent.IE && e.keyCode == goog.events.KeyCodes.WIN_IME) {
+      valueBeforeKey = null;
+    }
 
     // Create an input event now, because when we fire it on timer, the
     // underlying event will already be disposed.

@@ -15,8 +15,6 @@
 /**
  * @fileoverview Class to support scrollable containers for drag and drop.
  *
- *
- *
  */
 
 goog.provide('goog.fx.DragScrollSupport');
@@ -28,6 +26,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Coordinate');
 goog.require('goog.style');
+
 
 
 /**

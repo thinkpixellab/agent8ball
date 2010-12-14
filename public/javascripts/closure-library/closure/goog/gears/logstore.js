@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview This file implements a store for goog.debug.Logger data.
- *
  */
 
 goog.provide('goog.gears.LogStore');
@@ -28,6 +27,7 @@ goog.require('goog.debug.Logger.Level');
 goog.require('goog.gears.BaseStore');
 goog.require('goog.gears.BaseStore.SchemaType');
 goog.require('goog.json');
+
 
 
 /**

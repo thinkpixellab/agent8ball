@@ -28,7 +28,6 @@
  * CrossPageChannel abstracts the underlying transport mechanism to
  * provide a common interface in all browsers.
  *
- *
  */
 
 /*
@@ -36,10 +35,16 @@ TODO(user)
 - resolve fastback issues in Safari (IframeRelayTransport)
  */
 
+
 /**
  * Namespace for CrossPageChannel
  */
 goog.provide('goog.net.xpc');
+goog.provide('goog.net.xpc.CfgFields');
+goog.provide('goog.net.xpc.ChannelStates');
+goog.provide('goog.net.xpc.TransportNames');
+goog.provide('goog.net.xpc.TransportTypes');
+goog.provide('goog.net.xpc.UriCfgFields');
 
 goog.require('goog.debug.Logger');
 
@@ -74,6 +79,7 @@ goog.net.xpc.TransportNames = {
 
 
 // TODO(user): Add auth token support to other methods.
+
 
 /**
  * Field names used on configuration object.
@@ -147,6 +153,19 @@ goog.net.xpc.CfgFields = {
 
 
 /**
+ * Config properties that need to be URL sanitized.
+ * @type {Array}.<string>
+ */
+goog.net.xpc.UriCfgFields = [
+  goog.net.xpc.CfgFields.PEER_URI,
+  goog.net.xpc.CfgFields.LOCAL_RELAY_URI,
+  goog.net.xpc.CfgFields.PEER_RELAY_URI,
+  goog.net.xpc.CfgFields.LOCAL_POLL_URI,
+  goog.net.xpc.CfgFields.PEER_POLL_URI
+];
+
+
+/**
  * @enum {number}
  */
 goog.net.xpc.ChannelStates = {
@@ -172,7 +191,7 @@ goog.net.xpc.SETUP = 'SETUP';
 
 
 /**
- * Transport signaling message: setup acknoledgement.
+ * Transport signaling message: setup acknowledgement.
  * @private
  */
 goog.net.xpc.SETUP_ACK_ = 'SETUP_ACK';
@@ -210,6 +229,7 @@ goog.net.xpc.getRandomString = function(length, opt_characters) {
  */
 goog.net.xpc.randomStringCharacters_ =
     'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
 
 /**
  * The logger.

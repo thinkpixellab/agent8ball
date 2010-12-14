@@ -57,7 +57,6 @@
  * </pre>
  *
  *
- *
  * @supported IE6, FF2+, Safari. Requires flash to actually work.
  *
  * TODO(user): test on other browsers
@@ -72,6 +71,7 @@ goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaModel');
 goog.require('goog.ui.media.MediaModel.Player');
 goog.require('goog.ui.media.MediaRenderer');
+
 
 
 /**
@@ -173,6 +173,7 @@ goog.ui.media.PicasaAlbum.prototype.createDom = function(control) {
 goog.ui.media.PicasaAlbum.prototype.getCssClass = function() {
   return goog.ui.media.PicasaAlbum.CSS_CLASS;
 };
+
 
 
 /**

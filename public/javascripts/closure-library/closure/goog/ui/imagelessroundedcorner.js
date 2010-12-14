@@ -21,7 +21,6 @@
  * critical.
  *
  * @supported IE 6.0+, Safari 2.0+, Firefox 1.5+, Opera 9.2+.
- *
  * @see ../demos/imagelessroundedcorner.html
  */
 
@@ -140,6 +139,7 @@ goog.ui.ImagelessRoundedCorner.LEFT_ =
 goog.ui.ImagelessRoundedCorner.TOP_ =
     goog.ui.ImagelessRoundedCorner.Corner.TOP_LEFT |
     goog.ui.ImagelessRoundedCorner.Corner.TOP_RIGHT;
+
 
 
 /**

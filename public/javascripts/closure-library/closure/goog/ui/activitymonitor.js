@@ -21,7 +21,6 @@
  * If you would prefer to get BECOME_ACTIVE and BECOME_IDLE events when the
  * user changes states, then you should use the IdleTimer class instead.
  *
- *
  */
 
 goog.provide('goog.ui.ActivityMonitor');
@@ -32,6 +31,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
+
 
 
 /**
@@ -266,6 +266,7 @@ goog.ui.ActivityMonitor.prototype.getIdleTime = function(opt_now) {
   var now = opt_now || goog.now();
   return now - this.lastEventTime_;
 };
+
 
 /**
  * Returns the type of the last user event.

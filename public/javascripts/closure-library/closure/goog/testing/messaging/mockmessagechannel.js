@@ -16,13 +16,12 @@
  * @fileoverview Mock MessageChannel implementation that can receive fake
  * messages and test that the right messages are sent.
  *
- *
  */
 
 
 goog.provide('goog.testing.messaging.MockMessageChannel');
 
-goog.require('goog.messaging.MessageChannel'); // interface
+goog.require('goog.messaging.AbstractChannel');
 goog.require('goog.testing.asserts');
 
 
@@ -31,16 +30,11 @@ goog.require('goog.testing.asserts');
  * Class for unit-testing code that communicates over a MessageChannel.
  * @param {goog.testing.MockControl} mockControl The mock control used to create
  *   the method mock for #send.
- * @implements {goog.messaging.MessageChannel}
+ * @extends {goog.messaging.AbstractChannel}
  * @constructor
  */
 goog.testing.messaging.MockMessageChannel = function(mockControl) {
-  /**
-   * Services to call when receiving messages.
-   * @type {Object.<string, function((string|Object))>}
-   * @private
-   */
-  this.services_ = {};
+  goog.base(this);
 
   /**
    * Whether the channel has been disposed.
@@ -50,61 +44,18 @@ goog.testing.messaging.MockMessageChannel = function(mockControl) {
 
   mockControl.createMethodMock(this, 'send');
 };
-
-
-/**
- * Service to call when no other service matches.
- * @type {function(string, (string|Object))}
- * @private
- */
-goog.testing.messaging.MockMessageChannel.prototype.defaultService_;
-
-
-/**
- * @inheritDoc
- */
-goog.testing.messaging.MockMessageChannel.prototype.connect = function(
-    opt_connectCb) {
-  if (opt_connectCb) {
-    opt_connectCb();
-  }
-};
-
-
-/**
- * @inheritDoc
- */
-goog.testing.messaging.MockMessageChannel.prototype.isConnected = function() {
-  return true;
-};
+goog.inherits(goog.testing.messaging.MockMessageChannel,
+              goog.messaging.AbstractChannel);
 
 
 /**
  * A mock send function. Actually an instance of
  * {@link goog.testing.FunctionMock}.
  * @param {string} serviceName The name of the remote service to run.
- * @param {string|Object} payload The payload to send to the remote page.
+ * @param {string|!Object} payload The payload to send to the remote page.
  */
 goog.testing.messaging.MockMessageChannel.prototype.send = function(
     serviceName, payload) {};
-
-
-/**
- * @inheritDoc
- */
-goog.testing.messaging.MockMessageChannel.prototype.registerService = function(
-    name, callback, isJson) {
-  this.services_[name] = callback;
-};
-
-
-/**
- * @inheritDoc
- */
-goog.testing.messaging.MockMessageChannel.prototype.registerDefaultService =
-    function(callback) {
-  this.defaultService_ = callback;
-};
 
 
 /**
@@ -118,15 +69,9 @@ goog.testing.messaging.MockMessageChannel.prototype.dispose = function() {
 /**
  * Mocks the receipt of a message. Passes the payload the appropriate service.
  * @param {string} serviceName The service to run.
- * @param {string|Object} payload The argument to pass to the service.
+ * @param {string|!Object} payload The argument to pass to the service.
  */
 goog.testing.messaging.MockMessageChannel.prototype.receive = function(
     serviceName, payload) {
-  var callback = this.services_[serviceName];
-  if (!callback && this.defaultService_) {
-    callback = goog.partial(this.defaultService_, serviceName);
-  }
-
-  assertNotNull(callback);
-  callback(payload);
+  this.deliver(serviceName, payload);
 };

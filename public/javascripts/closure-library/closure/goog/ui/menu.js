@@ -37,7 +37,6 @@
  * TODO(user): Rename all references of "item" to child since menu is
  * essentially very generic and could, in theory, host a date or color picker.
  *
- *
  * @see ../demos/menu.html
  * @see ../demos/menus.html
  */
@@ -59,6 +58,7 @@ goog.require('goog.ui.MenuSeparator');
 // The dependencies MenuHeader, MenuItem, and MenuSeparator are implicit.
 // There are no references in the code, but we need to load these
 // classes before goog.ui.Menu.
+
 
 
 // TODO(robbyw): Reverse constructor argument order for consistency.

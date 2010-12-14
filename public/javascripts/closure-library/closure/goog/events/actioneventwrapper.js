@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Action event wrapper implementation.
- *
  */
 
 goog.provide('goog.events.actionEventWrapper');
@@ -24,6 +23,7 @@ goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.EventWrapper');
 goog.require('goog.events.KeyCodes');
+
 
 
 /**

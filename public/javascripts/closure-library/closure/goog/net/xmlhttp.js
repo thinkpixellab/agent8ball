@@ -14,8 +14,6 @@
 
 /**
  * @fileoverview Low level handling of XMLHttpRequest.
- *
- *
  */
 
 goog.provide('goog.net.DefaultXmlHttpFactory');
@@ -25,7 +23,6 @@ goog.provide('goog.net.XmlHttp.ReadyState');
 
 goog.require('goog.net.WrapperXmlHttpFactory');
 goog.require('goog.net.XmlHttpFactory');
-
 
 
 /**
@@ -129,6 +126,7 @@ goog.net.XmlHttp.setFactory = function(factory, optionsFactory) {
 goog.net.XmlHttp.setGlobalFactory = function(factory) {
   goog.net.XmlHttp.factory_ = factory;
 };
+
 
 
 /**

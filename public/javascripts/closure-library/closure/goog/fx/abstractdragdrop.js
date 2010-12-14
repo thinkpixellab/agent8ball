@@ -18,7 +18,6 @@
  * Provides functionality for implementing drag and drop classes. Also provides
  * support classes and events.
  *
- *
  */
 
 goog.provide('goog.fx.AbstractDragDrop');
@@ -36,6 +35,8 @@ goog.require('goog.fx.Dragger.EventType');
 goog.require('goog.math.Box');
 goog.require('goog.math.Coordinate');
 goog.require('goog.style');
+
+
 
 /**
  * Abstract class that provides reusable functionality for implementing drag
@@ -305,20 +306,31 @@ goog.fx.AbstractDragDrop.prototype.initItem = function(item) {
 
 
 /**
+ * Called when removing an item. Removes event listeners and classes.
+ *
+ * @param {goog.fx.DragDropItem} item Item to dispose.
+ * @protected
+ */
+goog.fx.AbstractDragDrop.prototype.disposeItem = function(item) {
+  if (this.isSource_) {
+    goog.events.unlisten(item.element, goog.events.EventType.MOUSEDOWN,
+                         item.mouseDown_, false, item);
+    if (this.sourceClass_) {
+      goog.dom.classes.remove(item.element, this.sourceClass_);
+    }
+  }
+  if (this.isTarget_ && this.targetClass_) {
+    goog.dom.classes.remove(item.element, this.targetClass_);
+  }
+};
+
+
+/**
  * Removes all items.
  */
 goog.fx.AbstractDragDrop.prototype.removeItems = function() {
   for (var item, i = 0; item = this.items_[i]; i++) {
-    if (this.isSource_) {
-      goog.events.unlisten(item.element, goog.events.EventType.MOUSEDOWN,
-                           item.mouseDown_, false, item);
-      if (this.sourceClass_) {
-        goog.dom.classes.remove(item.element, this.sourceClass_);
-      }
-    }
-    if (this.isTarget_ && this.targetClass_) {
-      goog.dom.classes.remove(item.element, this.targetClass_);
-    }
+    this.disposeItem(item);
   }
   this.items_.length = 0;
 };
@@ -1140,6 +1152,7 @@ goog.fx.DragDropEvent.prototype.disposeInternal = function() {
 };
 
 
+
 /**
  * Class representing a source or target element for drag and drop operations.
  *
@@ -1277,6 +1290,7 @@ goog.fx.DragDropItem.prototype.maybeStartDrag_ = function(event, element) {
 
   event.preventDefault();
 };
+
 
 /**
  * Event handler for mouse move. Starts drag operation if moved more than the

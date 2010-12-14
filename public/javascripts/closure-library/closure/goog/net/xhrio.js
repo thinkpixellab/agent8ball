@@ -35,7 +35,6 @@
  *
  * TODO(user): Error cases aren't playing nicely in Safari.
  *
- *
  */
 
 
@@ -53,6 +52,8 @@ goog.require('goog.net.XmlHttp');
 goog.require('goog.net.xhrMonitor');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
+goog.require('goog.uri.utils');
+
 
 
 /**
@@ -81,6 +82,7 @@ goog.net.XhrIo = function(opt_xmlHttpFactory) {
 };
 goog.inherits(goog.net.XhrIo, goog.events.EventTarget);
 
+
 /**
  * A reference to the XhrIo logger
  * @type {goog.debug.Logger}
@@ -95,6 +97,13 @@ goog.net.XhrIo.prototype.logger_ =
  * @type {string}
  */
 goog.net.XhrIo.CONTENT_TYPE_HEADER = 'Content-Type';
+
+
+/**
+ * The pattern matching the 'http' and 'https' URI schemes
+ * @type {!RegExp}
+ */
+goog.net.XhrIo.HTTP_SCHEME_PATTERN = /^https?:?$/i;
 
 
 /**
@@ -742,6 +751,8 @@ goog.net.XhrIo.prototype.isComplete = function() {
 goog.net.XhrIo.prototype.isSuccess = function() {
   switch (this.getStatus()) {
     case 0:         // Used for local XHR requests
+      return !this.isLastUriEffectiveSchemeHttp_();
+
     case 200:       // Http Success
     case 204:       // Http Success - no content
     case 304:       // Http Cache
@@ -749,6 +760,31 @@ goog.net.XhrIo.prototype.isSuccess = function() {
 
     default:
       return false;
+  }
+};
+
+
+/**
+ * @return {boolean} whether the effective scheme of the last URI that was
+ *     fetched was 'http' or 'https'.
+ * @private
+ */
+goog.net.XhrIo.prototype.isLastUriEffectiveSchemeHttp_ = function() {
+  var lastUriScheme = goog.isString(this.lastUri_) ?
+      goog.uri.utils.getScheme(this.lastUri_) :
+      (/** @type {!goog.Uri} */ this.lastUri_).getScheme();
+  // if it's an absolute URI, we're done.
+  if (lastUriScheme) {
+    return goog.net.XhrIo.HTTP_SCHEME_PATTERN.test(lastUriScheme);
+  }
+
+  // if it's a relative URI, it inherits the scheme of the page.
+  if (self.location) {
+    return goog.net.XhrIo.HTTP_SCHEME_PATTERN.test(self.location.protocol);
+  } else {
+    // This case can occur from a web worker in Firefox 3.5 . All other browsers
+    // with web workers support self.location from the worker.
+    return true;
   }
 };
 

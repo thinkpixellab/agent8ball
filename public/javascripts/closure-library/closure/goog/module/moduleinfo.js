@@ -15,10 +15,6 @@
 /**
  * @fileoverview Defines the goog.module.ModuleInfo class.
  *
- *
- *
- *
- *
  */
 
 goog.provide('goog.module.ModuleInfo');
@@ -30,6 +26,7 @@ goog.require('goog.module.ModuleLoadCallback');
 // TODO(user): Circular dependency between ModuleManager and ModuleInfo.  Move
 // FailureType to goog.module.FailureType.
 // goog.require('goog.module.ModuleManager.FailureType');
+
 
 
 /**

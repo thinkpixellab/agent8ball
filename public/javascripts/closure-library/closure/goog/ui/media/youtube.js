@@ -60,7 +60,6 @@
  * </pre>
  *
  *
- *
  * @supported IE6, FF2+, Safari. Requires flash to actually work.
  *
  * TODO(user): test on other browsers
@@ -79,6 +78,7 @@ goog.require('goog.ui.media.MediaModel');
 goog.require('goog.ui.media.MediaModel.Player');
 goog.require('goog.ui.media.MediaModel.Thumbnail');
 goog.require('goog.ui.media.MediaRenderer');
+
 
 
 /**
@@ -193,6 +193,7 @@ goog.ui.media.Youtube.prototype.setState = function(control, state, enable) {
 goog.ui.media.Youtube.prototype.getCssClass = function() {
   return goog.ui.media.Youtube.CSS_CLASS;
 };
+
 
 
 /**

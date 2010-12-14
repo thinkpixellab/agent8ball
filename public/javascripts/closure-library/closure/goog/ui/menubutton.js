@@ -15,7 +15,6 @@
 /**
  * @fileoverview A menu button control.
  *
- *
  * @see ../demos/menubutton.html
  */
 
@@ -40,6 +39,7 @@ goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.registry');
+
 
 
 /**

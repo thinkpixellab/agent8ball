@@ -15,7 +15,6 @@
 /**
  * @fileoverview Zippy widget implementation.
  *
- *
  * @see ../demos/zippy.html
  */
 
@@ -30,6 +29,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.style');
+
 
 
 /**
@@ -129,6 +129,7 @@ goog.ui.Zippy.Events = {
   TOGGLE: 'toggle'
 };
 
+
 /**
  * Destroys widget and removes all event listeners.
  */
@@ -141,6 +142,7 @@ goog.ui.Zippy.prototype.disposeInternal = function() {
   }
   goog.ui.Zippy.superClass_.disposeInternal.call(this);
 };
+
 
 /**
  * Expands content pane.

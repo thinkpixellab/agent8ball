@@ -15,7 +15,6 @@
 /**
  * @fileoverview Implementation of DataNode for wrapping JSON data.
  *
- *
  */
 
 
@@ -27,6 +26,7 @@ goog.require('goog.ds.DataManager');
 goog.require('goog.ds.JsDataSource');
 goog.require('goog.ds.LoadState');
 goog.require('goog.ds.logger');
+
 
 
 /**

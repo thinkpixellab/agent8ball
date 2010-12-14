@@ -16,7 +16,6 @@
  * @fileoverview A component that displays the offline status of an app.
  * Currently, it is used to show an icon with a tootip for the status.
  *
- *
  * @see ../demos/offline.html
  */
 
@@ -183,7 +182,6 @@ goog.ui.OfflineStatusComponent.prototype.MSG_OFFLINE_STATUS_ERROR_TITLE_ =
 goog.ui.OfflineStatusComponent.prototype.getStatus = function() {
   return this.status_;
 };
-
 
 
 /**

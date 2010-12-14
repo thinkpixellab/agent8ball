@@ -19,7 +19,6 @@
  * The implementation currently requires pre-determined bounds for data as it
  * can not rebalance itself to that degree.
  *
- *
  * @see ../demos/quadtree.html
  */
 
@@ -457,6 +456,7 @@ goog.structs.QuadTree.NodeType = {
 };
 
 
+
 /**
  * Constructs a new quad tree node.
  * @param {number} x X-coordiate of node.
@@ -540,6 +540,7 @@ goog.structs.QuadTree.Node.prototype.se = null;
  * @type {goog.structs.QuadTree.Point?}
  */
 goog.structs.QuadTree.Node.prototype.point = null;
+
 
 
 /**

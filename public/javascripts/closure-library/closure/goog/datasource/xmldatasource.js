@@ -16,7 +16,6 @@
  * @fileoverview
  * Implementations of DataNode for wrapping XML data.
  *
- *
  */
 
 goog.provide('goog.ds.XmlDataSource');
@@ -108,6 +107,7 @@ goog.ds.XmlDataSource.prototype.createChildNodes_ = function() {
   }
   this.childNodeList_ = childNodeList;
 };
+
 
 /**
  * Creates the DataNodeList with the attributes for the element
@@ -213,6 +213,7 @@ goog.ds.XmlDataSource.prototype.getDataName = function() {
   return this.dataName_;
 };
 
+
 /**
  * Setthe name of the node relative to the parent node
  * @param {string} name The name of the node.
@@ -281,6 +282,7 @@ goog.ds.XmlDataSource.createChildlessDocument_ = function() {
 };
 
 
+
 /**
  * Data source whose backing is an XMLHttpRequest,
  *
@@ -303,6 +305,7 @@ goog.ds.XmlHttpDataSource = function(uri, name) {
   }
 };
 goog.inherits(goog.ds.XmlHttpDataSource, goog.ds.XmlDataSource);
+
 
 /**
  * Default load state is NOT_LOADED

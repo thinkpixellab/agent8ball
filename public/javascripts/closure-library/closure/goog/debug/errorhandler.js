@@ -15,7 +15,6 @@
 /**
  * @fileoverview Error handling utilities.
  *
- *
  */
 
 goog.provide('goog.debug.ErrorHandler');
@@ -44,6 +43,8 @@ goog.require('goog.debug.Trace');
  * @implements {goog.debug.EntryPointMonitor}
  */
 goog.debug.ErrorHandler = function(handler) {
+  goog.base(this);
+
   /**
    * Handler for exceptions, which can do logging, reporting, etc.
    * @type {Function}

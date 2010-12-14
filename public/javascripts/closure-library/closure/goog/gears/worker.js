@@ -15,7 +15,6 @@
 /**
  * @fileoverview This represents a Gears worker (background process).
  *
- *
  */
 
 goog.provide('goog.gears.Worker');
@@ -156,7 +155,6 @@ goog.gears.Worker.prototype.disposeInternal = function() {
   this.workerPool_.unregisterWorker(this);
   this.workerPool_ = null;
 };
-
 
 
 /**

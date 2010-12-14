@@ -44,8 +44,6 @@
  * body .highlighted { background-color: yellow; }
  * </p>
  *
- *
- *
  */
 
 
@@ -98,6 +96,7 @@ goog.cssom.iframe.style.DECLARATION_START_DELIMITER_ = '{';
  * @private
  */
 goog.cssom.iframe.style.DECLARATION_END_DELIMITER_ = '}\n';
+
 
 
 /**
@@ -286,6 +285,7 @@ goog.cssom.iframe.style.makeColorRuleImportant_ = function(cssText) {
 };
 
 
+
 /**
  * Represents a single CSS selector, as described in
  * http://www.w3.org/TR/REC-CSS2/selector.html
@@ -406,6 +406,7 @@ goog.cssom.iframe.style.CssSelector_.prototype.matchElementAncestry =
 };
 
 
+
 /**
  * Represents one part of a CSS Selector. For example in the selector
  * 'body #foo .bar', body, #foo, and .bar would be considered selector parts.
@@ -490,6 +491,7 @@ goog.cssom.iframe.style.CssSelectorPart_.prototype.testElement =
   this.testedElements_[elementUid] = matched;
   return matched;
 };
+
 
 
 /**

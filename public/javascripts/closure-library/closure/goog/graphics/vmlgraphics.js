@@ -15,8 +15,6 @@
 
 /**
  * @fileoverview VmlGraphics sub class that uses VML to draw the graphics.
- *
- *
  */
 
 
@@ -40,6 +38,7 @@ goog.require('goog.graphics.VmlRectElement');
 goog.require('goog.graphics.VmlTextElement');
 goog.require('goog.math.Size');
 goog.require('goog.string');
+
 
 
 /**
@@ -66,6 +65,7 @@ goog.graphics.VmlGraphics = function(width, height,
   this.handler_ = new goog.events.EventHandler(this);
 };
 goog.inherits(goog.graphics.VmlGraphics, goog.graphics.AbstractGraphics);
+
 
 /**
  * The prefix to use for VML elements
@@ -118,6 +118,7 @@ goog.graphics.VmlGraphics.toCssSize = function(size) {
   return goog.isString(size) && goog.string.endsWith(size, '%') ?
          size : parseFloat(size.toString()) + 'px';
 };
+
 
 /**
  * Multiplies positioning coordinates by COORD_MULTIPLIER to allow sub-pixel

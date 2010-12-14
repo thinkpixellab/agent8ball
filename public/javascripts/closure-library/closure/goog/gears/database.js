@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview This file contains functions for using the Gears database.
- *
  */
 
 goog.provide('goog.gears.Database');
@@ -28,6 +27,7 @@ goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
 goog.require('goog.gears');
 goog.require('goog.json');
+
 
 
 /**
@@ -81,6 +81,7 @@ goog.gears.Database.EventType = {
   BEFOREROLLBACK: 'beforerollback',
   ROLLBACK: 'rollback'
 };
+
 
 
 /**
@@ -166,7 +167,6 @@ goog.gears.Database.BeginLevels_ = {
  */
 goog.gears.Database.prototype.currentBeginLevel_ =
     goog.gears.Database.BeginLevels_['DEFERRED'];
-
 
 
 /**
@@ -344,6 +344,7 @@ goog.gears.Database.prototype.execute = function(sql, var_args) {
     throw goog.debug.enhanceError(e, sql);
   }
 };
+
 
 /**
  * This is useful to remove all the arguments juggling from inside the
@@ -593,6 +594,7 @@ goog.gears.Database.prototype.transact = function(func) {
   return result;
 };
 
+
 /**
  * Helper that performs either a COMMIT or ROLLBACK command and dispatches
  * pre/post commit/rollback events.
@@ -645,6 +647,7 @@ goog.gears.Database.prototype.getUseTransactions = function() {
   return this.useTransactions_;
 };
 
+
 /**
  * Sets the default begin type.
  *
@@ -655,6 +658,7 @@ goog.gears.Database.prototype.setDefaultBeginType = function(beginType) {
     this.defaultBeginType_ = beginType;
   }
 };
+
 
 /**
  * Marks the beginning of a database transaction. Does a real BEGIN operation

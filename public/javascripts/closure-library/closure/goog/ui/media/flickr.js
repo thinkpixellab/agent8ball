@@ -52,7 +52,6 @@
  * </pre>
  *
  *
- *
  * @supported IE6, FF2+, Safari. Requires flash to actually work.
  *
  * TODO(user): Support non flash users. Maybe show a link to the Flick set,
@@ -69,6 +68,7 @@ goog.require('goog.ui.media.Media');
 goog.require('goog.ui.media.MediaModel');
 goog.require('goog.ui.media.MediaModel.Player');
 goog.require('goog.ui.media.MediaRenderer');
+
 
 
 /**
@@ -188,6 +188,7 @@ goog.ui.media.FlickrSet.prototype.createDom = function(control) {
 goog.ui.media.FlickrSet.prototype.getCssClass = function() {
   return goog.ui.media.FlickrSet.CSS_CLASS;
 };
+
 
 
 /**

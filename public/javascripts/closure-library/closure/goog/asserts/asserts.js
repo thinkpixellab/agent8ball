@@ -31,8 +31,6 @@
  * The compiler will leave in foo() (because its return value is used),
  * but it will remove bar() because it assumes it does not have side-effects.
  *
- *
- * @author agrieve@google.com (Andrew Grieve)
  */
 
 goog.provide('goog.asserts');
@@ -41,10 +39,12 @@ goog.provide('goog.asserts.AssertionError');
 goog.require('goog.debug.Error');
 goog.require('goog.string');
 
+
 /**
  * @define {boolean} Whether to strip out asserts or to leave them in.
  */
 goog.asserts.ENABLE_ASSERTS = goog.DEBUG;
+
 
 
 /**

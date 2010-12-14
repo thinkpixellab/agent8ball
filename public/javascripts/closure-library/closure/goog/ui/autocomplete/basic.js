@@ -16,7 +16,6 @@
  * @fileoverview Factory class to create a simple autocomplete that will match
  * from an array of data.
  *
- *
  * @see ../../demos/autocomplete-basic.html
  */
 
@@ -26,6 +25,7 @@ goog.require('goog.ui.AutoComplete');
 goog.require('goog.ui.AutoComplete.ArrayMatcher');
 goog.require('goog.ui.AutoComplete.InputHandler');
 goog.require('goog.ui.AutoComplete.Renderer');
+
 
 
 /**

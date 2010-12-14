@@ -15,7 +15,6 @@
 /**
  * @fileoverview Advanced tooltip widget implementation.
  *
- *
  * @see ../demos/advancedtooltip.html
  */
 
@@ -25,6 +24,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.math.Coordinate');
 goog.require('goog.ui.Tooltip');
 goog.require('goog.userAgent');
+
 
 
 /**

@@ -14,11 +14,11 @@
 
 /**
  * @fileoverview A utility class for representing two-dimensional positions.
- *
  */
 
 
 goog.provide('goog.math.Coordinate');
+
 
 
 /**

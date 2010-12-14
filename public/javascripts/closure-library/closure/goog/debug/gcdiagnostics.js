@@ -15,8 +15,6 @@
 /**
  * @fileoverview Definition of the GcDiagnostics class.
  *
- *
- *
  */
 
 goog.provide('goog.debug.GcDiagnostics');
@@ -24,6 +22,8 @@ goog.provide('goog.debug.GcDiagnostics');
 goog.require('goog.debug.Logger');
 goog.require('goog.debug.Trace');
 goog.require('goog.userAgent');
+
+
 
 /**
  * Class used for singleton goog.debug.GcDiagnostics.  Used to hook into
@@ -38,6 +38,7 @@ goog.require('goog.userAgent');
  * @private
  */
 goog.debug.GcDiagnostics_ = function() {};
+
 
 /**
  * Install the GcDiagnostics tool.
@@ -71,6 +72,7 @@ goog.debug.GcDiagnostics_.prototype.install = function() {
   }
 };
 
+
 /**
  * Logger for the gcDiagnotics
  * @type {goog.debug.Logger}
@@ -78,6 +80,7 @@ goog.debug.GcDiagnostics_.prototype.install = function() {
  */
 goog.debug.GcDiagnostics_.prototype.logger_ =
     goog.debug.Logger.getLogger('goog.debug.GcDiagnostics');
+
 
 /**
  * Starts recording garbage collection information.  If a trace is already in
@@ -91,6 +94,7 @@ goog.debug.GcDiagnostics_.prototype.start = function() {
     this.gcTracer_['startGcTracing']();
   }
 };
+
 
 /**
  * Stops recording garbage collection information.  Logs details on the garbage

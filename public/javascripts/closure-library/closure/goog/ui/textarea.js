@@ -19,7 +19,6 @@
  * modifications to support native (when available) textarea resizing and
  * minHeight and maxHeight enforcement.
  *
- *
  * @see ../demos/textarea.html
  */
 
@@ -33,6 +32,7 @@ goog.require('goog.ui.Control');
 goog.require('goog.ui.TextareaRenderer');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
+
 
 
 /**
@@ -100,7 +100,6 @@ goog.ui.Textarea.prototype.maxHeight_ = 0;
  * @private
  */
 goog.ui.Textarea.prototype.minHeight_ = 0;
-
 
 
 /**

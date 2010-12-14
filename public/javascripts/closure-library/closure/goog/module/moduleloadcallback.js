@@ -16,16 +16,13 @@
  * @fileoverview A simple callback mechanism for notification about module
  * loads. Should be considered package-private to goog.module.
  *
- *
- *
- *
- *
  */
 
 goog.provide('goog.module.ModuleLoadCallback');
 
 goog.require('goog.debug.entryPointRegistry');
 goog.require('goog.debug.errorHandlerWeakDep');
+
 
 
 /**

@@ -18,7 +18,6 @@
  * handling and child management, based on a generalized version of
  * {@link goog.ui.Menu}.
  *
- *
  * @see ../demos/container.html
  */
 // TODO(user):  Fix code/logic duplication between this and goog.ui.Control.
@@ -41,6 +40,8 @@ goog.require('goog.ui.Component.Error');
 goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.Component.State');
 goog.require('goog.ui.ContainerRenderer');
+
+
 
 /**
  * Base class for containers.  Extends {@link goog.ui.Component} by adding

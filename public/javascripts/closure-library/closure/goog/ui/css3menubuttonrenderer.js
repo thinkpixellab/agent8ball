@@ -23,9 +23,6 @@
  *
  * Tested and verified to work in Gecko 1.9.2+ and WebKit 528+.
  *
- *
- *
- *
  * @see ../demos/css3menubutton.html
  */
 
@@ -38,6 +35,7 @@ goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.MenuButtonRenderer');
 goog.require('goog.ui.registry');
+
 
 
 /**
@@ -120,7 +118,6 @@ goog.ui.Css3MenuButtonRenderer.prototype.createButton = function(content, dom) {
       dom.createDom('div', [goog.getCssName(baseClass, 'dropdown'),
                             goog.getCssName('goog-inline-block')]));
 };
-
 
 
 /**

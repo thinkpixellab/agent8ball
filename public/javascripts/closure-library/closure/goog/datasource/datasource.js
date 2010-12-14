@@ -15,8 +15,8 @@
 /**
  * @fileoverview Generic rich data access API.
  *
- * See http://wiki/Main/ClientDataSource
- *
+ * Abstraction for data sources that allows listening for changes at different
+ * levels of the data tree and updating the data via XHR requests
  *
  */
 
@@ -33,6 +33,7 @@ goog.provide('goog.ds.logger');
 
 goog.require('goog.array');
 goog.require('goog.debug.Logger');
+
 
 
 /**
@@ -52,6 +53,7 @@ goog.ds.DataNode = function() {};
  * @return {Object} The value of the node, or null if no value.
  */
 goog.ds.DataNode.prototype.get = goog.nullFunction;
+
 
 /**
  * Set the value of the node
@@ -151,6 +153,7 @@ goog.ds.LoadState = {
   FAILED: 'FAILED',
   NOT_LOADED: 'NOT_LOADED'
 };
+
 
 
 /**

@@ -15,7 +15,6 @@
 /**
  * @fileoverview Predefined DHTML animations such as slide, resize and fade.
  *
- *
  * @see ../demos/effects.html
  */
 
@@ -41,6 +40,7 @@ goog.require('goog.events');
 goog.require('goog.fx.Animation');
 goog.require('goog.fx.Animation.EventType');
 goog.require('goog.style');
+
 
 
 /**
@@ -435,6 +435,7 @@ goog.fx.dom.FadeIn = function(element, time, opt_acc) {
 goog.inherits(goog.fx.dom.FadeIn, goog.fx.dom.Fade);
 
 
+
 /**
  * Fades an element out from full opacity to completely transparent and then
  * sets the display to 'none'
@@ -511,6 +512,7 @@ goog.fx.dom.BgColorTransform = function(element, start, end, time, opt_acc) {
 };
 goog.inherits(goog.fx.dom.BgColorTransform, goog.fx.dom.PredefinedEffect);
 
+
 /**
  * Animation event handler that will set the background-color of an element
  */
@@ -558,6 +560,7 @@ goog.fx.dom.bgColorFadeIn = function(element, start, time) {
   });
   anim.play();
 };
+
 
 
 /**

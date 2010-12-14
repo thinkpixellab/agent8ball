@@ -18,8 +18,8 @@
  * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
  *
  * @author robbyw@google.com (Robby Walker)
- *
- *
+ * @author ojan@google.com (Ojan Vafai)
+ * @author jparent@google.com (Julie Parent)
  */
 
 
@@ -36,6 +36,7 @@ goog.require('goog.dom.browserrange.AbstractRange');
 goog.require('goog.iter');
 goog.require('goog.iter.StopIteration');
 goog.require('goog.string');
+
 
 
 /**
@@ -62,7 +63,6 @@ goog.dom.browserrange.IeRange = function(range, doc) {
 };
 goog.inherits(goog.dom.browserrange.IeRange,
     goog.dom.browserrange.AbstractRange);
-
 
 
 /**
@@ -306,7 +306,6 @@ goog.dom.browserrange.IeRange.prototype.startOffset_ = -1;
 goog.dom.browserrange.IeRange.prototype.endOffset_ = -1;
 
 
-
 /**
  * @return {goog.dom.browserrange.IeRange} A clone of this range.
  */
@@ -432,7 +431,7 @@ goog.dom.browserrange.IeRange.prototype.findDeepestContainer_ = function(node) {
       var isNativeInRangeErratic = this.isCollapsed() && isChildRangeErratic;
 
       // In case 2 mentioned above, childRange is also collapsed. So we need to
-      // compare start of this range with both start and end of child range. 
+      // compare start of this range with both start and end of child range.
       var inChildRange = isNativeInRangeErratic ?
           (this.compareBrowserRangeEndpoints(childRange, start, start) >= 0 &&
               this.compareBrowserRangeEndpoints(childRange, start, end) <= 0) :
@@ -536,7 +535,7 @@ goog.dom.browserrange.IeRange.prototype.getEndpointNode_ = function(endpoint,
   // dom related properties like ownerDocument, parentNode, nextSibling etc
   // cause error when accessed. Therefore use the for-loop on childNodes to
   // iterate.
-  for (var j = 0, length = node.childNodes.length; j < length; j++ ) {
+  for (var j = 0, length = node.childNodes.length; j < length; j++) {
     var i = isStartEndpoint ? j : length - j - 1;
     var child = node.childNodes[i];
     var childRange;
@@ -821,6 +820,7 @@ goog.dom.browserrange.IeRange.prototype.removeContents = function() {
     }
   }
 };
+
 
 /**
  * @param {TextRange} range The range to get a dom helper for.

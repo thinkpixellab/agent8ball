@@ -23,13 +23,13 @@
  *
  * Based on http://webfx.eae.net/dhtml/slider/js/range.js
  *
- *
  */
 
 goog.provide('goog.ui.RangeModel');
 
 goog.require('goog.events.EventTarget');
 goog.require('goog.ui.Component.EventType');
+
 
 
 /**

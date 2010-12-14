@@ -32,6 +32,7 @@ goog.require('goog.functions');
 goog.require('goog.ui.Component');
 
 
+
 /**
  * A table sorter allows for sorting of a table by column.  This component can
  * be used to decorate an already existing TABLE element with sorting
@@ -171,7 +172,8 @@ goog.ui.TableSorter.prototype.setSortFunction = function(column, sortFunction) {
 goog.ui.TableSorter.prototype.sort_ = function(e) {
   // Determine what column was clicked.
   // TODO(robbyw): If this table cell contains another table, this could break.
-  var th = goog.dom.getAncestorByTagNameAndClass(e.target,
+  var target = /** @type {Node} */ (e.target);
+  var th = goog.dom.getAncestorByTagNameAndClass(target,
       goog.dom.TagName.TH);
   var col = th.cellIndex;
 

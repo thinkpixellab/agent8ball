@@ -15,7 +15,6 @@
 /**
  * @fileoverview Base class for bubble plugins.
  *
- *
  */
 
 goog.provide('goog.editor.plugins.LinkBubble');
@@ -32,6 +31,7 @@ goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.ui.editor.messages');
 goog.require('goog.window');
+
 
 
 /**
@@ -434,6 +434,7 @@ goog.editor.plugins.LinkBubble.prototype.getTestLinkAction_ = function() {
   var targetUrl = this.getTargetUrl();
   return this.testLinkUrlFn_ ? this.testLinkUrlFn_(targetUrl) : targetUrl;
 };
+
 
 
 /**

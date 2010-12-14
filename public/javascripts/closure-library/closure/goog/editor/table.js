@@ -21,7 +21,6 @@
  * and merging and splitting cells.
  *
  * @supported IE6+, WebKit 525+, Firefox 2+.
- *
  */
 
 goog.provide('goog.editor.Table');
@@ -34,6 +33,7 @@ goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
 goog.require('goog.string.Unicode');
 goog.require('goog.style');
+
 
 
 /**
@@ -412,6 +412,7 @@ goog.editor.Table.prototype.createEmptyTd = function() {
 };
 
 
+
 /**
  * Class representing a logical table row: a tr element and any cells
  * that appear in that row.
@@ -424,6 +425,7 @@ goog.editor.TableRow = function(trElement, rowIndex) {
   this.element = trElement;
   this.columns = [];
 };
+
 
 
 /**

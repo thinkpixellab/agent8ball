@@ -20,7 +20,7 @@
  * be used directly.
  *
  * @author robbyw@google.com (Robby Walker)
- *
+ * @author tildahl@google.com (Michael Tildahl)
  */
 
 goog.provide('goog.ui.editor.Bubble');
@@ -39,6 +39,7 @@ goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.PopupBase');
 goog.require('goog.ui.PopupBase.EventType');
 goog.require('goog.userAgent');
+
 
 
 /**
@@ -463,6 +464,7 @@ goog.ui.editor.Bubble.prototype.positionAtAnchor_ = function(
       targetElement, targetCorner, this.bubbleContainer_,
       bubbleCorner, null, goog.ui.editor.Bubble.MARGIN_BOX_, overflow);
 };
+
 
 
 /**

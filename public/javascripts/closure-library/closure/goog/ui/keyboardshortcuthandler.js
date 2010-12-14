@@ -15,7 +15,6 @@
 /**
  * @fileoverview Generic keyboard shortcut handler.
  *
- *
  * @see ../demos/keyboardshortcuts.html
  */
 
@@ -31,6 +30,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyNames');
 goog.require('goog.object');
+
 
 
 /**
@@ -654,6 +654,7 @@ goog.ui.KeyboardShortcutHandler.prototype.isPossiblePrintableKey_ =
       e.ctrlKey && e.altKey && !e.shiftKey;
 };
 
+
 /**
  * Handler for when a keypress event is fired on Windows.
  * @param {goog.events.BrowserEvent} e The key event.
@@ -881,13 +882,14 @@ goog.ui.KeyboardShortcutHandler.prototype.handleKeyDown_ = function(event) {
     var types = goog.ui.KeyboardShortcutHandler.EventType;
 
     // Dispatch SHORTCUT_TRIGGERED event
+    var target = /** @type {Node} */ (event.target);
     var triggerEvent = new goog.ui.KeyboardShortcutEvent(
-        types.SHORTCUT_TRIGGERED, shortcut, event.target);
+        types.SHORTCUT_TRIGGERED, shortcut, target);
     var retVal = this.dispatchEvent(triggerEvent);
 
     // Dispatch SHORTCUT_PREFIX_<identifier> event
     var prefixEvent = new goog.ui.KeyboardShortcutEvent(
-        types.SHORTCUT_PREFIX + shortcut, shortcut, event.target);
+        types.SHORTCUT_PREFIX + shortcut, shortcut, target);
     retVal &= this.dispatchEvent(prefixEvent);
 
     // The default action is prevented if 'preventDefault' was
@@ -955,6 +957,7 @@ goog.ui.KeyboardShortcutHandler.prototype.isValidShortcut_ = function(event) {
   // Don't allow any additional shortcut keys for textareas or selects.
   return false;
 };
+
 
 
 /**

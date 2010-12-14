@@ -16,8 +16,6 @@
  * @fileoverview A class for representing items in menus.
  * @see goog.ui.Menu
  *
- *
- *
  */
 
 goog.provide('goog.ui.MenuItem');
@@ -27,6 +25,7 @@ goog.require('goog.ui.Control');
 goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.MenuItemRenderer');
 goog.require('goog.ui.registry');
+
 
 
 /**

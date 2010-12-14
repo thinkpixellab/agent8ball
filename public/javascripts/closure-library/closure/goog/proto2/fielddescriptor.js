@@ -14,13 +14,13 @@
 
 /**
  * @fileoverview Protocol Buffer Field Descriptor class.
- *
  */
 
 goog.provide('goog.proto2.FieldDescriptor');
 
 goog.require('goog.proto2.Util');
 goog.require('goog.string');
+
 
 
 /**
@@ -183,12 +183,19 @@ goog.proto2.FieldDescriptor.prototype.getNativeType = function() {
  * @return {goog.proto2.Descriptor} The message descriptor.
  */
 goog.proto2.FieldDescriptor.prototype.getFieldMessageType = function() {
-  goog.proto2.Util.assert(
-      this.fieldType_ == goog.proto2.Message.FieldType.MESSAGE ||
-      this.fieldType_ == goog.proto2.Message.FieldType.GROUP,
-      'Expected message or group');
+  goog.proto2.Util.assert(this.isCompositeType(), 'Expected message or group');
 
   return this.nativeType_.descriptor_;
+};
+
+
+/**
+ * @return {boolean} True if the field stores composite data or repeated
+ *     composite data (message or group).
+ */
+goog.proto2.FieldDescriptor.prototype.isCompositeType = function() {
+  return this.fieldType_ == goog.proto2.Message.FieldType.MESSAGE ||
+      this.fieldType_ == goog.proto2.Message.FieldType.GROUP;
 };
 
 

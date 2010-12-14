@@ -24,7 +24,6 @@
  * Implements DataNode to provide the top element in a data registry
  * Prepends '$' to top level data names in path to denote they are root object
  *
- *
  */
 goog.provide('goog.ds.DataManager');
 
@@ -34,6 +33,7 @@ goog.require('goog.ds.Expr');
 goog.require('goog.string');
 goog.require('goog.structs');
 goog.require('goog.structs.Map');
+
 
 
 /**
@@ -488,6 +488,7 @@ goog.ds.DataManager.prototype.getListenerCount = function() {
   });
   return count;
 };
+
 
 /**
  * Disables the sending of all data events during the execution of the given

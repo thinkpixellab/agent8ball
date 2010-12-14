@@ -15,7 +15,6 @@
 
 /**
  * @fileoverview Gauge UI component, using browser vector graphics.
- *
  * @see ../demos/gauge.html
  */
 
@@ -33,6 +32,7 @@ goog.require('goog.graphics.Font');
 goog.require('goog.graphics.SolidFill');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.GaugeTheme');
+
 
 
 /**
@@ -65,6 +65,7 @@ goog.ui.GaugeColoredRange = function(fromValue, toValue, backgroundColor) {
    */
   this.backgroundColor = backgroundColor;
 };
+
 
 
 /**

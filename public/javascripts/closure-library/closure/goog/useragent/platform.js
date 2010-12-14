@@ -14,12 +14,12 @@
 
 /**
  * @fileoverview Utilities for getting details about the user's platform.
- *
  */
 
 goog.provide('goog.userAgent.platform');
 
 goog.require('goog.userAgent');
+
 
 /**
  * Detects the version of Windows or Mac OS that is running.

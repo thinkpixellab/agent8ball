@@ -16,7 +16,6 @@
  * @fileoverview A combo box control that allows user input with
  * auto-suggestion from a limited set of options.
  *
- *
  * @see ../demos/combobox.html
  */
 
@@ -39,6 +38,7 @@ goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.registry');
 goog.require('goog.userAgent');
+
 
 
 /**
@@ -591,7 +591,7 @@ goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
   // We only want this event on the element itself or the input or the button.
   if (this.enabled_ &&
       (e.target == this.getElement() || e.target == this.input_ ||
-       goog.dom.contains(this.button_, e.target))) {
+       goog.dom.contains(this.button_, /** @type {Node} */ (e.target)))) {
     if (this.menu_.isVisible()) {
       this.logger_.fine('Menu is visible, dismissing');
       this.dismiss();
@@ -619,7 +619,8 @@ goog.ui.ComboBox.prototype.onComboMouseDown_ = function(e) {
  * @private
  */
 goog.ui.ComboBox.prototype.onDocClicked_ = function(e) {
-  if (!goog.dom.contains(this.menu_.getElement(), e.target)) {
+  if (!goog.dom.contains(
+           this.menu_.getElement(), /** @type {Node} */ (e.target))) {
     this.logger_.info('onDocClicked_() - dismissing immediately');
     this.dismiss();
   }

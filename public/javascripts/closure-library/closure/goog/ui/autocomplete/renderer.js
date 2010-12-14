@@ -16,7 +16,6 @@
  * @fileoverview Class for rendering the results of an auto complete and
  * allow the user to select an row.
  *
- *
  */
 
 goog.provide('goog.ui.AutoComplete.Renderer');
@@ -33,6 +32,7 @@ goog.require('goog.style');
 goog.require('goog.ui.AutoComplete');
 goog.require('goog.ui.IdGenerator');
 goog.require('goog.userAgent');
+
 
 
 /**
@@ -385,7 +385,7 @@ goog.ui.AutoComplete.Renderer.prototype.maybeCreateElement_ = function() {
     this.setMenuClasses_(el);
     goog.dom.a11y.setRole(el, goog.dom.a11y.Role.LISTBOX);
 
-    var id = el.id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
+    el.id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
 
     // Set ARIA roles and states for the target input box.
     if (this.target_) {

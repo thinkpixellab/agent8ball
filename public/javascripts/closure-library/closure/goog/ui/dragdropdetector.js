@@ -16,7 +16,7 @@
  * @fileoverview Detects images dragged and dropped on to the window.
  *
  * @author robbyw@google.com (Robby Walker)
- *
+ * @author wcrosby@google.com (Wayne Crosby)
  */
 
 goog.provide('goog.ui.DragDropDetector');
@@ -39,9 +39,9 @@ goog.require('goog.userAgent');
 
 /**
  * Creates a new drag and drop detector.
- * @param {string} opt_filePath The URL of the page to use for the detector.  It
- *     should contain the same contents as dragdropdetector_target.html in the
- *     demos directory.
+ * @param {string=} opt_filePath The URL of the page to use for the detector.
+ *     It should contain the same contents as dragdropdetector_target.html in
+ *     the demos directory.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
@@ -455,7 +455,7 @@ goog.ui.DragDropDetector.prototype.trackMouse_ = function(e) {
   this.mousePosition_.y = e.clientY;
 
   // Check if the event is coming from within the iframe.
-  if (goog.dom.getOwnerDocument(e.target) != document) {
+  if (goog.dom.getOwnerDocument(/** @type {Node} */ (e.target)) != document) {
     var iframePosition = goog.style.getClientPosition(this.element_);
     this.mousePosition_.x += iframePosition.x;
     this.mousePosition_.y += iframePosition.y;

@@ -19,7 +19,6 @@
  * Testing code should not have dependencies outside of goog.testing so as to
  * reduce the chance of masking missing dependencies.
  *
- *
  */
 
 goog.provide('goog.testing.jsunit');
@@ -101,7 +100,7 @@ goog.testing.jsunit.AUTO_RUN_ONLOAD = true;
     window.onerror = function(error, url, line) {
       // Call any existing onerror handlers.
       if (onerror) {
-        onerror();
+        onerror(error, url, line);
       }
       if (typeof error == 'object') {
         // Webkit started passing an event object as the only argument to

@@ -17,7 +17,6 @@
  * animations.  AnimationParallelQueue and AnimationSerialQueue provide
  * specific implementations of the abstract class AnimationQueue.
  *
- *
  * @see ../demos/animationqueue.html
  */
 
@@ -29,6 +28,8 @@ goog.require('goog.array');
 goog.require('goog.events.EventHandler');
 goog.require('goog.fx.Animation');
 goog.require('goog.fx.Animation.EventType');
+
+
 
 /**
  * Constructor for AnimationQueue object.
@@ -232,7 +233,6 @@ goog.inherits(goog.fx.AnimationSerialQueue, goog.fx.AnimationQueue);
  * @private
  */
 goog.fx.AnimationSerialQueue.prototype.counter_ = 0;
-
 
 
 /**

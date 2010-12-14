@@ -15,7 +15,6 @@
 /**
  * @fileoverview Date picker implementation.
  *
- *
  * @see ../demos/datepicker.html
  */
 
@@ -38,6 +37,7 @@ goog.require('goog.i18n.DateTimeFormat');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
+
 
 
 /**

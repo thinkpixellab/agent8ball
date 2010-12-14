@@ -27,10 +27,6 @@
  * internal representation is now of un-encoded parts, this will change the
  * behavior slightly.
  *
- *
- *
- *
- *
  */
 
 goog.provide('goog.Uri');
@@ -42,6 +38,7 @@ goog.require('goog.structs');
 goog.require('goog.structs.Map');
 goog.require('goog.uri.utils');
 goog.require('goog.uri.utils.ComponentIndex');
+
 
 
 /**
@@ -1016,7 +1013,6 @@ goog.Uri.haveSameDomain = function(uri1String, uri2String) {
          pieces1[goog.uri.utils.ComponentIndex.PORT] ==
              pieces2[goog.uri.utils.ComponentIndex.PORT];
 };
-
 
 
 

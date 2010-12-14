@@ -15,8 +15,6 @@
 /**
  * @fileoverview Provides functions to parse and manipulate email addresses.
  *
- *
- *
  */
 
 goog.provide('goog.format.EmailAddress');
@@ -82,7 +80,7 @@ goog.format.EmailAddress.ALL_DOUBLE_QUOTES_ = /\"/g;
 
 
 /**
- * A RegExp to match escaped double quotes.  Used in parseAddress().
+ * A RegExp to match escaped double quotes.  Used in parse().
  * @type {RegExp}
  * @private
  */
@@ -98,7 +96,7 @@ goog.format.EmailAddress.ALL_BACKSLASHES_ = /\\/g;
 
 
 /**
- * A RegExp to match escaped backslashes.  Used in parseAddress().
+ * A RegExp to match escaped backslashes.  Used in parse().
  * @type {RegExp}
  * @private
  */

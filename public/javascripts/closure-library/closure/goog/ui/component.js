@@ -16,11 +16,8 @@
  * @fileoverview Abstract class for all UI components. This defines the standard
  * design pattern that all UI components should follow.
  *
- *
- *
- *
- *
  * @see ../demos/samplecomponent.html
+ * @see http://code.google.com/p/closure-library/wiki/IntroToComponents
  */
 
 goog.provide('goog.ui.Component');
@@ -38,6 +35,7 @@ goog.require('goog.events.EventTarget');
 goog.require('goog.object');
 goog.require('goog.style');
 goog.require('goog.ui.IdGenerator');
+
 
 
 /**
@@ -475,6 +473,11 @@ goog.ui.Component.prototype.getElement = function() {
 /**
  * Sets the component's root element to the given element.  Considered
  * protected and final.
+ *
+ * This should generally only be called during createDom. Setting the element
+ * does not actually change which element is rendered, only the element that is
+ * associated with this UI component.
+ *
  * @param {Element} element Root element for the component.
  * @protected
  */

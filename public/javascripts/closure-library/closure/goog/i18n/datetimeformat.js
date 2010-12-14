@@ -14,7 +14,6 @@
 
 /**
  * @fileoverview Functions for dealing with date/time formatting.
- *
  */
 
 
@@ -22,6 +21,7 @@
  * Namespace for i18n date/time formatting functions
  */
 goog.provide('goog.i18n.DateTimeFormat');
+goog.provide('goog.i18n.DateTimeFormat.Format');
 
 goog.require('goog.asserts');
 goog.require('goog.date.DateLike');
@@ -88,6 +88,7 @@ goog.require('goog.string');
  * not embraced within single quotes.
  * </pre>
  */
+
 
 
 /**

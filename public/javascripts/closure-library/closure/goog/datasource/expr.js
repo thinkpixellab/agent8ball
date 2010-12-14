@@ -29,7 +29,6 @@
  *    provided as a flag for client code which may ignore depending on usage
  * - If expression has [INDEX], will use getChildNodes().getByIndex(INDEX)
  *
- *
  */
 
 
@@ -38,6 +37,7 @@ goog.provide('goog.ds.Expr');
 goog.require('goog.ds.BasicNodeList');
 goog.require('goog.ds.EmptyNodeList');
 goog.require('goog.string');
+
 
 
 /**
@@ -497,11 +497,13 @@ goog.ds.Expr.String_ = {
  * Standard expressions
  */
 
+
 /**
  * The current node
  */
 goog.ds.Expr.CURRENT = goog.ds.Expr.create(
     goog.ds.Expr.String_.CURRENT_NODE_EXPR);
+
 
 /**
  * For DOM interop - all DOM child nodes (text + element).
@@ -510,11 +512,13 @@ goog.ds.Expr.CURRENT = goog.ds.Expr.create(
 goog.ds.Expr.ALL_CHILD_NODES =
     goog.ds.Expr.create(goog.ds.Expr.String_.ALL_CHILD_NODES_EXPR);
 
+
 /**
  * For DOM interop - all DOM element child nodes
  */
 goog.ds.Expr.ALL_ELEMENTS =
     goog.ds.Expr.create(goog.ds.Expr.String_.ALL_ELEMENTS_EXPR);
+
 
 /**
  * For DOM interop - all DOM attribute nodes
@@ -523,15 +527,18 @@ goog.ds.Expr.ALL_ELEMENTS =
 goog.ds.Expr.ALL_ATTRIBUTES =
     goog.ds.Expr.create(goog.ds.Expr.String_.ALL_ATTRIBUTES_EXPR);
 
+
 /**
  * Get the dataName of a node
  */
 goog.ds.Expr.NAME = goog.ds.Expr.create(goog.ds.Expr.String_.NAME_EXPR);
 
+
 /**
  * Get the count of nodes matching an expression
  */
 goog.ds.Expr.COUNT = goog.ds.Expr.create(goog.ds.Expr.String_.COUNT_EXPR);
+
 
 /**
  * Get the position of the "current" node in the current node list

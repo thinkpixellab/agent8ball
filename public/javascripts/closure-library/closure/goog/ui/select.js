@@ -17,7 +17,6 @@
  * with semantics similar to the native HTML <code>&lt;select&gt;</code>
  * element.
  *
- *
  * @see ../demos/select.html
  */
 
@@ -29,6 +28,7 @@ goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.SelectionModel');
 goog.require('goog.ui.registry');
+
 
 
 /**

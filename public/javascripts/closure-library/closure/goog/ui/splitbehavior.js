@@ -15,7 +15,6 @@
 /**
  * @fileoverview Behavior for combining two controls.
  *
- *
  * @see ../demos/split.html
  */
 
@@ -38,6 +37,7 @@ goog.require('goog.ui.Component.Error');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.decorate');
 goog.require('goog.ui.registry');
+
 
 
 /**

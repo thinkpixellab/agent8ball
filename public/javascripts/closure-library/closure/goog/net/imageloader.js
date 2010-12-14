@@ -16,8 +16,6 @@
  * @fileoverview Image loader utility class.  Useful when an application needs
  * to preload multiple images, for example so they can be sized.
  *
- *
- *
  */
 
 goog.provide('goog.net.ImageLoader');
@@ -29,6 +27,8 @@ goog.require('goog.events.EventType');
 goog.require('goog.net.EventType');
 goog.require('goog.object');
 goog.require('goog.userAgent');
+
+
 
 /**
  * Image loader utility class.  Raises a {@link goog.events.EventType.LOAD}

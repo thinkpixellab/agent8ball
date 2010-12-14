@@ -16,8 +16,6 @@
  * @fileoverview Datastructure: Pool.
  *
  *
- *
- *
  * A generic class for handling pools of objects.
  * When an object is released, it is attempted to be reused.
  */
@@ -28,6 +26,7 @@ goog.provide('goog.structs.Pool');
 goog.require('goog.Disposable');
 goog.require('goog.structs.Queue');
 goog.require('goog.structs.Set');
+
 
 
 /**

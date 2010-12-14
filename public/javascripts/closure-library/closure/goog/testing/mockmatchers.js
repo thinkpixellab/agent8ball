@@ -19,7 +19,6 @@
  *
  * For examples, please see the unit test.
  *
- *
  */
 
 
@@ -35,6 +34,7 @@ goog.provide('goog.testing.mockmatchers.TypeOf');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.testing.asserts');
+
 
 
 /**
@@ -96,6 +96,7 @@ goog.testing.mockmatchers.ArgumentMatcher.prototype.matches =
 };
 
 
+
 /**
  * A matcher that verifies that an argument is an instance of a given class.
  * @param {Function} ctor The class that will be used for verification.
@@ -116,6 +117,7 @@ goog.inherits(goog.testing.mockmatchers.InstanceOf,
     goog.testing.mockmatchers.ArgumentMatcher);
 
 
+
 /**
  * A matcher that verifies that an argument is of a given type (e.g. "object").
  * @param {string} type The type that a given argument must have.
@@ -130,6 +132,7 @@ goog.testing.mockmatchers.TypeOf = function(type) {
 };
 goog.inherits(goog.testing.mockmatchers.TypeOf,
     goog.testing.mockmatchers.ArgumentMatcher);
+
 
 
 /**
@@ -148,6 +151,7 @@ goog.inherits(goog.testing.mockmatchers.RegexpMatch,
     goog.testing.mockmatchers.ArgumentMatcher);
 
 
+
 /**
  * A matcher that always returns true. It is useful when the user does not care
  * for some arguments.
@@ -163,6 +167,7 @@ goog.testing.mockmatchers.IgnoreArgument = function() {
 };
 goog.inherits(goog.testing.mockmatchers.IgnoreArgument,
     goog.testing.mockmatchers.ArgumentMatcher);
+
 
 
 /**
@@ -200,6 +205,7 @@ goog.testing.mockmatchers.ObjectEquals.prototype.matches =
     return false;
   }
 };
+
 
 
 /**

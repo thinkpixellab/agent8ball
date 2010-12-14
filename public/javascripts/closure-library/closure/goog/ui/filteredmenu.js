@@ -16,7 +16,6 @@
  * @fileoverview Menu where items can be filtered based on user keyboard input.
  * If a filter is specified only the items matching it will be displayed.
  *
- *
  * @see ../demos/filteredmenu.html
  */
 
@@ -30,6 +29,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.string');
 goog.require('goog.ui.FilterObservingMenuItem');
 goog.require('goog.ui.Menu');
+
 
 
 /**
@@ -63,12 +63,14 @@ goog.ui.FilteredMenu.EventType = {
  */
 goog.ui.FilteredMenu.prototype.filterInput_;
 
+
 /**
  * The input handler that provides the input event.
  * @type {goog.events.InputHandler|undefined}
  * @private
  */
 goog.ui.FilteredMenu.prototype.inputHandler_;
+
 
 /**
  * Maximum number of characters for filter input.
@@ -77,12 +79,14 @@ goog.ui.FilteredMenu.prototype.inputHandler_;
  */
 goog.ui.FilteredMenu.prototype.maxLength_ = 0;
 
+
 /**
  * Label displayed in the filter input when no text has been entered.
  * @type {string}
  * @private
  */
 goog.ui.FilteredMenu.prototype.label_ = '';
+
 
 /**
  * Label element.
@@ -91,6 +95,7 @@ goog.ui.FilteredMenu.prototype.label_ = '';
  */
 goog.ui.FilteredMenu.prototype.labelEl_;
 
+
 /**
  * Whether multiple items can be entered comma separated.
  * @type {boolean}
@@ -98,12 +103,14 @@ goog.ui.FilteredMenu.prototype.labelEl_;
  */
 goog.ui.FilteredMenu.prototype.allowMultiple_ = false;
 
+
 /**
  * List of items entered in the search box if multiple entries are allowed.
  * @type {Array.<string>|undefined}
  * @private
  */
 goog.ui.FilteredMenu.prototype.enteredItems_;
+
 
 /**
  * Index of first item that should be affected by the filter. Menu items with
@@ -275,7 +282,6 @@ goog.ui.FilteredMenu.prototype.getFilter = function() {
   return this.filterInput_ && goog.isString(this.filterInput_.value) ?
       this.filterInput_.value : '';
 };
-
 
 
 /**

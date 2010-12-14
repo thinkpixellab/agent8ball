@@ -15,7 +15,6 @@
 /**
  * @fileoverview Class definition for a rounded corner panel.
  * @supported IE 6.0+, Safari 2.0+, Firefox 1.5+, Opera 9.2+.
- *
  * @see ../demos/roundedpanel.html
  */
 
@@ -110,6 +109,7 @@ goog.ui.RoundedPanel.Classes_ = {
   PANEL: goog.getCssName('goog-roundedpanel'),
   CONTENT: goog.getCssName('goog-roundedpanel-content')
 };
+
 
 
 /**
@@ -244,6 +244,7 @@ goog.ui.BaseRoundedPanel.prototype.getContentElement = function() {
 };
 
 
+
 /**
  * RoundedPanel class specifically for browsers that support CSS attributes
  * for elements with rounded borders (ex. Safari 3.0+, Firefox 3.0+). Do not
@@ -366,6 +367,7 @@ goog.ui.CssRoundedPanel.prototype.getStyle_ = function(corner) {
       'WebkitBorder' + cssCorner + 'Radius' :
       'MozBorderRadius' + cssCorner;
 };
+
 
 
 /**

@@ -16,14 +16,13 @@
 /**
  * @fileoverview A thin wrapper around the DOM element for elements with a
  * stroke and fill.
- *
- *
  */
 
 
 goog.provide('goog.graphics.StrokeAndFillElement');
 
 goog.require('goog.graphics.Element');
+
 
 
 /**
