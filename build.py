@@ -10,7 +10,6 @@ closure_path = path.join(js_path, 'closure-library','closure')
 
 externs = path.join(js_path, 'externs', '*.js')
 externs = glob.glob(externs)
-externs += [path.join('_tools', 'externs', 'jquery-1.4.3.externs.js')]
 
 loader_js_path = path.join(js_path, 'loader.js')
 deps_path = path.join(js_path, 'deps.js')
