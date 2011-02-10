@@ -499,6 +499,8 @@ eightball.Application = function(opt_skipGraphics) {
   $('#soundsbuttonclick').click(function() {
     soundManager.toggleSound();
   });
+
+  eightball.Application._showBrowserMessage();
 };
 
 /**
@@ -555,6 +557,103 @@ eightball.Application._getFacebookShareUrl = function(score) {
 eightball.Application._getTwitterShareUrl = function(score) {
   var status = goog.string.format(eightball.Application.s_twitterStatusText, score, eightball.Application.s_appUrl);
   return goog.string.format(eightball.Application.s_twitterShareUrl, escape(status));
+};
+
+eightball.Application._showBrowserMessage = function() {
+  if(!goog.userAgent.WINDOWS){
+    return;
+  }
+
+  var message = 'Hey there! ';
+
+  var isModern = false;
+  var isWin7 = (navigator.userAgent.indexOf('Windows NT 6') != -1);
+  var isIE9 = false;
+  var isIE = false;
+  var isChrome = false;
+  var isOpera = false;
+  var isSafari = false;
+  var isFirefox = false;
+  var browserVersion = 0;
+
+  var version;
+  if (version = /MSIE (\d+\.\d+)/.exec(navigator.userAgent)) {
+      isIE = true;
+      browserVersion = parseFloat(version[1]);
+  } else if (version = /Firefox\/(\d+\.\d+)/.exec(navigator.userAgent)) {
+      isFirefox = true;
+      browserVersion = parseFloat(version[1]);
+  } else if (version = /Chrome\/(\d+\.\d+)/.exec(navigator.userAgent)) {
+      isChrome = true;
+      browserVersion = parseFloat(version[1]);
+  } else if (version = /Opera.*Version\/(\d+\.\d+)/.exec(navigator.userAgent)) {
+      isOpera = true;
+      browserVersion = parseFloat(version[1]);
+  } else if (version = /Version\/(\d+\.\d+).*Safari/.exec(navigator.userAgent)) {
+      isSafari = true;
+      browserVersion = parseFloat(version[1]);
+  }
+
+  if (isIE && browserVersion >= 9) {
+    isIE9 = true;
+    isModern = true;
+  }
+
+  if (isChrome && browserVersion >= 7) isModern = true;
+  if (isOpera && browserVersion >= 10) isModern = true;
+  if (isSafari && browserVersion >= 5) isModern = true;
+  if (isFirefox && browserVersion >= 4) isModern = true;
+
+  if (isWin7)
+  {
+    // Vista or Win7 and older IE
+    if (isIE && !isIE9) {
+      message += 'You\'re using an older version of Internet Explorer. You should upgrade to <a target="_blank" href="http://beautyoftheweb.com">Internet Explorer 9</a> so you can start playing the game!';
+    }
+
+    // Vista or Win7 and IE9
+    else if (isIE9) {
+      return; // do nothing
+    }
+
+    // Vista or Win7 and older non-IE
+    else if (!isIE && !isModern) {
+      message += 'Looks like you\'re using an older browser. You should upgrade to <a target="_blank" href="http://beautyoftheweb.com">Internet Explorer 9</a> to get the best experience playing the game!';
+    }
+
+    // Vista or Win7 and modern non-IE
+    else if (!isIE && isModern) {
+      message += 'If you like Agent 008 Ball now, you\'ll love it with the blazing fast graphics in <a target="_blank" target="_blank" href="http://beautyoftheweb.com">Internet Explorer 9</a>. You should <a target="_blank" href="http://beautyoftheweb.com">check it out</a>!';
+    }
+  }
+  else
+  {
+    // XP and older IE
+    if (isIE && !isIE9) {
+      message += 'You\'re using an older version of Internet Explorer. You should upgrade to <a target="_blank" href="http://beautyoftheweb.com">Internet Explorer 9</a> so you can start playing the game!';
+    }
+
+    // XP or non-windows older non-IE
+    else if (!isIE && !isModern) {
+      message += 'Looks like you\'re using an older browser. You should check out <a target="_blank" href="http://beautyoftheweb.com">Internet Explorer 9</a> for Windows Vista and Windows 7.';
+    }
+
+    // XP or non-windows and modern non-IE
+    else if (!isIE && isModern) {
+      message += 'Agent 008 Ball works best with <a target="_blank" href="http://beautyoftheweb.com">Internet Explorer 9</a> for Windows Vista and Windows 7. You should <a target="_blank" href="http://beautyoftheweb.com">check it out</a>!';
+    }
+  }
+
+
+  // create the div but keep it hidden
+  $('body #browsermessage').html(message);
+
+  // fade it in
+  $('#bottombar').delay(1000).fadeIn(500);
+
+  $('#bottombar-close').click(function() {
+    $('#bottombar').fadeOut(500);
+  });
 };
 
 /**

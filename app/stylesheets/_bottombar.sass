@@ -1,0 +1,44 @@
+#bottombar
+  background: image-url('bottombar-bg.jpg')
+  height: 38px
+  width: 100%
+  z-index: 1000
+  position: fixed
+  bottom: 0px
+  display: none
+  left: 0px
+
+  #browsermessage
+    margin-top: 1px
+    margin-right: 20px
+    margin-left: 10px
+    height: 32px
+    width: 100%
+    background: image-url('bottombar-logo.jpg') no-repeat 0px 1px
+    text-align: left
+    padding-left: 38px
+    padding-top: 8px
+    padding-right: 20px
+    font-family: arial, helvetica, sans-serif
+    color: #d6a866
+    font-size: 13px
+    line-height: 17px
+    a
+      color: #da7532
+      text-decoration: none
+      &:visited, &:active
+        color: #da7532
+        text-decoration: none
+      &:hover
+        color: #ffe2b5
+        text-decoration: none
+
+  #bottombar-close
+    background: image-url('bottombar-close.jpg') no-repeat
+    width: 32px
+    height: 32px
+    cursor: pointer
+    margin-top: 2px
+    margin-right: 2px
+    float: right
+    position: relative
