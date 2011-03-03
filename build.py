@@ -22,6 +22,7 @@ js_dirs = map(lambda x: path.join(js_path, x), ['box2d','eightball','pixelLab'])
 Closure(
   closure_path = closure_path,
   application_js_path = loader_js_path,
+  root_symbol = None,
   closure_dependencies = js_dirs + [loader_js_path, application_js_path],
   deps_js_path = deps_path,
   compiled_js_path = compiled_path,
