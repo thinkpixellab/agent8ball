@@ -28,7 +28,7 @@ goog.inherits(pixelLab.KeyBinding, goog.events.EventTarget);
 /**
  @param {!string} keybinding
  @param {!string} description
- @param {function():void} action
+ @param {function():(string|undefined)} action
  */
 pixelLab.KeyBinding.prototype.add = function(keybinding, description, action) {
   var indexStr = this.m_map.length.toString();

@@ -13,7 +13,6 @@ pixelLab.Stats.addGoogleAnalytics = function(account_key) {
 
 /**
  * @param {Array.<Object>|function()} commandArray
- * @return {number}
  */
 pixelLab.Stats.gaqPush = function(commandArray) {
   if (window['_gaq'] === undefined) {
