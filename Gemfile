@@ -4,7 +4,6 @@ gem 'rails', '~>3.0'
 
 gem 'haml-rails'
 gem 'compass'
-gem 'hassle', :git => 'git://github.com/kevmoo/hassle.git', :ref => 'bd0cd41aaceb002c5'
 
 group :development do
   gem 'heroku'

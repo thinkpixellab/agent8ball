@@ -6,7 +6,7 @@
     = csrf_meta_tag
     %link{:href => image_path('thumbnail_fb.jpg'), :rel => "image_src"}/
     %link{:href => "/favicon.ico", :rel => "shortcut icon"}/
-    = stylesheet_link_tag 'compiled/screen'
+    = stylesheet_link_tag 'screen'
     - if Rails.env == 'development'
       = javascript_include_tag 'jquery-1.5.min'
     - else

@@ -1,12 +1,3 @@
-GIT
-  remote: git://github.com/kevmoo/hassle.git
-  revision: bd0cd41aaceb002c5364de37d2975d58079f469f
-  ref: bd0cd41aaceb002c5
-  specs:
-    hassle (0.0.1)
-      haml
-      rack
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -53,7 +44,7 @@ GEM
       activesupport (~> 3.0)
       haml (~> 3.0)
       railties (~> 3.0)
-    heroku (1.18.0)
+    heroku (1.18.2)
       json (~> 1.5.1)
       launchy (~> 0.3.2)
       rest-client (>= 1.4.0, < 1.7.0)
@@ -114,7 +105,6 @@ DEPENDENCIES
   awesome_print
   compass
   haml-rails
-  hassle!
   heroku
   rails (~> 3.0)
   ruby-debug19
