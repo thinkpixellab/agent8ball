@@ -26,6 +26,7 @@ goog.addDependency("../../../box2d/collision/shapes/b2Shape.js", ['box2d.Shape']
 goog.addDependency("../../../box2d/collision/shapes/b2ShapeDef.js", ['box2d.ShapeDef'], ['box2d.Vec2']);
 goog.addDependency("../../../box2d/collision/shapes/b2ShapeFactory.js", ['box2d.ShapeFactory'], ['box2d.BoxDef', 'box2d.CircleDef', 'box2d.CircleShape', 'box2d.PolyDef', 'box2d.PolyShape', 'box2d.ShapeDef']);
 goog.addDependency("../../../box2d/common/b2Settings.js", ['box2d.Settings'], []);
+goog.addDependency("../../../box2d/common/Util.js", ['box2d.Util'], []);
 goog.addDependency("../../../box2d/common/math/b2Mat22.js", ['box2d.Mat22'], []);
 goog.addDependency("../../../box2d/common/math/b2Math.js", ['box2d.Math'], ['box2d.Mat22', 'box2d.Vec2', 'goog.math']);
 goog.addDependency("../../../box2d/common/math/b2Vec2.js", ['box2d.Vec2'], ['goog.math.Vec2']);
