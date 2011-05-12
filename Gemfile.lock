@@ -38,7 +38,6 @@ GEM
       chunky_png (~> 1.1)
       fssm (>= 0.2.7)
       sass (~> 3.1)
-    configuration (1.2.0)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fssm (0.2.7)
@@ -48,14 +47,7 @@ GEM
       activesupport (~> 3.0)
       haml (~> 3.0)
       railties (~> 3.0)
-    heroku (2.1.1)
-      launchy (>= 0.3.2)
-      rest-client (~> 1.6.1)
-      term-ansicolor (~> 1.0.5)
     i18n (0.5.0)
-    launchy (0.4.0)
-      configuration (>= 0.0.5)
-      rake (>= 0.8.1)
     linecache19 (0.5.12)
       ruby_core_source (>= 0.1.4)
     mail (2.2.19)
@@ -84,8 +76,6 @@ GEM
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
-    rest-client (1.6.1)
-      mime-types (>= 1.16)
     ruby-debug-base19 (0.11.25)
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
@@ -97,7 +87,6 @@ GEM
     ruby_core_source (0.1.5)
       archive-tar-minitar (>= 0.5.2)
     sass (3.1.1)
-    term-ansicolor (1.0.5)
     thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
@@ -110,6 +99,5 @@ DEPENDENCIES
   awesome_print
   compass
   haml-rails
-  heroku
   rails (~> 3.0)
   ruby-debug19
