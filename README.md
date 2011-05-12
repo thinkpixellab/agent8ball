@@ -1,4 +1,4 @@
-### This is Agent 008 Ball
+![Agent 008 Ball!](https://github.com/thinkpixellab/agent8ball/raw/master/public/images/smalllogo.png)
 
 From your friends at [Pixel Lab](http://thinkpixellab.com)
 
