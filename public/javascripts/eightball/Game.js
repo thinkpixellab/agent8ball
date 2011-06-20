@@ -1,6 +1,4 @@
 goog.provide('eightball.Game');
-goog.provide('eightball.Game.EventType');
-goog.provide('eightball.Game.GameState');
 
 goog.require('eightball.Cookies');
 goog.require('eightball.PoolTable');

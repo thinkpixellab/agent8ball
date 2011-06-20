@@ -1,8 +1,6 @@
 goog.provide('eightball.Application');
 
 goog.require('eightball.Game');
-goog.require('eightball.Game.EventType');
-goog.require('eightball.Game.GameState');
 goog.require('eightball.Music');
 goog.require('eightball.PoolTable');
 goog.require('eightball.SoundEffectManager');
