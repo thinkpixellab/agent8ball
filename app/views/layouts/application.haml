@@ -8,11 +8,11 @@
     %link{:href => "/favicon.ico", :rel => "shortcut icon"}/
     = stylesheet_link_tag 'screen'
     - if Rails.env == 'development'
-      = javascript_include_tag 'jquery-1.5.min'
+      = javascript_include_tag 'jquery-1.6.1.min'
     - else
       :javascript
         window.doStats = true;
-      = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js'
+      = javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js'
     = yield :header
   %body
     = yield
