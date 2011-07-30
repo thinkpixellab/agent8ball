@@ -77,10 +77,10 @@ goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], [
 goog.addDependency("../../../eightball/SoundEffect.js", ['eightball.SoundEffect'], []);
 goog.addDependency("../../../eightball/SoundEffectManager.js", ['eightball.SoundEffectManager'], ['eightball.Cookies', 'eightball.SoundEffect', 'goog.events.Event', 'goog.events.EventTarget']);
 goog.addDependency("../../../eightball/Stats.js", ['eightball.Stats'], ['pixelLab.Stats']);
-goog.addDependency("../../../pixelLab/DebugDiv.js", ['pixelLab.DebugDiv'], ['goog.asserts', 'goog.debug.LogManager', 'goog.dom', 'goog.style']);
-goog.addDependency("../../../pixelLab/FpsLogger.js", ['pixelLab.FpsLogger'], []);
-goog.addDependency("../../../pixelLab/KeyBinding.js", ['pixelLab.KeyBinding', 'pixelLab.KeyBindingEvent'], ['goog.events.Event', 'goog.events.EventTarget', 'goog.ui.KeyboardShortcutHandler', 'goog.ui.KeyboardShortcutHandler.EventType']);
-goog.addDependency("../../../pixelLab/Preload.js", ['pixelLab.Preload'], ['goog.object']);
-goog.addDependency("../../../pixelLab/Stats.js", ['pixelLab.Stats'], ['goog.dom']);
+goog.addDependency("../../../pixellab/DebugDiv.js", ['pixelLab.DebugDiv'], ['goog.asserts', 'goog.debug.LogManager', 'goog.dom', 'goog.style']);
+goog.addDependency("../../../pixellab/FpsLogger.js", ['pixelLab.FpsLogger'], []);
+goog.addDependency("../../../pixellab/KeyBinding.js", ['pixelLab.KeyBinding', 'pixelLab.KeyBindingEvent'], ['goog.events.Event', 'goog.events.EventTarget', 'goog.ui.KeyboardShortcutHandler', 'goog.ui.KeyboardShortcutHandler.EventType']);
+goog.addDependency("../../../pixellab/Preload.js", ['pixelLab.Preload'], ['goog.object']);
+goog.addDependency("../../../pixellab/Stats.js", ['pixelLab.Stats'], ['goog.dom']);
 goog.addDependency("../../../loader.js", [], ['eightball.Application', 'goog.object', 'pixelLab.Preload']);
 goog.addDependency("../../../application.js", ['eightball.Application'], ['eightball.Game', 'eightball.Music', 'eightball.PoolTable', 'eightball.SoundEffectManager', 'eightball.Stats', 'goog.array', 'goog.debug.LogManager', 'goog.events', 'goog.events.EventType', 'goog.i18n.NumberFormat', 'goog.string', 'goog.string.format', 'goog.userAgent', 'pixelLab.DebugDiv', 'pixelLab.KeyBinding']);

@@ -1,0 +1,8 @@
+base_path: public/javascripts/closure-library/closure
+js_paths:
+  - public/javascripts/box2d
+  - public/javascripts/eightball
+  - public/javascripts/pixellab
+  - public/javascripts/loader.js
+  - public/javascripts/application.js
+deps_path: public/javascripts/deps.js
