@@ -1,8 +1,14 @@
 base_path: public/javascripts/closure-library/closure
+inputs:
+  - public/javascripts/loader.js
 js_paths:
+  - public/javascripts/closure-library/closure
   - public/javascripts/box2d
   - public/javascripts/eightball
   - public/javascripts/pixellab
-  - public/javascripts/loader.js
   - public/javascripts/application.js
 deps_path: public/javascripts/deps.js
+compile_path: public/javascripts/compiled.js
+externs:
+  - public/javascripts/externs/application_extern.js
+  - public/javascripts/externs/jquery-1.5.js

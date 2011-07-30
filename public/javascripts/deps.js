@@ -82,5 +82,4 @@ goog.addDependency("../../../pixellab/FpsLogger.js", ['pixelLab.FpsLogger'], [])
 goog.addDependency("../../../pixellab/KeyBinding.js", ['pixelLab.KeyBinding', 'pixelLab.KeyBindingEvent'], ['goog.events.Event', 'goog.events.EventTarget', 'goog.ui.KeyboardShortcutHandler', 'goog.ui.KeyboardShortcutHandler.EventType']);
 goog.addDependency("../../../pixellab/Preload.js", ['pixelLab.Preload'], ['goog.object']);
 goog.addDependency("../../../pixellab/Stats.js", ['pixelLab.Stats'], ['goog.dom']);
-goog.addDependency("../../../loader.js", [], ['eightball.Application', 'goog.object', 'pixelLab.Preload']);
 goog.addDependency("../../../application.js", ['eightball.Application'], ['eightball.Game', 'eightball.Music', 'eightball.PoolTable', 'eightball.SoundEffectManager', 'eightball.Stats', 'goog.array', 'goog.debug.LogManager', 'goog.events', 'goog.events.EventType', 'goog.i18n.NumberFormat', 'goog.string', 'goog.string.format', 'goog.userAgent', 'pixelLab.DebugDiv', 'pixelLab.KeyBinding']);
