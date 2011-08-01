@@ -2,7 +2,9 @@
 
 From your friends at [Pixel Lab](http://thinkpixellab.com)
 
-The MIT License
+Built with [ktools](https://github.com/kevmoo/ktools)
+
+# The MIT License #
 
 Copyright (c) 2010-2011 Pixel Lab
 
