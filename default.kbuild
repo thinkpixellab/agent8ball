@@ -11,4 +11,4 @@ deps_path: public/javascripts/deps.js
 compile_path: public/javascripts/compiled.js
 externs:
   - public/javascripts/externs/application_extern.js
-  - public/javascripts/externs/jquery-1.5.js
+  - public/javascripts/externs/jquery-1.6.js
