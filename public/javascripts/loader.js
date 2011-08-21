@@ -1,6 +1,6 @@
 goog.require('eightball.Application');
 goog.require('goog.object');
-goog.require('pixelLab.Preload');
+goog.require('pl.Preload');
 
 /** @define {boolean} */
 var SKIP_PRELOAD = false;
@@ -37,6 +37,6 @@ $(document).ready(function() {
     goog.object.forEach(preloadAssets.audios, function(element, key, hash) {
       eightball.SoundEffect.create(key, element);
     });
-    pixelLab.Preload(images, progress, done);
+    pl.Preload(images, progress, done);
   }
 });

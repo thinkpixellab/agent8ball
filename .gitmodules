@@ -4,3 +4,6 @@
 [submodule "public/javascripts/closure-library"]
 	path = public/javascripts/closure-library
 	url = git://github.com/jarib/google-closure-library.git
+[submodule "public/javascripts/pl"]
+	path = public/javascripts/pl
+	url = git://github.com/thinkpixellab/pl.git

@@ -22,8 +22,8 @@ goog.require('goog.math.Vec2');
 goog.require('goog.object');
 goog.require('goog.style');
 
-goog.require('pixelLab.DebugDiv');
-goog.require('pixelLab.FpsLogger');
+goog.require('pl.DebugDiv');
+goog.require('pl.FpsLogger');
 
 /**
  @constructor
@@ -106,9 +106,9 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, imageMap) {
 
   /**
    @private
-   @type {!pixelLab.FpsLogger}
+   @type {!pl.FpsLogger}
    */
-  this.m_fpsLogger = new pixelLab.FpsLogger();
+  this.m_fpsLogger = new pl.FpsLogger();
 
   /**
    @private
@@ -212,7 +212,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, imageMap) {
         // calculate strike power
         _this.m_strikePower = strikeOffset == 0 ? 0 : strikeOffset / eightball.PoolTable.s_maxStrikeDistance;
 
-        pixelLab.DebugDiv.clear();
+        pl.DebugDiv.clear();
         logger.info('Allowed Angle Range: ' + Math.round(cueAngle - 90) + ' to ' + Math.round(cueAngle + 90));
         logger.info('Strike Angle: ' + Math.round(strikeAngle));
         logger.info('Strike Power: ' + _this.m_strikePower);
@@ -975,7 +975,7 @@ eightball.PoolTable.prototype.increaseBombPulse = function() {
  @return {number}
  */
 eightball.PoolTable.prototype.stepsPerSecond = function() {
-  return this.m_fpsLogger.getFps();
+  return this.m_fpsLogger.fps;
 };
 
 /**

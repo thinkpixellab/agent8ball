@@ -15,8 +15,8 @@ goog.require('goog.string');
 goog.require('goog.string.format');
 goog.require('goog.userAgent');
 
-goog.require('pixelLab.DebugDiv');
-goog.require('pixelLab.KeyBinding');
+goog.require('pl.DebugDiv');
+goog.require('pl.KeyBinding');
 
 var _game;
 
@@ -329,8 +329,8 @@ eightball.Application = function(opt_skipGraphics) {
   //
   // Keyboard shortcuts
   //
-  var keyBinding = new pixelLab.KeyBinding();
-  goog.events.listen(keyBinding, pixelLab.KeyBinding.TYPE, function(e) {
+  var keyBinding = new pl.KeyBinding();
+  goog.events.listen(keyBinding, pl.KeyBinding.TYPE, function(e) {
     $('#alert-div-holder').stop(true, true).show();
     if (e.keybinding == 'h') {
       var map = keyBinding.getMap();
@@ -394,7 +394,7 @@ eightball.Application = function(opt_skipGraphics) {
   });
 
   keyBinding.add('l', 'Toggle debug log', function() {
-    var enabled = pixelLab.DebugDiv.toggle();
+    var enabled = pl.DebugDiv.toggle();
     return enabled ? 'Logger on' : 'Logger off';
   });
 
@@ -505,7 +505,7 @@ eightball.Application = function(opt_skipGraphics) {
  @private
  */
 eightball.Application.prototype._updateFpsLog = function() {
-  pixelLab.DebugDiv.clear();
+  pl.DebugDiv.clear();
   if (this.m_game.gameState == eightball.Game.States.STARTED) {
     var fmt = new goog.i18n.NumberFormat('#,###.##');
     var message = 'FPS: ' + fmt.format(this.m_poolTable.stepsPerSecond());
