@@ -77,13 +77,13 @@ goog.addDependency("../../../eightball/PoolTable.js", ['eightball.PoolTable'], [
 goog.addDependency("../../../eightball/SoundEffect.js", ['eightball.SoundEffect'], []);
 goog.addDependency("../../../eightball/SoundEffectManager.js", ['eightball.SoundEffectManager'], ['eightball.Cookies', 'eightball.SoundEffect', 'goog.events.Event', 'goog.events.EventTarget']);
 goog.addDependency("../../../eightball/Stats.js", ['eightball.Stats'], ['pl.Stats']);
-goog.addDependency("../../../pl/DebugDiv.js", ['pl.DebugDiv'], ['goog.asserts', 'goog.debug.LogManager', 'goog.dom', 'goog.style']);
+goog.addDependency("../../../pl/debugDiv.js", ['pl.DebugDiv'], ['goog.asserts', 'goog.debug.LogManager', 'goog.dom', 'goog.style']);
 goog.addDependency("../../../pl/ex.js", ['pl.ex'], ['goog.style', 'goog.string', 'goog.array', 'goog.math.Size']);
 goog.addDependency("../../../pl/fpsLogger.js", ['pl.FpsLogger'], []);
 goog.addDependency("../../../pl/gfx.js", ['pl.gfx'], ['goog.math.Size']);
-goog.addDependency("../../../pl/KeyBinding.js", ['pl.KeyBinding', 'pl.KeyBindingEvent'], ['goog.events.Event', 'goog.events.EventTarget', 'goog.ui.KeyboardShortcutHandler', 'goog.ui.KeyboardShortcutHandler.EventType']);
-goog.addDependency("../../../pl/Preload.js", ['pl.Preload'], ['goog.object']);
-goog.addDependency("../../../pl/Stats.js", ['pl.Stats'], ['goog.dom']);
+goog.addDependency("../../../pl/keyBinding.js", ['pl.KeyBinding', 'pl.KeyBindingEvent'], ['goog.events.Event', 'goog.events.EventTarget', 'goog.ui.KeyboardShortcutHandler', 'goog.ui.KeyboardShortcutHandler.EventType']);
+goog.addDependency("../../../pl/preload.js", ['pl.Preload'], ['goog.object']);
+goog.addDependency("../../../pl/stats.js", ['pl.Stats'], ['goog.dom']);
 goog.addDependency("../../../pl/retained/container.js", ['pl.retained.Container'], ['goog.array', 'pl.retained.Element']);
 goog.addDependency("../../../pl/retained/element.js", ['pl.retained.Element'], ['goog.color.alpha', 'goog.math.Coordinate', 'goog.math.Rect', 'goog.math.Size']);
 goog.addDependency("../../../pl/retained/stage.js", ['pl.retained.Stage'], ['goog.math.Coordinate', 'goog.math.Size', 'pl.retained.Element', 'pl.ex']);
