@@ -5,7 +5,7 @@ js_paths:
   - public/javascripts/closure-library/closure
   - public/javascripts/box2d
   - public/javascripts/eightball
-  - public/javascripts/pl
+  - public/javascripts/pl/src
   - public/javascripts/application.js
 deps_path: public/javascripts/deps.js
 compile_path: public/javascripts/compiled.js
