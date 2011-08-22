@@ -1,7 +1,7 @@
 goog.provide('eightball.SoundEffectManager');
 
 goog.require('eightball.Cookies');
-goog.require('eightball.SoundEffect');
+goog.require('pl.SoundEffect');
 
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
@@ -16,7 +16,7 @@ eightball.SoundEffectManager = function(audioMap) {
 
   /**
    @private
-   @type {!Object.<string, eightball.SoundEffect>}
+   @type {!Object.<string, pl.SoundEffect>}
    */
   this.m_sounds = {};
 
@@ -29,7 +29,7 @@ eightball.SoundEffectManager = function(audioMap) {
 goog.inherits(eightball.SoundEffectManager, goog.events.EventTarget);
 
 eightball.SoundEffectManager.prototype.add = function(name, count) {
-  this.m_sounds[name] = new eightball.SoundEffect(name, this.m_audioMap[name], count);
+  this.m_sounds[name] = new pl.SoundEffect(name, this.m_audioMap[name], count);
 };
 
 eightball.SoundEffectManager.prototype.play = function(name) {

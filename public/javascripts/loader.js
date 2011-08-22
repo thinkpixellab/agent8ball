@@ -35,7 +35,7 @@ $(document).ready(function() {
     $('#loadingbg').delay(500).fadeIn(700);
 
     goog.object.forEach(preloadAssets.audios, function(element, key, hash) {
-      eightball.SoundEffect.create(key, element);
+      pl.SoundEffect.create(key, element);
     });
     pl.Preload(images, progress, done);
   }

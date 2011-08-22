@@ -4,6 +4,7 @@ goog.require('eightball.Cookies');
 
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
+goog.require('pl.SoundEffect');
 
 /**
  @constructor
@@ -45,7 +46,7 @@ eightball.Music.prototype.startMusic = function() {
 
   this._clearMusic();
 
-  this.m_music = eightball.SoundEffect.create(this.m_name, this.m_locations);
+  this.m_music = pl.SoundEffect.create(this.m_name, this.m_locations);
   this.m_music.setAttribute('loop', 'loop');
 
   this.m_music.load();
@@ -65,7 +66,7 @@ eightball.Music.prototype.stopMusic = function() {
  @return {boolean}
  */
 eightball.Music.prototype.isMusicOn = function() {
-  return (this.m_music != null);
+  return Boolean(this.m_music);
 };
 
 eightball.Music.prototype.toggleMusic = function() {
