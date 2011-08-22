@@ -1,8 +1,8 @@
 [submodule "public/javascripts/box2d"]
 	path = public/javascripts/box2d
 	url = git@github.com:thinkpixellab/box2d.git
-[submodule "public/javascripts/closure-library"]
-	path = public/javascripts/closure-library
+[submodule "public/javascripts/closure"]
+	path = public/javascripts/closure
 	url = git://github.com/jarib/google-closure-library.git
 [submodule "public/javascripts/pl"]
 	path = public/javascripts/pl

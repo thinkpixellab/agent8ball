@@ -1,8 +1,8 @@
-base_path: public/javascripts/closure-library/closure
+base_path: public/javascripts/closure/closure
 inputs:
   - public/javascripts/loader.js
 js_paths:
-  - public/javascripts/closure-library/closure
+  - public/javascripts/closure/closure
   - public/javascripts/box2d
   - public/javascripts/eightball
   - public/javascripts/pl/src
