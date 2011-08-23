@@ -351,6 +351,7 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
         this.gameTableBounds = new goog.math.Box(q.y - 180, q.x + 380, q.y + 180, q.x - 380);
       }
 
+      this.m_cueCanvasContext.beginPath();
       for (var i = 4; i < steps; i++) {
         x2 = x + (xStep * i);
         y2 = y + (yStep * i);
@@ -371,13 +372,12 @@ eightball.PoolTable.prototype._updateCue = function(mousePoint, cueOffset) {
           if (hitTest) {
             break;
           } else {
-            this.m_cueCanvasContext.beginPath();
             this.m_cueCanvasContext.moveTo(x2, y2);
           }
         } else {
           this.m_cueCanvasContext.lineTo(x2, y2);
-          this.m_cueCanvasContext.stroke();
         }
+        this.m_cueCanvasContext.stroke();
       }
       if (steps > 4) {
         this.m_cueCanvasContext.beginPath();
@@ -898,7 +898,6 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       this.m_context.lineTo(pt4.x, pt4.y);
       this.m_context.lineTo(pt5.x, pt5.y);
       this.m_context.lineTo(pt6.x, pt6.y);
-      this.m_context.fill();
 
       pt3.x = vec1.x + Math.sin((Math.PI * -0.3) - angle) * shape.m_radius + ballCenter.x - shape.m_radius;
       pt3.y = vec1.y + Math.cos((Math.PI * -0.3) - angle) * shape.m_radius + ballCenter.y - shape.m_radius;
@@ -909,7 +908,6 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       pt6.x = vec2.x + Math.sin((Math.PI * 0.3) - angle) * shape.m_radius + ballCenter.x - shape.m_radius;
       pt6.y = vec2.y + Math.cos((Math.PI * 0.3) - angle) * shape.m_radius + ballCenter.y - shape.m_radius;
 
-      this.m_context.beginPath();
       this.m_context.moveTo(pt3.x, pt3.y);
       this.m_context.lineTo(pt4.x, pt4.y);
       this.m_context.lineTo(pt5.x, pt5.y);
