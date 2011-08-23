@@ -190,6 +190,7 @@ eightball.Game.prototype._resetTable = function() {
   }
   this._isBombFound = false;
   this._isBombActive = false;
+  this.m_poolTable.randomGravity(false);
   this.m_poolTable.rackEm();
   this.m_poolTable.resume();
   this.m_poolTable.clearBombNumber();

@@ -628,12 +628,11 @@ eightball.PoolTable.prototype.isFixFramerate = function() {
  @return {boolean} True if things are random.
  */
 eightball.PoolTable.prototype.randomGravity = function(opt_enabled) {
-  if (Boolean(opt_enabled)) {
+  if (goog.isDef(opt_enabled)) {
     var vec;
     if (opt_enabled) {
       vec = goog.math.Vec2.randomUnit().scale(100);
-    }
-    else {
+    } else {
       vec = new box2d.Vec2();
     }
     this.m_world.m_gravity = vec;
