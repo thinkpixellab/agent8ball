@@ -383,7 +383,7 @@ eightball.Application = function(opt_skipGraphics) {
   keyBinding.add('h', 'Help', goog.nullFunction);
 
   keyBinding.add('i', 'Toggle framerate throttling', function() {
-    if (poolTable.isFixFramerate()) {
+    if (poolTable.fixFramerate()) {
       poolTable.fixFramerate(false);
       return 'Framerate: floating';
     }

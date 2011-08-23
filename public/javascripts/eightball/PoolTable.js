@@ -24,6 +24,7 @@ goog.require('goog.style');
 
 goog.require('pl.DebugDiv');
 goog.require('pl.FpsLogger');
+goog.require('pl.ex');
 
 /**
  @constructor
@@ -134,6 +135,12 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, imageMap) {
    */
   this._isCueHit = false;
 
+  /**
+   @private
+   @type {boolean}
+   */
+  this._fixFramerate = true;
+
   // load our cuestick image (we'll need this for rendering in the updateCue function)
   this.m_cueImage = new Image();
   this.m_cueImage.onload = function() {
@@ -231,10 +238,7 @@ eightball.PoolTable = function(canvasElement, cueCanvasElement, imageMap) {
     _this.m_isMouseDown = false;
   });
 
-  this._timer = new goog.Timer(eightball.PoolTable.s_millisecondsPerFrame);
-  goog.events.listen(this._timer, goog.Timer.TICK, this._step, undefined, this);
-  this._timer.start();
-
+  this._requestStep();
 };
 goog.inherits(eightball.PoolTable, goog.events.EventTarget);
 
@@ -246,19 +250,11 @@ eightball.PoolTable.prototype.updateLayout = function(width, height) {
 };
 
 eightball.PoolTable.prototype.resume = function() {
-  if (this._timer) {
-    if (!this._timer.enabled) {
-      this._timer.start();
-    }
-  }
+  this._requestStep();
 };
 
 eightball.PoolTable.prototype.pause = function() {
-  if (this._timer) {
-    if (this._timer.enabled) {
-      this._timer.stop();
-    }
-  }
+  this._paused = true;
 };
 
 /**
@@ -599,28 +595,13 @@ eightball.PoolTable.prototype.getBombLocation = function() {
 
 /**
  @param {boolean=} opt_enabled
- @return {boolean} True if framerate is fixed.
+ @returns {boolean}
  */
 eightball.PoolTable.prototype.fixFramerate = function(opt_enabled) {
-  if (opt_enabled === undefined) {
-    opt_enabled = true;
+  if (goog.isDef(opt_enabled)) {
+    this._fixFramerate = Boolean(opt_enabled);
   }
-
-  if (opt_enabled) {
-    this._timer.setInterval(eightball.PoolTable.s_millisecondsPerFrame);
-    return true;
-  }
-  else {
-    this._timer.setInterval(1);
-    return false;
-  }
-};
-
-/**
- @return {boolean}
- */
-eightball.PoolTable.prototype.isFixFramerate = function() {
-  return this._timer.getInterval() == eightball.PoolTable.s_millisecondsPerFrame;
+  return this._fixFramerate;
 };
 
 /**
@@ -648,6 +629,11 @@ eightball.PoolTable.prototype.randomGravity = function(opt_enabled) {
  @private
  */
 eightball.PoolTable.prototype._step = function() {
+  this._stepRequested = false;
+  if (!this._paused) {
+    this._requestStep();
+  }
+
   this.m_fpsLogger.AddInterval();
   this.m_world.Step(1.0 / 30.0, 1);
 
@@ -656,6 +642,19 @@ eightball.PoolTable.prototype._step = function() {
     this._drawWorld();
     this._processPairs(this.m_world.lastPairs);
     this._processBalls();
+  }
+};
+
+eightball.PoolTable.prototype._requestStep = function() {
+  this._paused = false;
+  if (!this._stepRequested) {
+    var callback = goog.bind(this._step, this);
+    this._stepRequested = true;
+    if (this._fixFramerate) {
+      pl.ex.requestAnimationFrame(callback);
+    } else {
+      goog.Timer.callOnce(callback);
+    }
   }
 };
 
@@ -879,7 +878,6 @@ eightball.PoolTable.prototype._drawBall = function(ballBody) {
       var pt4 = new goog.math.Vec2(0, 0);
       var pt5 = new goog.math.Vec2(0, 0);
       var pt6 = new goog.math.Vec2(0, 0);
-
 
       pt3.x = vec1.x + Math.sin((Math.PI * -0.7) - angle) * shape.m_radius + ballCenter.x - shape.m_radius;
       pt3.y = vec1.y + Math.cos((Math.PI * -0.7) - angle) * shape.m_radius + ballCenter.y - shape.m_radius;
@@ -1265,13 +1263,6 @@ eightball.PoolTable.s_matrixFlipHorizontal = new goog.math.Matrix([
 eightball.PoolTable.s_matrixFlipVertical = new goog.math.Matrix([
   [-1, 0],
   [0, -1]]);
-
-/**
- @private
- @const
- @type {number}
- */
-eightball.PoolTable.s_millisecondsPerFrame = 1000.0 / 60.0;
 
 /**
  @private
