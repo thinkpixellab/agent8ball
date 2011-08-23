@@ -3,7 +3,6 @@ inputs:
   - public/javascripts/loader.js
 js_paths:
   - public/javascripts/closure/closure
-  - public/javascripts/box2d
   - public/javascripts/eightball
   - public/javascripts/pl/src
   - public/javascripts/application.js
