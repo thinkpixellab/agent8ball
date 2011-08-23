@@ -631,9 +631,7 @@ eightball.PoolTable.prototype.randomGravity = function(opt_enabled) {
   if (Boolean(opt_enabled)) {
     var vec;
     if (opt_enabled) {
-      vec = new box2d.Vec2(Math.random() - 0.5, Math.random() - 0.5);
-      vec.Normalize();
-      vec.scale(100);
+      vec = goog.math.Vec2.randomUnit().scale(100);
     }
     else {
       vec = new box2d.Vec2();
