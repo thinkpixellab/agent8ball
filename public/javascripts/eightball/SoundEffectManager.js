@@ -1,10 +1,9 @@
 goog.provide('eightball.SoundEffectManager');
 
 goog.require('eightball.Cookies');
-goog.require('pl.SoundEffect');
-
 goog.require('goog.events.Event');
 goog.require('goog.events.EventTarget');
+goog.require('pl.SoundEffect');
 
 /**
  @constructor

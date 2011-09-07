@@ -558,7 +558,7 @@ eightball.Application._getTwitterShareUrl = function(score) {
 };
 
 eightball.Application._showBrowserMessage = function() {
-  if(!goog.userAgent.WINDOWS){
+  if (!goog.userAgent.WINDOWS) {
     return;
   }
 

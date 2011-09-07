@@ -595,7 +595,7 @@ eightball.PoolTable.prototype.getBombLocation = function() {
 
 /**
  @param {boolean=} opt_enabled
- @returns {boolean}
+ @return {boolean}
  */
 eightball.PoolTable.prototype.fixFramerate = function(opt_enabled) {
   if (goog.isDef(opt_enabled)) {
