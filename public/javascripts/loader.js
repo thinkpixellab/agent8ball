@@ -1,6 +1,6 @@
 goog.require('eightball.Application');
 goog.require('goog.object');
-goog.require('pl.Preload');
+goog.require('pl.images');
 
 /** @define {boolean} */
 var SKIP_PRELOAD = false;
@@ -19,7 +19,7 @@ $(document).ready(function() {
     new eightball.Application(true);
   } else {
 
-    var images = preloadAssets.images;
+    var images = new pl.images(preloadAssets.images);
 
     var done = function() {
       $('#loadingbg').delay(500).fadeOut(700, function() {
@@ -37,6 +37,7 @@ $(document).ready(function() {
     goog.object.forEach(preloadAssets.audios, function(element, key, hash) {
       pl.SoundEffect.create(key, element);
     });
-    pl.Preload(images, progress, done);
+
+    images.load(progress, done);
   }
 });

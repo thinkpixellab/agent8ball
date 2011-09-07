@@ -13,6 +13,7 @@ goog.addDependency("../../../pl/src/debugDiv.js", ['pl.DebugDiv'], ['goog.assert
 goog.addDependency("../../../pl/src/ex.js", ['pl.ex'], ['goog.array', 'goog.math.Size', 'goog.string', 'goog.style']);
 goog.addDependency("../../../pl/src/fpsLogger.js", ['pl.FpsLogger'], []);
 goog.addDependency("../../../pl/src/gfx.js", ['pl.gfx'], ['goog.graphics.AffineTransform', 'goog.math.Size']);
+goog.addDependency("../../../pl/src/images.js", ['pl.images'], ['goog.asserts', 'goog.net.EventType', 'goog.net.ImageLoader', 'goog.object']);
 goog.addDependency("../../../pl/src/keyBinding.js", ['pl.KeyBinding', 'pl.KeyBindingEvent'], ['goog.events.Event', 'goog.events.EventTarget', 'goog.ui.KeyboardShortcutHandler', 'goog.ui.KeyboardShortcutHandler.EventType']);
 goog.addDependency("../../../pl/src/preload.js", ['pl.Preload'], ['goog.object']);
 goog.addDependency("../../../pl/src/property.js", ['pl.Property'], ['goog.array', 'goog.math.Coordinate', 'goog.math.Size']);
