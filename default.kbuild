@@ -15,3 +15,4 @@ fix_paths:
   - public/javascripts/eightball
   - public/javascripts/pl/src
   - public/javascripts/application.js
+  - public/javascripts/loader.js
