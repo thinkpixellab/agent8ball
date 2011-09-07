@@ -2,7 +2,7 @@
 
 From your friends at [Pixel Lab](http://thinkpixellab.com)
 
-Built with [ktools](https://github.com/kevmoo/ktools)
+Built with [kbuild](https://github.com/kevmoo/kbuild)
 
 # The MIT License #
 
