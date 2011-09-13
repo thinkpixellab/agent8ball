@@ -1,3 +1,4 @@
+# kbuild file - https://github.com/kevmoo/kbuild
 base_path: public/javascripts/closure/closure
 inputs:
   - public/javascripts/loader.js
