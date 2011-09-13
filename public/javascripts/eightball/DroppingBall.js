@@ -8,8 +8,8 @@ goog.provide('eightball.DroppingBall');
  */
 eightball.DroppingBall = function(number, ballLocation, pocketLocation) {
   /**
-   @private
-   @type {number}
+   * @const
+   * @type {number}
    */
   this.number = number;
 
