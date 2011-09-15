@@ -4,9 +4,12 @@ require File.expand_path('../boot', __FILE__)
 require "action_controller/railtie"
 require "active_resource/railtie"
 
-# If you have a Gemfile, require the gems listed there, including any gems
-# you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env) if defined?(Bundler)
+if defined?(Bundler)
+  # If you precompile assets before deploying to production, use this line
+  Bundler.require(*Rails.groups(:assets => %w(development test)))
+  # If you want your assets lazily compiled in production, use this line
+  # Bundler.require(:default, :assets, Rails.env)
+end
 
 module Agent8ballRails
   class Application < Rails::Application
@@ -32,9 +35,6 @@ module Agent8ballRails
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # JavaScript files you want as :defaults (application.js is always included).
-    config.action_view.javascript_expansions[:defaults] = %w()
-
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
@@ -42,27 +42,10 @@ module Agent8ballRails
     config.filter_parameters += [:password]
 
     config.session_store :disabled
+    # Enable the asset pipeline
+    config.assets.enabled = true
 
-    @@from = {}
-    @@since = Time.now.utc
-
-    def self.from
-      {
-        :from => @@from,
-        :since => @@since
-      }
-    end
-
-    def self.redirect(from)
-      value = @@from[from]
-      if(value)
-        value += 1
-      else
-        value = 1
-      end
-      @@from[from] = value
-      puts "new value! #{value}"
-    end
-
+    # Version of your assets, change this if you want to expire all your assets
+    config.assets.version = '1.0'
   end
 end
