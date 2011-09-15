@@ -1,19 +1,19 @@
 # kbuild file - https://github.com/kevmoo/kbuild
-base_path: public/javascripts/closure/closure
+base_path: app/assets/javascripts/closure/closure
 inputs:
-  - public/javascripts/loader.js
+  - app/assets/javascripts/loader.js
 js_paths:
-  - public/javascripts/closure/closure
-  - public/javascripts/eightball
-  - public/javascripts/pl/src
-  - public/javascripts/application.js
-deps_path: public/javascripts/deps.js
-compile_path: public/javascripts/compiled.js
+  - app/assets/javascripts/closure/closure
+  - app/assets/javascripts/eightball
+  - app/assets/javascripts/pl/src
+  - app/assets/javascripts/application.js
+deps_path: app/assets/javascripts/deps.js
+compile_path: app/assets/javascripts/compiled.js
 externs:
-  - public/javascripts/externs/application_extern.js
-  - public/javascripts/externs/jquery-1.6.js
+  - app/assets/javascripts/externs/application_extern.js
+  - app/assets/javascripts/externs/jquery-1.6.js
 fix_paths:
-  - public/javascripts/eightball
-  - public/javascripts/pl/src
-  - public/javascripts/application.js
-  - public/javascripts/loader.js
+  - app/assets/javascripts/eightball
+  - app/assets/javascripts/pl/src
+  - app/assets/javascripts/application.js
+  - app/assets/javascripts/loader.js

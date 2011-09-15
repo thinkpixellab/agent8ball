@@ -6,7 +6,7 @@ module MainHelper
     items << content_tag('script', asset_js, {'type' => Mime::JS}, escape = false)
 
     if debug
-      items << content_tag('script', '', {'type' => Mime::JS, 'src' => '/javascripts/closure/closure/goog/base.js'})
+      items << javascript_include_tag('closure/closure/goog/base.js')
       items << javascript_include_tag('deps', 'loader')
     else
       items << javascript_include_tag('compiled')
@@ -20,7 +20,7 @@ module MainHelper
     assets = {}
 
     # images
-    images = Dir.glob(File.join(Rails.root,'public','images','*'))
+    images = Dir.glob(File.join(Rails.root,'app','assets','images','*'))
     images.map!{ |f| File.basename(f) }
     images = images.inject(Hash.new) do |h,i|
       entry = { File.basename(i,File.extname(i)) => image_path(i) }
@@ -29,7 +29,7 @@ module MainHelper
     assets[:images] = images
 
     # audios
-    audios = Dir.glob(File.join(Rails.root,'public','audios','*'))
+    audios = Dir.glob(File.join(Rails.root,'app','assets','audios','*'))
     audios.map!{ |f| File.basename(f) }
 
     audios_hash = {}

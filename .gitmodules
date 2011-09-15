@@ -1,6 +1,6 @@
-[submodule "public/javascripts/closure"]
-	path = public/javascripts/closure
+[submodule "app/assets/javascripts/closure"]
+	path = app/assets/javascripts/closure
 	url = git://github.com/kevmoo/google-closure-library.git
-[submodule "public/javascripts/pl"]
-	path = public/javascripts/pl
+[submodule "app/assets/javascripts/pl"]
+	path = app/assets/javascripts/pl
 	url = git://github.com/thinkpixellab/pl.git
