@@ -2,6 +2,9 @@
 - content_for :header do
   = game_js(uncompiled)
   %link{:rel => 'canonical', :href => 'http://agent8ball.com'}
+%a#fork_me{:href => "https://github.com/thinkpixellab/agent8ball"}
+  %img{ :alt=> "Fork me on GitHub", :src=>"http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"}
+
 - if Rails.env == 'development'
   - if(uncompiled)
     = link_to "Uncompiled", root_path, :id => 'debug', :title => 'Go to compiled version'
