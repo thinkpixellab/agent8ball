@@ -1,12 +1,10 @@
 # kbuild file - https://github.com/kevmoo/kbuild
-base_path: public/javascripts/closure/closure
+closure_path: public/javascripts/closure
 inputs:
-  - public/javascripts/loader.js
+  - public/javascripts/eightball/loader.js
 js_paths:
-  - public/javascripts/closure/closure
   - public/javascripts/eightball
   - public/javascripts/pl/src
-  - public/javascripts/application.js
 deps_path: public/javascripts/deps.js
 compile_path: public/javascripts/compiled.js
 externs:

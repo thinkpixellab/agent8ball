@@ -7,7 +7,7 @@ module MainHelper
 
     if debug
       items << content_tag('script', '', {'type' => Mime::JS, 'src' => '/javascripts/closure/closure/goog/base.js'})
-      items << javascript_include_tag('deps', 'loader')
+      items << javascript_include_tag('deps', 'eightball/loader')
     else
       items << javascript_include_tag('compiled')
     end

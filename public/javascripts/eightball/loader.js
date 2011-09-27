@@ -1,3 +1,5 @@
+goog.provide('eightball.loader');
+
 goog.require('eightball.Application');
 goog.require('goog.object');
 goog.require('pl.images');
