@@ -8,7 +8,7 @@ goog.require('pl.SoundEffect');
 /**
  @constructor
  @extends {goog.events.EventTarget}
- @param {!Object.<string,!Array.<string>>} audioMap
+ @param {!Object.<string,!Array.<Array.<string>>>} audioMap
  */
 eightball.SoundEffectManager = function(audioMap) {
   goog.events.EventTarget.call(this);
@@ -21,7 +21,7 @@ eightball.SoundEffectManager = function(audioMap) {
 
   /**
    @private
-   @type {!Object.<string,!Array.<string>>}
+   @type {!Object.<string,!Array.<Array.<string>>>}
    */
   this.m_audioMap = audioMap;
 };

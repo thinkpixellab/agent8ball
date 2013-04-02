@@ -127,7 +127,7 @@ eightball.Application = function(opt_skipGraphics) {
   });
 
   goog.events.listen(game, eightball.Game.EventType.HIGHSCORE, function() {
-    $('#bestscore').html(game.getHighScore());
+    $('#bestscore').html(game.getHighScore().toString());
   });
 
   if (opt_skipGraphics) {

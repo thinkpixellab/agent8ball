@@ -9,7 +9,7 @@ goog.require('pl.SoundEffect');
 /**
  @constructor
  @extends {goog.events.EventTarget}
- @param {!Array.<string>} locations
+ @param {!Array.<Array.<string>>} locations
  */
 eightball.Music = function(name, locations) {
   goog.events.EventTarget.call(this);
@@ -28,7 +28,7 @@ eightball.Music = function(name, locations) {
 
   /**
    @private
-   @type {!Array.<string>}
+   @type {!Array.<Array.<string>>}
    */
   this.m_locations = locations;
 

@@ -660,7 +660,7 @@ eightball.PoolTable.prototype._requestStep = function() {
 
 /**
  @private
- @param {!Array.<box2d.Pair>} pairs
+ @param {!Array.<!box2d.Contact>} pairs
  */
 eightball.PoolTable.prototype._processPairs = function(pairs) {
   var _this = this,
